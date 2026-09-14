@@ -1,0 +1,21 @@
+opam-version: "2.0"
+synopsis: "Native OCaml implementation for DataScript OCaml"
+description: "Native DataScript implementation selected by the locked iPhoneOS SDK."
+maintainer: "rcmerci"
+authors: ["rcmerci"]
+license: "MIT"
+homepage: "https://github.com/logseq/datascript-ocaml"
+bug-reports: "https://github.com/logseq/datascript-ocaml/issues"
+dev-repo: "git+https://github.com/logseq/datascript-ocaml.git"
+depends: [
+  "ocaml" {= "5.1.1"}
+  "dune" {= "3.23.1"}
+  "datascript_ocaml" {= "dev"}
+  "persistent_sorted_set_ocaml" {= "dev"}
+  "sqlite3" {= "5.4.0"}
+  "melange-transit-native" {= "0.1.2"}
+  "yojson" {= "3.0.0"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]

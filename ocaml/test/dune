@@ -1,0 +1,281 @@
+(test
+ (name core_tests)
+ (modules core_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.runtime))
+
+(test
+ (name trace_debug_tests)
+ (modules trace_debug_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_trace
+  bonsai_swiftui_trace_debug))
+
+(test
+ (name trace_release_tests)
+ (modules trace_release_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_trace
+  bonsai_swiftui_trace_release))
+
+(test
+ (name protocol_tests)
+ (modules protocol_tests)
+ (deps
+  ../../protocol/generated/fixtures/ocaml_counter_full.hex
+  ../../protocol/generated/fixtures/swift_counter_press.hex
+  ../../protocol/generated/fixtures/legacy_1_12_counter_full.hex)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.protocol))
+
+(test
+ (name cross_language_fixture_tests)
+ (modules cross_language_fixture_tests)
+ (deps
+  ../../protocol/generated/fixtures/swift_counter_press.hex
+  ../../protocol/generated/fixtures/swift_host_response.hex
+  ../../protocol/generated/fixtures/swift_text_edit_unicode.hex
+  ../../protocol/generated/fixtures/swift_environment_changed.hex)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.protocol))
+
+(test
+ (name event_dispatch_tests)
+ (modules event_dispatch_tests)
+ (deps ../../protocol/generated/fixtures/swift_counter_press.hex)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime))
+
+(test
+ (name text_editing_tests)
+ (modules text_editing_tests)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.ui))
+
+(test
+ (name control_surface_tests)
+ (modules control_surface_tests)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.ui))
+
+(test
+ (name core_surface_tests)
+ (modules core_surface_tests)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.ui))
+
+(test
+ (name native_widget_tests)
+ (modules native_widget_tests)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.ui))
+
+(test
+ (name public_api_tests)
+ (modules public_api_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(test
+ (name layout_driver_tests)
+ (modules layout_driver_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(test
+ (name bonsai_runtime_adapter_tests)
+ (modules bonsai_runtime_adapter_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.runtime_adapter
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(test
+ (name frame_driven_pump_tests)
+ (modules frame_driven_pump_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(test
+ (name driver_counter_tests)
+ (modules driver_counter_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(test
+ (name test_handle_tests)
+ (modules test_handle_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  bonsai_swiftui_test
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(test
+ (name native_backend_tests)
+ (modules native_backend_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect
+  unix))
+
+(test
+ (name runtime_bootstrap_config_tests)
+ (modules runtime_bootstrap_config_tests)
+ (libraries bonsai_swiftui.spec_impl core bonsai_swiftui.driver))
+
+(test
+ (name bounded_mailbox_tests)
+ (modules bounded_mailbox_tests)
+ (libraries bonsai_swiftui.spec_impl core bonsai_swiftui.driver threads))
+
+(test
+ (name worker_runtime_tests)
+ (modules worker_runtime_tests)
+ (libraries bonsai_swiftui.spec_impl core bonsai_swiftui.driver threads))
+
+(test
+ (name worker_runtime_not_started_shutdown_tests)
+ (modules worker_runtime_not_started_shutdown_tests)
+ (libraries bonsai_swiftui.spec_impl core bonsai_swiftui.driver threads))
+
+(test
+ (name worker_runtime_spawn_failure_tests)
+ (modules worker_runtime_spawn_failure_tests)
+ (libraries bonsai_swiftui.spec_impl core bonsai_swiftui.driver threads))
+
+(test
+ (name worker_runtime_attached_final_shutdown_tests)
+ (modules worker_runtime_attached_final_shutdown_tests)
+ (libraries bonsai_swiftui.spec_impl core bonsai_swiftui.driver threads))
+
+(test
+ (name worker_eio_service_tests)
+ (modules worker_eio_service_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  core
+  eio
+  eio.core
+  bonsai_swiftui.driver
+  threads
+  unix))
+
+(test
+ (name worker_eio_phase3_tests)
+ (modules worker_eio_phase3_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  core
+  eio
+  eio.core
+  bonsai_swiftui.driver
+  threads
+  unix))
+
+(test
+ (name worker_eio_environment_tests)
+ (modules worker_eio_environment_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  core
+  eio
+  eio.core
+  eio.unix
+  bonsai_swiftui.driver
+  threads
+  unix))
+
+(test
+ (name worker_driver_tests)
+ (modules worker_driver_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  threads
+  virtual_dom.ui_effect))
+
+(test
+ (name native_backend_worker_tests)
+ (modules native_backend_worker_tests)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  threads
+  virtual_dom.ui_effect))

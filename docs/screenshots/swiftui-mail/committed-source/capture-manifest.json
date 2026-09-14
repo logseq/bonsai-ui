@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-14",
+  "source_revision": "11d75d45e5006b281faa2656ee029e83c336491a",
+  "source_published": false,
+  "configuration": "macOS Debug",
+  "minimum_macos": "26.0",
+  "architecture": "arm64",
+  "bundle": "/Users/rcmerci/.codex/worktrees/94c71a22-9d72-4a52-99d8-e16ba8eb3a67/bonsai_flutter/examples/mail/apple/DerivedData/Build/Products/Debug/BonsaiMail.app",
+  "native_object_source": "Fresh git archive of 9b48ae3251b05d37cbec581f58cb161fcb16dd56; OCaml, Mail model, protocol and C bridge sources are unchanged at the captured revision.",
+  "native_object_sha256": "359f4a07b738a1360a3b1bdca28067cebc633c4d0e9dff02443c120d3c6eede4",
+  "build_log": "/tmp/swiftui-mail-mouse-fixed-macos-build.log",
+  "build_log_sha256": "2ea4e3a07a959cef07eb3ef5c2ec97b56378caf889cfd303a1461c16536733cd",
+  "capture": "Original CUA application-window JPEG bytes; no image transformation",
+  "dimensions_pixels": [
+    1200,
+    760
+  ],
+  "appearance": "Application-owned light palette; system appearance unchanged",
+  "binary_sha256": {
+    "Contents/MacOS/BonsaiMail": "aa88a9d99ce42ecf8c6e436012dabad82ea4a88546c0a00637c7cac93f025827",
+    "Contents/MacOS/BonsaiMail.debug.dylib": "16d9a47b46137e71e3eb2413be70c652a6409018ab2fcb32dec44d8d6680901c",
+    "Contents/MacOS/__preview.dylib": "eb341915c09517b8223e2d390794640df8ef67201de446d0d966070401c1abaa"
+  },
+  "captures": {
+    "macos-archived.jpg": {
+      "sha256": "9aa303c816753699669640146f761b551b652dc2074e76efa91bc0728a0c6be4"
+    },
+    "macos-detail-attachment.jpg": {
+      "sha256": "b7ba6a16e06c65735446212a287e43edae0987cf9764e858f4c5a01711e724fe"
+    },
+    "macos-expanded.jpg": {
+      "sha256": "a7ba8955adf1d6b7ff8ceb8e645f33a69f182c4f98b85a5f5fb215cf615d9f69"
+    },
+    "macos-inbox.jpg": {
+      "sha256": "a7855094190879fc6625badacbf73f802d6f3bb23e9bd7882300f279cfa6af60"
+    },
+    "macos-swipe-actions.jpg": {
+      "sha256": "7650a63dd7aa5ddeb30abb12a5c1a67e61287f61ab1745ff58e5c5b9ba314866"
+    }
+  },
+  "observed_interactions": [
+    "Fresh launch into Inbox",
+    "Mouse drag from window point (355, 220) to (510, 220) exposes exactly one Archive and one Trash button without expanding Mara",
+    "Close actions through the native accessibility action; an ordinary mouse click expands Mara",
+    "Collapse Mara; expand Juniper and open its message; verify visible attachment and read-state update",
+    "Return to the list; repeat the mouse drag and click the exposed Archive button; Mara appears in Archived"
+  ],
+  "limitations": [
+    "These macOS captures do not establish physical iOS gesture acceptance",
+    "Development build; no distribution export or remote publication"
+  ],
+  "regressions": {
+    "mail_before_fix": {
+      "status": "failed",
+      "log": "/tmp/swiftui-mail-mouse-drag-regression.log",
+      "log_sha256": "1ee1f6db7be19bc36e3b1b32f4547afc019fb58d0894496588f08a6dd8c8ea2f"
+    },
+    "mail_after_fix": {
+      "status": "passed",
+      "log": "/tmp/swiftui-mail-mouse-drag-green.log",
+      "log_sha256": "ca3998cae9c4be23836c6d27087e75568d435c55148841f242cab43e796eb242"
+    },
+    "swipe_directions": {
+      "status": "passed",
+      "log": "/tmp/swiftui-mail-mouse-fix-swipe.log",
+      "log_sha256": "fad86b810b43bf45547242477ab9e8accf920086db4f2e8af31c527600f584cc"
+    },
+    "removal_directions": {
+      "status": "passed",
+      "log": "/tmp/swiftui-mail-mouse-fix-removal.log",
+      "log_sha256": "508eb00da4df2a6cc40227a969ace530bf75e8299f13ef470887266d067c4184"
+    },
+    "swift_focused": {
+      "status": "passed",
+      "log": "/tmp/swiftui-mail-mouse-fix-focused.log",
+      "log_sha256": "69c589bc1b6a5a20496e92b9678de6680a8f9044742f37421077dff62d2b70f5"
+    },
+    "full_swift_after_capture": {
+      "source_revision": "404ae1754fc174f925b0077171404ec9c0e7965d",
+      "status": "passed",
+      "tests": 489,
+      "suites": 107,
+      "seconds": 486.197,
+      "log": "/tmp/swiftui-final-macos-404ae17.log",
+      "log_sha256": "32fa26f19cfbca1f6ceadd89e74bb6025487c66c82c171483746947770acb84c"
+    }
+  },
+  "archived_accessibility_sha256": "f92881d1e3ebe5737ee9fd222484e0634d838cff6e92cced9d865f6aa8949ce5"
+}

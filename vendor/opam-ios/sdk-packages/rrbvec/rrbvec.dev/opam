@@ -1,0 +1,16 @@
+opam-version: "2.0"
+synopsis: "Persistent RRB vectors for OCaml applications"
+description: "Persistent RRB vectors selected by the locked iPhoneOS SDK."
+maintainer: "RCmerci"
+homepage: "https://github.com/RCmerci/rrbvec"
+bug-reports: "https://github.com/RCmerci/rrbvec/issues"
+dev-repo: "git+https://github.com/RCmerci/rrbvec.git"
+depends: [
+  "ocaml" {= "5.1.1"}
+  "dune" {= "3.23.1"}
+  "js_of_ocaml"
+  "melange" {= "5.1.0-51"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs "@install"]
+]

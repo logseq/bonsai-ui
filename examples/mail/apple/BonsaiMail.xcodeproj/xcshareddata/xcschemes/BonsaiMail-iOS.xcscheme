@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Scheme LastUpgradeVersion="2610" version="1.7">
+  <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES" buildArchitectures="Automatic">
+    <BuildActionEntries>
+      <BuildActionEntry buildForTesting="YES" buildForRunning="YES" buildForProfiling="YES" buildForArchiving="YES" buildForAnalyzing="YES">
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="37748E06E02BC32C4AF50B5B" BuildableName="BonsaiMail.app" BlueprintName="BonsaiMail-iOS" ReferencedContainer="container:BonsaiMail.xcodeproj" />
+      </BuildActionEntry>
+    </BuildActionEntries>
+  </BuildAction>
+  <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="YES">
+    <Testables>
+      <TestableReference skipped="NO" parallelizable="NO">
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="25E3429BDA5EA902E76375AE" BuildableName="BonsaiMail-iOSTests.xctest" BlueprintName="BonsaiMail-iOSTests" ReferencedContainer="container:BonsaiMail.xcodeproj" />
+      </TestableReference>
+      <TestableReference skipped="NO" parallelizable="NO">
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="83803DE71EF943B59890875E" BuildableName="BonsaiMail-iOSUITests.xctest" BlueprintName="BonsaiMail-iOSUITests" ReferencedContainer="container:BonsaiMail.xcodeproj" />
+      </TestableReference>
+    </Testables>
+  </TestAction>
+  <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" allowLocationSimulation="NO">
+    <BuildableProductRunnable runnableDebuggingMode="0">
+      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="37748E06E02BC32C4AF50B5B" BuildableName="BonsaiMail.app" BlueprintName="BonsaiMail-iOS" ReferencedContainer="container:BonsaiMail.xcodeproj" />
+    </BuildableProductRunnable>
+  </LaunchAction>
+  <ProfileAction buildConfiguration="Profile" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES">
+    <BuildableProductRunnable runnableDebuggingMode="0">
+      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="37748E06E02BC32C4AF50B5B" BuildableName="BonsaiMail.app" BlueprintName="BonsaiMail-iOS" ReferencedContainer="container:BonsaiMail.xcodeproj" />
+    </BuildableProductRunnable>
+  </ProfileAction>
+  <AnalyzeAction buildConfiguration="Debug" />
+  <ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES" />
+</Scheme>

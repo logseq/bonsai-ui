@@ -1,0 +1,19 @@
+opam-version: "2.0"
+synopsis: "Check that pkg-config is available for iPhoneOS SDK construction"
+description: """
+Validates the macOS host pkg-config executable required while building the
+locked Bonsai Flutter iPhoneOS target package universe.
+"""
+maintainer: "bonsai_flutter contributors"
+authors: ["bonsai_flutter contributors"]
+license: "MIT"
+homepage: "https://www.freedesktop.org/wiki/Software/pkg-config/"
+bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"
+build: [
+  ["pkg-config" "--help"]
+]
+depexts: [
+  ["pkgconf"] {os = "macos" & os-distribution = "homebrew"}
+  ["pkgconfig"] {os = "macos" & os-distribution = "macports"}
+]
+available: os = "macos" & arch = "arm64"

@@ -1,0 +1,26 @@
+(library
+ (name bonsai_swiftui_text_input_example)
+ (package bonsai_swiftui_text_input_example)
+ (wrapped false)
+ (modules text_input_example)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  virtual_dom.ui_effect))
+
+(executable
+ (name native_embed)
+ (modules native_embed)
+ (libraries
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_text_input_example
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend)
+ (modes
+  (native object)))

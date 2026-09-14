@@ -1,0 +1,303 @@
+{
+  "recorded_at": "2026-09-14T02:48:46.077015+00:00",
+  "source_revision": "39c486233d0a1a614c6cb1267a80fa19d6076fcc",
+  "dirty_worktree": true,
+  "host": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83\n",
+  "compiler": "Apple Swift version 6.2.1 (swiftlang-6.2.1.4.8 clang-1700.4.4.1)\nTarget: arm64-apple-macosx26.0\n",
+  "sha256": {
+    "_build/default/native/test/libruntime_fixture.dylib": "dce13ec610e299213be7cc01aa492ac52907a36a494bc10f6dcbf072954de6ae",
+    "_build/validation/collection-performance/measure-collection": "1bb5abf1ab9141472822a96394067d45a950949190c4d26b2fddb68d1c04b4e6",
+    "tool/measure_swiftui_collection.swift": "7c4b994b3691d18660026be065f0623a87e1af417435cb9738df13eccfde92fe",
+    "tool/measure_swiftui_collection.py": "7367c6fa0865baf54efff11d44823f35bf8ba2157e2c6aacab964ffd245a7cca",
+    "examples/gallery/ocaml/mixed_collection_catalog.ml": "fd2ca59c794e760d7d49e992339bd7595c449f09b552518c2e117423a36bf5af"
+  },
+  "scope": "Debug OCaml pump, frame decode/stage/render commit, programmatic NSScrollView movement, synchronous NSHostingView layout/display and acknowledgment. Synthetic visible-range intents bypass input sampling; no physical gestures, compositor frame rate, allocation/leak proof or iOS claim. Render tree and window remain alive at the final memory sample.",
+  "summary": {
+    "vertical": {
+      "phases": {
+        "initial": {
+          "count": 3,
+          "timings": {
+            "pump_ms": {
+              "median": 3.720542,
+              "p95": 3.747166,
+              "max": 3.747166
+            },
+            "decode_apply_ms": {
+              "median": 29.297041,
+              "p95": 29.998209,
+              "max": 29.998209
+            },
+            "synchronous_layout_display_ms": {
+              "median": 15.877208,
+              "p95": 16.018083,
+              "max": 16.018083
+            },
+            "ack_ms": {
+              "median": 1.982333,
+              "p95": 2.534709,
+              "max": 2.534709
+            },
+            "total_ms": {
+              "median": 50.66975,
+              "p95": 51.721875,
+              "max": 51.721875
+            }
+          },
+          "max_frame_bytes": 249958,
+          "max_render_nodes": 17,
+          "max_materialized_rows": 0
+        },
+        "adjacent": {
+          "count": 300,
+          "timings": {
+            "pump_ms": {
+              "median": 0.166833,
+              "p95": 0.203833,
+              "max": 0.368666
+            },
+            "decode_apply_ms": {
+              "median": 0.5241255,
+              "p95": 0.618834,
+              "max": 1.014791
+            },
+            "synchronous_layout_display_ms": {
+              "median": 1.2660624999999999,
+              "p95": 1.63025,
+              "max": 3.928458
+            },
+            "ack_ms": {
+              "median": 0.1480205,
+              "p95": 0.212875,
+              "max": 0.663041
+            },
+            "total_ms": {
+              "median": 2.116146,
+              "p95": 2.641667,
+              "max": 5.821084
+            }
+          },
+          "max_frame_bytes": 3536,
+          "max_render_nodes": 61,
+          "max_materialized_rows": 21
+        },
+        "distant": {
+          "count": 300,
+          "timings": {
+            "pump_ms": {
+              "median": 0.16949999999999998,
+              "p95": 0.512667,
+              "max": 0.772709
+            },
+            "decode_apply_ms": {
+              "median": 0.9510625,
+              "p95": 1.118375,
+              "max": 1.296
+            },
+            "synchronous_layout_display_ms": {
+              "median": 3.11775,
+              "p95": 3.900041,
+              "max": 4.424625
+            },
+            "ack_ms": {
+              "median": 0.5269170000000001,
+              "p95": 0.66425,
+              "max": 0.814541
+            },
+            "total_ms": {
+              "median": 4.8035415,
+              "p95": 5.839459,
+              "max": 6.234459
+            }
+          },
+          "max_frame_bytes": 3552,
+          "max_render_nodes": 59,
+          "max_materialized_rows": 21
+        }
+      },
+      "memory_runs": [
+        {
+          "before_open_bytes": 28622848,
+          "after_initial_bytes": 86179840,
+          "peak_sampled_bytes": 93126656,
+          "after_runtime_close_bytes": 93126656
+        },
+        {
+          "before_open_bytes": 28590080,
+          "after_initial_bytes": 86212608,
+          "peak_sampled_bytes": 93093888,
+          "after_runtime_close_bytes": 93110272
+        },
+        {
+          "before_open_bytes": 28672000,
+          "after_initial_bytes": 86753280,
+          "peak_sampled_bytes": 93372416,
+          "after_runtime_close_bytes": 93372416
+        }
+      ]
+    },
+    "horizontal": {
+      "phases": {
+        "initial": {
+          "count": 3,
+          "timings": {
+            "pump_ms": {
+              "median": 3.518041,
+              "p95": 3.55475,
+              "max": 3.55475
+            },
+            "decode_apply_ms": {
+              "median": 28.57575,
+              "p95": 28.685667,
+              "max": 28.685667
+            },
+            "synchronous_layout_display_ms": {
+              "median": 14.655958,
+              "p95": 14.740333,
+              "max": 14.740333
+            },
+            "ack_ms": {
+              "median": 1.975208,
+              "p95": 2.00675,
+              "max": 2.00675
+            },
+            "total_ms": {
+              "median": 48.687334,
+              "p95": 48.73775,
+              "max": 48.73775
+            }
+          },
+          "max_frame_bytes": 249958,
+          "max_render_nodes": 17,
+          "max_materialized_rows": 0
+        },
+        "adjacent": {
+          "count": 300,
+          "timings": {
+            "pump_ms": {
+              "median": 0.166979,
+              "p95": 0.196875,
+              "max": 0.227292
+            },
+            "decode_apply_ms": {
+              "median": 0.5263125,
+              "p95": 0.592459,
+              "max": 0.969167
+            },
+            "synchronous_layout_display_ms": {
+              "median": 1.2232500000000002,
+              "p95": 1.463,
+              "max": 4.006625
+            },
+            "ack_ms": {
+              "median": 0.1334795,
+              "p95": 0.172791,
+              "max": 0.660917
+            },
+            "total_ms": {
+              "median": 2.0602085,
+              "p95": 2.4015,
+              "max": 5.826042
+            }
+          },
+          "max_frame_bytes": 3536,
+          "max_render_nodes": 61,
+          "max_materialized_rows": 21
+        },
+        "distant": {
+          "count": 300,
+          "timings": {
+            "pump_ms": {
+              "median": 0.16833350000000002,
+              "p95": 0.520209,
+              "max": 0.599917
+            },
+            "decode_apply_ms": {
+              "median": 0.9487289999999999,
+              "p95": 1.121042,
+              "max": 1.38825
+            },
+            "synchronous_layout_display_ms": {
+              "median": 3.1005415,
+              "p95": 3.651542,
+              "max": 4.237417
+            },
+            "ack_ms": {
+              "median": 0.528729,
+              "p95": 0.737167,
+              "max": 0.95225
+            },
+            "total_ms": {
+              "median": 4.8007915,
+              "p95": 5.624958,
+              "max": 6.524917
+            }
+          },
+          "max_frame_bytes": 3552,
+          "max_render_nodes": 59,
+          "max_materialized_rows": 21
+        }
+      },
+      "memory_runs": [
+        {
+          "before_open_bytes": 28508160,
+          "after_initial_bytes": 86179840,
+          "peak_sampled_bytes": 93192192,
+          "after_runtime_close_bytes": 93192192
+        },
+        {
+          "before_open_bytes": 28540928,
+          "after_initial_bytes": 86065152,
+          "peak_sampled_bytes": 92864512,
+          "after_runtime_close_bytes": 92864512
+        },
+        {
+          "before_open_bytes": 28491776,
+          "after_initial_bytes": 86425600,
+          "peak_sampled_bytes": 93290496,
+          "after_runtime_close_bytes": 93290496
+        }
+      ]
+    }
+  },
+  "raw_reports_sha256": {
+    "horizontal-1.json": "0bd0c84d6d701e6122d6b7fb940112fa34660c0d12f11af63c18d88e62346af4",
+    "horizontal-2.json": "bb8dbb12910f7612ff4dd438d6aa8391eaa57c7a2f80aea9134678a19847f602",
+    "horizontal-3.json": "5e57c941e68395b92819f3f4a33e05762561f1fd483db76bd9f815de8fb7b1a7",
+    "vertical-1.json": "c9f090a38f0331b98bcd7ea772c8d9112368f7085af07e9f03ff491ea0f7cc6b",
+    "vertical-2.json": "ae2f9aa7676af1a07c43e3c25d5db05f40b3924cdceb058d4b9fc73280fc166f",
+    "vertical-3.json": "92fc953c6c71546f24a46d471a646492255a34f7928f5eb5f3275c3f1397c4d6"
+  },
+  "raw_reports_location": "_build/validation/collection-performance/",
+  "reproduction": "python3 tool/measure_swiftui_collection.py",
+  "startup_runs": {
+    "vertical": [
+      {
+        "open_ms": 28.146458,
+        "resident_before_open_bytes": 28622848
+      },
+      {
+        "open_ms": 24.526709,
+        "resident_before_open_bytes": 28590080
+      },
+      {
+        "open_ms": 25.798375,
+        "resident_before_open_bytes": 28672000
+      }
+    ],
+    "horizontal": [
+      {
+        "open_ms": 23.949917,
+        "resident_before_open_bytes": 28508160
+      },
+      {
+        "open_ms": 23.551416,
+        "resident_before_open_bytes": 28540928
+      },
+      {
+        "open_ms": 23.559166,
+        "resident_before_open_bytes": 28491776
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+opam-version: "2.0"
+synopsis: "Platform-independent Transit JSON types and helpers"
+maintainer: "rcmerci <rcmerci@gmail.com>"
+authors: ["rcmerci"]
+license: "MIT"
+homepage: "https://github.com/RCmerci/melange-transit"
+bug-reports: "https://github.com/RCmerci/melange-transit/issues"
+dev-repo: "git+https://github.com/RCmerci/melange-transit.git"
+depends: [
+  "dune" {= "3.23.1"}
+  "ocaml" {= "5.1.1"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs "@install"]
+]

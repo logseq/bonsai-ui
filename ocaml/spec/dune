@@ -1,0 +1,5 @@
+(library
+ (name bonsai_swiftui_spec)
+ (public_name bonsai_swiftui.spec)
+ (modules id)
+ (virtual_modules id))

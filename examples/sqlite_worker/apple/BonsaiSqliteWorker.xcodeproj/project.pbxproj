@@ -1,0 +1,602 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = "1";
+	"classes" = {
+	};
+	"objectVersion" = "56";
+	"objects" = {
+		"0540D2316D24D0D17CC6DDEA" = {
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = "0";
+			"isa" = "PBXFileReference";
+			"path" = "BonsaiSqliteWorker.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"09AA38CEF3EA53936A20C858" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"ENABLE_TESTABILITY" = "YES";
+				"GCC_OPTIMIZATION_LEVEL" = "0";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+		};
+		"0A3E27B8CA818264D75C8D81" = {
+			"children" = (
+				"0540D2316D24D0D17CC6DDEA",
+				"5201B5D12CC114A65F921B95",
+			);
+			"isa" = "PBXGroup";
+			"name" = "Products";
+			"sourceTree" = "<group>";
+		};
+		"0D6E4079E36703EBD37C0072" = {
+			"children" = (
+				"2CB661822DFFA82A32B1109E",
+				"F2124A0D4D637009E296719D",
+				"0A3E27B8CA818264D75C8D81",
+			);
+			"isa" = "PBXGroup";
+			"sourceTree" = "<group>";
+		};
+		"1E4B6209DBC7689E3E7CF89C" = {
+			"buildConfigurations" = (
+				"09AA38CEF3EA53936A20C858",
+				"9E5C9A17C43753CBDBEAD47F",
+				"2C51B24F1BD0E37CCD3A85CD",
+			);
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Debug";
+			"isa" = "XCConfigurationList";
+		};
+		"22F2AA81ACBC70B24132569B" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "729AC91603007E3F3465F85E";
+		};
+		"244210E48437B6556980A702" = {
+			"attributes" = {
+				"BuildIndependentTargetsInParallel" = "YES";
+				"LastUpgradeCheck" = "2610";
+			};
+			"buildConfigurationList" = "1E4B6209DBC7689E3E7CF89C";
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "en";
+			"isa" = "PBXProject";
+			"knownRegions" = (
+				"en",
+				"Base",
+			);
+			"mainGroup" = "0D6E4079E36703EBD37C0072";
+			"packageReferences" = (
+				"BC4A71180870F7945155FBB0",
+			);
+			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = (
+				"E5DA4A4C4D768A1E2CFA8809",
+				"31D05BB72D72683537C58370",
+			);
+		};
+		"2AF18A3015B1E61C92CD9CC1" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"E8BE7C51D6B97667ABBE4BDF",
+				"D3B8EA516D2414C370B603BE",
+			);
+			"isa" = "PBXSourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"2C51B24F1BD0E37CCD3A85CD" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+		};
+		"2CB661822DFFA82A32B1109E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "../swift/App.swift";
+			"sourceTree" = "<group>";
+		};
+		"2EA57C1DFA255DB50B001EE4" = {
+			"buildConfigurations" = (
+				"F446C95C05B9E75D4836D1AF",
+				"466AA5523B919C94D9BCAD4B",
+				"30B86E421B3F2BDD6A235C33",
+			);
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Debug";
+			"isa" = "XCConfigurationList";
+		};
+		"30B86E421B3F2BDD6A235C33" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-macOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.sqlite-worker";
+				"PRODUCT_NAME" = "BonsaiSqliteWorker";
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+		};
+		"31D05BB72D72683537C58370" = {
+			"buildConfigurationList" = "6CE2E97F4611E87D91AAB642";
+			"buildPhases" = (
+				"4B8F7903BE4410BA91B2B2EE",
+				"CE048A46ECB166E4BFE69A79",
+				"BF88959C26F43B1B8794526C",
+				"5C50B4EDF5D26DBE794A8BFA",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+			"isa" = "PBXNativeTarget";
+			"name" = "BonsaiSqliteWorker-iOS";
+			"packageProductDependencies" = (
+				"D0D591BEFC2393C271B48F52",
+			);
+			"productName" = "BonsaiSqliteWorker";
+			"productReference" = "5201B5D12CC114A65F921B95";
+			"productType" = "com.apple.product-type.application";
+		};
+		"44FCDC287CC9ACEC47E7E76A" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "YES";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "0";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-iOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.sqlite-worker";
+				"PRODUCT_NAME" = "BonsaiSqliteWorker";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+		};
+		"4643117387B65857C6B2D5F4" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-iOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.sqlite-worker";
+				"PRODUCT_NAME" = "BonsaiSqliteWorker";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+		};
+		"466AA5523B919C94D9BCAD4B" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-macOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.sqlite-worker";
+				"PRODUCT_NAME" = "BonsaiSqliteWorker";
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Profile";
+		};
+		"4B8F7903BE4410BA91B2B2EE" = {
+			"alwaysOutOfDate" = "1";
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"inputPaths" = (
+				"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o",
+			);
+			"isa" = "PBXShellScriptBuildPhase";
+			"name" = "Verify native complete object";
+			"outputPaths" = (
+				"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp",
+			);
+			"runOnlyForDeploymentPostprocessing" = "0";
+			"shellPath" = "/bin/sh";
+			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\" IOS 18.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+		};
+		"5201B5D12CC114A65F921B95" = {
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = "0";
+			"isa" = "PBXFileReference";
+			"path" = "BonsaiSqliteWorker.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"5C50B4EDF5D26DBE794A8BFA" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"isa" = "PBXResourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"6CE2E97F4611E87D91AAB642" = {
+			"buildConfigurations" = (
+				"44FCDC287CC9ACEC47E7E76A",
+				"A7C4656C3D69BF015ABDB17D",
+				"4643117387B65857C6B2D5F4",
+			);
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Debug";
+			"isa" = "XCConfigurationList";
+		};
+		"6E8D0861B131E05E340FCEFC" = {
+			"fileRef" = "F2124A0D4D637009E296719D";
+			"isa" = "PBXBuildFile";
+		};
+		"721C2FEF15829E7E1F0B3794" = {
+			"alwaysOutOfDate" = "1";
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"inputPaths" = (
+				"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o",
+			);
+			"isa" = "PBXShellScriptBuildPhase";
+			"name" = "Verify native complete object";
+			"outputPaths" = (
+				"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp",
+			);
+			"runOnlyForDeploymentPostprocessing" = "0";
+			"shellPath" = "/bin/sh";
+			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\" MACOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+		};
+		"729AC91603007E3F3465F85E" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"productName" = "BonsaiSwiftUI";
+		};
+		"9E5C9A17C43753CBDBEAD47F" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Profile";
+		};
+		"A75E9E48B8A422CA347F9471" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"isa" = "PBXResourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"A7C4656C3D69BF015ABDB17D" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-iOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.sqlite-worker";
+				"PRODUCT_NAME" = "BonsaiSqliteWorker";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Profile";
+		};
+		"AA1148CBF86620635E9935A5" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "D0D591BEFC2393C271B48F52";
+		};
+		"BC4A71180870F7945155FBB0" = {
+			"isa" = "XCLocalSwiftPackageReference";
+			"relativePath" = "../../..";
+		};
+		"BF88959C26F43B1B8794526C" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"AA1148CBF86620635E9935A5",
+			);
+			"isa" = "PBXFrameworksBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"CE048A46ECB166E4BFE69A79" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"F2F00BE51C44DE325F6FF3F1",
+				"6E8D0861B131E05E340FCEFC",
+			);
+			"isa" = "PBXSourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"D0D591BEFC2393C271B48F52" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"productName" = "BonsaiSwiftUI";
+		};
+		"D3B8EA516D2414C370B603BE" = {
+			"fileRef" = "F2124A0D4D637009E296719D";
+			"isa" = "PBXBuildFile";
+		};
+		"DBB7C4C07C2166C080F4006E" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"22F2AA81ACBC70B24132569B",
+			);
+			"isa" = "PBXFrameworksBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"E5DA4A4C4D768A1E2CFA8809" = {
+			"buildConfigurationList" = "2EA57C1DFA255DB50B001EE4";
+			"buildPhases" = (
+				"721C2FEF15829E7E1F0B3794",
+				"2AF18A3015B1E61C92CD9CC1",
+				"DBB7C4C07C2166C080F4006E",
+				"A75E9E48B8A422CA347F9471",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+			"isa" = "PBXNativeTarget";
+			"name" = "BonsaiSqliteWorker-macOS";
+			"packageProductDependencies" = (
+				"729AC91603007E3F3465F85E",
+			);
+			"productName" = "BonsaiSqliteWorker";
+			"productReference" = "0540D2316D24D0D17CC6DDEA";
+			"productType" = "com.apple.product-type.application";
+		};
+		"E8BE7C51D6B97667ABBE4BDF" = {
+			"fileRef" = "2CB661822DFFA82A32B1109E";
+			"isa" = "PBXBuildFile";
+		};
+		"F2124A0D4D637009E296719D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "../swift/Startup.swift";
+			"sourceTree" = "<group>";
+		};
+		"F2F00BE51C44DE325F6FF3F1" = {
+			"fileRef" = "2CB661822DFFA82A32B1109E";
+			"isa" = "PBXBuildFile";
+		};
+		"F446C95C05B9E75D4836D1AF" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "YES";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "0";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-macOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.sqlite-worker";
+				"PRODUCT_NAME" = "BonsaiSqliteWorker";
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"SWIFT_VERSION" = "6.0";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+		};
+	};
+	"rootObject" = "244210E48437B6556980A702";
+}

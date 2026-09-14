@@ -1,0 +1,18 @@
+opam-version: "2.0"
+synopsis: "OCaml 5 implementation of DataScript"
+description: "OCaml 5 DataScript core selected by the locked iPhoneOS SDK."
+maintainer: "rcmerci"
+authors: ["rcmerci"]
+license: "MIT"
+homepage: "https://github.com/logseq/datascript-ocaml"
+bug-reports: "https://github.com/logseq/datascript-ocaml/issues"
+dev-repo: "git+https://github.com/logseq/datascript-ocaml.git"
+depends: [
+  "ocaml" {= "5.1.1"}
+  "dune" {= "3.23.1"}
+  "persistent_sorted_set_ocaml" {= "dev"}
+  "melange" {= "5.1.0-51"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]

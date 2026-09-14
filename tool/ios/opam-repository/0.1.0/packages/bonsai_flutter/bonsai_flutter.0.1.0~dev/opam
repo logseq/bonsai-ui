@@ -1,0 +1,28 @@
+opam-version: "2.0"
+synopsis: "Native Flutter backend for Jane Street Bonsai"
+description: """
+Bonsai Flutter application runtime and native embedding libraries used by the
+locked iPhoneOS SDK package universe.
+"""
+maintainer: "bonsai_flutter contributors"
+authors: ["bonsai_flutter contributors"]
+license: "MIT"
+homepage: "https://github.com/RCmerci/bonsai_flutter"
+bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"
+dev-repo: "git+https://github.com/RCmerci/bonsai_flutter.git"
+depends: [
+  "ocaml" {= "5.1.1"}
+  "dune" {= "3.23.1"}
+  "eio" {= "1.2"}
+  "eio_posix" {= "1.2"}
+  "mtime" {= "2.1.0"}
+  "base" {= "v0.17.3"}
+  "bonsai" {= "v0.17.0"}
+  "core" {= "v0.17.2"}
+  "incr_dom" {= "v0.17.0"}
+  "virtual_dom" {= "v0.17.0"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+available: os = "macos" & arch = "arm64"

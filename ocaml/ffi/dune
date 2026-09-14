@@ -1,0 +1,25 @@
+(library
+ (name bonsai_swiftui_native_backend)
+ (public_name bonsai_swiftui.native_backend)
+ (wrapped false)
+ (modules native_backend)
+ (libraries
+  bonsai
+  base
+  core
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  threads
+  virtual_dom.ui_effect)
+ (c_library_flags
+  (:include ../../native/system_link_flags.sexp))
+ (foreign_stubs
+  (language c)
+  (names bonsai_swiftui_native_embed)
+  (include_dirs ../../native/src)
+  (flags :standard -std=c11 -Wall -Wextra -Werror)))

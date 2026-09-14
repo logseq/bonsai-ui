@@ -1,0 +1,20 @@
+opam-version: "2.0"
+synopsis: "Fixed iPhoneOS arm64 cross-compilation configuration"
+description: """
+Defines the immutable iPhoneOS arm64 target selected by the Bonsai Flutter SDK.
+The active Xcode installation supplies only the SDK path and SDK version.
+"""
+maintainer: "bonsai_flutter contributors"
+authors: ["bonsai_flutter contributors"]
+license: "MIT"
+homepage: "https://github.com/RCmerci/bonsai_flutter"
+bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"
+depends: ["ocaml" {= "5.1.1"}]
+build: [
+  [
+    "sh"
+    "-c"
+    "sdk=$(xcrun --sdk iphoneos --show-sdk-version) && sysroot=$(xcrun --sdk iphoneos --show-sdk-path) && printf '%s\\n' 'arch: \"arm64\"' 'subarch: \"arm64\"' 'platform: \"iPhoneOS\"' \"sdk: \\\"$sdk\\\"\" \"sysroot: \\\"$sysroot\\\"\" \"cflags: \\\"-arch arm64 -isysroot $sysroot -miphoneos-version-min=15.0\\\"\" \"ldflags: \\\"-Wl,-syslibroot,$sysroot -miphoneos-version-min=15.0\\\"\" 'triple: \"arm-apple-darwin\"' 'triplereal: \"aarch64-apple-darwin\"' 'target: \"aarch64-apple-darwin.ios\"' > conf-ios.config"
+  ]
+]
+available: os = "macos" & arch = "arm64"

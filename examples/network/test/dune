@@ -1,0 +1,64 @@
+(test
+ (name network_policy_tests)
+ (libraries alcotest bonsai_swiftui.spec_impl bonsai_swiftui_network_example))
+
+(tests
+ (names network_tls_tests network_http_tests network_websocket_tests)
+ (deps
+  (glob_files fixtures/*.pem))
+ (libraries
+  alcotest
+  bigstringaf
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.driver
+  bonsai_swiftui_network_example
+  cstruct
+  digestif
+  eio
+  eio.core
+  eio.unix
+  eio_posix
+  gluten
+  httpun
+  httpun-eio
+  httpun-ws
+  ptime
+  tls
+  tls-eio
+  x509))
+
+(test
+ (name network_service_tests)
+ (libraries
+  alcotest
+  bonsai
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.driver
+  bonsai_swiftui_network_example
+  core
+  eio
+  eio.core
+  threads
+  unix
+  virtual_dom.ui_effect))
+
+(test
+ (name network_example_tests)
+ (libraries
+  alcotest
+  base
+  bonsai
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  bonsai_swiftui_test
+  bonsai_swiftui_network_example
+  core
+  eio
+  eio.core
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  threads
+  unix
+  virtual_dom.ui_effect))

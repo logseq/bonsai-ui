@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (public_name bonsai-swiftui)
+ (package bonsai_swiftui_tool)
+ (libraries bonsai_swiftui_tool cmdliner unix))

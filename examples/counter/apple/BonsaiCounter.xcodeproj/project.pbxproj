@@ -1,0 +1,585 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = "1";
+	"classes" = {
+	};
+	"objectVersion" = "56";
+	"objects" = {
+		"09AA38CEF3EA53936A20C858" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"ENABLE_TESTABILITY" = "YES";
+				"GCC_OPTIMIZATION_LEVEL" = "0";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+		};
+		"0A3E27B8CA818264D75C8D81" = {
+			"children" = (
+				"A2E3974F96F61C0EDD1F08DF",
+				"903CCBC3B8216D8F442E9FA6",
+			);
+			"isa" = "PBXGroup";
+			"name" = "Products";
+			"sourceTree" = "<group>";
+		};
+		"0D6E4079E36703EBD37C0072" = {
+			"children" = (
+				"2CB661822DFFA82A32B1109E",
+				"0A3E27B8CA818264D75C8D81",
+			);
+			"isa" = "PBXGroup";
+			"sourceTree" = "<group>";
+		};
+		"1107F28E4965DAED59077F39" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "YES";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "0";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-macOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.counter";
+				"PRODUCT_NAME" = "BonsaiCounter";
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"SWIFT_VERSION" = "6.0";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+		};
+		"17D48C83B157A799D73C0811" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"productName" = "BonsaiSwiftUI";
+		};
+		"1E4B6209DBC7689E3E7CF89C" = {
+			"buildConfigurations" = (
+				"09AA38CEF3EA53936A20C858",
+				"9E5C9A17C43753CBDBEAD47F",
+				"2C51B24F1BD0E37CCD3A85CD",
+			);
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Debug";
+			"isa" = "XCConfigurationList";
+		};
+		"244210E48437B6556980A702" = {
+			"attributes" = {
+				"BuildIndependentTargetsInParallel" = "YES";
+				"LastUpgradeCheck" = "2610";
+			};
+			"buildConfigurationList" = "1E4B6209DBC7689E3E7CF89C";
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "en";
+			"isa" = "PBXProject";
+			"knownRegions" = (
+				"en",
+				"Base",
+			);
+			"mainGroup" = "0D6E4079E36703EBD37C0072";
+			"packageReferences" = (
+				"BC4A71180870F7945155FBB0",
+			);
+			"productRefGroup" = "0A3E27B8CA818264D75C8D81";
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = (
+				"F2F582134CC482E03F49C842",
+				"BE4BE235FB31972F93898FFB",
+			);
+		};
+		"2C51B24F1BD0E37CCD3A85CD" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+		};
+		"2CB661822DFFA82A32B1109E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "../swift/App.swift";
+			"sourceTree" = "<group>";
+		};
+		"2F30D827144D6908624B4BA1" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"productName" = "BonsaiSwiftUI";
+		};
+		"30F7BE1B7CBE064FC6A9229B" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"72175A1796C1A5A694D3776D",
+			);
+			"isa" = "PBXSourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"3D2C4ED18306956B8239F628" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "2F30D827144D6908624B4BA1";
+		};
+		"3D9D21210A98C1F40105225C" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "17D48C83B157A799D73C0811";
+		};
+		"41E76673E3A522997595C948" = {
+			"buildConfigurations" = (
+				"1107F28E4965DAED59077F39",
+				"B026F9F48E8EB82E2556D600",
+				"7104372BDE1436D9DCDBF6B4",
+			);
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Debug";
+			"isa" = "XCConfigurationList";
+		};
+		"45AD11E47C18A016297C3AC4" = {
+			"buildConfigurations" = (
+				"63EEA157FF0660CB01F39119",
+				"5AA21661358D94D45FE4F05E",
+				"B0891616D11A5277F4B3D81E",
+			);
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Debug";
+			"isa" = "XCConfigurationList";
+		};
+		"5AA21661358D94D45FE4F05E" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-iOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.counter";
+				"PRODUCT_NAME" = "BonsaiCounter";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Profile";
+		};
+		"63EEA157FF0660CB01F39119" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "YES";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "0";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-iOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.counter";
+				"PRODUCT_NAME" = "BonsaiCounter";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+		};
+		"7104372BDE1436D9DCDBF6B4" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-macOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.counter";
+				"PRODUCT_NAME" = "BonsaiCounter";
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+		};
+		"72175A1796C1A5A694D3776D" = {
+			"fileRef" = "2CB661822DFFA82A32B1109E";
+			"isa" = "PBXBuildFile";
+		};
+		"903CCBC3B8216D8F442E9FA6" = {
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = "0";
+			"isa" = "PBXFileReference";
+			"path" = "BonsaiCounter.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"9E5C9A17C43753CBDBEAD47F" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Profile";
+		};
+		"A2A1C2AF9B3ADD904C2777BF" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"3D9D21210A98C1F40105225C",
+			);
+			"isa" = "PBXFrameworksBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"A2E3974F96F61C0EDD1F08DF" = {
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = "0";
+			"isa" = "PBXFileReference";
+			"path" = "BonsaiCounter.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"A5E357ACECBC9731213A50BE" = {
+			"alwaysOutOfDate" = "1";
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"inputPaths" = (
+				"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o",
+			);
+			"isa" = "PBXShellScriptBuildPhase";
+			"name" = "Verify native complete object";
+			"outputPaths" = (
+				"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp",
+			);
+			"runOnlyForDeploymentPostprocessing" = "0";
+			"shellPath" = "/bin/sh";
+			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\" MACOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+		};
+		"AC5E1993210AF003DB6BAACC" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"3D2C4ED18306956B8239F628",
+			);
+			"isa" = "PBXFrameworksBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"B026F9F48E8EB82E2556D600" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-macOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.counter";
+				"PRODUCT_NAME" = "BonsaiCounter";
+				"SDKROOT" = "macosx";
+				"SUPPORTED_PLATFORMS" = "macosx";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Profile";
+		};
+		"B0891616D11A5277F4B3D81E" = {
+			"buildSettings" = {
+				"ARCHS" = "arm64";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_TESTABILITY" = "NO";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"GCC_OPTIMIZATION_LEVEL" = "s";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"INFOPLIST_FILE" = "Info-iOS.plist";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"LD_RUNPATH_SEARCH_PATHS" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ONLY_ACTIVE_ARCH" = "NO";
+				"OTHER_LDFLAGS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"-framework",
+					"CoreFoundation",
+					"-framework",
+					"Security",
+					"-lpthread",
+					"@\"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp\"",
+					"-Wl,-no_compact_unwind",
+				);
+				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.counter";
+				"PRODUCT_NAME" = "BonsaiCounter";
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_INCLUDE_PATHS" = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/../../../native/src\"",
+				);
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+			};
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+		};
+		"BC4A71180870F7945155FBB0" = {
+			"isa" = "XCLocalSwiftPackageReference";
+			"relativePath" = "../../..";
+		};
+		"BE4BE235FB31972F93898FFB" = {
+			"buildConfigurationList" = "45AD11E47C18A016297C3AC4";
+			"buildPhases" = (
+				"E3A5A3EB385C55D29EBADED2",
+				"ECDD3AE9227F87553C2E2B5F",
+				"A2A1C2AF9B3ADD904C2777BF",
+				"F5E525ACC818C2A263B4804F",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+			"isa" = "PBXNativeTarget";
+			"name" = "BonsaiCounter-iOS";
+			"packageProductDependencies" = (
+				"17D48C83B157A799D73C0811",
+			);
+			"productName" = "BonsaiCounter";
+			"productReference" = "903CCBC3B8216D8F442E9FA6";
+			"productType" = "com.apple.product-type.application";
+		};
+		"E3A5A3EB385C55D29EBADED2" = {
+			"alwaysOutOfDate" = "1";
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"inputPaths" = (
+				"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o",
+			);
+			"isa" = "PBXShellScriptBuildPhase";
+			"name" = "Verify native complete object";
+			"outputPaths" = (
+				"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp",
+			);
+			"runOnlyForDeploymentPostprocessing" = "0";
+			"shellPath" = "/bin/sh";
+			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\" IOS 18.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+		};
+		"ECDD3AE9227F87553C2E2B5F" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+				"FF2EDADBDD78669A3AB0F3EA",
+			);
+			"isa" = "PBXSourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"F2F582134CC482E03F49C842" = {
+			"buildConfigurationList" = "41E76673E3A522997595C948";
+			"buildPhases" = (
+				"A5E357ACECBC9731213A50BE",
+				"30F7BE1B7CBE064FC6A9229B",
+				"AC5E1993210AF003DB6BAACC",
+				"FBAE0C5C469B32AD6C275C27",
+			);
+			"buildRules" = (
+			);
+			"dependencies" = (
+			);
+			"isa" = "PBXNativeTarget";
+			"name" = "BonsaiCounter-macOS";
+			"packageProductDependencies" = (
+				"2F30D827144D6908624B4BA1",
+			);
+			"productName" = "BonsaiCounter";
+			"productReference" = "A2E3974F96F61C0EDD1F08DF";
+			"productType" = "com.apple.product-type.application";
+		};
+		"F5E525ACC818C2A263B4804F" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"isa" = "PBXResourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"FBAE0C5C469B32AD6C275C27" = {
+			"buildActionMask" = "2147483647";
+			"files" = (
+			);
+			"isa" = "PBXResourcesBuildPhase";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"FF2EDADBDD78669A3AB0F3EA" = {
+			"fileRef" = "2CB661822DFFA82A32B1109E";
+			"isa" = "PBXBuildFile";
+		};
+	};
+	"rootObject" = "244210E48437B6556980A702";
+}

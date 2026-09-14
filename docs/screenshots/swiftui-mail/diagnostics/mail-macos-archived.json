@@ -1,0 +1,16 @@
+{
+  "application" : "Bonsai Mail",
+  "capture" : "NSView.cacheDisplay of a running standalone SwiftUI App window; not a desktop screenshot",
+  "contentHeightPoints" : 760,
+  "contentWidthPoints" : 1200,
+  "displayScale" : 2,
+  "effectiveAppearance" : "NSAppearanceNameAqua",
+  "entrypoint" : "mail-collection",
+  "height" : 1520,
+  "model" : "Mail.app",
+  "os" : "Version 26.6.2 (Build 25G83)",
+  "revision" : 9,
+  "state" : "archived",
+  "timestamp" : "2026-09-13T08:42:42Z",
+  "width" : 2400
+}

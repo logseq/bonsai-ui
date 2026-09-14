@@ -1,0 +1,16 @@
+(lang dune 3.17)
+(name bonsai_swiftui_counter_example)
+(generate_opam_files false)
+(implicit_transitive_deps false)
+(license MIT)
+
+(package
+ (name bonsai_swiftui_counter_example)
+ (depends
+  (ocaml (= 5.1.1))
+  (dune (>= 3.17))
+  (bonsai_swiftui (= 0.1.0~dev))
+  (base (and (>= v0.17) (< v0.18~)))
+  (bonsai (and (>= v0.17) (< v0.18~)))
+  (incr_dom (and (>= v0.17) (< v0.18~)))
+  (virtual_dom (and (>= v0.17) (< v0.18~)))))

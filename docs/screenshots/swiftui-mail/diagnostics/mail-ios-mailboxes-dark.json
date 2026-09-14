@@ -1,0 +1,22 @@
+{
+  "platform": "iOS",
+  "device_model": "iPhone 13",
+  "os_version": "26.6.1",
+  "os_build": "23G83",
+  "capture_method": "Xcode Devices > Take Screenshot through CUA",
+  "state": "Mailboxes observed before reinstallation; whether a user or native navigation selected it is unverified",
+  "appearance": "Dark, observed; user settings unchanged",
+  "pixel_dimensions": [
+    1170,
+    2532
+  ],
+  "image_sha256": "4874ff48606e9b65f7d85bea4d8622b5e58345a967c39d31f472f2adb50635d5",
+  "original_sha256": "4874ff48606e9b65f7d85bea4d8622b5e58345a967c39d31f472f2adb50635d5",
+  "capture_local_time": "2026-09-13 21:23:55 +08:00",
+  "source_base_revision": "39c486233d0a1a614c6cb1267a80fa19d6076fcc",
+  "source_state": "uncommitted migration checkpoint",
+  "native_object_sha256": "8377db6185e3acbf84f6acba55e65a6b022e429112262f63757dff424ea72034",
+  "acceptance": "Diagnostic only: dark foreground on black background has insufficient contrast. Inbox, expansion, swipe, detail/attachment remain unverified.",
+  "local_executable_sha256_at_capture": "e395242d50db3c3e5ce9fb4d7fe73553028e863dc14e0bc33987e65551e0f49f",
+  "installed_executable_identity": "Unverified: Xcode rebuilt the local App after the earlier install. Superseded by the reinstalled Inbox capture."
+}

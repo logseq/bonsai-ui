@@ -1,0 +1,5 @@
+(library
+ (name bonsai_swiftui_spec_impl)
+ (public_name bonsai_swiftui.spec_impl)
+ (implements bonsai_swiftui_spec)
+ (modules id))

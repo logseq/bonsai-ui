@@ -1,0 +1,17 @@
+_build/
+.build/
+__pycache__/
+*.pyc
+/examples/*/apple/DerivedData/
+/examples/*/apple/Native/
+**/*.xcodeproj/xcuserdata/
+**/*.xcodeproj/project.xcworkspace/xcuserdata/
+_opam/
+*.install
+*.merlin
+build/
+coverage/
+.DS_Store
+.idea/
+*.iml
+/.dir-locals.el

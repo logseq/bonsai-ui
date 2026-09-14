@@ -1,0 +1,37 @@
+opam-version: "2.0"
+name: "bonsai_swiftui_tool"
+version: "0.1.0~dev"
+synopsis: "OCaml-first tooling for native SwiftUI applications"
+description: """
+The bonsai-swiftui command initializes, validates, builds, and runs native
+SwiftUI applications with OCaml application logic and generated Xcode hosts.
+"""
+maintainer: "bonsai_swiftui contributors"
+authors: ["bonsai_swiftui contributors"]
+license: "MIT"
+homepage: "https://github.com/rcmerci/bonsai_flutter"
+bug-reports: "https://github.com/rcmerci/bonsai_flutter/issues"
+dev-repo: "git+https://github.com/rcmerci/bonsai_flutter.git"
+depends: [
+  "ocaml" {= "5.1.1"}
+  "dune" {>= "3.17"}
+  "cmdliner" {>= "1.3.0"}
+  "digestif" {= "1.3.1"}
+  "sexplib" {>= "v0.17" & < "v0.18~"}
+  "alcotest" {with-test & = "1.7.0"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+install: [
+  ["mkdir" "-p" "%{share}%/bonsai_swiftui_tool/framework"]
+  ["cp" "-R" "native" "%{share}%/bonsai_swiftui_tool/framework/"]
+  ["cp" "-R" "swift" "%{share}%/bonsai_swiftui_tool/framework/"]
+  ["cp" "Package.swift" "%{share}%/bonsai_swiftui_tool/framework/Package.swift"]
+  ["cp" "-R" "ocaml" "%{share}%/bonsai_swiftui_tool/framework/"]
+  ["cp" "-R" "protocol" "%{share}%/bonsai_swiftui_tool/framework/"]
+  ["cp" "-R" "tool" "%{share}%/bonsai_swiftui_tool/framework/"]
+  ["cp" "-R" "vendor" "%{share}%/bonsai_swiftui_tool/framework/"]
+  ["cp" "dune-project" "%{share}%/bonsai_swiftui_tool/framework/dune-project"]
+]
+available: arch != "x86_32"

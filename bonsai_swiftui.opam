@@ -1,0 +1,33 @@
+opam-version: "2.0"
+name: "bonsai_swiftui"
+version: "0.1.0~dev"
+synopsis: "A native SwiftUI backend for Jane Street Bonsai"
+description: """
+bonsai_swiftui is an OCaml-first UI framework. Bonsai owns application state,
+view construction, reconciliation, and incremental patches; SwiftUI owns
+native widget construction, layout, paint, input-method integration, and
+platform services.
+"""
+maintainer: "bonsai_swiftui contributors"
+authors: ["bonsai_swiftui contributors"]
+license: "MIT"
+homepage: "https://github.com/rcmerci/bonsai_flutter"
+bug-reports: "https://github.com/rcmerci/bonsai_flutter/issues"
+dev-repo: "git+https://github.com/rcmerci/bonsai_flutter.git"
+depends: [
+  "ocaml" {= "5.1.1"}
+  "dune" {>= "3.17"}
+  "eio" {= "1.2"}
+  "eio_posix" {= "1.2"}
+  "mtime" {= "2.1.0"}
+  "uri" {>= "4.4.0"}
+  "base" {>= "v0.17" & < "v0.18~"}
+  "bonsai" {>= "v0.17" & < "v0.18~"}
+  "core" {>= "v0.17" & < "v0.18~"}
+  "incr_dom" {>= "v0.17" & < "v0.18~"}
+  "virtual_dom" {>= "v0.17" & < "v0.18~"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+available: arch != "x86_32"

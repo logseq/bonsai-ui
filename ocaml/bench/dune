@@ -1,0 +1,9 @@
+(executable
+ (name runtime_bench)
+ (modules runtime_bench)
+ (libraries
+  bonsai_swiftui.spec_impl
+  unix
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime))

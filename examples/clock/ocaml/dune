@@ -1,0 +1,26 @@
+(library
+ (name bonsai_swiftui_clock_example)
+ (package bonsai_swiftui_clock_example)
+ (wrapped false)
+ (modules clock)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(executable
+ (name native_embed)
+ (modules native_embed)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_clock_example
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend)
+ (modes
+  (native object)))

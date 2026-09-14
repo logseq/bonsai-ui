@@ -1,0 +1,288 @@
+"""Generate deterministic Xcode application hosts for the native Swift package."""
+
+import hashlib
+import json
+import os
+from pathlib import Path
+import plistlib
+import shlex
+import xml.etree.ElementTree as ET
+
+
+CONFIGURATIONS = ("Debug", "Profile", "Release")
+PLATFORMS = {"macOS": ("macosx", "MACOS", "26.0"), "iOS": ("iphoneos", "IOS", "18.0")}
+
+
+def write_if_changed(path, content):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    content = content.encode() if isinstance(content, str) else content
+    if not path.is_file() or path.read_bytes() != content:
+        path.write_bytes(content)
+
+
+def openstep(value, depth=0):
+    indent = "\t" * depth
+    if isinstance(value, dict):
+        return "{\n" + "".join(
+            f"{indent}\t{json.dumps(key)} = {openstep(item, depth + 1)};\n"
+            for key, item in sorted(value.items())
+        ) + indent + "}"
+    if isinstance(value, list):
+        return "(\n" + "".join(
+            f"{indent}\t{openstep(item, depth + 1)},\n" for item in value
+        ) + indent + ")"
+    return json.dumps(str(value), ensure_ascii=False)
+
+
+def generate_project(*, framework_root, application_root, host_directory, product_name,
+                     bundle_identifier, development_team="", check=False):
+    framework_root = Path(framework_root).resolve()
+    application_root = Path(application_root).resolve()
+    host = Path(host_directory).resolve()
+    project = host / f"{product_name}.xcodeproj"
+    objects = {}
+    outputs = {}
+
+    def emit(path, content):
+        outputs[path] = content.encode() if isinstance(content, str) else content
+
+    def add(key, isa, **attributes):
+        identifier = hashlib.sha256(key.encode()).hexdigest()[:24].upper()
+        objects[identifier] = {"isa": isa, **attributes}
+        return identifier
+
+    def file(path, kind):
+        relative = os.path.relpath(path, host)
+        return add(f"file/{relative}", "PBXFileReference", lastKnownFileType=kind,
+                   path=relative, sourceTree="<group>")
+
+    def configurations(key, settings):
+        entries = []
+        for configuration in CONFIGURATIONS:
+            entries.append(add(
+                f"{key}/{configuration}", "XCBuildConfiguration", name=configuration,
+                buildSettings={
+                    **settings,
+                    "SWIFT_OPTIMIZATION_LEVEL": "-Onone" if configuration == "Debug" else "-O",
+                    "GCC_OPTIMIZATION_LEVEL": "0" if configuration == "Debug" else "s",
+                    "DEBUG_INFORMATION_FORMAT": "dwarf" if configuration == "Debug" else "dwarf-with-dsym",
+                    "ENABLE_TESTABILITY": "YES" if configuration == "Debug" else "NO",
+                },
+            ))
+        return add(f"{key}/configurations", "XCConfigurationList", buildConfigurations=entries,
+                   defaultConfigurationIsVisible="0", defaultConfigurationName="Debug")
+
+    source_files = [file(path, "sourcecode.swift") for path in sorted((application_root / "swift").glob("*.swift"))]
+    if not source_files:
+        raise ValueError(f"No Swift application sources in {application_root / 'swift'}")
+    test_files = [file(path, "sourcecode.swift") for path in sorted((application_root / "apple-tests").glob("*.swift"))]
+    resources = []
+    resource_directory = application_root / "resources"
+    if resource_directory.is_dir():
+        for path in sorted(resource_directory.iterdir()):
+            kind = "folder.assetcatalog" if path.suffix == ".xcassets" else "folder" if path.is_dir() else "file"
+            resources.append(file(path, kind))
+    package = add("package", "XCLocalSwiftPackageReference", relativePath=os.path.relpath(framework_root, host))
+    targets, products, schemes, test_host_files, ui_test_files = [], [], [], [], []
+
+    for platform, (sdk, macho, minimum) in PLATFORMS.items():
+        target_name = f"{product_name}-{platform}"
+        platform_ui_files = [file(path, "sourcecode.swift") for path in sorted(
+            (application_root / "apple-ui-tests" / platform.lower()).glob("*.swift"))]
+        ui_test_files.extend(platform_ui_files)
+        metadata = {
+            "CFBundleDevelopmentRegion": "$(DEVELOPMENT_LANGUAGE)",
+            "CFBundleIdentifier": "$(PRODUCT_BUNDLE_IDENTIFIER)",
+            "CFBundleExecutable": "$(EXECUTABLE_NAME)", "CFBundleName": "$(PRODUCT_NAME)",
+            "CFBundlePackageType": "APPL", "CFBundleVersion": "1",
+            "CFBundleShortVersionString": "1.0",
+        }
+        if platform == "macOS":
+            metadata.update(LSMinimumSystemVersion=minimum, NSHighResolutionCapable=True)
+        else:
+            metadata.update(
+                LSRequiresIPhoneOS=True, UILaunchScreen={},
+                UIApplicationSceneManifest={"UIApplicationSupportsMultipleScenes": False},
+                UISupportedInterfaceOrientations=["UIInterfaceOrientationPortrait", "UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"],
+            )
+            metadata["UISupportedInterfaceOrientations~ipad"] = [
+                "UIInterfaceOrientationPortrait", "UIInterfaceOrientationPortraitUpsideDown",
+                "UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight",
+            ]
+        emit(host / f"Info-{platform}.plist", plistlib.dumps(metadata))
+        emit(host / f"{platform}.entitlements", plistlib.dumps({}))
+        settings = {
+            "ARCHS": "arm64", "ONLY_ACTIVE_ARCH": "NO", "SDKROOT": sdk,
+            "SUPPORTED_PLATFORMS": sdk, "SUPPORTS_MACCATALYST": "NO",
+            "SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD": "NO",
+            "MACOSX_DEPLOYMENT_TARGET": "26.0", "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
+            "SWIFT_VERSION": "6.0", "CLANG_ENABLE_MODULES": "YES",
+            "SWIFT_INCLUDE_PATHS": ["$(inherited)", f'"$(PROJECT_DIR)/{os.path.relpath(framework_root / "native/src", host)}"'],
+            "OTHER_LDFLAGS": ["$(inherited)", f'"$(PROJECT_DIR)/Native/{sdk}/$(CONFIGURATION)/runtime.complete.o"',
+                              "-framework", "CoreFoundation", "-framework", "Security",
+                              "-lpthread", '@"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp"', "-Wl,-no_compact_unwind"],
+            "LD_RUNPATH_SEARCH_PATHS": ["$(inherited)", "@executable_path/../Frameworks", "@executable_path/Frameworks", "@loader_path/Frameworks"],
+            "CODE_SIGN_STYLE": "Automatic", "DEVELOPMENT_TEAM": development_team,
+            "ENABLE_USER_SCRIPT_SANDBOXING": "NO",
+        }
+        if platform == "macOS":
+            settings["CODE_SIGN_IDENTITY"] = "-"
+        else:
+            settings["TARGETED_DEVICE_FAMILY"] = "1,2"
+
+        def target(name, sources, kind="application"):
+            is_test = kind in ("runtime-test", "ui-test")
+            links_runtime = kind in ("application", "runtime-test")
+            suffix = "xctest" if is_test else "app"
+            output_name = product_name if kind == "application" else name
+            product = add(f"{name}/product", "PBXFileReference", explicitFileType="wrapper.cfbundle" if is_test else "wrapper.application",
+                          path=f"{output_name}.{suffix}", sourceTree="BUILT_PRODUCTS_DIR", includeInIndex="0")
+            products.append(product)
+            package_products, package_links = [], []
+            if links_runtime:
+                package_product = add(f"{name}/package-product", "XCSwiftPackageProductDependency", productName="BonsaiSwiftUI")
+                package_products.append(package_product)
+                package_links.append(add(f"{name}/package-link", "PBXBuildFile", productRef=package_product))
+            source_builds = [add(f"{name}/source/{reference}", "PBXBuildFile", fileRef=reference) for reference in sources]
+            resource_builds = [add(f"{name}/resource/{reference}", "PBXBuildFile", fileRef=reference) for reference in resources] if kind == "application" else []
+            phases = []
+            if links_runtime:
+                phases.append(add(
+                    f"{name}/verify", "PBXShellScriptBuildPhase", name="Verify native complete object",
+                    buildActionMask="2147483647", runOnlyForDeploymentPostprocessing="0", files=[],
+                    inputPaths=[f"$(PROJECT_DIR)/Native/{sdk}/$(CONFIGURATION)/runtime.complete.o"],
+                    outputPaths=["$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp"], alwaysOutOfDate="1", shellPath="/bin/sh",
+                    shellScript='set -eu\n/bin/sh "$PROJECT_DIR"/' + shlex.quote(os.path.relpath(framework_root / "tool/ios/verify_complete_object.sh", host))
+                    + f' "$PROJECT_DIR/Native/{sdk}/$CONFIGURATION/runtime.complete.o" {macho} {minimum} arm64\n'
+                    + f'symbols=$(xcrun nm -uj "$PROJECT_DIR/Native/{sdk}/$CONFIGURATION/runtime.complete.o")\n'
+                    + 'mkdir -p "$DERIVED_FILE_DIR"\n'
+                    + ': > "$DERIVED_FILE_DIR/runtime-system-libraries.rsp"\n'
+                    + 'if printf "%s\\n" "$symbols" | LC_ALL=C grep -Eq "^_sqlite3_[A-Za-z0-9_]+$"; then\n'
+                    + '  printf "%s\\n" "-lsqlite3" > "$DERIVED_FILE_DIR/runtime-system-libraries.rsp"\n'
+                    + 'fi\n',
+                ))
+            for phase, files in [("Sources", source_builds), ("Frameworks", package_links), ("Resources", resource_builds)]:
+                phases.append(add(f"{name}/{phase}", f"PBX{phase}BuildPhase", files=files,
+                                  buildActionMask="2147483647", runOnlyForDeploymentPostprocessing="0"))
+            target_settings = {**settings, "PRODUCT_NAME": output_name,
+                               "PRODUCT_BUNDLE_IDENTIFIER": bundle_identifier + {
+                                   "application": "", "runtime-host": ".test-host",
+                                   "runtime-test": ".tests", "ui-test": ".ui-tests",
+                               }[kind]}
+            dependencies = []
+            if not links_runtime:
+                target_settings.pop("OTHER_LDFLAGS")
+                target_settings.pop("SWIFT_INCLUDE_PATHS")
+            if kind == "ui-test":
+                target_settings.update(GENERATE_INFOPLIST_FILE="YES", TEST_TARGET_NAME=target_name)
+                dependencies.append(add(f"{name}/app-dependency", "PBXTargetDependency", target=application))
+            elif kind == "runtime-test":
+                target_settings.update(GENERATE_INFOPLIST_FILE="YES", TEST_HOST="")
+                if platform == "iOS":
+                    target_settings.update(
+                        TEST_HOST=f"$(BUILT_PRODUCTS_DIR)/{test_host_name}.app/{test_host_name}",
+                        BUNDLE_LOADER="$(TEST_HOST)",
+                    )
+                    dependencies.append(add(f"{name}/host-dependency", "PBXTargetDependency", target=test_host))
+            else:
+                target_settings.update(INFOPLIST_FILE=f"Info-{platform}.plist", GENERATE_INFOPLIST_FILE="NO",
+                                       CODE_SIGN_ENTITLEMENTS=f"{platform}.entitlements")
+            identifier = add(name, "PBXNativeTarget", name=name, productName=output_name, productReference=product,
+                             productType=("com.apple.product-type.bundle.ui-testing" if kind == "ui-test" else
+                                          "com.apple.product-type.bundle.unit-test" if is_test else "com.apple.product-type.application"),
+                             buildConfigurationList=configurations(name, target_settings),
+                             buildPhases=phases, buildRules=[], dependencies=dependencies, packageProductDependencies=package_products)
+            targets.append(identifier)
+            return identifier
+
+        application = target(target_name, source_files)
+        if test_files and platform == "iOS":
+            test_host_name = product_name + "TestHost"
+            test_host_source = host / "TestHost.swift"
+            emit(test_host_source, '''import SwiftUI
+
+@main
+struct RuntimeTestHost: App {
+  var body: some Scene {
+    WindowGroup {
+      Text("Runtime tests")
+    }
+  }
+}
+''')
+            test_host_file = file(test_host_source, "sourcecode.swift")
+            test_host_files.append(test_host_file)
+            test_host = target(test_host_name, [test_host_file], kind="runtime-host")
+        test_name = target_name + "Tests"
+        tests = []
+        if test_files:
+            tests.append((test_name, target(test_name, test_files, kind="runtime-test")))
+        if platform_ui_files:
+            ui_test_name = target_name + "UITests"
+            tests.append((ui_test_name, target(ui_test_name, platform_ui_files, kind="ui-test")))
+        schemes.append((target_name, application, tests))
+
+    product_group = add("products", "PBXGroup", children=products, name="Products", sourceTree="<group>")
+    main_group = add("main", "PBXGroup", children=source_files + test_files + test_host_files + ui_test_files + resources + [product_group], sourceTree="<group>")
+    project_id = add("project", "PBXProject", attributes={"LastUpgradeCheck": "2610", "BuildIndependentTargetsInParallel": "YES"},
+                     buildConfigurationList=configurations("project", {"ARCHS": "arm64"}), compatibilityVersion="Xcode 14.0",
+                     developmentRegion="en", knownRegions=["en", "Base"], mainGroup=main_group,
+                     productRefGroup=product_group, projectDirPath="", projectRoot="", targets=targets,
+                     packageReferences=[package])
+    emit(project / "project.pbxproj", "// !$*UTF8*$!\n" + openstep({
+        "archiveVersion": "1", "classes": {}, "objectVersion": "56", "objects": objects, "rootObject": project_id,
+    }) + "\n")
+
+    for name, application, tests in schemes:
+        scheme = ET.Element("Scheme", LastUpgradeVersion="2610", version="1.7")
+
+        def reference(parent, identifier, blueprint, buildable):
+            ET.SubElement(parent, "BuildableReference", BuildableIdentifier="primary", BlueprintIdentifier=identifier,
+                          BuildableName=buildable, BlueprintName=blueprint, ReferencedContainer=f"container:{project.name}")
+
+        build = ET.SubElement(scheme, "BuildAction", parallelizeBuildables="YES", buildImplicitDependencies="YES", buildArchitectures="Automatic")
+        entries = ET.SubElement(build, "BuildActionEntries")
+        entry = ET.SubElement(entries, "BuildActionEntry", buildForTesting="YES", buildForRunning="YES", buildForProfiling="YES", buildForArchiving="YES", buildForAnalyzing="YES")
+        reference(entry, application, name, f"{product_name}.app")
+        action = ET.SubElement(scheme, "TestAction", buildConfiguration="Debug", selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB", selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB", shouldUseLaunchSchemeArgsEnv="YES")
+        testables = ET.SubElement(action, "Testables")
+        for test_name, identifier in tests:
+            testable = ET.SubElement(testables, "TestableReference", skipped="NO", parallelizable="NO")
+            reference(testable, identifier, test_name, f"{test_name}.xctest")
+        launch = ET.SubElement(scheme, "LaunchAction", buildConfiguration="Debug", selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB", selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB", launchStyle="0", useCustomWorkingDirectory="NO", ignoresPersistentStateOnLaunch="NO", debugDocumentVersioning="YES", allowLocationSimulation="NO")
+        reference(ET.SubElement(launch, "BuildableProductRunnable", runnableDebuggingMode="0"), application, name, f"{product_name}.app")
+        profile = ET.SubElement(scheme, "ProfileAction", buildConfiguration="Profile", shouldUseLaunchSchemeArgsEnv="YES", savedToolIdentifier="", useCustomWorkingDirectory="NO", debugDocumentVersioning="YES")
+        reference(ET.SubElement(profile, "BuildableProductRunnable", runnableDebuggingMode="0"), application, name, f"{product_name}.app")
+        ET.SubElement(scheme, "AnalyzeAction", buildConfiguration="Debug")
+        ET.SubElement(scheme, "ArchiveAction", buildConfiguration="Release", revealArchiveInOrganizer="YES")
+        ET.indent(scheme)
+        emit(project / "xcshareddata/xcschemes" / f"{name}.xcscheme", ET.tostring(scheme, encoding="utf-8", xml_declaration=True))
+    changed = [path for path, content in outputs.items()
+               if not path.is_file() or path.read_bytes() != content]
+    if check and changed:
+        raise ValueError("Generated Xcode host is out of date: " + ", ".join(str(path) for path in changed))
+    if not check:
+        for path in changed:
+            write_if_changed(path, outputs[path])
+    return project
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--framework-root", required=True, type=Path)
+    parser.add_argument("--application-root", required=True, type=Path)
+    parser.add_argument("--host-directory", required=True, type=Path)
+    parser.add_argument("--product-name", required=True)
+    parser.add_argument("--bundle-identifier", required=True)
+    parser.add_argument("--check", action="store_true")
+    arguments = vars(parser.parse_args())
+    try:
+        print(generate_project(**arguments))
+    except (OSError, ValueError) as error:
+        parser.exit(1, f"{error}\n")
+
+
+if __name__ == "__main__":
+    main()

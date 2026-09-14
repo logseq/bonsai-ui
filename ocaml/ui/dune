@@ -1,0 +1,19 @@
+(library
+ (name bonsai_swiftui_ui)
+ (public_name bonsai_swiftui.ui)
+ (libraries bonsai_swiftui.spec_impl uri)
+ (modules
+  key
+  test_id
+  event
+  layout
+  style
+  semantics
+  theme
+  text_editing
+  navigation
+  animation
+  view
+  workflow
+  native_widget
+  debug))

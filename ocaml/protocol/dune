@@ -1,0 +1,5 @@
+(library
+ (name bonsai_swiftui_protocol)
+ (public_name bonsai_swiftui.protocol)
+ (libraries bonsai_swiftui.spec_impl uri)
+ (modules :standard))

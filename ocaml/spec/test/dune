@@ -1,0 +1,4 @@
+(test
+ (name id_contract_tests)
+ (modules id_contract_tests)
+ (libraries bonsai_swiftui.spec_impl))

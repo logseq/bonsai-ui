@@ -1,0 +1,44 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "00008110-000A71C414BB801E",
+        "deviceName": "c\u7684iPhone",
+        "modelName": "iPhone 13",
+        "osBuildNumber": "23G83",
+        "osVersion": "26.6.1",
+        "platform": "iOS"
+      },
+      "expectedFailures": 0,
+      "failedTests": 1,
+      "passedTests": 0,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "BonsaiMail-iOS \u00b7 Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 1,
+  "finishTime": 1789348451.956,
+  "passedTests": 0,
+  "result": "Failed",
+  "skippedTests": 0,
+  "startTime": 1789348384.166,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "The test runner failed to initialize for UI testing. (Underlying Error: Timed out while enabling automation mode.)",
+      "targetName": "BonsaiMail-iOSUITests",
+      "testIdentifier": 1,
+      "testIdentifierString": "BonsaiMail-iOSUITests-Runner (23225) encountered an error",
+      "testName": "BonsaiMail-iOSUITests-Runner (23225) encountered an error"
+    }
+  ],
+  "title": "Test - BonsaiMail-iOS",
+  "topInsights": [],
+  "totalTestCount": 1
+}

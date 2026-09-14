@@ -1,0 +1,7 @@
+(rule
+ (target system_link_flags.sexp)
+ (deps ../tool/swiftui_system_link_flags.py)
+ (action
+  (with-stdout-to
+   %{target}
+   (run python3 %{dep:../tool/swiftui_system_link_flags.py} %{context_name}))))

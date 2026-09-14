@@ -1,0 +1,15 @@
+--- a/otherlibs/Makefile.otherlibs.common
++++ b/otherlibs/Makefile.otherlibs.common
+@@ -34,6 +34,6 @@ ifeq "$(FLAMBDA)" "true"
+ OPTCOMPFLAGS += -O3
+ endif
+-MKLIB=$(OCAMLRUN) $(ROOTDIR)/tools/ocamlmklib
++MKLIB=$(OCAMLRUN) $(ROOTDIR)/tools/ocamlmklib -failsafe
+
+ # Variables that must be defined by individual libraries:
+ # LIBNAME
+--- a/otherlibs/systhreads/Makefile
++++ b/otherlibs/systhreads/Makefile
+@@ -29,1 +29,1 @@
+-MKLIB=$(OCAMLRUN) $(ROOTDIR)/tools/ocamlmklib$(EXE)
++MKLIB=$(OCAMLRUN) $(ROOTDIR)/tools/ocamlmklib$(EXE) -failsafe

@@ -1,0 +1,46 @@
+(executable
+ (name rrbvec_native_embed)
+ (modules rrbvec_probe rrbvec_native_embed)
+ (libraries rrbvec)
+ (modes
+  (native object)))
+
+(executable
+ (name datascript_fixture)
+ (modules datascript_fixture rrbvec_probe)
+ (modes
+  (native object))
+ (libraries
+  astring
+  rrbvec
+  datascript-ocaml-native
+  datascript-ocaml-native.sqlite
+  uutf
+  uunf
+  uucp)
+ (link_flags
+  (:standard -cclib -L%{env:BONSAI_SWIFTUI_APPLE_SDK_ROOT=}/usr/lib)))
+
+(executable
+ (name datascript_worker_native_embed)
+ (modules
+  rrbvec_probe
+  datascript_worker_probe
+  datascript_worker_native_embed)
+ (preprocess
+  (pps ppx_deriving_yojson))
+ (modes
+  (native object))
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend
+  bonsai_swiftui_sqlite_worker_example
+  rrbvec
+  datascript-ocaml-native
+  datascript-ocaml-native.sqlite
+  uutf
+  uunf
+  uucp)
+ (link_flags
+  (:standard -cclib -L%{env:BONSAI_SWIFTUI_APPLE_SDK_ROOT=}/usr/lib)))

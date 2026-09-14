@@ -1,0 +1,27 @@
+diff --git a/src/blocking_mutex.h b/src/blocking_mutex.h
+index c4658e3..42cd211 100644
+--- a/src/blocking_mutex.h
++++ b/src/blocking_mutex.h
+@@ -11,6 +11,9 @@
+ #include <pthread.h>
+ 
+ #ifdef __APPLE__
++#ifdef fallthrough
++#undef fallthrough
++#endif
+ #include <dispatch/dispatch.h>
+ #define platform_sem_t dispatch_semaphore_t
+ #else
+diff --git a/src/stubs.c b/src/stubs.c
+index 7469e82..ccff338 100644
+--- a/src/stubs.c
++++ b/src/stubs.c
+@@ -92,7 +92,7 @@ CAMLweakdef value caml_atomic_lxor_stub(value ref, value incr) {
+ 
+ CAMLprim value basement_domain_self_index(value unit) {
+   (void)unit;
+-  return Val_long(caml_state->id);
++  return Val_long(Caml_state->id);
+ }
+ 
+ CAMLprim value caml_is_runtime5_stub(value unit) {

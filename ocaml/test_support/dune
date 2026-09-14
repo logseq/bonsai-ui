@@ -1,0 +1,16 @@
+(library
+ (name bonsai_swiftui_test)
+ (public_name bonsai_swiftui_test)
+ (wrapped false)
+ (modules query handle bonsai_swiftui_test)
+ (libraries
+  bonsai
+  base
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))

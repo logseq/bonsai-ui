@@ -1,0 +1,49 @@
+{
+  "state": "expanded",
+  "image": "mail-macos-expanded.png",
+  "original": "capture-originals/mail-macos-expanded.jpg",
+  "width": 1200,
+  "height": 760,
+  "source_capture_format": "JPEG",
+  "encoding": "PNG, lossless re-encoding of captured JPEG pixels",
+  "original_file_written_utc": "2026-09-13T13:01:22.855215+00:00",
+  "capture_method": "cua App.getScreenshot / App.getAXStateAndScreenshot",
+  "original_sha256": "74a37359e13a0fca9ffba306a66b61c6b4590f3c5e9910513941a996db5c6de9",
+  "png_sha256": "f52b895f55089298e7f18435ca119cc660bafdb19a295177ed400aabd4f2d36d",
+  "decoded_rgb_sha256": "026c5905b042a06ecebe19bc63a22d5f852a3983ceff666b8de9593fed5d1bd6",
+  "observed_appearance": "Light",
+  "system_appearance_setting_changed": false,
+  "content_edited": false,
+  "source_base": "39c486233d0a1a614c6cb1267a80fa19d6076fcc",
+  "uncommitted_worktree": true,
+  "bundle": "examples/mail/apple/DerivedData/Build/Products/Debug/BonsaiMail.app",
+  "executable_sha256": "e10b94ccdd2a7ab08feefcc555eea99a775775bf2c7b9b5e67cb46125d153c27",
+  "native_object_sha256": "e99e0949e2758057fac2c4f6bb180fa656f9399bc64466376e22f5093b1140f0",
+  "environment": {
+    "xcode": "26.1.1 (17B100)",
+    "macos": "26.6.2 (25G83)",
+    "hardware_model": "Mac16,9",
+    "hardware_name": "Mac Studio",
+    "chip": "Apple M4 Max",
+    "display_name": "AG493UG7R4",
+    "display_native_pixels": [
+      6400,
+      1800
+    ],
+    "display_logical_points": [
+      3200,
+      900
+    ],
+    "display_scale": 2.0,
+    "display_scale_basis": "system_profiler physical/logical resolution ratio",
+    "app_default_window_points": [
+      1200,
+      760
+    ],
+    "capture_pixels": [
+      1200,
+      760
+    ],
+    "capture_resized_by_agent": false
+  }
+}

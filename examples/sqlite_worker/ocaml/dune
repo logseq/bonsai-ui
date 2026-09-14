@@ -1,0 +1,37 @@
+(library
+ (name bonsai_swiftui_sqlite_worker_example)
+ (package bonsai_swiftui_sqlite_worker_example)
+ (wrapped false)
+ (modules
+  sqlite_worker_config
+  sqlite_worker_file_demo
+  sqlite_worker_protocol
+  sqlite_worker_store
+  sqlite_worker_service
+  sqlite_worker_example)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  core
+  cstruct
+  eio
+  eio.core
+  incr_dom.ui_incr
+  optint
+  sqlite3
+  unix
+  virtual_dom.ui_effect))
+
+(executable
+ (name native_embed)
+ (modules native_embed)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_sqlite_worker_example
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend)
+ (modes
+  (native object)))

@@ -1,0 +1,36 @@
+Window: "Bonsai Mail", App: BonsaiMail.
+0 standard window Bonsai Mail, ID: mail, Secondary Actions: Raise
+	1 split group mail, SidebarNavigationSplitView
+		2 scroll area
+			3 text Bonsai Mail BM • local@example.test
+			4 button Inbox
+			5 button Starred
+			6 button (selected) Archived
+			7 button Trash
+			8 button Settings
+		9 splitter (disabled, settable, float) 228
+		10 container
+			11 button Description: Search in mail, Secondary Actions: Menu
+			12 heading Archived
+			13 scroll area
+				14 button (selected) Description: Unread message from Mara Vale, Help: The field notes are ready, Primary, Value: Collapsed, Secondary Actions: Starred message from Mara Vale
+		15 splitter (disabled, settable, float) 420
+		16 text Select a message
+	17 toolbar
+		18 button Description: Hide Sidebar, Secondary Actions: Increment, Decrement, Delete, Cancel
+		19 Navigation Tab Bar
+			20 radio button Description: Mail, Value: 1, ID: tray
+			21 radio button Description: Chat, Value: 0, ID: bubble.left.and.bubble.right
+			22 radio button Description: Spaces, Value: 0, ID: person.3
+			23 radio button Description: Meet, Value: 0, ID: video
+	24 close button
+	25 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	26 minimize button
+27 menu bar
+	28 BonsaiMail
+	29 Edit
+	30 View
+	31 Window
+	32 Help
+
+The focused UI element is 0 standard window Bonsai Mail, ID: mail, Secondary Actions: Raise

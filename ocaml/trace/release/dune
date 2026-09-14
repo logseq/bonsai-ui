@@ -1,0 +1,3 @@
+(library
+ (name bonsai_swiftui_trace_release)
+ (implements bonsai_swiftui_trace))

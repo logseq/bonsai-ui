@@ -1,0 +1,9 @@
+opam-version: "2.0"
+name: "bonsai_swiftui_todo_example"
+version: "0.1.0"
+synopsis: "Bonsai SwiftUI Todo example"
+maintainer: "bonsai_swiftui contributors"
+authors: ["bonsai_swiftui contributors"]
+license: "MIT"
+depends: ["ocaml" {= "5.1.1"} "dune" {>= "3.17"} "bonsai_swiftui" {= "0.1.0~dev"} "base" "core" "bonsai" "incr_dom" "virtual_dom"]
+build: [["dune" "build" "-p" name "-j" jobs]]

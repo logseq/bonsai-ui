@@ -1,0 +1,5 @@
+(library
+ (name bonsai_swiftui_trace)
+ (wrapped false)
+ (modules trace)
+ (virtual_modules trace))

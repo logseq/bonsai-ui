@@ -1,0 +1,230 @@
+(copy_files ../../examples/gallery/ocaml/expandable_composer_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/expandable_composer_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/composer_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/composer_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/native_view_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/native_view_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/mixed_collection_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/mixed_collection_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/table_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/table_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/search_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/search_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/dropdown_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/dropdown_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/contextual_selection_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/contextual_selection_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/removal_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/removal_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/refresh_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/refresh_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/initial_scroll_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/initial_scroll_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/scroll_fill_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/scroll_fill_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/scroll_observer_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/scroll_observer_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/scroll_sections_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/scroll_sections_catalog.mli)
+
+(copy_files ../../examples/host_effects/ocaml/host_effects.ml)
+
+(copy_files ../../examples/host_navigation/ocaml/host_navigation.ml)
+
+(copy_files ../../examples/sqlite_worker/ocaml/*.mli)
+
+(copy_files ../../examples/sqlite_worker/ocaml/sqlite_worker_config.ml)
+
+(copy_files ../../examples/sqlite_worker/ocaml/sqlite_worker_file_demo.ml)
+
+(copy_files ../../examples/sqlite_worker/ocaml/sqlite_worker_protocol.ml)
+
+(copy_files ../../examples/sqlite_worker/ocaml/sqlite_worker_store.ml)
+
+(copy_files ../../examples/sqlite_worker/ocaml/sqlite_worker_service.ml)
+
+(copy_files ../../examples/sqlite_worker/ocaml/sqlite_worker_example.ml)
+
+(copy_files ../../examples/network/ocaml/network_protocol.ml)
+
+(copy_files ../../examples/network/ocaml/network_policy.ml)
+
+(copy_files ../../examples/network/ocaml/network_tls.ml)
+
+(copy_files ../../examples/network/ocaml/network_http.ml)
+
+(copy_files ../../examples/network/ocaml/network_websocket.ml)
+
+(copy_files ../../examples/network/ocaml/network_service.ml)
+
+(copy_files ../../examples/network/ocaml/network_example.ml)
+
+(copy_files ../../examples/counter/ocaml/counter.ml)
+
+(copy_files ../../examples/gallery/ocaml/gallery.ml)
+
+(copy_files ../../examples/gallery/ocaml/app_bar_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/app_bar_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/toolbar_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/toolbar_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/sidebar_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/sidebar_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/page_layout_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/page_layout_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/sheet_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/sheet_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/selection_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/selection_catalog.mli)
+
+(copy_files ../../examples/gallery/ocaml/carousel_catalog.ml)
+
+(copy_files ../../examples/gallery/ocaml/carousel_catalog.mli)
+
+(copy_files ../../examples/text_input/ocaml/text_input_example.ml)
+
+(copy_files ../../examples/mail/ocaml/mail.ml)
+
+(copy_files ../../examples/navigation/ocaml/navigation.ml)
+
+(copy_files ../../examples/clock/ocaml/clock.ml)
+
+(copy_files ../../examples/todo/ocaml/todo.ml)
+
+(executable
+ (name runtime_fixture)
+ (enabled_if
+  (= %{context_name} default))
+ (modules
+  counter
+  gallery
+  selection_catalog
+  search_catalog
+  dropdown_catalog
+  table_catalog
+  mixed_collection_catalog
+  native_view_catalog
+  composer_catalog
+  expandable_composer_catalog
+  contextual_selection_catalog
+  carousel_catalog
+  sheet_catalog
+  page_layout_catalog
+  sidebar_catalog
+  toolbar_catalog
+  scroll_sections_catalog
+  scroll_fill_catalog
+  initial_scroll_catalog
+  refresh_catalog
+  removal_catalog
+  scroll_observer_catalog
+  app_bar_catalog
+  text_input_example
+  mail
+  navigation
+  clock
+  todo
+  network_protocol
+  network_policy
+  network_tls
+  network_http
+  network_websocket
+  network_service
+  network_example
+  network_fixture
+  host_effects
+  host_navigation
+  sqlite_worker_config
+  sqlite_worker_file_demo
+  sqlite_worker_protocol
+  sqlite_worker_store
+  sqlite_worker_service
+  sqlite_worker_example
+  runtime_fixture)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend
+  eio
+  x509
+  sqlite3
+  optint
+  bigstringaf
+  bonsai_swiftui.runtime
+  ca-certs-nss
+  cstruct
+  digestif
+  domain-name
+  eio.core
+  gluten
+  gluten-eio
+  httpun
+  httpun-eio
+  httpun-ws
+  mirage-crypto-rng.unix
+  mirage-crypto-rng
+  ptime
+  tls
+  tls-eio
+  uri
+  unix
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect)
+ (modes
+  (native object)))
+
+(rule
+ (targets libruntime_fixture.dylib runtime_fixture.complete.o)
+ (enabled_if
+  (= %{context_name} default))
+ (deps runtime_fixture.exe.o ../../tool/link_swiftui_runtime.py)
+ (action
+  (run
+   python3
+   %{dep:../../tool/link_swiftui_runtime.py}
+   runtime_fixture.exe.o
+   runtime_fixture.complete.o
+   --dylib
+   libruntime_fixture.dylib)))

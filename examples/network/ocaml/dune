@@ -1,0 +1,65 @@
+(library
+ (name bonsai_swiftui_network_example)
+ (package bonsai_swiftui_network_example)
+ (wrapped false)
+ (modules
+  network_protocol
+  network_policy
+  network_tls
+  network_http
+  network_websocket
+  network_service
+  network_example)
+ (libraries
+  base
+  bonsai
+  bigstringaf
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.runtime
+  bonsai_swiftui.driver
+  ca-certs-nss
+  cstruct
+  digestif
+  domain-name
+  eio
+  eio.core
+  gluten
+  gluten-eio
+  httpun
+  httpun-eio
+  httpun-ws
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  mirage-crypto-rng.unix
+  mirage-crypto-rng
+  ptime
+  tls
+  tls-eio
+  uri
+  unix
+  virtual_dom.ui_effect
+  x509))
+
+(executable
+ (name native_embed)
+ (modules native_embed)
+ (libraries
+  bonsai_swiftui.driver
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_network_example
+  bonsai_swiftui.native_backend)
+ (modes
+  (native object)))
+
+(executable
+ (name network_smoke_cli)
+ (modules network_smoke_cli)
+ (libraries
+  bonsai_swiftui.driver
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_network_example
+  eio
+  eio.core
+  eio.unix
+  eio_posix))

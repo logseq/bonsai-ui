@@ -1,0 +1,50 @@
+(copy_files ../../../tool/ios/fixtures/application-closure/rrbvec_probe.ml)
+
+(copy_files
+ ../../../tool/ios/fixtures/application-closure/datascript_worker_probe.ml)
+
+(copy_files
+ ../../../tool/ios/fixtures/application-closure/datascript_worker_native_embed.ml)
+
+(copy_files ../../../examples/sqlite_worker/ocaml/sqlite_worker_*.ml)
+
+(copy_files ../../../examples/sqlite_worker/ocaml/sqlite_worker_*.mli)
+
+(executable
+ (name datascript_worker_native_embed)
+ (modules
+  rrbvec_probe
+  datascript_worker_probe
+  datascript_worker_native_embed
+  sqlite_worker_config
+  sqlite_worker_file_demo
+  sqlite_worker_protocol
+  sqlite_worker_store
+  sqlite_worker_service
+  sqlite_worker_example)
+ (preprocess
+  (pps ppx_deriving_yojson))
+ (modes
+  (native object))
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend
+  base
+  bonsai
+  bonsai_swiftui.ui
+  core
+  cstruct
+  eio
+  eio.core
+  incr_dom.ui_incr
+  optint
+  sqlite3
+  unix
+  virtual_dom.ui_effect
+  rrbvec
+  datascript-ocaml-native
+  datascript-ocaml-native.sqlite
+  uutf
+  uunf
+  uucp))

@@ -1,0 +1,4 @@
+(library
+ (name bonsai_swiftui_tool)
+ (public_name bonsai_swiftui_tool)
+ (libraries digestif sexplib unix))

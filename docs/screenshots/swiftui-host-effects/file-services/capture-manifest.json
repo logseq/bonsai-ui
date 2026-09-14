@@ -1,0 +1,47 @@
+{
+  "root": "/Users/rcmerci/.codex/worktrees/94c71a22-9d72-4a52-99d8-e16ba8eb3a67/bonsai_flutter/_build/validation/swiftui-file-panel-5c2j2tlh",
+  "input_files": {
+    "/Users/rcmerci/.codex/worktrees/94c71a22-9d72-4a52-99d8-e16ba8eb3a67/bonsai_flutter/_build/validation/swiftui-file-panel-5c2j2tlh/inputs/Bonsai bytes.bin": "becaebd74026149894627beb3edb9a4462d51a4c6baef01696e3aed0f2a5c124",
+    "/Users/rcmerci/.codex/worktrees/94c71a22-9d72-4a52-99d8-e16ba8eb3a67/bonsai_flutter/_build/validation/swiftui-file-panel-5c2j2tlh/inputs/Bonsai \u4e2d\u6587.txt": "a963d4ec32b22a913cec233a3c03c0d5d08445d7c9a2a6e9a5a20fb994111bc1"
+  },
+  "import_result": {
+    "directory": "/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/BonsaiImport-0381751D-CD05-4EEF-B23C-D05412E62BCE",
+    "files": {
+      "/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/BonsaiImport-0381751D-CD05-4EEF-B23C-D05412E62BCE/0/Bonsai bytes.bin": "becaebd74026149894627beb3edb9a4462d51a4c6baef01696e3aed0f2a5c124",
+      "/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/BonsaiImport-0381751D-CD05-4EEF-B23C-D05412E62BCE/1/Bonsai \u4e2d\u6587.txt": "a963d4ec32b22a913cec233a3c03c0d5d08445d7c9a2a6e9a5a20fb994111bc1"
+    }
+  },
+  "source_files_unchanged": true,
+  "first_export": {
+    "path": "/Users/rcmerci/.codex/worktrees/94c71a22-9d72-4a52-99d8-e16ba8eb3a67/bonsai_flutter/_build/validation/swiftui-file-panel-5c2j2tlh/exports/Bonsai.txt",
+    "size": 26,
+    "sha256": "7d6791cccc31f1c125a4ede4928fd910bc53764ad3df327fcb1e4b8e201faa12"
+  },
+  "overwrite_precondition_sha256": "3362e71d3314421cfbbde41b9e75c90edd4903b9217b2da4b91eae356100a717",
+  "overwrite_result_sha256": "7d6791cccc31f1c125a4ede4928fd910bc53764ad3df327fcb1e4b8e201faa12",
+  "recorded_at": "2026-09-14T02:21:27.085400+00:00",
+  "cancelled_import_and_export_preserve_files": true,
+  "ui_actions": "CUA against the real BonsaiHostEffects macOS application and system file panels",
+  "physical_ios": "not exercised",
+  "source_files_sha256": {
+    "examples/host_effects/ocaml/host_effects.ml": "541e4d7737e9c1f432bb14b6ea4bbe041d8bcff99ea390e0bac6f29585bc4479",
+    "swift/BonsaiSwiftUI/Sources/NativeFileDialogs.swift": "88e15891144045ee4b3785959147ebb37b971c365bd00fa7e35158322c1847cd",
+    "swift/BonsaiSwiftUI/Sources/NativeFileImports.swift": "cfaa3b5ee2fcc697a1b86a9f355e0c3d9ad2956421becfdc14319b600ffb7b9a",
+    "examples/host_effects/apple/DerivedData/Build/Products/Debug/BonsaiHostEffects.app/Contents/MacOS/BonsaiHostEffects": "673780e3f2157639990129be192465eb1801f4a5da75afde92aaa909b259ac5d",
+    "examples/host_effects/apple/DerivedData/Build/Products/Debug/BonsaiHostEffects.app/Contents/MacOS/BonsaiHostEffects.debug.dylib": "895b83698981024f3b35e7eb991bca7f74c3f2993f7d62e514fac55c018724f7"
+  },
+  "artifacts_sha256": {
+    "import-selection.jpg": "1471f6354e4edc3378b0d5981a5fe0e9a02184cb521fa6b85c1288b0bd80d78f",
+    "overwrite-result.txt": "613337ed45495fd822adca3a9ea26a506c4f0890dd4a743b6d40d25ef0246362",
+    "export-cancel.txt": "53da9d90322a191f40530a8c73461bf21283e1a5c283bf801bf527e3426a00ef",
+    "import-result.jpg": "93616ff2f4c6f2b0780ca66fb899093c374d398734ee41e09f84d98ecc2a14ad",
+    "export-result.txt": "1f2917e05dd7716f7754baa87ca06d816e6fa47100a8f81c4eb87cdf5ee76e2e",
+    "overwrite-confirmation.jpg": "60b06f342a7d206419f51c94485e0d7d372a3c8a79b6715c63d8a8bef78ab578",
+    "import-result.txt": "c40da4a71a96e66e6626440038e7486814fcdcbd85164bb62f0aaa492f420834",
+    "import-cancel.txt": "4f311d87c990dd28b3429d87a372cf7ccb90c4e17ef1a72cca045dd2c78aeae4",
+    "export-result.jpg": "920251e6101b9b572fa1b8d0e290b189ca6de1d43e879065f3414123442f36b7"
+  },
+  "build_command": "BONSAI_SWIFTUI_SOURCE_ROOT=../.. OCAMLPATH=../../_build/install/default/lib opam exec --switch=bonsai-flutter-v017-exact -- ../../_build/default/bonsai_swiftui_tool/bin/main.exe build macos --profile debug (from examples/host_effects; source/library paths resolved absolutely)",
+  "build_log": "/tmp/swiftui-file-panel-build.log",
+  "runtime_implementation_changed": false
+}

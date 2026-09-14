@@ -1,0 +1,48 @@
+(library
+ (name bonsai_swiftui_gallery)
+ (package bonsai_swiftui_gallery)
+ (wrapped false)
+ (modules
+  gallery
+  selection_catalog
+  search_catalog
+  dropdown_catalog
+  table_catalog
+  mixed_collection_catalog
+  native_view_catalog
+  composer_catalog
+  expandable_composer_catalog
+  contextual_selection_catalog
+  carousel_catalog
+  sheet_catalog
+  page_layout_catalog
+  sidebar_catalog
+  toolbar_catalog
+  scroll_sections_catalog
+  scroll_fill_catalog
+  initial_scroll_catalog
+  refresh_catalog
+  removal_catalog
+  scroll_observer_catalog
+  app_bar_catalog)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  virtual_dom.ui_effect))
+
+(executable
+ (name native_embed)
+ (modules native_embed)
+ (libraries
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_gallery
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend)
+ (modes
+  (native object)))

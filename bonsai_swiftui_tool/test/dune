@@ -1,0 +1,12 @@
+(test
+ (name tool_tests)
+ (libraries alcotest bonsai_swiftui_tool str unix))
+
+(test
+ (name native_plan_tests)
+ (modules native_plan_tests)
+ (libraries alcotest bonsai_swiftui_tool unix)
+ (deps
+  ../../examples/counter/ocaml/native_embed.exe.o
+  ../../tool/ios/verify_complete_object.sh
+  ../../tool/ios/verify_macho.sh))

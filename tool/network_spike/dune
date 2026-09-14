@@ -1,0 +1,36 @@
+(library
+ (name network_spike)
+ (modules network_spike)
+ (libraries
+  bigstringaf
+  ca-certs-nss
+  cstruct
+  digestif
+  domain-name
+  eio
+  eio.core
+  eio.unix
+  eio_posix
+  gluten
+  gluten-eio
+  httpun
+  httpun-eio
+  httpun-ws
+  mirage-crypto-rng
+  mirage-crypto-rng.unix
+  ptime
+  tls
+  tls-eio
+  unix
+  x509))
+
+(test
+ (name network_spike_test)
+ (modules network_spike_test)
+ (deps localhost-cert.pem localhost-key.pem)
+ (libraries alcotest network_spike))
+
+(executable
+ (name network_spike_cli)
+ (modules network_spike_cli)
+ (libraries network_spike))

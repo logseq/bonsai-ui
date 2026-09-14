@@ -1,0 +1,25 @@
+(library
+ (name bonsai_swiftui_todo_example)
+ (package bonsai_swiftui_todo_example)
+ (wrapped false)
+ (modules todo)
+ (libraries
+  bonsai_swiftui.spec_impl
+  base
+  core
+  bonsai
+  bonsai_swiftui.ui
+  bonsai_swiftui.driver
+  incr_dom.ui_incr
+  virtual_dom.ui_effect))
+
+(executable
+ (name native_embed)
+ (modules native_embed)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui_todo_example
+  bonsai_swiftui.driver
+  bonsai_swiftui.native_backend)
+ (modes
+  (native object)))

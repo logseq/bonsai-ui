@@ -1,0 +1,66 @@
+(library
+ (name bonsai_swiftui_runtime)
+ (public_name bonsai_swiftui.runtime)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol)
+ (modules
+  node_id
+  handler_id
+  runtime_error
+  mounted_tree
+  frame_patch
+  handler_registry
+  event_dispatcher
+  reconciler))
+
+(library
+ (name bonsai_swiftui_runtime_adapter)
+ (public_name bonsai_swiftui.runtime_adapter)
+ (wrapped false)
+ (modules bonsai_runtime_adapter)
+ (libraries
+  bonsai
+  bonsai.driver
+  base
+  core
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  virtual_dom.ui_effect))
+
+(library
+ (name bonsai_swiftui_driver)
+ (public_name bonsai_swiftui.driver)
+ (wrapped false)
+ (modules
+  bonsai_v017
+  host_effect
+  environment
+  driver
+  app
+  entrypoint
+  runtime_bootstrap_config
+  bounded_mailbox
+  worker_eio_backend
+  worker
+  worker_runtime)
+ (libraries
+  bonsai_swiftui.spec_impl
+  bonsai
+  base
+  bonsai_swiftui.ui
+  bonsai_swiftui.protocol
+  bonsai_swiftui.runtime
+  bonsai_swiftui.runtime_adapter
+  core
+  eio
+  eio.core
+  eio.unix
+  eio_posix
+  incr_dom.ui_incr
+  incr_dom.ui_time_source
+  mtime.clock
+  threads
+  virtual_dom.ui_effect
+  unix))

@@ -1,0 +1,19 @@
+(library
+ (name protocol_generator)
+ (modules schema render))
+
+(executable
+ (name generate)
+ (modules generate)
+ (libraries protocol_generator))
+
+(executable
+ (name generate_fixtures)
+ (modules generate_fixtures)
+ (libraries bonsai_swiftui.spec_impl bonsai_swiftui.protocol))
+
+(test
+ (name generator_tests)
+ (modules generator_tests)
+ (deps ../schema.sexp)
+ (libraries protocol_generator))

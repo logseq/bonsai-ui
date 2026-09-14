@@ -1,0 +1,4 @@
+module CBonsaiSwiftUI {
+    header "bonsai_swiftui_native.h"
+    export *
+}

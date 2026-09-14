@@ -1,0 +1,9 @@
+opam-version: "2.0"
+name: "bonsai_swiftui_sqlite_worker_example"
+version: "0.1.0"
+synopsis: "Bonsai SwiftUI SQLite Worker example"
+maintainer: "bonsai_swiftui contributors"
+authors: ["bonsai_swiftui contributors"]
+license: "MIT"
+depends: ["ocaml" {= "5.1.1"} "dune" {>= "3.17"} "bonsai_swiftui" {= "0.1.0~dev"} "base" "bonsai" "core" "cstruct" "eio" "incr_dom" "optint" "sqlite3" "virtual_dom"]
+build: [["dune" "build" "-p" name "-j" jobs]]
