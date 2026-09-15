@@ -92,7 +92,7 @@ Installed package and SDK publication is still separate work.
 ## Examples and Mail
 
 Counter, Clock, Todo, Text Input, Navigation, Host Navigation, Host Effects,
-Network, SQLite Worker and Mail have standalone Swift App entrypoints. The
+Network, SQLite Worker, Mail and [Note](examples/note/README.md) have standalone Swift App entrypoints. The
 [build matrix](docs/swiftui-example-builds.md) records macOS Debug and signed
 physical-iOS Release evidence and the source checkpoint for those builds.
 Gallery also builds native macOS and physical-iOS hosts. Its full-tree macOS

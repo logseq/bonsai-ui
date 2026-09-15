@@ -236,6 +236,7 @@ module Sheet_prop : sig
   val interactive : Bonsai_swiftui_spec.Id.Protocol.property
   val indicator : Bonsai_swiftui_spec.Id.Protocol.property
   val sizing : Bonsai_swiftui_spec.Id.Protocol.property
+  val fraction : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -387,6 +388,7 @@ module Text_field_prop : sig
   val keyboard : Bonsai_swiftui_spec.Id.Protocol.property
   val submit_label : Bonsai_swiftui_spec.Id.Protocol.property
   val autofocus : Bonsai_swiftui_spec.Id.Protocol.property
+  val appearance : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -405,6 +407,7 @@ module Secure_field_prop : sig
   val keyboard : Bonsai_swiftui_spec.Id.Protocol.property
   val submit_label : Bonsai_swiftui_spec.Id.Protocol.property
   val autofocus : Bonsai_swiftui_spec.Id.Protocol.property
+  val appearance : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 

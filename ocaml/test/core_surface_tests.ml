@@ -751,6 +751,13 @@ let () =
   invalid (fun () -> create []);
   invalid (fun () -> create [ S.Medium; S.Medium ]);
   invalid (fun () -> create ~initial_detent:S.Large [ S.Medium ]);
+  List.iter
+    (fun value -> invalid (fun () -> create [ S.Fraction value ]))
+    [ 0.; -0.1; 1.01; nan; infinity ];
+  invalid (fun () -> create [ S.Fraction 0.5; S.Fraction 0.98 ]);
+  invalid (fun () -> create ~initial_detent:(S.Fraction 0.5) [ S.Fraction 0.98 ]);
+  ignore (create [ S.Medium; S.Fraction 0.98; S.Large ]);
+  ignore (create [ S.Fraction 1. ]);
   let sheet = create ~initial_detent:S.Medium [ S.Medium; S.Large ] in
   check (Ui.View.For_testing.kind_name sheet = "Sheet") "sheet used a legacy node";
   check (Array.length (Ui.View.For_testing.children sheet) = 2) "sheet lost content";

@@ -138,7 +138,7 @@ let test_retired_scroll_header_nodes_are_rejected () =
        | Error error ->
          fail "retired scroll header failed for wrong reason: %s" error.message
        | Ok _ -> fail "retired scroll header node was accepted")
-    [ {|42 53 46 52 05 00 00 00 30 00 03 00
+    [ {|42 53 46 52 06 00 00 00 30 00 03 00
 07 00 00 00 00 00 00 00 01 00 00 00
 00 00 00 00 02 00 00 00 00 00 00 00
 77 00 00 00 00 00 00 00 00 00 00 00
@@ -152,7 +152,7 @@ ff 01 ef cd ab ff 02 00 00 00 01 01
 00 00 00 00 c0 4f 40 01 01 01 00 00
 00 00 00 a0 47 40 01 01 01 00 00 00
 00 00 00 11 40 00 0a 00 00 00 00|}
-    ; {|4253465205000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
+    ; {|4253465206000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
     ]
 ;;
 
@@ -160,7 +160,7 @@ let test_retired_navigation_bar_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-4253465205000000300003005a00000000000000010000000000000002000000
+4253465206000000300003005a00000000000000010000000000000002000000
 000000007b00000000000000000000000100000000036c000000010000000000
 00007300ff0f00000000000000000000020004000000486f6d65010107000000
 000110000000486f6d652064657374696e6174696f6e0800000053657474696e
@@ -178,7 +178,7 @@ let test_retired_route_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-42 53 46 52 05 00 00 00 30 00 03 00
+42 53 46 52 06 00 00 00 30 00 03 00
 49 00 00 00 00 00 00 00 04 00 00 00
 00 00 00 00 05 00 00 00 00 00 00 00
 a8 00 00 00 00 00 00 00 00 00 00 00
@@ -550,7 +550,7 @@ let test_layout_native_and_semantics_props_round_trip () =
      | Ok decoded -> expect (decoded = frame) "widget props changed during round trip")
 ;;
 
-let native_text_field_frame ?(composing_end = 4) () =
+let native_text_field_frame ?(appearance = 0) ?(composing_end = 4) () =
   Wire_frame.
     { runtime_epoch = epoch 10L
     ; base_revision = revision 4L
@@ -582,6 +582,7 @@ let native_text_field_frame ?(composing_end = 4) () =
                   ; secure = false
                   ; keyboard = 0
                   ; submit_label = 0
+                  ; appearance
                   ; autofocus = true
                   }
             }
@@ -590,13 +591,23 @@ let native_text_field_frame ?(composing_end = 4) () =
 ;;
 
 let test_native_text_field_props_round_trip () =
-  let frame = native_text_field_frame () in
-  match Binary_codec.encode frame with
-  | Error error -> fail "text input encode failed: %s" error.message
-  | Ok encoded ->
-    (match Binary_codec.decode encoded with
-     | Error error -> fail "text input decode failed: %s" error.message
-     | Ok decoded -> expect (decoded = frame) "text input props changed during round trip")
+  List.iter
+    (fun appearance ->
+       let frame = native_text_field_frame ~appearance () in
+       match Binary_codec.encode frame with
+       | Error error -> fail "text input encode failed: %s" error.message
+       | Ok encoded ->
+         (match Binary_codec.decode encoded with
+          | Error error -> fail "text input decode failed: %s" error.message
+          | Ok decoded ->
+            expect (decoded = frame) "text input props changed during round trip"))
+    [ 0; 1 ];
+  List.iter
+    (fun appearance ->
+       match Binary_codec.encode (native_text_field_frame ~appearance ()) with
+       | Error { code = Invalid_props; _ } -> ()
+       | _ -> fail "invalid field appearance was accepted")
+    [ -1; 2 ]
 ;;
 
 let test_text_input_rejects_split_surrogate_range () =
@@ -631,6 +642,7 @@ let test_text_input_rejects_split_surrogate_range () =
                     ; secure = false
                     ; keyboard = 0
                     ; submit_label = 0
+                    ; appearance = 0
                     ; autofocus = false
                     }
               }
@@ -741,6 +753,7 @@ let test_text_input_rejects_invalid_utf8_byte_limits () =
                       ; secure = false
                       ; keyboard = 0
                       ; submit_label = 0
+                      ; appearance = 0
                       ; autofocus = false
                       }
                 }
@@ -1580,6 +1593,7 @@ let test_complete_native_protocol_round_trip () =
         ; secure = false
         ; keyboard = 0
         ; submit_label = 0
+        ; appearance = 0
         ; autofocus = true
         }
     ; Table_props
@@ -2148,7 +2162,7 @@ let () =
   match
     Binary_codec.decode
       (bytes_of_hex
-         "4253465205000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
+         "4253465206000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
   with
   | Error { code = Binary_codec.Unknown_node_kind; _ } -> ()
   | Error error -> fail "retired fill failed for wrong reason: %s" error.message

@@ -402,7 +402,7 @@ done
 
 for platform in macos ios; do
   commands=$(dry_run_target "ci-$platform")
-  require_text "$commands" 'for consumer in clock counter gallery host_effects host_navigation mail navigation network sqlite_worker text_input todo' "ci-$platform complete example matrix"
+  require_text "$commands" 'for consumer in clock counter gallery host_effects host_navigation mail navigation network note sqlite_worker text_input todo' "ci-$platform complete example matrix"
   require_text "$commands" 'for profile in debug profile release' "ci-$platform profile matrix"
   require_text "$commands" "build $platform --profile" "ci-$platform native build"
   reject_pattern "$commands" '(^|[[:space:]])flutter/' "ci-$platform obsolete host"
@@ -485,6 +485,7 @@ assert_consumer_root host_effects bonsai_swiftui_host_effects_example
 assert_consumer_root host_navigation bonsai_swiftui_host_navigation_example
 assert_consumer_root mail bonsai_swiftui_mail_example
 assert_consumer_root navigation bonsai_swiftui_navigation_example
+assert_consumer_root note bonsai_swiftui_note_example
 assert_consumer_root network bonsai_swiftui_network_example ' network'
 assert_consumer_root sqlite_worker bonsai_swiftui_sqlite_worker_example ' sqlite'
 assert_consumer_root text_input bonsai_swiftui_text_input_example

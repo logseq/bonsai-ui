@@ -1,7 +1,7 @@
 // Generated from protocol/schema.sexp. Do not edit.
 
 public enum ProtocolVersion {
-  public static let protocolMajor = 5
+  public static let protocolMajor = 6
   public static let protocolMinor = 0
 }
 
@@ -464,6 +464,7 @@ public enum SheetPropId {
     public static let `interactive` = 5
     public static let `indicator` = 6
     public static let `sizing` = 7
+    public static let `fraction` = 8
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
@@ -474,6 +475,7 @@ public enum SheetPropId {
         case 5: return "interactive"
         case 6: return "indicator"
         case 7: return "sizing"
+        case 8: return "fraction"
         default: return nil
         }
     }
@@ -777,6 +779,7 @@ public enum TextFieldPropId {
     public static let `keyboard` = 12
     public static let `submitLabel` = 13
     public static let `autofocus` = 14
+    public static let `appearance` = 15
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
@@ -794,6 +797,7 @@ public enum TextFieldPropId {
         case 12: return "keyboard"
         case 13: return "submit_label"
         case 14: return "autofocus"
+        case 15: return "appearance"
         default: return nil
         }
     }
@@ -814,6 +818,7 @@ public enum SecureFieldPropId {
     public static let `keyboard` = 12
     public static let `submitLabel` = 13
     public static let `autofocus` = 14
+    public static let `appearance` = 15
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
@@ -831,6 +836,7 @@ public enum SecureFieldPropId {
         case 12: return "keyboard"
         case 13: return "submit_label"
         case 14: return "autofocus"
+        case 15: return "appearance"
         default: return nil
         }
     }

@@ -11,6 +11,55 @@ import Testing
   }
 
   @Test(arguments: [47, 49])
+  func plainFieldAppearanceRetainsNativeInputAndRestoresRoundedStyle(kind: Int) async throws {
+    initializeAccessibilityApplication()
+    let tree = RenderTree()
+    var store = try NodeStore().staging(
+      TreeFixture.frame([
+        TreeFixture.editor(kind: kind, appearance: 1), TreeFixture.root(1),
+      ])
+    ).tree
+    tree.commit(store)
+    tree.onInput = { _, _ in true }
+    let controller = try #require(tree.root?.fieldController)
+    let host = NSHostingView(
+      rootView: NativeNodeView(node: try #require(tree.root), activate: { _ in }))
+    let window = NSWindow(
+      contentRect: CGRect(x: 0, y: 0, width: 320, height: 60),
+      styleMask: [.titled], backing: .buffered, defer: false)
+    window.contentView = host
+    window.orderFront(nil)
+    defer {
+      tree.commit(NodeStore())
+      window.orderOut(nil)
+      window.contentView = nil
+    }
+    try await settleAccessibility(host)
+    #expect(
+      !controller.field.isBezeled && !controller.field.isBordered
+        && !controller.field.drawsBackground)
+    #expect(controller.field.focusRingType == .none)
+    controller.field.selectText(nil)
+    let editor = try #require(controller.field.currentEditor() as? NSTextView)
+    editor.insertText("Local 🌿", replacementRange: NSRange(location: 0, length: 5))
+    try await settleAccessibility(host)
+    let revision = controller.session.localRevision
+    store = try store.staging(
+      TreeFixture.frame(
+        [
+          TreeFixture.editor(
+            kind: kind, appearance: 0, document: 2, accepted: revision, mode: 0, update: true)
+        ], base: 1, revision: 2)
+    ).tree
+    tree.commit(store)
+    try await settleAccessibility(host)
+    #expect(tree.root?.fieldController === controller)
+    #expect(controller.session.value.text == "Local 🌿")
+    #expect(controller.field.isBezeled && controller.field.drawsBackground)
+    #expect(controller.field.focusRingType == .default)
+  }
+
+  @Test(arguments: [47, 49])
   func nativeFieldsRetainEditingAcrossReorderingAndRejectFutureAcks(kind: Int) async throws {
     initializeAccessibilityApplication()
     let tree = RenderTree()
@@ -91,6 +140,7 @@ import Testing
     ).tree
     var invalid = [
       TreeFixture.editor(kind: kind, keyboard: 5, update: true),
+      TreeFixture.editor(kind: kind, appearance: 2, update: true),
       TreeFixture.editor(kind: kind, submitLabel: 6, update: true),
       TreeFixture.editor(kind: kind, autofocus: 2, update: true),
       TreeFixture.editor(kind: kind, mode: 3, update: true),

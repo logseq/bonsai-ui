@@ -358,7 +358,7 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.rangeSlider: return 1023
   case NodeKindId.toggle: return 7
   case NodeKindId.badge: return 7
-  case NodeKindId.sheet: return 127
+  case NodeKindId.sheet: return 255
   case NodeKindId.popover: return 3
   case NodeKindId.toolbar, NodeKindId.help, NodeKindId.groupBox, NodeKindId.hoverRegion: return 1
   case NodeKindId.disclosureGroup: return 3
@@ -387,7 +387,7 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.collectionCatalog: return 1023
   case NodeKindId.collectionWindow: return 3
   case NodeKindId.scroll: return 15
-  case NodeKindId.textField, NodeKindId.secureField: return 16383
+  case NodeKindId.textField, NodeKindId.secureField: return 32767
   case NodeKindId.frame, NodeKindId.textEditor: return 511
   case NodeKindId.spacer, NodeKindId.padding, NodeKindId.opacity: return 1
   case NodeKindId.background, NodeKindId.clip: return 3

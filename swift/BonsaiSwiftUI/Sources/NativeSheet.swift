@@ -3,6 +3,7 @@ import SwiftUI
 struct RenderSheet: Equatable, Sendable {
   struct Configuration: Equatable, Sendable {
     let fullscreen: Bool
+    let fraction: Double
     let detents: Int
     let initial: Int
     let interactive: Bool
@@ -14,18 +15,21 @@ struct RenderSheet: Equatable, Sendable {
   static func decode(_ reader: inout WireReader) throws -> Self {
     let presented = try reader.flag()
     let fullscreen = try reader.flag()
-    let detents = try reader.choice(3)
-    let initial = try reader.choice(1)
+    let detents = try reader.choice(7)
+    let initial = try reader.choice(2)
     let interactive = try reader.flag()
     let indicator = try reader.flag()
     let sizing = try reader.choice(3)
-    guard detents > 0, detents & (1 << initial) != 0,
+    let fraction = Double(bitPattern: try reader.integer(UInt64.self))
+    guard fraction.isFinite,
+      detents & 4 != 0 ? fraction > 0 && fraction <= 1 : fraction == 0,
+      detents > 0, detents & (1 << initial) != 0,
       !fullscreen || (detents == 2 && initial == 1 && !interactive && !indicator && sizing == 0)
     else { throw TreeError.invalidProperties }
     return Self(
       presented: presented,
       configuration: Configuration(
-        fullscreen: fullscreen,
+        fullscreen: fullscreen, fraction: fraction,
         detents: detents, initial: initial, interactive: interactive, indicator: indicator,
         sizing: sizing))
   }
@@ -63,6 +67,15 @@ struct NativeSheet: View {
     default: content.presentationSizing(.automatic)
     }
   }
+  #if os(iOS)
+    private func nativeDetent(_ value: Int) -> PresentationDetent {
+      switch value {
+      case 0: .medium
+      case 1: .large
+      default: .fraction(properties.configuration.fraction)
+      }
+    }
+  #endif
   private var background: some View { NativeNodeView(node: node.children[0], activate: activate) }
   @ViewBuilder private var presentation: some View {
     #if os(iOS)
@@ -73,10 +86,11 @@ struct NativeSheet: View {
           sizedContent
             .presentationDetents(
               Set(
-                [0, 1].filter { properties.configuration.detents & (1 << $0) != 0 }
-                  .map { $0 == 0 ? PresentationDetent.medium : .large }),
+                [0, 1, 2].filter { properties.configuration.detents & (1 << $0) != 0 }
+                  .map(nativeDetent)),
               selection: Binding(
-                get: { detent == 0 ? .medium : .large }, set: { detent = $0 == .medium ? 0 : 1 })
+                get: { nativeDetent(detent) },
+                set: { value in detent = value == .medium ? 0 : value == .large ? 1 : 2 })
             )
             .presentationDragIndicator(properties.configuration.indicator ? .visible : .hidden)
         }

@@ -33,7 +33,7 @@ int main(void) {
   assert(runtime != NULL);
   assert(bs_abi_version_major() == 3);
   assert(bs_abi_version_minor() == 0);
-  assert(bs_protocol_version_major() == 5);
+  assert(bs_protocol_version_major() == 6);
   assert(bs_protocol_version_minor() == 0);
   assert(offsetof(bs_output_buffer, data) == 0);
   assert(offsetof(bs_output_buffer, length) > offsetof(bs_output_buffer, data));

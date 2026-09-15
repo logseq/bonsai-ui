@@ -3,7 +3,7 @@
 EXAMPLE ?= counter
 SANITIZERS ?= undefined
 BONSAI_SWIFTUI := $(CURDIR)/_build/default/bonsai_swiftui_tool/bin/main.exe
-CONSUMERS := clock counter gallery host_effects host_navigation mail navigation network sqlite_worker text_input todo
+CONSUMERS := clock counter gallery host_effects host_navigation mail navigation network note sqlite_worker text_input todo
 export BONSAI_SWIFTUI_SOURCE_ROOT := $(CURDIR)
 export OCAMLPATH := $(CURDIR)/_build/install/default/lib:$(OCAMLPATH)
 CONSUMER_ROOTS := $(addprefix ./examples/,$(CONSUMERS))

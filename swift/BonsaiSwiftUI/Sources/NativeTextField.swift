@@ -3,10 +3,12 @@ import SwiftUI
 
 enum FieldKeyboard: Int, Equatable, Sendable { case text, number, email, phone, url }
 enum FieldSubmitLabel: Int, Equatable, Sendable { case done, next, search, send, go, `continue` }
+enum FieldAppearance: Int, Equatable, Sendable { case rounded, plain }
 struct TextFieldTraits: Equatable, Sendable {
   var keyboard: FieldKeyboard = .text
   var submitLabel: FieldSubmitLabel = .done
   var autofocus = false
+  var appearance: FieldAppearance = .rounded
 }
 
 struct RenderTextField: Equatable, Sendable {
@@ -22,7 +24,8 @@ struct RenderTextField: Equatable, Sendable {
       prompt: reader.string(), secure: secure,
       traits: TextFieldTraits(
         keyboard: FieldKeyboard(rawValue: reader.choice(4))!,
-        submitLabel: FieldSubmitLabel(rawValue: reader.choice(5))!, autofocus: reader.flag()))
+        submitLabel: FieldSubmitLabel(rawValue: reader.choice(5))!, autofocus: reader.flag(),
+        appearance: FieldAppearance(rawValue: reader.choice(1))!))
   }
 }
 
@@ -162,6 +165,10 @@ struct RenderTextField: Equatable, Sendable {
         autofocusPending = true
       }
       self.traits = traits
+      field.isBordered = false
+      field.isBezeled = traits.appearance == .rounded
+      field.drawsBackground = traits.appearance == .rounded
+      field.focusRingType = traits.appearance == .plain ? .none : .default
       attemptAutofocus()
     }
     func setPresentationActive(_ active: Bool) {
@@ -462,6 +469,7 @@ struct RenderTextField: Equatable, Sendable {
       let changed =
         traits.keyboard != self.traits.keyboard || traits.submitLabel != self.traits.submitLabel
       self.traits = traits
+      input.borderStyle = traits.appearance == .plain ? .none : .roundedRect
       switch traits.keyboard {
       case .text: input.keyboardType = .default
       case .number: input.keyboardType = .decimalPad

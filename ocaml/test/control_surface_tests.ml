@@ -12,9 +12,15 @@ let text_value text =
   Ui.Text_editing.Value.create ~text ~selection ()
 ;;
 
-let native_text_field ?(read_only = false) ?(autofocus = false) () =
+let native_text_field
+      ?(appearance = Ui.Text_editing.Field_appearance.Rounded)
+      ?(read_only = false)
+      ?(autofocus = false)
+      ()
+  =
   Ui.View.text_field
     ~label:"Text input"
+    ~appearance
     ~read_only
     ~autofocus
     ~session_id:(Bonsai_swiftui_spec.Id.Text_input.Session_id.of_int64 9L)
@@ -233,7 +239,13 @@ let test_text_field_identity_includes_read_only_and_autofocus () =
   expect
     (not
        (Ui.View.Private.node_equal_widgets default (native_text_field ~autofocus:true ())))
-    "text field autofocus was omitted from logical equality"
+    "text field autofocus was omitted from logical equality";
+  expect
+    (not
+       (Ui.View.Private.node_equal_widgets
+          default
+          (native_text_field ~appearance:Plain ())))
+    "text field appearance was omitted from logical equality"
 ;;
 
 let test_additional_component_validation () =

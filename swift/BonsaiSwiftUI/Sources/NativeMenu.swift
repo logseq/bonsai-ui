@@ -166,11 +166,18 @@ struct NativeMenu: View {
     default: preconditionFailure("Unvalidated menu kind")
     }
   }
-  var body: some View {
+  private var menu: some View {
     Menu {
       items(properties.entries, enabled: properties.enabled)
     } label: {
       label(0)
     }.disabled(!properties.enabled)
+  }
+  var body: some View {
+    #if os(macOS)
+      menu.menuStyle(.borderlessButton).menuIndicator(.hidden)
+    #else
+      menu
+    #endif
   }
 }

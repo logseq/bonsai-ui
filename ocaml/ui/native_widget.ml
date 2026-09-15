@@ -1006,3 +1006,89 @@ module Expandable_message_composer = struct
     ;;
   end
 end
+
+module Surface = struct
+  type fill =
+    | Solid of Style.Color.t
+    | Linear of Style.Color.t list
+    | Angular of Style.Color.t list
+    | Thin_material of Style.Color.t
+    | Regular_material of Style.Color.t
+    | Ultra_thin_material of Style.Color.t
+
+  type shadow =
+    { color : Style.Color.t
+    ; radius : float
+    ; x : float
+    ; y : float
+    }
+
+  let finite name v =
+    if not (Float.is_finite v) then invalid_arg ("Surface: " ^ name ^ " must be finite")
+  ;;
+
+  let nonnegative name v =
+    finite name v;
+    if v < 0. then invalid_arg ("Surface: " ^ name ^ " must be non-negative")
+  ;;
+
+  let shadow ~color ~radius ?(x = 0.) ?(y = 0.) () =
+    nonnegative "shadow radius" radius;
+    finite "shadow x" x;
+    finite "shadow y" y;
+    { color; radius; x; y }
+  ;;
+
+  let transparent = Style.Color.argb ~alpha:0 ~red:0 ~green:0 ~blue:0
+  let no_shadow = shadow ~color:transparent ~radius:0. ()
+  let no_event = Event.Handler.create ~name:"surface" (fun _ -> ())
+
+  let create
+        ?key
+        ?(corner_radius = 0.)
+        ?(shadow = no_shadow)
+        ?(border_color = transparent)
+        ?(border_width = 0.)
+        ?(opacity = 1.)
+        ?(presentation_background = false)
+        ~fill
+        child
+    =
+    if (not (Float.is_finite opacity)) || opacity < 0. || opacity > 1.
+    then invalid_arg "Surface: opacity must be finite and in [0, 1]";
+    nonnegative "corner radius" corner_radius;
+    nonnegative "border width" border_width;
+    let mode, colors =
+      match fill with
+      | Solid c -> 0, [ c ]
+      | Linear cs -> 1, cs
+      | Angular cs -> 2, cs
+      | Thin_material c -> 3, [ c ]
+      | Regular_material c -> 4, [ c ]
+      | Ultra_thin_material c -> 5, [ c ]
+    in
+    let count = List.length colors in
+    if count > 16 || count < if mode = 1 || mode = 2 then 2 else 1
+    then invalid_arg "Surface: gradients require 2..16 colors";
+    let payload = Bytes.make (60 + (4 * count)) '\000' in
+    Bytes.set payload 0 (Char.chr mode);
+    Bytes.set payload 1 (Char.chr count);
+    Bytes.set payload 2 (if presentation_background then '\001' else '\000');
+    List.iteri
+      (fun i v -> Bytes.set_int64_le payload (4 + (8 * i)) (Int64.bits_of_float v))
+      [ corner_radius; shadow.radius; shadow.x; shadow.y; border_width; opacity ];
+    List.iteri
+      (fun i c ->
+         Bytes.set_int32_le payload (52 + (4 * i)) (Style.Color.Private.to_argb32 c))
+      (shadow.color :: border_color :: colors);
+    View.Private.native_widget
+      ?key
+      ~kind_id:(ID.Native_widget.Kind_id.of_int 8)
+      ~version:2
+      ~capabilities:0L
+      ~payload
+      ~on_event:no_event
+      ~children:[ child ]
+      ()
+  ;;
+end

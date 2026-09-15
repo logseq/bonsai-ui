@@ -37,8 +37,19 @@ closing and exposes no drag-detent configuration.
 For regular sheets, detents default to `[Large]`, interactive dismissal and the
 drag indicator default to true, and the initial detent defaults to the first
 listed entry. Detents must be nonempty and unique, and the initial detent must
-belong to the set. iOS uses native medium/large detents and the native drag
-indicator. The selected height is local SwiftUI presentation state; it resets
+belong to the set. iOS uses native medium/large/fractional detents and the native drag
+indicator. `Fraction 0.98` maps directly to `.fraction(0.98)`. A sheet can include
+one fractional height alongside Medium and Large; the fraction must be finite
+and in (0, 1]. Multiple fractional entries are rejected. The initial fractional
+detent must exactly match the configured value.
+
+On iOS 26, the large detent becomes a full-height opaque presentation. A fraction
+below 1 can retain the system's inset floating presentation and translucent
+material. Note uses `Fraction 0.98`; this does not redefine `Large` for other
+applications. The Protocol 6 sheet payload includes its Float64 fractional height
+(zero when absent) and validates it before rendering.
+
+The native drag indicator remains system-owned. The selected height is local SwiftUI presentation state; it resets
 on a new canonical presentation or configuration change. Rejecting dismissal or
 resuming visibility does not change that initial-selection contract. macOS uses
 native sheet sizing without simulating an iOS drag handle or mobile fullscreen

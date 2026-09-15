@@ -532,6 +532,10 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
               | Send -> 3
               | Go -> 4
               | Continue -> 5)
+         ; appearance =
+             (match fields.appearance with
+              | Ui.Text_editing.Field_appearance.Rounded -> 0
+              | Plain -> 1)
          ; autofocus = fields.autofocus
          ; editing =
              { session_id = fields.session_id
@@ -857,10 +861,27 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
       | Trailing -> 2
     in
     Ok (Badge_props { count = Option.map Int64.of_int count; alignment; visible })
-  | Sheet { presented; fullscreen; detents; initial; interactive; indicator; sizing } ->
+  | Sheet
+      { presented
+      ; fullscreen
+      ; detents
+      ; initial
+      ; interactive
+      ; indicator
+      ; sizing
+      ; fraction
+      } ->
     Ok
       (Sheet_props
-         { presented; fullscreen; detents; initial; interactive; indicator; sizing })
+         { presented
+         ; fullscreen
+         ; detents
+         ; initial
+         ; interactive
+         ; indicator
+         ; sizing
+         ; fraction
+         })
   | Popover { presented; edge } -> Ok (Popover_props { presented; edge })
   | Scroll_sections
       { vertical; pin_headers; pin_footers; spacing; shows_indicators; initial_anchor } ->

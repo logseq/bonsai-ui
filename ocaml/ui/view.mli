@@ -146,12 +146,16 @@ val badge
   -> t
 
 (** OCaml-controlled modal content. Native dismissal requests deliver Bool false.
-    iOS detents are Medium/Large; the initial detent defaults to the first entry.
+    iOS detents are Medium, Large, and Fraction; the initial detent defaults to the first entry.
     macOS retains its native sheet sizing. Content stays logically mounted. *)
 module Sheet : sig
+  (** A sheet may contain at most one Fraction, optionally with Medium/Large.
+      Fractions must be finite and in (0, 1]. They map to SwiftUI's native
+      fractional detent, without changing the meaning of Large. *)
   type detent =
     | Medium
     | Large
+    | Fraction of float
 
   type sizing =
     | Automatic
@@ -247,13 +251,16 @@ val text_editor
   -> t
 
 (** Native single-line text entry with revisioned editing. Return submits by
-    default. Layout, adornments and supporting text use ordinary composition. *)
+    default. Rounded appearance is the default. Plain removes the native background,
+    border and focus ring for a composed field surface. Layout, adornments and
+    supporting text use ordinary composition. *)
 val text_field
   :  ?key:Key.t
   -> label:string
   -> ?prompt:string
   -> ?keyboard:Text_editing.Keyboard.t
   -> ?submit_label:Text_editing.Submit_label.t
+  -> ?appearance:Text_editing.Field_appearance.t
   -> ?autofocus:bool
   -> ?enabled:bool
   -> ?read_only:bool
@@ -278,6 +285,7 @@ val secure_field
   -> ?prompt:string
   -> ?keyboard:Text_editing.Keyboard.t
   -> ?submit_label:Text_editing.Submit_label.t
+  -> ?appearance:Text_editing.Field_appearance.t
   -> ?autofocus:bool
   -> ?enabled:bool
   -> ?read_only:bool
@@ -1408,6 +1416,7 @@ module Private : sig
         ; secure : bool
         ; keyboard : Text_editing.Keyboard.t
         ; submit_label : Text_editing.Submit_label.t
+        ; appearance : Text_editing.Field_appearance.t
         ; autofocus : bool
         }
         -> [ `Text_field ] node
@@ -1580,6 +1589,7 @@ module Private : sig
         { presented : bool
         ; fullscreen : bool
         ; detents : int
+        ; fraction : float
         ; initial : int
         ; interactive : bool
         ; indicator : bool

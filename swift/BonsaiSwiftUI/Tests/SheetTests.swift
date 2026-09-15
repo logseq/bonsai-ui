@@ -8,15 +8,16 @@ extension TreeFixture {
   static func sheet(
     presented: UInt8 = 0, fullscreen: UInt8 = 0, detents: UInt8 = 2,
     initial: UInt8 = 1, interactive: UInt8 = 1, indicator: UInt8 = 1, update: Bool = false,
-    bound: Bool = true, sizing: UInt8 = 0
+    bound: Bool = true, sizing: UInt8 = 0, fraction: Double = 0
   ) -> WireOperation {
     operation(update ? OperationId.updateProps : OperationId.createNode) {
       $0.integer(UInt64(1))
       $0.integer(UInt16(73))
-      if update { $0.integer(UInt64(127)) }
+      if update { $0.integer(UInt64(255)) }
       for value in [presented, fullscreen, detents, initial, interactive, indicator, sizing] {
         $0.integer(value)
       }
+      $0.integer(fraction.bitPattern)
       if !update {
         $0.integer(UInt16(bound ? 1 : 0))
         if bound {
@@ -35,6 +36,24 @@ extension TreeFixture {
 }
 
 @MainActor struct SheetTests {
+  @Test func fractionalSheetHeightsValidateBeforePresentation() throws {
+    func decode(_ fraction: Double, detents: UInt8 = 4, initial: UInt8 = 2) throws {
+      var writer = WireWriter()
+      for value: UInt8 in [1, 0, detents, initial, 1, 0, 3] { writer.integer(value) }
+      writer.integer(fraction.bitPattern)
+      var reader = WireReader(writer.bytes)
+      _ = try RenderSheet.decode(&reader)
+      #expect(reader.remaining == 0)
+    }
+    try decode(0.98)
+    try decode(0.5, detents: 7, initial: 0)
+    for invalid in [0, -0.1, 1.01, Double.nan, .infinity] {
+      #expect(throws: (any Error).self) { try decode(invalid) }
+    }
+    #expect(throws: (any Error).self) { try decode(0.98, detents: 2, initial: 1) }
+    #expect(throws: (any Error).self) { try decode(0.98, detents: 4, initial: 1) }
+  }
+
   @Test func sheetsValidateDetentsAndRetainInactiveContent() throws {
     let original = try NodeStore().staging(TreeFixture.frame(TreeFixture.sheetTree())).tree
     #expect(original.accessibilityHiddenNodes.contains(3))
@@ -137,14 +156,14 @@ extension NativeRuntimeTests {
             } == true
         }
       }
-      func settle(_ condition: () -> Bool) async throws {
+      func settle(line: UInt = #line, _ condition: () -> Bool) async throws {
         for _ in 0..<35 {
           _ = try await session.refresh()
           if let ticket = session.ticket { #expect(try await session.presented(ticket)) }
           try await settleAccessibility(host)
           if condition() { return }
         }
-        Issue.record("Sheet did not settle")
+        Issue.record("Sheet did not settle at line \(line)")
         throw NSError(domain: "SheetTests", code: 1)
       }
       func press(_ title: String) async throws {

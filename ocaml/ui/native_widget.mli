@@ -15,6 +15,51 @@ module Capability : sig
   val bits : t list -> int64
 end
 
+(** Shared native decorative surfaces. Content keeps its layout and event ownership;
+    the rounded background, inset border and shadow do not clip it. Gradients use
+    evenly spaced colors (2..16); linear gradients run from top to bottom and
+    angular gradients start at the trailing edge. Material tint is composited over
+    native material. Reduced Transparency uses the tint's opaque RGB color.
+    Surfaces introduce no animation. Standard native kind 8, version 1. *)
+module Surface : sig
+  type fill =
+    | Solid of Style.Color.t
+    | Linear of Style.Color.t list
+    | Angular of Style.Color.t list
+    | Thin_material of Style.Color.t
+    | Regular_material of Style.Color.t
+    | Ultra_thin_material of Style.Color.t
+
+  type shadow
+
+  (** Finite offsets; finite non-negative blur radius. *)
+  val shadow
+    :  color:Style.Color.t
+    -> radius:float
+    -> ?x:float
+    -> ?y:float
+    -> unit
+    -> shadow
+
+  (** Radius and border width must be finite and non-negative. Border width
+      defaults to zero. [presentation_background] also applies the fill and radius
+      to the containing native sheet (default false). Place it at the sheet content
+      root. [opacity] in [0, 1] affects only the painted background, not its child.
+      Material becomes opaque when Reduce Transparency is enabled.
+      The supplied content is the single retained native child. *)
+  val create
+    :  ?key:Key.t
+    -> ?corner_radius:float
+    -> ?shadow:shadow
+    -> ?border_color:Style.Color.t
+    -> ?border_width:float
+    -> ?opacity:float
+    -> ?presentation_background:bool
+    -> fill:fill
+    -> View.t
+    -> View.t
+end
+
 module Extension : sig
   type ('props, 'event) t
 

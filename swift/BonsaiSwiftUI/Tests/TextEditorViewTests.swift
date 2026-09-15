@@ -7,7 +7,7 @@ import Testing
 extension TreeFixture {
   static func editor(
     _ id: UInt64 = 1, kind: Int = 6, label: String = "Title", prompt: String = "Enter title",
-    keyboard: UInt8 = 0, submitLabel: UInt8 = 0, autofocus: UInt8 = 0,
+    keyboard: UInt8 = 0, submitLabel: UInt8 = 0, autofocus: UInt8 = 0, appearance: UInt8 = 0,
     text: String = "Draft", session: UInt64 = 1,
     document: UInt64 = 1, accepted: UInt64 = 0, mode: UInt8 = 2,
     enabled: UInt8 = 1, readOnly: UInt8 = 0, submit: UInt8 = 0,
@@ -18,7 +18,7 @@ extension TreeFixture {
     operation(update ? OperationId.updateProps : OperationId.createNode) {
       $0.integer(id)
       $0.integer(UInt16(kind))
-      if update { $0.integer(UInt64(kind == 6 ? 511 : 16383)) }
+      if update { $0.integer(UInt64(kind == 6 ? 511 : 32767)) }
       $0.integer(session)
       $0.integer(document)
       $0.integer(accepted)
@@ -38,7 +38,7 @@ extension TreeFixture {
           $0.integer(UInt32(string.utf8.count))
           $0.bytes.append(contentsOf: string.utf8)
         }
-        $0.bytes.append(contentsOf: [keyboard, submitLabel, autofocus])
+        $0.bytes.append(contentsOf: [keyboard, submitLabel, autofocus, appearance])
       }
       if !update {
         $0.integer(UInt16(bindings.count))

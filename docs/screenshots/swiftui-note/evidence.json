@@ -1,0 +1,117 @@
+{
+  "sourceRevision": "d22bcf8b17416dbca104e6b8b7c6e59880352551",
+  "worktree": "Uncommitted implementation; exact source hashes below",
+  "date": "2026-09-15",
+  "device": "iPhone 13 (iPhone14,5)",
+  "osBuild": "23G83",
+  "xcode": "26.1.1 (17B100)",
+  "nativeObjectSha256": "939c89c8767b07c04f77502f38dbdfd6a9c3586af1c35aae0167ede827ecbc33",
+  "sourceSha256": {
+    "examples/note/ocaml/note.ml": "594a9d6da22a4a05c1bd72329a7d1f670ec50931b70286ed8ec6a50dc0040527",
+    "examples/note/ocaml/native_embed.ml": "eff7d8238236252ba9a7d801ecebe5d8da0196af815db9e8c4f09dd074114f3f",
+    "examples/note/resources/typewriter.png": "8783d4bce956b4b82a1840d520fdc22d13d517a07f305b3fdb3279da038ea6ea",
+    "examples/note/swift/App.swift": "263e818c75b943a9dcbd2c7a763623b603ca8b2ad6c6b3066443dfcb54deb63a",
+    "ocaml/ui/native_widget.ml": "3084db4a62c6c9927fcb430f4c5efcb682a1989dce3898b25bb517d954c9990c",
+    "ocaml/ui/view.ml": "2ecd90e6672108f7de8dcaa2248059cc54781df73fa146bd1d03fdbd5e788296",
+    "ocaml/runtime/driver.ml": "fd538e70433f7636be34de396f50154386aff9eb2f382759da391a8d7f1f1f7c",
+    "protocol/schema.sexp": "974d3946ac2fcc38c9bade0b9ddfbf316f0cf30424a1f29fa3358644ea9dba91",
+    "native/src/bonsai_swiftui_native.c": "384a7e3ca3eb534130827e2a5196009b75d843e9a5d8a21643886a251860a8ef",
+    "swift/BonsaiSwiftUI/Sources/NativeSurface.swift": "0911a251e8514fc91fccd4e343a13f471f63f57981cc85d4a9e5bb7b3af69c04",
+    "swift/BonsaiSwiftUI/Sources/NativeSheet.swift": "cd81ad7fad1005af8616da52b3369cba6b2908fc9dbd4b1a9eb496a0514d85cc",
+    "swift/BonsaiSwiftUI/Sources/NativePresentation.swift": "dd2ef56b99de38336ba4c48c8e6ea3649d45207e6ea64c5a42eae5ba1990b4e6",
+    "swift/BonsaiSwiftUI/Sources/BonsaiSession.swift": "cf96416835033bce407619e36959a0fd5a23971724bc57a71d66ff321312a8ca",
+    "swift/BonsaiSwiftUI/Sources/NativeTextField.swift": "7133be409f46fd1aee6901363162b7914f56f125718d18f8ba9348db55da72b3",
+    "swift/BonsaiSwiftUI/Sources/NativeMenu.swift": "0712f56e4a6fcda26e264bdafcfe63d3fec6726f738b3547b95b4cb3373bf7cb",
+    "swift/BonsaiSwiftUI/Sources/BonsaiNativeViews.swift": "15519b6c8ec8ff067ea937768f3a965642e32dc29824f30e086f7b6fe6354c45",
+    "ocaml/protocol/binary_codec.ml": "4c99efbef255c746cc28eb910c401f844b9326d0f6ce3c8a2aefea5dd67e4e7a",
+    "examples/note/bonsai-swiftui.sexp": "c1e5445e9ee66b3682d5fa0b13e30683e9d65523e3b62127957f6c3e1220ebe1",
+    "native/test/note_device.swift": "a86decf0ab6f0e5c2d26a65745e9f559dba25f403896a09e9fbfe0c5b4e20b41"
+  },
+  "referenceSha256": "9882144659c59f6edbc6d7da3e53c3c52894b1bd4f1ace2b1000d61d86ab09eb",
+  "captureSha256": {
+    "cornell-system.png": "9ffba5fd54c272264cbcd8884fb7fd444d1a1dd2f7cdead62ed0d9c3f7032a22",
+    "cornell.png": "33637d994545c4e58c66647a2d5d82fbf57afcc8a4d664e72c1c649573ce0314",
+    "templates.png": "1939ceef44b09a27b398bc7e7b2b041c484ec0edfb7dde534988977c28b3374e",
+    "templates-cool.png": "e6dc0ffe82f5736458aef48a88d5d4fe2535e0b2f3bb780b74d2c320007d9944",
+    "templates-focused.png": "2d0ead6d6a719db8035bf33e0674c2c73104c305aa32181ed958a6a7f17e0c41",
+    "templates-focused-cool.png": "3fe2bd3d4bb4e3abb7dcd22f48cd51191d7c4d24a38bb3490a475f9cc4f823a4",
+    "templates-after-keyboard.png": "1d2f11f073d51314eaa4ba7d9a3a5507f8fbfbcb7f99fac5ad69670ce5792a7b",
+    "search-empty.png": "0b9abce6bd218b9fc7aa7a9befc0102759e8d4e3802aef86d819156f81f0f23d",
+    "reading.png": "14b0cd2d5ecbb4a68920c4ef295e4e1afc23ae86ae6eda574040ac825c455108",
+    "reading-end.png": "c8ec74d2e71b3cafc3d6f85caa37ef7da2a2d259f6568e38b0bd989ffeb739ca",
+    "editing-keyboard.png": "caeb435ebd464203d771138b77de5411fc5c62432d7a4d42dcaada72d8f32e0b",
+    "narrow.png": "d4b5e9b9df97d57b94385808c58f6168f54b96c4626769e771812b03fb130b58",
+    "narrow-large-text.png": "dfbb5ab924a8dacfe65c85de044caa8f7730b908fe5a19e9cd2c5faf9f0fba96"
+  },
+  "referenceCrops": {
+    "templates": [
+      30,
+      125,
+      636,
+      1310
+    ],
+    "cornell": [
+      698,
+      125,
+      1306,
+      1310
+    ],
+    "reading": [
+      1365,
+      125,
+      1972,
+      1310
+    ]
+  },
+  "windowCrop": [
+    0,
+    141,
+    1170,
+    2460
+  ],
+  "normalization": "390 pixels wide, preserved aspect ratio; crop and resize only",
+  "fixtures": {
+    "cornell": "Fresh warm Cornell; both disclosures collapsed",
+    "templates": "Empty query; top of catalog",
+    "reading": "Fresh cool Reading; top of document"
+  },
+  "acceptance": {
+    "boldText": true,
+    "capture": "Active physical-device UIWindow.drawHierarchy; actual Note OCaml entrypoint",
+    "captureLegibility": "regular",
+    "checks": [
+      "Initial Cornell and 44-point button targets",
+      "Sheet material responds to the real document backdrop",
+      "Native search, empty state, clear and reading selection",
+      "Native scrolling exposes final content above anchored controls",
+      "Back, close and independent disclosure actions",
+      "Actual UIKit title/body input and Done preserve edits",
+      "Theme, both insertions and named mock results",
+      "Fresh seed, 320-point width and larger text reflow"
+    ],
+    "darkerSystemColors": false,
+    "error": "",
+    "metrics": {
+      "bottomControlsY": 707,
+      "documentEndY": 648.9999999999999,
+      "doneBottomY": 60,
+      "editorBottomY": 492,
+      "focusedSheetBackdropResponseRGB": 0,
+      "focusedSheetFraction": 0.98,
+      "keyboardTopY": 508,
+      "narrowLargeTextHeight": 1428.6666666666665,
+      "narrowNormalHeight": 954.3333333333333,
+      "scale": 3,
+      "sheetAfterKeyboardRestorationRGBError": 0,
+      "sheetBackdropResponseRGB": 15,
+      "viewportHeight": 844,
+      "viewportWidth": 390
+    },
+    "reduceMotion": false,
+    "reduceTransparency": false,
+    "revision": 33,
+    "status": "passed",
+    "systemVersion": "26.6.1",
+    "windowContrast": 0
+  }
+}

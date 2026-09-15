@@ -155,3 +155,9 @@ module Submit_label = struct
     | Go
     | Continue
 end
+
+module Field_appearance = struct
+  type t =
+    | Rounded
+    | Plain
+end

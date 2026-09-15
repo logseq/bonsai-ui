@@ -381,6 +381,7 @@ module Private_types = struct
         ; secure : bool
         ; keyboard : Text_editing.Keyboard.t
         ; submit_label : Text_editing.Submit_label.t
+        ; appearance : Text_editing.Field_appearance.t
         ; autofocus : bool
         }
         -> [ `Text_field ] node
@@ -553,6 +554,7 @@ module Private_types = struct
         { presented : bool
         ; fullscreen : bool
         ; detents : int
+        ; fraction : float
         ; initial : int
         ; interactive : bool
         ; indicator : bool
@@ -860,6 +862,7 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && x.secure = y.secure
     && x.keyboard = y.keyboard
     && x.submit_label = y.submit_label
+    && x.appearance = y.appearance
     && x.autofocus = y.autofocus
   | Image x, Image y ->
     x.source = y.source && x.sizing = y.sizing && Float.equal x.scale y.scale
@@ -959,6 +962,7 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     x.presented = y.presented
     && x.fullscreen = y.fullscreen
     && x.detents = y.detents
+    && Float.equal x.fraction y.fraction
     && x.initial = y.initial
     && x.interactive = y.interactive
     && x.indicator = y.indicator
@@ -1239,6 +1243,7 @@ let native_text_field
       ?(prompt = "")
       ?(keyboard = Text_editing.Keyboard.Text)
       ?(submit_label = Text_editing.Submit_label.Done)
+      ?(appearance = Text_editing.Field_appearance.Rounded)
       ?(autofocus = false)
       ?(enabled = true)
       ?(read_only = false)
@@ -1296,6 +1301,7 @@ let native_text_field
          ; prompt
          ; keyboard
          ; submit_label
+         ; appearance
          ; autofocus
          })
     ~event_bindings:(Array.of_list bindings)
@@ -1960,6 +1966,7 @@ module Sheet = struct
   type detent =
     | Medium
     | Large
+    | Fraction of float
 
   type sizing =
     | Automatic
@@ -1972,6 +1979,7 @@ module Sheet = struct
         ~presented
         ~fullscreen
         ~detents
+        ~fraction
         ~initial
         ~interactive
         ~indicator
@@ -1983,7 +1991,16 @@ module Sheet = struct
     create_typed
       ~key
       ~node:
-        (Sheet { presented; fullscreen; detents; initial; interactive; indicator; sizing })
+        (Sheet
+           { presented
+           ; fullscreen
+           ; detents
+           ; initial
+           ; interactive
+           ; indicator
+           ; sizing
+           ; fraction
+           })
       ~event_bindings:
         [| { tag = Event.Tag.Value_changed; handler = on_presented_changed } |]
       ~children:(plain_children [ background; content ])
@@ -2016,6 +2033,10 @@ module Sheet = struct
              match detent with
              | Medium -> 1
              | Large -> 2
+             | Fraction value ->
+               if (not (Float.is_finite value)) || value <= 0. || value > 1.
+               then invalid_arg "View.Sheet: fraction must be finite and in (0, 1]";
+               4
            in
            if mask land bit <> 0 then invalid_arg "View.Sheet: duplicate detent";
            mask lor bit)
@@ -2033,10 +2054,18 @@ module Sheet = struct
          | Form -> 2
          | Page -> 3)
       ~detents:mask
+      ~fraction:
+        (List.fold_left
+           (fun value -> function
+              | Fraction f -> f
+              | _ -> value)
+           0.
+           detents)
       ~initial:
         (match initial with
          | Medium -> 0
-         | Large -> 1)
+         | Large -> 1
+         | Fraction _ -> 2)
       ~interactive:interactive_dismiss
       ~indicator:shows_drag_indicator
       ~on_presented_changed
@@ -2051,6 +2080,7 @@ module Sheet = struct
       ~fullscreen:true
       ~sizing:0
       ~detents:2
+      ~fraction:0.
       ~initial:1
       ~interactive:false
       ~indicator:false

@@ -2,7 +2,7 @@
 
 module ID = Bonsai_swiftui_spec.Id
 
-let protocol_major = 5
+let protocol_major = 6
 let protocol_minor = 0
 
 module Limits = struct
@@ -454,6 +454,7 @@ module Sheet_prop = struct
   let interactive = ID.Protocol.Property.of_int 5
   let indicator = ID.Protocol.Property.of_int 6
   let sizing = ID.Protocol.Property.of_int 7
+  let fraction = ID.Protocol.Property.of_int 8
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
@@ -464,6 +465,7 @@ module Sheet_prop = struct
     | 5 -> Some "interactive"
     | 6 -> Some "indicator"
     | 7 -> Some "sizing"
+    | 8 -> Some "fraction"
     | _ -> None
   ;;
 end
@@ -749,6 +751,7 @@ module Text_field_prop = struct
   let keyboard = ID.Protocol.Property.of_int 12
   let submit_label = ID.Protocol.Property.of_int 13
   let autofocus = ID.Protocol.Property.of_int 14
+  let appearance = ID.Protocol.Property.of_int 15
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
@@ -766,6 +769,7 @@ module Text_field_prop = struct
     | 12 -> Some "keyboard"
     | 13 -> Some "submit_label"
     | 14 -> Some "autofocus"
+    | 15 -> Some "appearance"
     | _ -> None
   ;;
 end
@@ -785,6 +789,7 @@ module Secure_field_prop = struct
   let keyboard = ID.Protocol.Property.of_int 12
   let submit_label = ID.Protocol.Property.of_int 13
   let autofocus = ID.Protocol.Property.of_int 14
+  let appearance = ID.Protocol.Property.of_int 15
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
@@ -802,6 +807,7 @@ module Secure_field_prop = struct
     | 12 -> Some "keyboard"
     | 13 -> Some "submit_label"
     | 14 -> Some "autofocus"
+    | 15 -> Some "appearance"
     | _ -> None
   ;;
 end

@@ -1,6 +1,6 @@
 ((protocol
   (name bonsai_swiftui)
-  (major 5)
+  (major 6)
   (minor 0)
   (endianness little)
   (header_bytes 48)
@@ -114,7 +114,7 @@
   ((scroll_sections ((vertical 1 bool) (pin_headers 2 bool) (pin_footers 3 bool) (spacing 4 f64) (shows_indicators 5 bool) (initial_anchor 6 enum_u8)))
    (scroll_section ((has_header 1 bool) (has_footer 2 bool) (hero_height 3 optional_f64) (stretch 4 bool)))
    (toolbar ((placements 1 toolbar_placements)))
-   (sheet ((presented 1 bool) (fullscreen 2 bool) (detents 3 u8) (initial 4 enum_u8) (interactive 5 bool) (indicator 6 bool) (sizing 7 enum_u8)))
+   (sheet ((presented 1 bool) (fullscreen 2 bool) (detents 3 u8) (initial 4 enum_u8) (interactive 5 bool) (indicator 6 bool) (sizing 7 enum_u8) (fraction 8 f64)))
    (popover ((presented 1 bool) (edge 2 enum_u8)))
    (help ((message 1 string)))
    (toggle ((value 1 bool) (enabled 2 bool) (style 3 enum_u8)))
@@ -149,12 +149,12 @@
     ((session_id 1 u64) (document_revision 2 u64) (accepted_local_revision 3 u64)
      (update_mode 4 text_update_mode) (value 5 text_editing_value) (enabled 6 bool)
      (read_only 7 bool) (submit_on_return 8 bool) (max_utf8_bytes 9 optional_u32)
-     (label 10 string) (prompt 11 string) (keyboard 12 enum_u8) (submit_label 13 enum_u8) (autofocus 14 bool)))
+     (label 10 string) (prompt 11 string) (keyboard 12 enum_u8) (submit_label 13 enum_u8) (autofocus 14 bool) (appearance 15 enum_u8)))
    (secure_field
     ((session_id 1 u64) (document_revision 2 u64) (accepted_local_revision 3 u64)
      (update_mode 4 text_update_mode) (value 5 text_editing_value) (enabled 6 bool)
      (read_only 7 bool) (submit_on_return 8 bool) (max_utf8_bytes 9 optional_u32)
-     (label 10 string) (prompt 11 string) (keyboard 12 enum_u8) (submit_label 13 enum_u8) (autofocus 14 bool)))
+     (label 10 string) (prompt 11 string) (keyboard 12 enum_u8) (submit_label 13 enum_u8) (autofocus 14 bool) (appearance 15 enum_u8)))
    (text_editor
     ((session_id 1 u64) (document_revision 2 u64) (accepted_local_revision 3 u64)
      (update_mode 4 text_update_mode) (value 5 text_editing_value) (enabled 6 bool)

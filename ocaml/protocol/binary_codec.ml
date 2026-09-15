@@ -84,13 +84,23 @@ let check_u32 label value =
   then fail Invalid_props "%s is outside u32" label
 ;;
 
-let check_sheet_properties ~fullscreen ~detents ~initial ~interactive ~indicator ~sizing =
+let check_sheet_properties
+      ~fullscreen
+      ~detents
+      ~initial
+      ~interactive
+      ~indicator
+      ~sizing
+      ~fraction
+  =
   if
     detents < 1
-    || detents > 3
+    || detents > 7
     || initial < 0
-    || initial > 1
+    || initial > 2
     || detents land (1 lsl initial) = 0
+    || (not (Float.is_finite fraction))
+    || (if detents land 4 <> 0 then fraction <= 0. || fraction > 1. else fraction <> 0.)
     || sizing < 0
     || sizing > 3
     || (fullscreen
@@ -683,10 +693,13 @@ let write_text_field writer (fields : Wire_frame.text_field) =
     || fields.keyboard > 4
     || fields.submit_label < 0
     || fields.submit_label > 5
+    || fields.appearance < 0
+    || fields.appearance > 1
   then fail Invalid_props "invalid field input traits";
   Writer.u8 writer fields.keyboard;
   Writer.u8 writer fields.submit_label;
-  write_bool writer fields.autofocus
+  write_bool writer fields.autofocus;
+  Writer.u8 writer fields.appearance
 ;;
 
 let write_tab_key writer key =
@@ -1485,15 +1498,31 @@ let write_props writer kind props =
     write_badge writer count alignment visible
   | ( Sheet
     , Sheet_props
-        { presented; fullscreen; detents; initial; interactive; indicator; sizing } ) ->
-    check_sheet_properties ~fullscreen ~detents ~initial ~interactive ~indicator ~sizing;
+        { presented
+        ; fullscreen
+        ; detents
+        ; initial
+        ; interactive
+        ; indicator
+        ; sizing
+        ; fraction
+        } ) ->
+    check_sheet_properties
+      ~fullscreen
+      ~detents
+      ~initial
+      ~interactive
+      ~indicator
+      ~sizing
+      ~fraction;
     write_bool writer presented;
     write_bool writer fullscreen;
     Writer.u8 writer detents;
     Writer.u8 writer initial;
     write_bool writer interactive;
     write_bool writer indicator;
-    Writer.u8 writer sizing
+    Writer.u8 writer sizing;
+    Writer.f64 writer fraction
   | Popover, Popover_props { presented; edge } ->
     if edge < 0 || edge > 4 then fail Invalid_props "invalid popover edge";
     write_bool writer presented;
@@ -1772,7 +1801,7 @@ let changed_fields = function
   | Refresh_props _ -> 7L
   | Scroll_targets_props _ -> 511L
   | Scroll_props _ -> 15L
-  | Text_field_props _ -> 16383L
+  | Text_field_props _ -> 32767L
   | Text_editor_props _ -> 511L
   | Image_props _ ->
     List.fold_left
@@ -1866,7 +1895,7 @@ let changed_fields = function
   | Divider_props -> 0L
   | Label_props -> 0L
   | Badge_props _ -> 7L
-  | Sheet_props _ -> 127L
+  | Sheet_props _ -> 255L
   | Popover_props _ -> 3L
   | Scroll_sections_props _ -> 63L
   | Scroll_section_props _ -> 15L
@@ -2136,15 +2165,31 @@ let write_update_props writer props =
   | Badge_props { count; alignment; visible } ->
     write_badge writer count alignment visible
   | Sheet_props
-      { presented; fullscreen; detents; initial; interactive; indicator; sizing } ->
-    check_sheet_properties ~fullscreen ~detents ~initial ~interactive ~indicator ~sizing;
+      { presented
+      ; fullscreen
+      ; detents
+      ; initial
+      ; interactive
+      ; indicator
+      ; sizing
+      ; fraction
+      } ->
+    check_sheet_properties
+      ~fullscreen
+      ~detents
+      ~initial
+      ~interactive
+      ~indicator
+      ~sizing
+      ~fraction;
     write_bool writer presented;
     write_bool writer fullscreen;
     Writer.u8 writer detents;
     Writer.u8 writer initial;
     write_bool writer interactive;
     write_bool writer indicator;
-    Writer.u8 writer sizing
+    Writer.u8 writer sizing;
+    Writer.f64 writer fraction
   | Popover_props { presented; edge } ->
     if edge < 0 || edge > 4 then fail Invalid_props "invalid popover edge";
     write_bool writer presented;
@@ -3340,6 +3385,8 @@ let read_props reader kind =
       if keyboard > 4 || submit_label > 5
       then fail Invalid_props "invalid field input traits";
       let autofocus = read_bool reader in
+      let appearance = Reader.u8 reader in
+      if appearance > 1 then fail Invalid_props "invalid field appearance";
       Text_field_props
         { editing
         ; label
@@ -3347,6 +3394,7 @@ let read_props reader kind =
         ; secure = kind = Secure_field
         ; keyboard
         ; submit_label
+        ; appearance
         ; autofocus
         })
   | Image ->
@@ -3682,9 +3730,25 @@ let read_props reader kind =
     let interactive = read_bool reader in
     let indicator = read_bool reader in
     let sizing = Reader.u8 reader in
-    check_sheet_properties ~fullscreen ~detents ~initial ~interactive ~indicator ~sizing;
+    let fraction = Reader.f64 reader in
+    check_sheet_properties
+      ~fullscreen
+      ~detents
+      ~initial
+      ~interactive
+      ~indicator
+      ~sizing
+      ~fraction;
     Sheet_props
-      { presented; fullscreen; detents; initial; interactive; indicator; sizing }
+      { presented
+      ; fullscreen
+      ; detents
+      ; initial
+      ; interactive
+      ; indicator
+      ; sizing
+      ; fraction
+      }
   | Popover ->
     let presented = read_bool reader in
     let edge = Reader.u8 reader in

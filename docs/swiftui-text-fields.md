@@ -26,12 +26,23 @@ acknowledged application presentation. Inactive applications and inactive conten
 cannot consume the request. Disabling a field before its first focus defers the
 request. Blurring a field or reactivating the application does not rearm it.
 
+## Composed field appearance
+
+`View.text_field` and `View.secure_field` accept
+`~appearance:Text_editing.Field_appearance.Plain` to remove the native border,
+background and AppKit focus ring. The default is `Rounded`. Compose a search
+surface with ordinary background, padding and icons around a Plain field.
+The field remains a native input with its accessibility label, caret, selection,
+composition and keyboard behavior. Changing appearance retains its controller and
+local draft. Note uses this for its single-surface template search.
+
 ## Protocol and lifetime
 
 The `text_field` and `secure_field` node kinds use IDs 47 and 49. Their first nine
 properties share TextEditor's session/revision/value/configuration payload;
-label, prompt, keyboard, submit label and autofocus follow it. The full update
-mask is 16383. Both are leaves with
+label, prompt, keyboard, submit label, autofocus and appearance follow it. The full update
+mask is 32767. Protocol 6 replaces the previous layout; appearance is a required
+byte (0 = Rounded, 1 = Plain), and unknown values are rejected. Both are leaves with
 required edit, submit and focus bindings and an optional limit event binding.
 Separate node kinds make a plain/secure change replace the native control.
 

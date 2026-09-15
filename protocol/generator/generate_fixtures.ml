@@ -356,6 +356,7 @@ let fixtures : (string * Protocol.Wire_frame.t) list =
                     ; secure = false
                     ; keyboard = 0
                     ; submit_label = 0
+                    ; appearance = 0
                     ; autofocus = true
                     }
               }

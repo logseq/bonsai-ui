@@ -2,7 +2,7 @@
 
 # Protocol IDs
 
-Protocol version: `5.0`
+Protocol version: `6.0`
 
 ## Frame kind
 
@@ -241,6 +241,7 @@ Protocol version: `5.0`
 | `interactive` | 5 | `bool` |
 | `indicator` | 6 | `bool` |
 | `sizing` | 7 | `enum_u8` |
+| `fraction` | 8 | `f64` |
 
 ## Popover properties
 
@@ -410,6 +411,7 @@ Protocol version: `5.0`
 | `keyboard` | 12 | `enum_u8` |
 | `submit_label` | 13 | `enum_u8` |
 | `autofocus` | 14 | `bool` |
+| `appearance` | 15 | `enum_u8` |
 
 ## Secure field properties
 
@@ -429,6 +431,7 @@ Protocol version: `5.0`
 | `keyboard` | 12 | `enum_u8` |
 | `submit_label` | 13 | `enum_u8` |
 | `autofocus` | 14 | `bool` |
+| `appearance` | 15 | `enum_u8` |
 
 ## Text editor properties
 

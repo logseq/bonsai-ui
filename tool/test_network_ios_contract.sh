@@ -85,7 +85,7 @@ require_text \
 
 ios_commands=$(make -n ci-ios)
 require_text "$ios_commands" \
-  'for consumer in clock counter gallery host_effects host_navigation mail navigation network sqlite_worker text_input todo' \
+  'for consumer in clock counter gallery host_effects host_navigation mail navigation network note sqlite_worker text_input todo' \
   "ci-ios complete example matrix including Network"
 require_text "$ios_commands" 'for profile in debug profile release' "ci-ios build profiles"
 require_text "$ios_commands" 'build ios --profile "$profile" --no-codesign' "ci-ios native build"

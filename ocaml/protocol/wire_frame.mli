@@ -239,6 +239,7 @@ type text_field =
   ; secure : bool
   ; keyboard : int
   ; submit_label : int
+  ; appearance : int
   ; autofocus : bool
   }
 
@@ -506,6 +507,7 @@ type props =
       { presented : bool
       ; fullscreen : bool
       ; detents : int
+      ; fraction : float
       ; initial : int
       ; interactive : bool
       ; indicator : bool

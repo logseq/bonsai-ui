@@ -68,7 +68,7 @@ public struct BonsaiNativeEvent: Sendable {
     makeResource: @escaping () -> Resource, dispose: @escaping (Resource) -> Void,
     @ViewBuilder content: @escaping (BonsaiNativeContext<Properties, Event, Resource>) -> Content
   ) throws {
-    guard kind > 0, kind <= 65535, kind != 6, kind != 7, version > 0, capabilities.isValid
+    guard kind > 0, kind <= 65535, kind != 6, kind != 7, kind != 8, version > 0, capabilities.isValid
     else { throw BonsaiNativeViewError.invalidRegistration }
     guard definitions[kind] == nil else { throw BonsaiNativeViewError.duplicateKind(kind) }
     definitions[kind] = Self.definition(
@@ -81,6 +81,7 @@ public struct BonsaiNativeEvent: Sendable {
     var result = self
     result.definitions[6] = NativeMessageComposer.definition
     result.definitions[7] = NativeExpandableComposer.definition
+    result.definitions[8] = NativeSurface.definition
     return result
   }
 

@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CLI = ROOT / "_build/default/bonsai_swiftui_tool/bin/main.exe"
 EXAMPLES = (
     "clock", "counter", "gallery", "host_effects", "host_navigation", "mail",
-    "navigation", "network", "sqlite_worker", "text_input", "todo",
+    "navigation", "network", "note", "sqlite_worker", "text_input", "todo",
 )
 
 
@@ -31,7 +31,7 @@ class ExampleCliTests(unittest.TestCase):
         target = self.root / name
         target.mkdir()
         for path in source.iterdir():
-            if path.name in ("ocaml", "swift", "apple-tests", "resources", "test"):
+            if path.name in ("ocaml", "swift", "apple-tests", "resources", "test", "apple-ui-tests"):
                 shutil.copytree(path, target / path.name)
             elif path.is_file() and (path.name in ("dune-project", "bonsai-swiftui.sexp") or ".opam" in path.name):
                 shutil.copyfile(path, target / path.name)
@@ -86,6 +86,23 @@ class ExampleCliTests(unittest.TestCase):
                              (project / "resources" / resource).read_bytes())
         self.assertFalse((project / "flutter").exists())
         self.cli(project, "sync-host", "--check")
+
+    def test_note_packages_its_cover_and_runs_the_actual_ocaml_application(self):
+        project = self.copy_example("note")
+        self.cli(project, "build", "macos", "--profile", "debug")
+        bundle = project / "apple/DerivedData/Build/Products/Debug/BonsaiNote.app"
+        self.assertEqual((bundle / "Contents/Resources/typewriter.png").read_bytes(),
+                         (project / "resources/typewriter.png").read_bytes())
+        self.cli(project, "sync-host", "--check")
+        output = self.cli(
+            project, "exec", "--profile", "debug", "--",
+            "xcodebuild", "-project", project / "apple/BonsaiNote.xcodeproj",
+            "-scheme", "BonsaiNote-macOS", "-configuration", "Debug",
+            "-destination", "platform=macOS,arch=arm64", "-derivedDataPath",
+            project / "apple/DerivedData", "test",
+        )
+        self.assertRegex(output, r"testPackagedNoteStartsPresentsAndRestarts.*passed")
+        self.assertIn("** TEST SUCCEEDED **", output)
 
 
 if __name__ == "__main__":

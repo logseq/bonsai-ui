@@ -51,3 +51,9 @@ module Submit_label : sig
     | Go
     | Continue
 end
+
+module Field_appearance : sig
+  type t =
+    | Rounded
+    | Plain
+end
