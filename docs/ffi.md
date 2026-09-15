@@ -1,7 +1,7 @@
 # Native runtime boundary
 
 The [public C header](../native/src/bonsai_swiftui_native.h) defines native ABI
-**3.0**. The renderer protocol is **BSFR 4.0**. `NativeRuntime.open` checks both
+**3.0**. The renderer protocol is **BSFR 5.0**. `NativeRuntime.open` checks both
 exactly before creating a runtime. Swift imports the header through
 `CBonsaiSwiftUI`; no Flutter Native Assets package or Dart wrapper is involved.
 

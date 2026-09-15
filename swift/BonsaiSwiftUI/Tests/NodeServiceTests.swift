@@ -37,7 +37,7 @@ import Testing
           _ = session.activate($0)
         }
       ).frame(maxWidth: .infinity, maxHeight: .infinity).modifier(
-        NativeLayoutObserver(tree: session.tree))
+        NativeLayoutObserver(requests: session.windowHost.layoutRequests))
     )
     hosting = view
     window.contentView = view
@@ -172,6 +172,8 @@ extension NativeRuntimeTests {
           }
           return false
         })
+      // Idle layout must not populate a retained frame for every node.
+      #expect(scene.session.tree.nodes.values.allSatisfy { $0.layoutTarget.observation == nil })
       let first = try await scene.perform("measure:\(target.id.node)")
       let values = first.split(separator: ",").compactMap { Double($0) }
       try #require(values.count == 4)
@@ -179,6 +181,21 @@ extension NativeRuntimeTests {
       #expect(values[2] == 120 && values[3] == 40)
       scene.window.setFrameOrigin(CGPoint(x: 125, y: 250))
       #expect(try await scene.perform("measure:\(target.id.node)") == first)
+      for width in [650.0, 420.0] {
+        scene.window.setContentSize(CGSize(width: width, height: 400))
+        let field = try scene.field("Plain")
+        let response = try await scene.perform("measure:\(field.id.node)")
+        let measured = response.split(separator: ",").compactMap { Double($0) }
+        try #require(measured.count == 4)
+        let native = try #require(field.fieldController?.field)
+        let expected = native.convert(native.bounds, to: scene.window.contentView)
+        for (actual, expected) in zip(
+          measured, [expected.minX, expected.minY, expected.width, expected.height])
+        {
+          #expect(abs(actual - expected) < 0.001)
+        }
+        #expect(scene.windowHost.layoutRequests.subscriptionCount == 0)
+      }
       #expect(try await scene.perform("measure:9223372036854775807") == "error")
       try scene.send("remove")
       try await scene.settle { scene.session.tree.nodes[target.id.node] == nil }

@@ -59,6 +59,33 @@ import Testing
     #expect(second.title == "Changed by another owner")
   }
 
+  @Test func windowClosureAndOwnerReplacementEndPendingLayoutRequests() async throws {
+    for closeWindow in [true, false] {
+      let window = hostTestWindow("Layout lifetime")
+      defer { window.close() }
+      let host = NativeWindowHost()
+      let owner = NSView()
+      let replacement = NSView()
+      host.attach(window: window, title: nil, owner: owner)
+      let target = NodeLayoutTarget(identity: RenderIdentity(epoch: 1, node: 2))
+      target.attach(UUID(), registry: host.layoutRequests)
+      let task = Task { try await host.layoutRequests.measure(target, valid: { true }) }
+      for _ in 0..<100 {
+        if host.layoutRequests.subscriptionCount == 1 { break }
+        await Task.yield()
+      }
+      try #require(host.layoutRequests.subscriptionCount == 1)
+      if closeWindow {
+        window.close()
+      } else {
+        host.attach(window: window, title: nil, owner: replacement)
+      }
+      #expect(host.layoutRequests.subscriptionCount == 0)
+      host.reset()
+      await #expect(throws: HostServiceError.self) { try await task.value }
+    }
+  }
+
   @Test func malformedRequestsAndCancelledOperationsCannotMutateTheWindow() async throws {
     let window = hostTestWindow("Original")
     defer { window.close() }

@@ -10,6 +10,7 @@ import Foundation
 
 /// The presentation view binds its own window; services never select a global key window.
 @MainActor final class NativeWindowHost {
+  let layoutRequests = NativeLayoutRequests()
   let fileDialogs = NativeFileDialogs()
   let notices = NativeNotices()
   let dialogs = NativeHostDialogs()
@@ -19,12 +20,21 @@ import Foundation
   var allowsFeedback: (() -> Bool)?
   var hasModalContent: (() -> Bool)?
   var resolveNode: ((UInt64, Bool) -> RenderNodeState?)?
+  #if os(macOS)
+    private var closeObservation: NSObjectProtocol?
+  #endif
   private weak var window: HostPlatformWindow?
   private weak var owner: AnyObject?
   private var inheritedTitle: String?
   private var applicationTitle: String?
   private var requestedTitle: String?
   private var effectiveTitle: String { requestedTitle ?? applicationTitle ?? inheritedTitle ?? "" }
+
+  isolated deinit {
+    #if os(macOS)
+      if let closeObservation { NotificationCenter.default.removeObserver(closeObservation) }
+    #endif
+  }
 
   func owns(_ owner: AnyObject) -> Bool { self.owner === owner && window != nil }
 
@@ -37,6 +47,15 @@ import Foundation
       reset()
       self.window = window
       inheritedTitle = readTitle(window)
+      #if os(macOS)
+        closeObservation = NotificationCenter.default.addObserver(
+          forName: NSWindow.willCloseNotification, object: window, queue: nil
+        ) { [weak self] _ in
+          MainActor.assumeIsolated { self?.reset() }
+        }
+      #endif
+    } else if self.owner !== owner {
+      layoutRequests.reset()
     }
     self.owner = owner
     if applicationTitle != title {
@@ -52,6 +71,11 @@ import Foundation
   }
 
   func reset() {
+    #if os(macOS)
+      if let closeObservation { NotificationCenter.default.removeObserver(closeObservation) }
+      closeObservation = nil
+    #endif
+    layoutRequests.reset()
     #if os(iOS)
       feedbackGenerators.reset()
     #endif

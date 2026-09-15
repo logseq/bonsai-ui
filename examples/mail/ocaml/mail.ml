@@ -81,6 +81,26 @@ type state =
   ; painted_last_exclusive : int
   }
 
+type ('set_state, 'sleep) paging_dependencies =
+  { paging_destination : mail_destination
+  ; paging_count : int
+  ; paging_load : load_state
+  ; paging_cursor : int
+  ; paging_generation : int
+  ; paging_set_state : 'set_state
+  ; paging_sleep : 'sleep
+  }
+
+let equal_paging_dependencies left right =
+  left.paging_destination = right.paging_destination
+  && Int.equal left.paging_count right.paging_count
+  && left.paging_load = right.paging_load
+  && Int.equal left.paging_cursor right.paging_cursor
+  && Int.equal left.paging_generation right.paging_generation
+  && left.paging_set_state == right.paging_set_state
+  && left.paging_sleep == right.paging_sleep
+;;
+
 let message
       id
       sender
@@ -381,6 +401,29 @@ let initial =
 
 let equal_state = ( = )
 
+let same_message_sizing (left : message) (right : message) =
+  left.sender = right.sender
+  && left.subject = right.subject
+  && left.preview = right.preview
+  && left.timestamp = right.timestamp
+  && left.read = right.read
+  && left.outline = right.outline
+;;
+
+let same_existing_row_sizes before after =
+  if before == after
+  then true
+  else (
+    let previous = Hashtbl.create (List.length before) in
+    List.iter (fun (message : message) -> Hashtbl.add previous message.id message) before;
+    List.for_all
+      (fun (message : message) ->
+         match Hashtbl.find_opt previous message.id with
+         | None -> true
+         | Some old -> same_message_sizing old message)
+      after)
+;;
+
 let update_message state id update =
   { state with
     messages =
@@ -660,7 +703,7 @@ let render_outline_node message_id (path, depth, node) =
             ())
 ;;
 
-let collapsed_mail_content ~large_text ~toggle_star ~expand message =
+let mail_header ~large_text ~toggle_star ~toggle ~expanded message =
   let sender_weight = if message.read then Ui.Style.Font_weight.Normal else Semi_bold in
   let timestamp =
     styled_text ~size:11.5 ~color:text_secondary ~line_limit:1 message.timestamp
@@ -680,24 +723,42 @@ let collapsed_mail_content ~large_text ~toggle_star ~expand message =
            ~color:text_primary
            ~line_limit:(if large_text then 2 else 1)
            message.subject
-       ; styled_text
-           ~size:13.
-           ~color:text_secondary
-           ~line_limit:(if large_text then 2 else 1)
-           message.preview
        ]
+       @ (if expanded
+          then []
+          else
+            [ styled_text
+                ~size:13.
+                ~color:text_secondary
+                ~line_limit:(if large_text then 2 else 1)
+                message.preview
+            ])
        @ if large_text then [ timestamp ] else [])
   in
   let trailing =
     Ui.View.column
-      ((if large_text then [] else [ timestamp ])
-       @ [ star_control toggle_star message ~detail:false ])
+      ((if large_text then [] else [ timestamp ]) @ [ Ui.View.spacer ~min_length:32. () ])
+  in
+  let actions =
+    [ star_control toggle_star message ~detail:false ]
+    @
+    if expanded
+    then
+      [ semantic_icon_button
+          ~test_id:(Printf.sprintf "mail-card-collapse-%d" message.id)
+          ~label:(Printf.sprintf "Collapse message from %s" message.sender)
+          ~selected:false
+          ~on_press:toggle
+          ~name:"chevron.up"
+          ~color:primary
+      ]
+    else []
   in
   let content =
     Ui.View.background
-      ~color:(if message.read then surface else unread_surface)
+      ~color:(if expanded || message.read then surface else unread_surface)
       (Ui.View.frame
-         ~min_height:compact_mail_extent
+         ~min_height:(if expanded then card_header_extent else compact_mail_extent)
          (padding
             ~horizontal:16.
             ~vertical:8.
@@ -706,7 +767,11 @@ let collapsed_mail_content ~large_text ~toggle_star ~expand message =
                 @ [ Ui.View.Weighted.share (padding ~horizontal:12. text_column)
                   ; Ui.View.Weighted.fixed trailing
                   ]))))
-    |> Ui.View.with_test_id (Ui.Test_id.string (Printf.sprintf "mail-row-%d" message.id))
+    |> Ui.View.with_test_id
+         (Ui.Test_id.string
+            (Printf.sprintf
+               (if expanded then "mail-active-header-%d" else "mail-row-%d")
+               message.id))
     |> Ui.View.semantics
          ~properties:
            (Ui.Semantics.create
@@ -720,7 +785,7 @@ let collapsed_mail_content ~large_text ~toggle_star ~expand message =
                    "%s, %s"
                    message.subject
                    (category_label message.category))
-              ~value:"Collapsed"
+              ~value:(if expanded then "Expanded" else "Collapsed")
               ~role:Ui.Semantics.Role.Button
               ())
     |> fun child ->
@@ -728,102 +793,21 @@ let collapsed_mail_content ~large_text ~toggle_star ~expand message =
       ~key:(Ui.Key.int message.id)
       ~style:Ui.View.Button_style.Plain
       ~child
-      ~on_press:expand
+      ~on_press:toggle
       ()
     |> Ui.View.with_test_id
-         (Ui.Test_id.string (Printf.sprintf "mail-button-%d" message.id))
+         (Ui.Test_id.string
+            (Printf.sprintf
+               (if expanded then "mail-card-header-%d" else "mail-button-%d")
+               message.id))
   in
-  content
+  Ui.View.overlay
+    ~alignment:Bottom_end
+    ~overlay:(Ui.View.row actions |> padding ~horizontal:8. ~vertical:4.)
+    content
 ;;
 
-let expanded_mail_content
-      ~large_text
-      ~toggle_star
-      ~collapse
-      ~reply
-      ~open_message
-      ~notice
-      message
-  =
-  let sender_weight = if message.read then Ui.Style.Font_weight.Normal else Semi_bold in
-  let header_text =
-    Ui.View.column
-      ~alignment:Leading
-      ([ styled_text
-           ~size:15.
-           ~weight:sender_weight
-           ~color:text_primary
-           ~line_limit:1
-           ~truncation:Tail
-           message.sender
-       ; styled_text
-           ~size:13.5
-           ~weight:(if message.read then Normal else Semi_bold)
-           ~color:text_primary
-           ~line_limit:(if large_text then 2 else 1)
-           ~truncation:Tail
-           message.subject
-       ]
-       @
-       if large_text
-       then [ styled_text ~size:11.5 ~color:text_secondary message.timestamp ]
-       else [])
-  in
-  let collapsible_header =
-    Ui.View.frame
-      ~min_height:card_header_extent
-      (padding
-         ~horizontal:12.
-         ~vertical:8.
-         (Ui.View.Weighted.row
-            ((if large_text then [] else [ Ui.View.Weighted.fixed (avatar message) ])
-             @ [ Ui.View.Weighted.share (padding ~horizontal:12. header_text) ]
-             @
-             if large_text
-             then []
-             else
-               [ Ui.View.Weighted.fixed
-                   (styled_text ~size:11.5 ~color:text_secondary message.timestamp)
-               ])))
-    |> Ui.View.semantics
-         ~properties:
-           (Ui.Semantics.create
-              ~label:
-                (Printf.sprintf
-                   "%s message from %s"
-                   (if message.read then "Read" else "Unread")
-                   message.sender)
-              ~hint:
-                (Printf.sprintf
-                   "%s, %s"
-                   message.subject
-                   (category_label message.category))
-              ~value:"Expanded"
-              ~role:Ui.Semantics.Role.Button
-              ())
-    |> fun child ->
-    Ui.View.button ~style:Ui.View.Button_style.Plain ~child ~on_press:collapse ()
-    |> Ui.View.with_test_id
-         (Ui.Test_id.string (Printf.sprintf "mail-card-header-%d" message.id))
-  in
-  let collapse_button =
-    semantic_icon_button
-      ~test_id:(Printf.sprintf "mail-card-collapse-%d" message.id)
-      ~label:(Printf.sprintf "Collapse message from %s" message.sender)
-      ~selected:false
-      ~on_press:collapse
-      ~name:"chevron.up"
-      ~color:primary
-  in
-  let header =
-    collapsible_header
-    |> Ui.View.overlay
-         ~alignment:Bottom_end
-         ~overlay:
-           (star_control toggle_star message ~detail:false
-            |> Ui.View.padding ~insets:(Ui.Layout.Edge_insets.only ~trailing:48. ()))
-    |> Ui.View.overlay ~alignment:Bottom_end ~overlay:collapse_button
-  in
+let expanded_mail_details ~reply ~open_message ~notice message =
   let outline =
     message.outline
     |> flatten_outline
@@ -889,11 +873,10 @@ let expanded_mail_content
   in
   let divider = Ui.View.frame ~height:card_divider_extent (Ui.View.divider ()) in
   let blocks =
-    [ Some header; Some divider; Some outline; notice_widget; Some divider; Some footer ]
+    [ Some divider; Some outline; notice_widget; Some divider; Some footer ]
     |> List.filter_map Fun.id
   in
-  Ui.View.column blocks
-  |> Ui.View.with_test_id (Ui.Test_id.string (Printf.sprintf "mail-card-%d" message.id))
+  blocks
 ;;
 
 let with_swipe_actions ~swipe_actions message content =
@@ -967,16 +950,25 @@ let render_mail_row
   let content =
     Ui.View.Morphing_surface.create
       ~expanded
-      ~compact_content:(collapsed_mail_content ~large_text ~toggle_star ~expand message)
-      ~expanded_content:
-        (expanded_mail_content
-           ~large_text
-           ~toggle_star
-           ~collapse
-           ~reply
-           ~open_message
-           ~notice
-           message)
+      ~content:
+        (Ui.View.column
+           ~key:(Ui.Key.string "mail-active-content")
+           ([ mail_header
+                ~large_text
+                ~toggle_star
+                ~toggle:(if expanded then collapse else expand)
+                ~expanded
+                message
+            ]
+            @
+            if expanded
+            then expanded_mail_details ~reply ~open_message ~notice message
+            else [])
+         |> Ui.View.with_test_id
+              (Ui.Test_id.string
+                 (Printf.sprintf
+                    (if expanded then "mail-card-%d" else "mail-content-%d")
+                    message.id)))
       ()
   in
   with_swipe_actions ~swipe_actions message content
@@ -1771,7 +1763,7 @@ let component handlers graph =
       set_state (fun state ->
         let next = update state in
         if
-          next.messages == state.messages
+          same_existing_row_sizes state.messages next.messages
           && next.expanded_id = state.expanded_id
           && next.card_notice = state.card_notice
         then next
@@ -1815,38 +1807,48 @@ let component handlers graph =
     Bonsai.Cont.map2
       state
       (Bonsai.Cont.both set_state sleep)
-      ~f:(fun state (set_state, sleep) -> state, set_state, sleep)
+      ~f:(fun state (set_state, sleep) ->
+        { paging_destination = state.selected_mail_destination
+        ; paging_count = List.length (messages_for_destination state)
+        ; paging_load = state.load_state
+        ; paging_cursor = state.next_cursor
+        ; paging_generation = state.next_generation
+        ; paging_set_state = set_state
+        ; paging_sleep = sleep
+        })
   in
   let visible_range =
     Driver.Handler.create
       handlers
       ~name:"mail-visible-range"
-      ~equal:(fun (left, left_set, left_sleep) (right, right_set, right_sleep) ->
-        equal_state left right && left_set == right_set && left_sleep == right_sleep)
+      ~equal:equal_paging_dependencies
       visible_range_dependencies
-      ~f:(fun (snapshot, set_state, sleep) payload ->
+      ~f:(fun snapshot payload ->
+        let set_state = snapshot.paging_set_state in
+        let sleep = snapshot.paging_sleep in
         match Ui.View.Collection.visible_range_of_payload payload with
         | None -> Bonsai.Effect.Ignore
         | Some { first_index; last_exclusive } ->
-          let count = List.length (messages_for_destination snapshot) in
+          let count = snapshot.paging_count in
           let bounded value = Int64.to_int (Int64.min value (Int64.of_int count)) in
           let first_index = bounded first_index in
           let last_exclusive = bounded last_exclusive in
           let should_load =
-            snapshot.selected_mail_destination = Inbox_view
-            && snapshot.load_state = Idle
+            snapshot.paging_destination = Inbox_view
+            && snapshot.paging_load = Idle
             && last_exclusive >= max 0 (count - 8)
           in
           if should_load
           then (
-            let generation = snapshot.next_generation in
-            let cursor = snapshot.next_cursor in
+            let generation = snapshot.paging_generation in
+            let cursor = snapshot.paging_cursor in
             Bonsai.Effect.Many
               [ set_state (fun state ->
                   if
                     state.load_state = Idle
                     && state.selected_mail_destination = Inbox_view
                     && Int.equal state.next_cursor cursor
+                    && Int.equal state.next_generation generation
                   then
                     { state with
                       painted_first_index = first_index

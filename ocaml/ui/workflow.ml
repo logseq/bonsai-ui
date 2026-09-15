@@ -87,8 +87,7 @@ let create
       ~expand_duration_ms:0
       ~collapse_duration_ms:0
       ~expanded:(step.id = current_step_id)
-      ~compact_content:(View.empty ())
-      ~expanded_content:step.content
+      ~content:(if step.id = current_step_id then step.content else View.empty ())
       ()
   in
   let content =

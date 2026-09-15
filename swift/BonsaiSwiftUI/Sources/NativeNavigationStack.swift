@@ -24,7 +24,10 @@ struct NavigationRouteIdentity: Hashable {
 }
 
 @MainActor @Observable final class NavigationStackController {
-  private(set) var path: [NavigationRouteIdentity] = []
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  private(set) var path: [NavigationRouteIdentity] = [] {
+    didSet { if oldValue != path { onPresentationChange?() } }
+  }
   private var destinations: [RenderNodeState] = []
   private var committedPath: [NavigationRouteIdentity] = []
 

@@ -16,33 +16,58 @@ final class BonsaiSession {
   private(set) var displayedRevision: UInt64 = 0
   @ObservationIgnored private var deferredApplicationRequests: [ApplicationRequest] = []
   @ObservationIgnored private let applicationConnection: ApplicationBridgeConnection
-  var isVisible = false { didSet { updateAnimationActivity() } }
-  var isActive = true { didSet { updateAnimationActivity() } }
+  var isVisible = false { didSet { if oldValue != isVisible { updateAnimationActivity() } } }
+  var isActive = true { didSet { if oldValue != isActive { updateAnimationActivity() } } }
+
+  private struct EligibilityKey: Hashable {
+    let identity: RenderIdentity
+    let controlsOwnInput: Bool
+    let ignoringModalBlocking: Bool
+  }
+  @ObservationIgnored private var eligibility: [EligibilityKey: Bool] = [:]
+  @ObservationIgnored private var presentationDirty = true
+  @ObservationIgnored private var reconcilingPresentation = false
+  @ObservationIgnored private(set) var presentationReconciliationCount: UInt64 = 0
+
+  private func invalidatePresentation() {
+    eligibility.removeAll(keepingCapacity: true)
+    presentationDirty = true
+    reconcilePresentation()
+  }
+
+  private func reconcilePresentation() {
+    guard presentationDirty, !reconcilingPresentation else { return }
+    reconcilingPresentation = true
+    defer { reconcilingPresentation = false }
+    while presentationDirty {
+      presentationDirty = false
+      presentationReconciliationCount += 1
+      updatePresentations()
+      updateNativeViewPresentation()
+      updateOpacityPresentation()
+      updateFieldFocus()
+      updateHoverPresentation()
+      updateFocusAndGesturePresentation()
+      updateScrollPresentation()
+    }
+  }
 
   private func updateAnimationActivity() {
     windowHost.dialogs.setActive(isVisible && isActive)
     windowHost.notices.setActive(isVisible && isActive && !windowHost.dialogs.blocksBackgroundInput)
-    for node in tree.nodes.values {
+    for node in tree.animationNodes {
       node.collectionController?.viewport.setAnimationsActive(isVisible && isActive)
       node.morphingSurfaceController?.setAnimationsActive(isVisible && isActive)
       node.progressAnimationsActive = isVisible && isActive
     }
-    updateOpacityPresentation()
-    updatePresentations()
-    updateFieldFocus()
-    updateHoverPresentation()
-    updateFocusAndGesturePresentation()
-    updateNativeViewPresentation()
-    updateScrollPresentation()
+    invalidatePresentation()
     dispatchCommittedHostCommands()
     dispatchCommittedApplicationRequests()
   }
 
   private func updateNativeViewPresentation() {
-    // Parent ownership must be established before any nested extension is enabled.
-    var pending = tree.root.map { [$0] } ?? []
-    while let node = pending.popLast() {
-      pending.append(contentsOf: node.children.reversed())
+    // The committed index establishes parent ownership before nested extensions.
+    for node in tree.nativeViewNodes {
       guard let instance = node.nativeView else { continue }
       let mounted = displayed.tree.nodes[node.id.node]
       instance.setPresented(
@@ -55,7 +80,7 @@ final class BonsaiSession {
   }
 
   private func updateScrollPresentation() {
-    for node in tree.nodes.values {
+    for node in tree.scrollNodes {
       if let removal = node.removalController {
         let mounted = displayed.tree.nodes[node.id.node]
         removal.setPresentation(
@@ -84,7 +109,7 @@ final class BonsaiSession {
   }
 
   private func updateFocusAndGesturePresentation() {
-    for node in tree.nodes.values {
+    for node in tree.focusAndGestureNodes {
       let mounted = displayed.tree.nodes[node.id.node]
       node.keyboardController?.focus.setPresented(
         isVisible && isActive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
@@ -106,7 +131,7 @@ final class BonsaiSession {
 
   private func updateHoverPresentation() {
     if !isVisible || !isActive { tree.discardHoverInput() }
-    for node in tree.nodes.values {
+    for node in tree.hoverNodes {
       node.hoverController?.setCollecting(
         isVisible && isActive && isInActiveContent(node, controlsOwnInput: false))
     }
@@ -116,7 +141,7 @@ final class BonsaiSession {
   }
 
   private func updateOpacityPresentation() {
-    for node in tree.nodes.values {
+    for node in tree.opacityNodes {
       guard let controller = node.opacityController else { continue }
       let mounted = displayed.tree.nodes[node.id.node]
       controller.setPresentationActive(
@@ -145,13 +170,16 @@ final class BonsaiSession {
   }
 
   private func updateFieldFocus() {
-    for node in tree.nodes.values.sorted(by: { $0.id.node < $1.id.node }) {
+    for node in tree.fieldNodes {
+      let contentActive = isVisible && isActive && isInActiveContent(node)
+      node.textController?.setContentActive(contentActive)
       guard let controller = node.fieldController else { continue }
+      controller.setContentActive(contentActive)
       let active =
         isVisible && isActive && displayedRevision > 0
         && displayed.tree.epoch == node.id.epoch
         && displayed.tree.nodes[node.id.node]?.properties == node.properties
-        && isInActiveContent(node)
+        && contentActive
       controller.setPresentationActive(active)
     }
   }
@@ -246,13 +274,9 @@ final class BonsaiSession {
       guard let self else { return }
       self.windowHost.notices.setActive(
         self.isVisible && self.isActive && !self.windowHost.dialogs.blocksBackgroundInput)
-      self.updatePresentations()
-      self.updateFieldFocus()
-      self.updateHoverPresentation()
-      self.updateFocusAndGesturePresentation()
-      self.updateNativeViewPresentation()
-      self.updateScrollPresentation()
+      self.invalidatePresentation()
     }
+    tree.onPresentationChange = { [weak self] in self?.invalidatePresentation() }
     tree.onInputFailure = { [weak self] error in self?.inputFailure = error }
     windowHost.resolveNode = { [weak self] id, controlsOwnInput in
       guard let self, isVisible, isActive, displayedRevision > 0,
@@ -288,13 +312,7 @@ final class BonsaiSession {
   }
 
   @discardableResult func refresh() async throws -> Bool {
-    updateOpacityPresentation()
-    updatePresentations()
-    updateFieldFocus()
-    updateHoverPresentation()
-    updateFocusAndGesturePresentation()
-    updateNativeViewPresentation()
-    updateScrollPresentation()
+    reconcilePresentation()
     if let inputFailure { throw inputFailure }
     guard let runtime, isVisible, isActive, !busy, pending == nil else { return false }
     let identity = sessionID
@@ -456,6 +474,7 @@ final class BonsaiSession {
     ticket = PresentationTicket(
       session: identity, epoch: next.tree.epoch,
       presentation: output.presentationID, revision: output.revision)
+    invalidatePresentation()
     return true
   }
 
@@ -475,13 +494,7 @@ final class BonsaiSession {
     deferredApplicationRequests.append(contentsOf: candidate.applicationRequests)
     pending = nil
     ticket = nil
-    updateOpacityPresentation()
-    updatePresentations()
-    updateFieldFocus()
-    updateHoverPresentation()
-    updateFocusAndGesturePresentation()
-    updateNativeViewPresentation()
-    updateScrollPresentation()
+    invalidatePresentation()
     if isVisible && isActive { for text in announcements { announce(text) } }
     dispatchCommittedHostCommands()
     dispatchCommittedApplicationRequests()
@@ -511,7 +524,7 @@ final class BonsaiSession {
   }
 
   private func sampleCollectionRequests() {
-    for node in tree.nodes.values.sorted(by: { $0.id.node < $1.id.node }) {
+    for node in tree.collectionNodes {
       guard node.id.epoch == displayed.tree.epoch,
         let controller = node.collectionController,
         let mounted = displayed.tree.nodes[node.id.node],
@@ -833,6 +846,20 @@ final class BonsaiSession {
     _ node: RenderNodeState, controlsOwnInput: Bool = true,
     ignoringModalBlocking: Bool = false
   ) -> Bool {
+    let key = EligibilityKey(
+      identity: node.id, controlsOwnInput: controlsOwnInput,
+      ignoringModalBlocking: ignoringModalBlocking)
+    if let cached = eligibility[key] { return cached }
+    let active = computeActiveContent(
+      node, controlsOwnInput: controlsOwnInput, ignoringModalBlocking: ignoringModalBlocking)
+    eligibility[key] = active
+    return active
+  }
+
+  private func computeActiveContent(
+    _ node: RenderNodeState, controlsOwnInput: Bool,
+    ignoringModalBlocking: Bool
+  ) -> Bool {
     guard !windowHost.dialogs.blocksBackgroundInput else { return false }
     if !ignoringModalBlocking {
       for owner in tree.nativeViewNodes where owner.nativeView?.blocksBackgroundInput == true {
@@ -938,7 +965,7 @@ final class BonsaiSession {
           case .morphingSurface(let displayedSurface) = previous.properties,
           displayedSurface.expanded == surface.expanded,
           previous.children == parent.children.map({ $0.id.node }),
-          parent.children[surface.expanded ? 1 : 0] === child
+          parent.children.first === child
         else { return false }
       }
       if case .tab(let tab) = child.properties {

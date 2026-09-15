@@ -141,7 +141,8 @@ extension NativeRuntimeTests {
     let controller = try #require(tree.root?.collectionController)
     let viewport = controller.viewport
     #expect(viewport.position.y == 40)
-    viewport.attach()
+    let attachmentID = UUID()
+    viewport.attach(id: attachmentID)
     viewport.observe(CGRect(x: 0, y: 40, width: 100, height: 40))
     store = try store.staging(
       TreeFixture.frame(
@@ -159,7 +160,7 @@ extension NativeRuntimeTests {
     viewport.finishAnimation()
     #expect(viewport.geometry.extent(at: 1) == 120)
     #expect(viewport.leadingOffset == 40)
-    viewport.detach()
+    viewport.detach(id: attachmentID)
   }
 
   @Test func malformedInitialPositionsAndRetiredMasksCannotPublish() throws {

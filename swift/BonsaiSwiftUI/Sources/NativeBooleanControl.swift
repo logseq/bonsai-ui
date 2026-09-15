@@ -21,7 +21,10 @@ struct RenderBooleanControl: Equatable, Sendable {
     let serial: UInt64
     let value: Bool
   }
-  private(set) var value: Bool
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  private(set) var value: Bool {
+    didSet { if oldValue != value { onPresentationChange?() } }
+  }
   private(set) var pending: Request?
   private var properties: RenderBooleanControl
   private var generation: UInt64 = 0

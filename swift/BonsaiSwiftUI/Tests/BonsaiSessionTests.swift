@@ -1,10 +1,86 @@
 import Foundation
+import Observation
 import SwiftUI
+import Synchronization
 import Testing
 
 @testable import BonsaiSwiftUI
 
 extension NativeRuntimeTests {
+  @Test @MainActor func presentationTicketsDoNotInvalidateApplicationContent() async throws {
+    let session = BonsaiSession()
+    session.isVisible = true
+    do {
+      try await session.start(entrypoint: "counter")
+      let view = BonsaiApplicationView(entrypoint: "counter", session: session)
+      let publications = Mutex(0)
+      func observeContent() {
+        withObservationTracking {
+          _ = view.body
+        } onChange: {
+          publications.withLock { $0 += 1 }
+        }
+      }
+      observeContent()
+      #expect(try await session.presented(#require(session.ticket)))
+      #expect(publications.withLock { $0 } == 0)
+      let button = try #require(session.tree.focusAndGestureNodes.first)
+      observeContent()
+      #expect(session.activate(button))
+      #expect(try await session.refresh())
+      #expect(publications.withLock { $0 } == 0)
+      observeContent()
+      session.isActive = false
+      #expect(publications.withLock { $0 } == 0)
+      session.isActive = true
+      #expect(try await session.presented(#require(session.ticket)))
+      observeContent()
+      await session.close()
+      #expect(publications.withLock { $0 } > 0)
+    } catch {
+      await session.close()
+      throw error
+    }
+  }
+
+  @Test @MainActor func unchangedPumpsDoNotReconcilePresentation() async throws {
+    let session = BonsaiSession()
+    session.isVisible = true
+    do {
+      try await session.start(entrypoint: "counter")
+      #expect(try await session.presented(#require(session.ticket)))
+      let reconciliations = session.presentationReconciliationCount
+      for _ in 0..<20 { #expect(try await session.refresh() == false) }
+      #expect(session.presentationReconciliationCount == reconciliations)
+      #expect(session.tree.fieldNodes.isEmpty)
+      #expect(session.tree.collectionNodes.isEmpty)
+      #expect(session.tree.focusAndGestureNodes.count == 1)
+      let button = try #require(session.tree.focusAndGestureNodes.first)
+      let focus = try #require(button.focusController)
+      focus.setMounted(true)
+      #expect(focus.isCollecting)
+      #expect(session.activate(button))
+      #expect(try await session.refresh())
+      let ticket = try #require(session.ticket)
+      session.isActive = false
+      #expect(!focus.isCollecting)
+      let inactive = session.presentationReconciliationCount
+      #expect(try await session.refresh() == false)
+      #expect(session.presentationReconciliationCount == inactive)
+      session.isActive = true
+      #expect(try await session.presented(ticket))
+      #expect(focus.isCollecting)
+      await session.close()
+      #expect(!focus.isCollecting)
+      #expect(session.tree.focusAndGestureNodes.isEmpty)
+      #expect(session.tree.nativeViewNodes.isEmpty)
+      #expect(session.tree.animationNodes.isEmpty)
+    } catch {
+      await session.close()
+      throw error
+    }
+  }
+
   @Test @MainActor func hostWindowPresentsCounterAndClosesWhenRemoved() async throws {
     _ = NSApplication.shared
     let session = BonsaiSession()

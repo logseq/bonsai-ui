@@ -51,6 +51,7 @@ struct RenderExpandableComposer: Equatable {
 }
 
 @MainActor @Observable final class ExpandableComposerController: NativeModalResource {
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
   let composer = ComposerController()
   private(set) var generation: UInt64 = 0
   private(set) var requested = false
@@ -67,25 +68,34 @@ struct RenderExpandableComposer: Equatable {
     guard !disposed, !requested, !closing, context.properties.composer.enabled,
       context.canInteract()
     else { return }
+    defer { onPresentationChange?() }
     generation += 1
     requested = true
     composer.beginPresentation()
   }
   func appeared(_ token: UInt64) {
+    let blocked = blocksBackgroundInput
+    defer { if blocked != blocksBackgroundInput { onPresentationChange?() } }
     guard !disposed, requested, generation == token else { return }
     visible = true
   }
   func close(_ token: UInt64) {
+    let blocked = blocksBackgroundInput
+    defer { if blocked != blocksBackgroundInput { onPresentationChange?() } }
     guard !disposed, requested, generation == token else { return }
     requested = false
     closing = true
     composer.suspend()
   }
   func disappeared(_ token: UInt64) {
+    let blocked = blocksBackgroundInput
+    defer { if blocked != blocksBackgroundInput { onPresentationChange?() } }
     guard generation == token else { return }
     visible = false
   }
   func dismissed(_ token: UInt64) {
+    let blocked = blocksBackgroundInput
+    defer { if blocked != blocksBackgroundInput { onPresentationChange?() } }
     guard generation == token, !requested else { return }
     closing = false
     visible = false
@@ -101,6 +111,8 @@ struct RenderExpandableComposer: Equatable {
       })
   }
   func dispose() {
+    let blocked = blocksBackgroundInput
+    defer { if blocked != blocksBackgroundInput { onPresentationChange?() } }
     guard !disposed else { return }
     disposed = true
     requested = false

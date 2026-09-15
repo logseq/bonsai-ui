@@ -170,8 +170,10 @@ extension NativeRuntimeTests {
       resource.showsChild = false
       try await settleCard(host)
       #expect(!session.activate(child))
+      #expect(child.focusController?.isCollecting == false)
       resource.showsChild = true
       try await settleCard(host)
+      #expect(child.focusController?.isCollecting == true)
       #expect(session.activate(child))
       #expect(try await session.refresh())
       #expect(try await session.presented(#require(session.ticket)))
@@ -393,6 +395,16 @@ extension NativeRuntimeTests {
       defer { window.contentView = nil }
       try await settleCard(host)
       #expect(trace.created == 9)
+      var indexed: Set<UInt64> = []
+      for node in session.tree.nativeViewNodes {
+        var ancestor = session.tree.parents[node.id.node]
+        while let id = ancestor {
+          if session.tree.nodes[id]?.nativeView != nil { #expect(indexed.contains(id)) }
+          ancestor = session.tree.parents[id]
+        }
+        indexed.insert(node.id.node)
+      }
+      #expect(indexed.count == 9)
       #expect(try await session.presented(#require(session.ticket)))
       try await settleCard(host)
       #expect(trace.emissions.count == 9)

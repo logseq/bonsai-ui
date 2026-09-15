@@ -141,6 +141,76 @@ struct CollectionNodeTests {
     #expect(controller.request(handler: 20) == request)
   }
 
+  @Test(arguments: ["overscan-content", "measurement-context"]) @MainActor
+  func nativeMeasurementsDoNotRepeatAnUnchangedFulfilledRange(change: String) async throws {
+    initializeAccessibilityApplication()
+    let keys = (0..<30).map(String.init)
+    let loadedKeys = Array(keys.prefix(8))
+    let rowIDs = (3...10).map(UInt64.init)
+    var store = try NodeStore().staging(
+      TreeFixture.frame(
+        [
+          TreeFixture.collection(keys: keys, measurementRevision: 0),
+          TreeFixture.collectionWindow(first: 0, keys: loadedKeys),
+        ] + rowIDs.map { TreeFixture.text($0, "Short") } + [
+          TreeFixture.children(1, [2]), TreeFixture.children(2, rowIDs), TreeFixture.root(1),
+        ])
+    ).tree
+    let model = RenderTree()
+    model.commit(store)
+    let root = try #require(model.root)
+    let controller = try #require(root.collectionController)
+    let hosting = NSHostingView(rootView: NativeNodeView(node: root, activate: { _ in }))
+    let window = NSWindow(
+      contentRect: CGRect(x: 0, y: 0, width: 300, height: 40),
+      styleMask: [.borderless], backing: .buffered, defer: false)
+    window.contentView = hosting
+    defer {
+      window.contentView = nil
+      model.commit(NodeStore())
+    }
+    try await settleCollection(hosting)
+    let requested = try #require(controller.request(handler: 20))
+    #expect(requested.lowerBound == 0 && requested.upperBound < loadedKeys.count)
+    controller.accepted(requested, handler: 20)
+    #expect(controller.request(handler: 20) == nil)
+    let oldExtent = controller.viewport.geometry.extent(at: 7)
+    let oldContext = controller.measurements.contextToken
+    let tallText = String(repeating: "Another measured line\n", count: 8)
+    if change == "overscan-content" {
+      store = try store.staging(
+        TreeFixture.frame(
+          [TreeFixture.text(10, tallText, update: true)],
+          base: store.revision, revision: store.revision + 1)
+      ).tree
+      model.commit(store)
+    } else {
+      window.setContentSize(CGSize(width: 340, height: 40))
+    }
+    try await settleCollection(hosting)
+    if change == "overscan-content" {
+      #expect(controller.viewport.geometry.extent(at: 7) > oldExtent)
+    } else {
+      #expect(controller.measurements.contextToken != oldContext)
+    }
+    #expect(controller.viewport.visibleRange == requested)
+    #expect(controller.request(handler: 20) == nil)
+
+    // A visible size change and a new handler must still reach the producer.
+    store = try store.staging(
+      TreeFixture.frame(
+        [TreeFixture.text(3, tallText, update: true)],
+        base: store.revision, revision: store.revision + 1)
+    ).tree
+    model.commit(store)
+    try await settleCollection(hosting)
+    let changed = try #require(controller.request(handler: 20))
+    #expect(changed != requested && changed == controller.viewport.visibleRange)
+    controller.accepted(changed, handler: 20)
+    #expect(controller.request(handler: 20) == nil)
+    #expect(controller.request(handler: 21) == changed)
+  }
+
   @Test func catalogAndWindowValidateAtomicallyWithExactKeyIdentity() throws {
     let initial = try NodeStore().staging(
       TreeFixture.frame([

@@ -106,7 +106,10 @@ struct RenderTable: Equatable, Sendable {
     let payload: NativeEventPayload
   }
   private(set) var pending: [Request] = []
-  var detailsExpanded = false
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  var detailsExpanded = false {
+    didSet { if oldValue != detailsExpanded { onPresentationChange?() } }
+  }
   private var properties: RenderTable
   private var serial: UInt64 = 0
   private var generation: UInt64 = 0

@@ -5,6 +5,26 @@ import Testing
 
 @MainActor
 struct RenderTreeTests {
+  @Test(arguments: [100, 1000])
+  func controllerIndexesExcludeDecorationsAndClearOnTeardown(decorations: Int) throws {
+    let tree = RenderTree()
+    var operations = [
+      TreeFixture.create(1), TreeFixture.editor(3, kind: 47), TreeFixture.editor(2, kind: 47),
+    ]
+    let ids = (0..<decorations).map { UInt64($0 + 10) }
+    operations += ids.map { TreeFixture.text($0, "Decorative text") }
+    operations += [TreeFixture.children(1, [3, 2] + ids), TreeFixture.root(1)]
+    tree.commit(try NodeStore().staging(TreeFixture.frame(operations)).tree)
+    #expect(tree.nodes.count == decorations + 3)
+    #expect(tree.fieldNodes.map(\.id.node) == [2, 3])
+    #expect(tree.collectionNodes.isEmpty)
+    #expect(tree.focusAndGestureNodes.isEmpty)
+    #expect(tree.animationNodes.isEmpty)
+    tree.commit(NodeStore())
+    #expect(tree.fieldNodes.isEmpty)
+    #expect(tree.nodes.isEmpty)
+  }
+
   @Test func nativeEnvironmentReachesDescendantViews() throws {
     let content = EnvironmentProbe().modifier(
       SwiftUIEnvironmentModifier(

@@ -75,17 +75,20 @@ import Testing
   @Test func cancelAndResetDiscardPendingEdgesWithoutInventingReleasesOrKeepingTouchesAlive() {
     let identities = PointerContactIdentities()
     let input = PointerContactInput(identities: identities)
-    var first: NSObject? = NSObject()
-    weak var released = first
+    weak var released: NSObject?
     let second = NSObject()
     let unknown = NSObject()
-    input.begin(first!, kind: .touch, position: .zero, buttons: 1, generation: 1)
-    input.begin(second, kind: .touch, position: .zero, buttons: 1, generation: 1)
-    input.cancel(first!)
-    input.end(first!, position: .zero, buttons: 0)
-    input.end(unknown, position: .zero, buttons: 0)
-    input.cancel(unknown)
-    first = nil
+    // Drain temporary Foundation references before checking retained ownership.
+    autoreleasepool {
+      let first = NSObject()
+      released = first
+      input.begin(first, kind: .touch, position: .zero, buttons: 1, generation: 1)
+      input.begin(second, kind: .touch, position: .zero, buttons: 1, generation: 1)
+      input.cancel(first)
+      input.end(first, position: .zero, buttons: 0)
+      input.end(unknown, position: .zero, buttons: 0)
+      input.cancel(unknown)
+    }
     #expect(released == nil)
     #expect(input.hasActiveContacts)
     let remaining = input.drain()

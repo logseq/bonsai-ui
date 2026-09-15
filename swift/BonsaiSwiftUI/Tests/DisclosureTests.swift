@@ -82,6 +82,38 @@ extension TreeFixture {
 }
 
 extension NativeRuntimeTests {
+  @Test @MainActor func nativeDisclosureCollapseRevokesFocusBeforeTheNextPump() async throws {
+    let session = BonsaiSession()
+    session.isVisible = true
+    do {
+      try await session.start(entrypoint: "native-disclosure")
+      #expect(try await session.presented(#require(session.ticket)))
+      let owner = try #require(
+        session.tree.nodes.values.first {
+          $0.booleanControlController?.value == true
+        })
+      func button(in node: RenderNodeState) -> RenderNodeState? {
+        if node.focusController != nil { return node }
+        return node.children.lazy.compactMap { button(in: $0) }.first
+      }
+      let content = try #require(owner.children.last)
+      let body = try #require(button(in: content))
+      let focus = try #require(body.focusController)
+      focus.setMounted(true)
+      #expect(focus.isCollecting)
+      let revision = session.displayedRevision
+      let controller = try #require(owner.booleanControlController)
+      #expect(controller.request(false, emit: owner.emit))
+      #expect(session.displayedRevision == revision)
+      #expect(!focus.isCollecting)
+      #expect(!session.activate(body))
+      await session.close()
+    } catch {
+      await session.close()
+      throw error
+    }
+  }
+
   @Test @MainActor func actualDisclosureOwnershipTracksExpansionAndPresentation() async throws {
     let session = BonsaiSession()
     session.isVisible = true

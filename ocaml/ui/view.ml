@@ -3530,8 +3530,7 @@ module Morphing_surface = struct
         ?(expand_duration_ms = 240)
         ?(collapse_duration_ms = 190)
         ~expanded
-        ~compact_content
-        ~expanded_content
+        ~content
         ()
     =
     validate_u32
@@ -3546,7 +3545,7 @@ module Morphing_surface = struct
       ~key
       ~node:(Morphing_surface { expanded; expand_duration_ms; collapse_duration_ms })
       ~event_bindings:[||]
-      ~children:(plain_children [ compact_content; expanded_content ])
+      ~children:(plain_children [ content ])
   ;;
 end
 

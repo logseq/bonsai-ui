@@ -56,6 +56,15 @@ struct RenderTextField: Equatable, Sendable {
   }
 
   @MainActor private final class PlainField: NSTextField {
+    var attached: (() -> Void)?
+    override func viewDidMoveToWindow() {
+      super.viewDidMoveToWindow()
+      attached?()
+    }
+    override func layout() {
+      super.layout()
+      attached?()
+    }
     var focused: (() -> Void)?
     override func becomeFirstResponder() -> Bool {
       let accepted = super.becomeFirstResponder()
@@ -68,6 +77,15 @@ struct RenderTextField: Equatable, Sendable {
     }
   }
   @MainActor private final class SecureField: NSSecureTextField {
+    var attached: (() -> Void)?
+    override func viewDidMoveToWindow() {
+      super.viewDidMoveToWindow()
+      attached?()
+    }
+    override func layout() {
+      super.layout()
+      attached?()
+    }
     var focused: (() -> Void)?
     override func becomeFirstResponder() -> Bool {
       let accepted = super.becomeFirstResponder()
@@ -87,6 +105,7 @@ struct RenderTextField: Equatable, Sendable {
     private var emit: (NativeEventPayload) -> Bool
     private var failed: (any Error) -> Void
     private var hostEnabled = true
+    private var contentActive = true
     private var applying = false
     private var disposed = false
     private var focused = false
@@ -114,6 +133,8 @@ struct RenderTextField: Equatable, Sendable {
       field.maximumNumberOfLines = 1
       field.usesSingleLineMode = true
       field.formatter = FieldInputFormatter { [weak self] in self?.accepts($0) ?? false }
+      (field as? PlainField)?.attached = { [weak self] in self?.attemptAutofocus() }
+      (field as? SecureField)?.attached = { [weak self] in self?.attemptAutofocus() }
       (field as? PlainField)?.focused = { [weak self] in self?.focus(true) }
       (field as? SecureField)?.focused = { [weak self] in self?.focus(true) }
       NotificationCenter.default.addObserver(
@@ -149,7 +170,7 @@ struct RenderTextField: Equatable, Sendable {
       attemptAutofocus()
     }
     private func attemptAutofocus() {
-      guard !disposed, presentationActive, autofocusPending, hostEnabled,
+      guard !disposed, presentationActive, autofocusPending, hostEnabled, contentActive,
         configuration.enabled, let window = field.window, window.isVisible,
         !field.isHiddenOrHasHiddenAncestor
       else { return }
@@ -162,13 +183,18 @@ struct RenderTextField: Equatable, Sendable {
       field.placeholderString = prompt
       field.setAccessibilityLabel(label)
     }
+    func setContentActive(_ active: Bool) {
+      guard !disposed, active != contentActive else { return }
+      contentActive = active
+      updateAvailability()
+    }
     func setHostEnabled(_ enabled: Bool) {
       guard !disposed else { return }
       hostEnabled = enabled
       updateAvailability()
     }
     private func updateAvailability() {
-      let enabled = hostEnabled && configuration.enabled
+      let enabled = hostEnabled && contentActive && configuration.enabled
       field.isEnabled = enabled
       field.isEditable = enabled && !configuration.readOnly
       field.isSelectable = enabled
@@ -188,6 +214,8 @@ struct RenderTextField: Equatable, Sendable {
       releaseFocus()
       NotificationCenter.default.removeObserver(self)
       field.delegate = nil
+      (field as? PlainField)?.attached = nil
+      (field as? SecureField)?.attached = nil
       (field as? PlainField)?.focused = nil
       (field as? SecureField)?.focused = nil
       field.isEnabled = false
@@ -198,7 +226,8 @@ struct RenderTextField: Equatable, Sendable {
 
     private func accepts(_ candidate: String) -> Bool {
       if applying { return true }
-      guard !disposed, hostEnabled, configuration.enabled, !configuration.readOnly else {
+      guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly
+      else {
         return false
       }
       guard candidate.utf8.count <= configuration.maxUTF8Bytes ?? ProtocolLimits.maxStringBytes
@@ -321,6 +350,15 @@ struct RenderTextField: Equatable, Sendable {
   import UIKit
 
   @MainActor private final class EditingField: UITextField {
+    var attached: (() -> Void)?
+    override func didMoveToWindow() {
+      super.didMoveToWindow()
+      attached?()
+    }
+    override func layoutSubviews() {
+      super.layoutSubviews()
+      attached?()
+    }
     var changed: (() -> Void)?
     var focusChanged: ((Bool) -> Void)?
     var acceptsInput: (() -> Bool)?
@@ -363,6 +401,7 @@ struct RenderTextField: Equatable, Sendable {
     private var emit: (NativeEventPayload) -> Bool
     private var failed: (any Error) -> Void
     private var hostEnabled = true
+    private var contentActive = true
     private var applying = false
     private var disposed = false
     private var focused = false
@@ -390,6 +429,7 @@ struct RenderTextField: Equatable, Sendable {
       input.adjustsFontForContentSizeCategory = true
       input.borderStyle = .roundedRect
       input.returnKeyType = .done
+      input.attached = { [weak self] in self?.attemptAutofocus() }
       input.changed = { [weak self] in self?.scheduleCapture() }
       input.focusChanged = { [weak self] in self?.focus($0) }
       input.acceptsInput = { [weak self] in
@@ -446,7 +486,7 @@ struct RenderTextField: Equatable, Sendable {
       attemptAutofocus()
     }
     private func attemptAutofocus() {
-      guard !disposed, presentationActive, autofocusPending, hostEnabled,
+      guard !disposed, presentationActive, autofocusPending, hostEnabled, contentActive,
         configuration.enabled, input.window != nil, !input.isHidden
       else { return }
       autofocusPending = false
@@ -458,13 +498,18 @@ struct RenderTextField: Equatable, Sendable {
       input.placeholder = prompt
       input.accessibilityLabel = label
     }
+    func setContentActive(_ active: Bool) {
+      guard !disposed, active != contentActive else { return }
+      contentActive = active
+      updateAvailability()
+    }
     func setHostEnabled(_ enabled: Bool) {
       guard !disposed else { return }
       hostEnabled = enabled
       updateAvailability()
     }
     private func updateAvailability() {
-      input.isEnabled = hostEnabled && configuration.enabled
+      input.isEnabled = hostEnabled && contentActive && configuration.enabled
       let keyboard = configuration.readOnly ? readOnlyKeyboard : nil
       if input.inputView !== keyboard {
         input.inputView = keyboard
@@ -479,6 +524,7 @@ struct RenderTextField: Equatable, Sendable {
       captureTask?.cancel()
       captureTask = nil
       input.resignFirstResponder()
+      input.attached = nil
       input.delegate = nil
       input.removeTarget(self, action: nil, for: .allEvents)
       input.changed = nil
@@ -564,7 +610,8 @@ struct RenderTextField: Equatable, Sendable {
       _ textField: UITextField, shouldChangeCharactersIn range: NSRange,
       replacementString string: String
     ) -> Bool {
-      guard !disposed, hostEnabled, configuration.enabled, !configuration.readOnly else {
+      guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly
+      else {
         return false
       }
       let text = input.text ?? ""
@@ -579,7 +626,7 @@ struct RenderTextField: Equatable, Sendable {
       return true
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-      guard !disposed, hostEnabled, configuration.enabled, !configuration.readOnly,
+      guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly,
         configuration.submitOnReturn, input.markedTextRange == nil
       else { return false }
       capture()

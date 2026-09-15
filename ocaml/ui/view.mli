@@ -1144,17 +1144,18 @@ module Swipe_actions : sig
 end
 
 module Morphing_surface : sig
-  (** Retains both keyed content branches while animating their surface and
-      intrinsic height. Only the selected branch accepts input or accessibility
-      actions. Native Reduce Motion and scene inactivity finish the transition.
+  (** Animates the surface around one active content subtree. Removed content
+      releases native editing, focus and accessibility resources immediately;
+      durable state belongs in OCaml. Collections coordinate row extent changes;
+      standalone surfaces animate their own intrinsic height.
+      Native Reduce Motion and scene inactivity finish the transition.
       Durations are unsigned 32-bit milliseconds; zero disables interpolation. *)
   val create
     :  ?key:Key.t
     -> ?expand_duration_ms:int
     -> ?collapse_duration_ms:int
     -> expanded:bool
-    -> compact_content:t
-    -> expanded_content:t
+    -> content:t
     -> unit
     -> t
 end

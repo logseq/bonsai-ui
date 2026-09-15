@@ -524,6 +524,38 @@ let collection_first_index handle =
   | _ -> fail "mail materialization has no collection window"
 ;;
 
+let test_painted_ranges_keep_the_paging_handler_until_behavior_changes () =
+  with_handle (fun handle ->
+    let handler () =
+      let node = collection_catalog_node handle in
+      let (Av view) = Ui.View.Private.view node.widget in
+      require (Array.length view.event_bindings = 1) "collection has ambiguous handlers";
+      view.event_bindings.(0).handler
+    in
+    let initial = handler () in
+    native_visible_range handle ~first_index:1 ~last_exclusive:8;
+    require
+      (handler () == initial)
+      "recording a painted range replaced the paging handler";
+    Test.Handle.present handle;
+    let revision = Test.Handle.revision handle in
+    native_visible_range handle ~first_index:1 ~last_exclusive:8;
+    Test.Handle.present handle;
+    require
+      (Test.Handle.revision handle = revision)
+      "equal painted range emitted a UI patch";
+    Test.Handle.present handle;
+    Test.Handle.click handle (Test.Query.test_id "mail-star-2");
+    require (handler () == initial) "star state replaced an unchanged paging handler";
+    native_visible_range handle ~first_index:12 ~last_exclusive:20;
+    require (handler () != initial) "loading behavior retained an obsolete paging handler";
+    let loading = handler () in
+    native_visible_range handle ~first_index:13 ~last_exclusive:20;
+    require (handler () == loading) "painted range replaced the loading handler";
+    advance_logical_time handle 750_000_010L;
+    require (handler () != loading) "page completion retained the loading handler")
+;;
+
 let test_initial_virtual_inbox_has_twenty_unique_button_rows () =
   with_handle (fun handle ->
     require
@@ -874,6 +906,46 @@ let test_mail_uses_native_buttons_in_list_preview_and_detail () =
     check ())
 ;;
 
+let test_active_surface_tree_and_shared_header_identity () =
+  with_handle (fun handle ->
+    let surfaces = Test.Handle.find_all handle (Test.Query.kind "Morphing_surface") in
+    require (surfaces <> []) "mail did not materialize any surfaces";
+    List.iter
+      (fun (node : Runtime.Mounted_tree.Snapshot.node) ->
+         require (Array.length node.children = 1) "surface retained an inactive branch")
+      surfaces;
+    require_absent
+      handle
+      (Test.Query.test_id "mail-outline-1-0")
+      "collapsed wire tree contains expanded details";
+    let header = require_node handle (Test.Query.test_id "mail-row-1") "missing header" in
+    let row = require_node handle (Test.Query.test_id "mail-swipe-1") "missing row" in
+    press handle 1;
+    let active_header =
+      require_node
+        handle
+        (Test.Query.test_id "mail-active-header-1")
+        "missing expanded shared header"
+    in
+    require
+      (header.node_id = active_header.node_id)
+      "expansion replaced the shared header";
+    let active_row =
+      require_node handle (Test.Query.test_id "mail-swipe-1") "missing row"
+    in
+    require (row.node_id = active_row.node_id) "expansion replaced the row root";
+    Test.Handle.present handle;
+    Test.Handle.click handle (Test.Query.test_id "mail-card-collapse-1");
+    require_absent
+      handle
+      (Test.Query.test_id "mail-outline-1-0")
+      "collapse retained expanded details";
+    let restored =
+      require_node handle (Test.Query.test_id "mail-row-1") "missing header"
+    in
+    require (header.node_id = restored.node_id) "collapse replaced the shared header")
+;;
+
 let test_expansion_accordion_outline_and_collapse () =
   with_handle (fun handle ->
     let initial_props = collection_props handle in
@@ -1001,6 +1073,31 @@ let test_filter_cleanup_and_retained_app_destination () =
       "mailbox change retained a stale extent override")
 ;;
 
+let test_measurement_revision_tracks_sizing_not_star_or_append () =
+  with_handle (fun handle ->
+    let revision () =
+      let node = collection_catalog_node handle in
+      let (Av view) = Ui.View.Private.view node.widget in
+      match view.node with
+      | Ui.View.Private.Collection_catalog { measurement_revision; _ } ->
+        measurement_revision
+      | _ -> fail "missing collection catalog"
+    in
+    let initial = revision () in
+    Test.Handle.present handle;
+    Test.Handle.click handle (Test.Query.test_id "mail-star-2");
+    require (revision () = initial) "star appearance invalidated unchanged row sizing";
+    native_visible_range handle ~first_index:12 ~last_exclusive:20;
+    advance_logical_time handle 750_000_010L;
+    require (revision () = initial) "append invalidated existing row extents";
+    native_visible_range handle ~first_index:0 ~last_exclusive:8;
+    swipe_action handle 1 3;
+    require (revision () <> initial) "font-weight change reused stale extents";
+    let before_expansion = revision () in
+    press handle 1;
+    require (revision () <> before_expansion) "expansion reused stale offscreen sizing")
+;;
+
 let test_accessibility_type_reflows_subjects_and_invalidates_measurements () =
   with_handle (fun handle ->
     let revision () =
@@ -1032,6 +1129,8 @@ let test_accessibility_type_reflows_subjects_and_invalidates_measurements () =
 ;;
 
 let () =
+  test_measurement_revision_tracks_sizing_not_star_or_append ();
+  test_painted_ranges_keep_the_paging_handler_until_behavior_changes ();
   test_accessibility_type_reflows_subjects_and_invalidates_measurements ();
   test_mail_app_disables_trace_by_default ();
   test_collection_catalog_and_window_share_exact_ordered_keys ();
@@ -1041,6 +1140,7 @@ let () =
   test_initial_virtual_inbox_has_twenty_unique_button_rows ();
   test_star_preserves_keyed_row_identity ();
   test_expand_open_and_platform_pop_preserve_state ();
+  test_active_surface_tree_and_shared_header_identity ();
   test_expansion_accordion_outline_and_collapse ();
   test_expanded_nested_actions_are_isolated ();
   test_filter_cleanup_and_retained_app_destination ();

@@ -317,6 +317,126 @@ let test_physical_equality_emits_no_patch () =
   apply_and_compare ~old_snapshot:(Some (Mounted_tree.snapshot first.mounted_tree)) second
 ;;
 
+let test_unchanged_reconcile_allocation_is_independent_of_tree_size () =
+  let allocated_for count =
+    let reconciler = Reconciler.create ~runtime_epoch:420L in
+    let widget =
+      View.column
+        (List.init count (fun index ->
+           View.row [ View.text (string_of_int index); View.text "stable" ]))
+    in
+    let first =
+      Reconciler.reconcile
+        reconciler
+        ~base_revision:0L
+        ~target_revision:1L
+        ~old:None
+        ~base_handler_frame:None
+        widget
+      |> ok
+    in
+    Gc.full_major ();
+    let before = Gc.allocated_bytes () in
+    for _ = 1 to 20 do
+      let output =
+        Reconciler.reconcile
+          reconciler
+          ~base_revision:1L
+          ~target_revision:2L
+          ~old:(Some first.mounted_tree)
+          ~base_handler_frame:(Some first.handler_frame)
+          widget
+        |> ok
+      in
+      check (Frame_patch.is_empty output.frame_patch) "unchanged tree emitted a patch"
+    done;
+    Gc.allocated_bytes () -. before
+  in
+  let small = allocated_for 100 in
+  let large = allocated_for 1000 in
+  if large > small +. 4096.
+  then
+    fail
+      "unchanged reconciliation allocations grew with tree size: %.0f -> %.0f"
+      small
+      large
+;;
+
+let test_unchanged_reconcile_preserves_validation_fences () =
+  let reconciler = Reconciler.create ~runtime_epoch:421L in
+  let child = View.text ~key:(Key.string "stable") "stable" in
+  let widget = View.column [ child ] in
+  let first =
+    reconcile_exn reconciler ~base_revision:0L ~target_revision:1L ~old:None widget
+  in
+  let expect_invalid ~base_revision ~target_revision ~base_handler_frame =
+    match
+      Reconciler.reconcile
+        reconciler
+        ~base_revision
+        ~target_revision
+        ~old:(Some first.mounted_tree)
+        ~base_handler_frame
+        widget
+    with
+    | Error (Runtime_error.Invalid_patch _) -> ()
+    | Error error -> fail "unexpected fence error: %s" (Runtime_error.to_string error)
+    | Ok _ -> fail "unchanged tree bypassed revision or handler-base validation"
+  in
+  expect_invalid
+    ~base_revision:1L
+    ~target_revision:1L
+    ~base_handler_frame:(Some first.handler_frame);
+  expect_invalid ~base_revision:1L ~target_revision:2L ~base_handler_frame:None;
+  expect_invalid
+    ~base_revision:2L
+    ~target_revision:3L
+    ~base_handler_frame:(Some first.handler_frame);
+  let duplicate = Key.string "duplicate" in
+  let changed =
+    View.column
+      [ child
+      ; View.column [ View.text ~key:duplicate "one"; View.text ~key:duplicate "two" ]
+      ]
+  in
+  (match
+     Reconciler.reconcile
+       reconciler
+       ~base_revision:1L
+       ~target_revision:2L
+       ~old:(Some first.mounted_tree)
+       ~base_handler_frame:(Some first.handler_frame)
+       changed
+   with
+   | Error (Runtime_error.Duplicate_key { key; _ }) ->
+     check (Key.equal key duplicate) "changed candidate reported the wrong duplicate"
+   | Error error -> fail "unexpected candidate error: %s" (Runtime_error.to_string error)
+   | Ok _ -> fail "changed candidate skipped nested duplicate validation");
+  let snapshot =
+    Reconciler.reconcile
+      reconciler
+      ~base_revision:0L
+      ~target_revision:2L
+      ~old:None
+      ~base_handler_frame:None
+      widget
+    |> ok
+  in
+  check
+    (Frame_patch.kind snapshot.frame_patch = Frame_patch.Full_snapshot)
+    "same widget did not produce a requested full snapshot";
+  check_int
+    ~expected:2
+    ~actual:(count_operations snapshot.frame_patch is_create)
+    "full snapshot create count";
+  check
+    (not
+       (Runtime.Node_id.equal
+          (Mounted_tree.root_id first.mounted_tree)
+          (Mounted_tree.root_id snapshot.mounted_tree)))
+    "full snapshot reused mounted node IDs"
+;;
+
 let test_one_text_change_is_one_prop_update () =
   let reconciler = Reconciler.create ~runtime_epoch:43L in
   let key = Key.string "counter" in
@@ -1898,6 +2018,10 @@ let tests =
   ; "button is a typed core widget", test_button_is_a_typed_core_widget
   ; "initial mount is a full snapshot", test_initial_mount_is_full_snapshot
   ; "physical equality emits no patch", test_physical_equality_emits_no_patch
+  ; ( "unchanged reconciliation allocations do not scale with tree size"
+    , test_unchanged_reconcile_allocation_is_independent_of_tree_size )
+  ; ( "unchanged reconciliation preserves validation fences"
+    , test_unchanged_reconcile_preserves_validation_fences )
   ; "one text change is one prop update", test_one_text_change_is_one_prop_update
   ; "keyed reorder preserves identity", test_keyed_reorder_preserves_identity
   ; ( "keyed insert and delete are incremental"

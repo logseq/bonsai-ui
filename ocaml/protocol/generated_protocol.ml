@@ -2,7 +2,7 @@
 
 module ID = Bonsai_swiftui_spec.Id
 
-let protocol_major = 4
+let protocol_major = 5
 let protocol_minor = 0
 
 module Limits = struct

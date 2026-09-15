@@ -29,9 +29,16 @@ enum RenderPresentation: Equatable, Sendable {
 @MainActor @Observable final class PresentationController {
   struct Request: Equatable { let serial: UInt64 }
   private var properties: RenderPresentation
-  private(set) var presented: Bool
-  private(set) var active = false
-  private(set) var nativeVisible = false
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  private(set) var presented: Bool {
+    didSet { if oldValue != presented { onPresentationChange?() } }
+  }
+  private(set) var active = false {
+    didSet { if oldValue != active { onPresentationChange?() } }
+  }
+  private(set) var nativeVisible = false {
+    didSet { if oldValue != nativeVisible { onPresentationChange?() } }
+  }
   private(set) var generation: UInt64 = 0
   private(set) var pending: Request?
   private var serial: UInt64 = 0

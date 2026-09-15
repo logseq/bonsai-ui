@@ -53,7 +53,10 @@ struct RenderSwipeAction: Equatable, Sendable {
   let identity: RenderIdentity
   private(set) var properties: RenderSwipeActions
   private(set) var actions: [RenderNodeState] = []
-  private(set) var offset: Double = 0
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  private(set) var offset: Double = 0 {
+    didSet { if (oldValue == 0) != (offset == 0) { onPresentationChange?() } }
+  }
   private(set) var size: CGSize = .zero
   private(set) var pending: Request?
   private(set) var dragging = false

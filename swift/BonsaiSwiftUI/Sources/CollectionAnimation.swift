@@ -27,8 +27,10 @@ struct CollectionAnimation {
   let target: CollectionGeometry
   private let changes: [Change]
   private let started: Double
-  init(from: CollectionGeometry, to: CollectionGeometry, timing: CollectionTiming, started: Double)
-  {
+  init(
+    from: CollectionGeometry, to: CollectionGeometry, timing: CollectionTiming, started: Double,
+    animatedIndices: Set<Int>? = nil
+  ) {
     target = to
     self.started = started
     guard from.count == to.count, from.defaultExtent == to.defaultExtent else {
@@ -41,7 +43,7 @@ struct CollectionAnimation {
       let new = to.extent(at: index)
       return Change(
         index: index, from: old, to: new,
-        duration: old == new
+        duration: old == new || animatedIndices?.contains(index) == false
           ? 0 : Double(new > old ? timing.expandMilliseconds : timing.collapseMilliseconds) / 1000)
     }
   }

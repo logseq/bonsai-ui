@@ -1,6 +1,6 @@
 ((protocol
   (name bonsai_swiftui)
-  (major 4)
+  (major 5)
   (minor 0)
   (endianness little)
   (header_bytes 48)

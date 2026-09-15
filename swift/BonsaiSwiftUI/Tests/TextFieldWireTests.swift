@@ -219,8 +219,8 @@ extension NativeRuntimeTests {
       #expect(try await session.presented(ticket))
       try await settleAccessibility(host)
       #expect(controller.field.currentEditor() != nil)
-      window.makeFirstResponder(nil)
       session.isActive = false
+      #expect(controller.field.currentEditor() == nil)
       session.isActive = true
       if try await session.refresh() {
         #expect(try await session.presented(#require(session.ticket)))

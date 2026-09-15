@@ -10,7 +10,7 @@ been removed. Package and OCaml module renaming remains unfinished: current
 
 ```text
 OCaml Bonsai computation -> immutable View.t -> mounted identity/reconciliation
-    -> BSFR 4.0 binary frame -> bs_* ABI 3.0 -> NativeRuntime serial queue
+    -> BSFR 5.0 binary frame -> bs_* ABI 3.0 -> NativeRuntime serial queue
     -> BonsaiSession / validated FrameState -> SwiftUI view hierarchy
 ```
 
@@ -43,6 +43,9 @@ acknowledged or rejected. Renderer revision advances when a frame is emitted.
 Native presentation probes coordinate observed layout/visibility with session
 acknowledgment; decoding and committing a candidate are not themselves an
 acknowledgment. Rejected candidates force recovery from the presented state.
+Presentation-ticket and activity observation live in a separate SwiftUI view.
+Acknowledging a frame does not invalidate the unchanged application content;
+the content root still observes application and root-identity replacement.
 
 The application view currently runs an asynchronous refresh task with a 16 ms
 active/visible delay and a 250 ms inactive delay. The session prevents logical

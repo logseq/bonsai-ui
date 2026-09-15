@@ -111,11 +111,13 @@ enum HostServiceError: Error, LocalizedError {
       try await command.scroll(alignment: alignment, animated: animated)
       return Data()
     case .measureLayout(let id):
-      _ = try windowHost.boundWindow()
-      guard let node = windowHost.resolveNode?(id, false), node.layoutOwner != nil,
-        let frame = node.layoutFrame, frame.width >= 0, frame.height >= 0,
-        [frame.minX, frame.minY, frame.width, frame.height].allSatisfy({ $0.isFinite })
-      else { throw HostServiceError.failed("The target has no presented layout") }
+      let window = try windowHost.boundWindow()
+      guard let node = windowHost.resolveNode?(id, false) else {
+        throw HostServiceError.failed("The target has no presented layout")
+      }
+      let frame = try await windowHost.layoutRequests.measure(node.layoutTarget) { [windowHost] in
+        (try? windowHost.boundWindow()) === window && windowHost.resolveNode?(id, false) === node
+      }
       var response = WireWriter()
       for value in [frame.minX, frame.minY, frame.width, frame.height] {
         response.integer(Double(value).bitPattern)

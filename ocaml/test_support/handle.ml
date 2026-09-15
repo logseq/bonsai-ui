@@ -60,16 +60,7 @@ let ordered_nodes snapshot =
       fail
         "mounted snapshot references missing node %Ld"
         (Runtime.Node_id.to_int64 node_id)
-    | Some node ->
-      let children =
-        let (Av view) = Ui.View.Private.view node.widget in
-        match view.node with
-        | Ui.View.Private.Morphing_surface { expanded; _ }
-          when Array.length node.children = 2 ->
-          [| node.children.(if expanded then 1 else 0) |]
-        | _ -> node.children
-      in
-      Array.fold_left visit (node :: reversed) children
+    | Some node -> Array.fold_left visit (node :: reversed) node.children
   in
   match Runtime.Mounted_tree.Snapshot.root_id snapshot with
   | None -> []

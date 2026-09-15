@@ -732,7 +732,11 @@ struct NodeStore: Equatable, Sendable {
         guard ownedWindows.contains(id), node.children.count == window.keys.count,
           node.bindings.isEmpty
         else { throw TreeError.invalidChildren }
-      case .overlay, .morphingSurface:
+      case .morphingSurface:
+        guard node.children.count == 1, node.bindings.isEmpty else {
+          throw TreeError.invalidChildren
+        }
+      case .overlay:
         guard node.children.count == 2, node.bindings.isEmpty else {
           throw TreeError.invalidChildren
         }
@@ -790,9 +794,7 @@ struct NodeStore: Equatable, Sendable {
       pending.append(
         contentsOf: node.children.enumerated().map { index, child in
           let inactive: Bool
-          if case .morphingSurface(let surface) = node.properties {
-            inactive = index != (surface.expanded ? 1 : 0)
-          } else if case .sheet(let sheet) = node.properties {
+          if case .sheet(let sheet) = node.properties {
             inactive = index == (sheet.presented ? 0 : 1)
           } else if case .popover(let popover) = node.properties {
             inactive = index == 1 && !popover.presented

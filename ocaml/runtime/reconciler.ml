@@ -160,7 +160,14 @@ let reconcile t ~base_revision ~target_revision ~old ~base_handler_frame new_wid
     match handler_base with
     | Error _ as error -> error
     | Ok handler_base ->
-      (match validate_unique_keys new_widget with
+      let validation =
+        match old with
+        | Some tree when (Mounted_tree.Private.root tree).source_widget == new_widget ->
+          (* Mounted roots have already passed validation and widgets are immutable. *)
+          Ok ()
+        | None | Some _ -> validate_unique_keys new_widget
+      in
+      (match validation with
        | Error _ as error -> error
        | Ok () ->
          let operations_reversed = ref [] in

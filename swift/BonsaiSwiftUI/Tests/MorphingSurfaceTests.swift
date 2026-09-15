@@ -28,19 +28,28 @@ extension TreeFixture {
   static func morphTree(_ surface: WireOperation = morph()) -> [WireOperation] {
     [
       surface, layoutFrame(2, width: 240, height: 40),
-      layoutFrame(3, width: 240, height: 140), text(4, "Compact content"),
-      text(5, "Expanded content"), children(2, [4]), children(3, [5]),
-      children(1, [2, 3]), root(1),
+      text(4, "Shared content"), children(2, [4]), children(1, [2]), root(1),
     ]
   }
 }
 
 @MainActor struct MorphingSurfaceTests {
+  @Test func singleActiveContentIsTheEntireSurfaceTree() throws {
+    let store = try NodeStore().staging(
+      TreeFixture.frame([
+        TreeFixture.morph(), TreeFixture.text(2, "Active content"),
+        TreeFixture.children(1, [2]), TreeFixture.root(1),
+      ])
+    ).tree
+    #expect(store.nodes.count == 2)
+    #expect(store.accessibilityHiddenNodes.isEmpty)
+  }
+
   @Test func malformedTransitionsCannotPartiallyReplaceTheTree() throws {
     let store = try NodeStore().staging(TreeFixture.frame(TreeFixture.morphTree())).tree
     for bad in [
       TreeFixture.morph(expanded: 2, update: true),
-      TreeFixture.children(1, [2]), TreeFixture.children(1, [2, 3, 4]),
+      TreeFixture.children(1, []), TreeFixture.children(1, [2, 4]),
     ] {
       #expect(throws: (any Error).self) {
         try store.staging(TreeFixture.frame([bad], base: 1, revision: 2))
@@ -61,12 +70,12 @@ extension TreeFixture {
       }
     }
     #expect(store.revision == 1)
-    #expect(store.accessibilityHiddenNodes == [3, 5])
+    #expect(store.accessibilityHiddenNodes.isEmpty)
     let expanded = try store.staging(TreeFixture.frame([change], base: 1, revision: 2)).tree
-    #expect(expanded.accessibilityHiddenNodes == [2, 4])
+    #expect(expanded.accessibilityHiddenNodes.isEmpty)
   }
 
-  @Test func nativeSurfaceRetainsBothBranchesAndOnlyExposesTheSelectedOne() async throws {
+  @Test func nativeSurfacePreservesSharedContentAcrossExtentChanges() async throws {
     initializeAccessibilityApplication()
     var store = try NodeStore().staging(TreeFixture.frame(TreeFixture.morphTree())).tree
     let tree = RenderTree()
@@ -90,32 +99,33 @@ extension TreeFixture {
       store = try store.staging(
         TreeFixture.frame(
           [
-            TreeFixture.morph(expanded: expanded ? 1 : 0, update: true)
+            TreeFixture.morph(expanded: expanded ? 1 : 0, update: true),
+            TreeFixture.layoutFrame(2, width: 240, height: expanded ? 140 : 40, update: true),
           ], base: store.revision, revision: store.revision + 1)
       ).tree
       tree.commit(store)
       try await settleAccessibility(host)
       let values = accessibilityElements(host).compactMap(\.value)
-      #expect(values.contains(expanded ? "Expanded content" : "Compact content"))
-      #expect(!values.contains(expanded ? "Compact content" : "Expanded content"))
+      #expect(values.contains("Shared content"))
       #expect(original.allSatisfy { tree.nodes[$0.key] === $0.value })
       #expect(abs(host.fittingSize.height - (expanded ? 152 : 40)) < 1)
     }
   }
 
-  @Test func hiddenNativeEditorReleasesFocusAndRetainsDraftAndSelection() async throws {
+  @Test func removedDetailEditorReleasesFocusAndCannotReceiveInput() async throws {
     initializeAccessibilityApplication()
     var store = try NodeStore().staging(
       TreeFixture.frame([
-        TreeFixture.morph(expand: 0, collapse: 0), TreeFixture.editor(2),
-        TreeFixture.text(3, "Expanded content"), TreeFixture.children(1, [2, 3]),
-        TreeFixture.root(1),
+        TreeFixture.morph(expanded: 1, expand: 0, collapse: 0), TreeFixture.create(2),
+        TreeFixture.text(3, "Shared header"), TreeFixture.editor(4),
+        TreeFixture.children(2, [3, 4]), TreeFixture.children(1, [2]), TreeFixture.root(1),
       ])
     ).tree
     let tree = RenderTree()
     tree.onInput = { _, _ in true }
     tree.commit(store)
-    let controller = try #require(tree.nodes[2]?.textController)
+    let shared = try #require(tree.nodes[3])
+    let controller = try #require(tree.nodes[4]?.textController)
     let host = NSHostingView(
       rootView: NativeNodeView(node: try #require(tree.root), activate: { _ in }))
     let window = NSWindow(
@@ -129,30 +139,24 @@ extension TreeFixture {
     }
     try await settleAccessibility(host)
     #expect(window.makeFirstResponder(controller.view))
-    controller.view.insertText("Local draft", replacementRange: NSRange(location: 0, length: 5))
-    controller.view.setSelectedRange(NSRange(location: 2, length: 3))
-    let selection = controller.session.value.selection
-    for expanded in [true, false] {
-      store = try store.staging(
-        TreeFixture.frame(
-          [
-            TreeFixture.morph(expanded: expanded ? 1 : 0, expand: 0, collapse: 0, update: true)
-          ], base: store.revision, revision: store.revision + 1)
-      ).tree
-      tree.commit(store)
-      try await settleAccessibility(host)
-      #expect(controller.view.isEditable == !expanded)
-      if expanded {
-        #expect(window.firstResponder !== controller.view)
-        controller.view.insertText(
-          "Hidden edit", replacementRange: NSRange(location: 0, length: 11))
-      } else {
-        #expect(window.makeFirstResponder(controller.view))
-      }
-      #expect(controller.view.string == "Local draft")
-      #expect(controller.session.value.selection == selection)
-      #expect(tree.nodes[2]?.textController === controller)
-    }
+    store = try store.staging(
+      TreeFixture.frame(
+        [
+          TreeFixture.morph(expanded: 0, expand: 0, collapse: 0, update: true),
+          TreeFixture.children(2, [3]),
+          TreeFixture.operation(OperationId.dropNode) { $0.integer(UInt64(4)) },
+        ], base: 1, revision: 2)
+    ).tree
+    tree.commit(store)
+    #expect(tree.nodes[4] == nil)
+    #expect(tree.nodes[3] === shared)
+    #expect(!controller.view.isEditable)
+    #expect(window.firstResponder !== controller.view)
+    let text = controller.view.string
+    controller.view.insertText("Stale input", replacementRange: NSRange(location: 0, length: 0))
+    #expect(controller.view.string == text)
+    try await settleAccessibility(host)
+    #expect(!accessibilityElements(host).contains { $0.role == "AXTextArea" })
   }
 
   @Test func nativeAnimationInterpolatesAndReversesWithoutJumping() async throws {
@@ -181,7 +185,8 @@ extension TreeFixture {
         TreeFixture.frame(
           [
             TreeFixture.morph(
-              expanded: expanded ? 1 : 0, expand: duration, collapse: duration, update: true)
+              expanded: expanded ? 1 : 0, expand: duration, collapse: duration, update: true),
+            TreeFixture.layoutFrame(2, width: 240, height: expanded ? 140 : 40, update: true),
           ], base: store.revision, revision: store.revision + 1)
       ).tree
       tree.commit(store)
@@ -229,29 +234,38 @@ extension NativeRuntimeTests {
             return text.value == label
           })
       }
-      let compact = try button("Increment compact")
-      let expanded = try button("Increment expanded")
       let toggle = try button("Toggle surface")
-      for active in [compact, expanded, compact] {
-        let hidden = active === compact ? expanded : compact
-        #expect(!session.activate(hidden))
+      for expanded in [false, true, false] {
+        let active = try button(expanded ? "Increment expanded" : "Increment compact")
+        let previousID = active.id
         #expect(session.activate(active))
         #expect(try await session.refresh())
         #expect(try await session.presented(#require(session.ticket)))
         #expect(session.activate(toggle))
         #expect(try await session.refresh())
         #expect(!session.activate(active))
-        #expect(!session.activate(hidden))
+        let next = try button(expanded ? "Increment compact" : "Increment expanded")
+        #expect(!session.activate(next))
         #expect(try await session.presented(#require(session.ticket)))
-        #expect(session.tree.nodes[compact.id.node] === compact)
-        #expect(session.tree.nodes[expanded.id.node] === expanded)
+        #expect(
+          session.tree.nodes[previousID.node] == nil
+            || session.tree.nodes[previousID.node] !== active
+            || active.bindings != next.bindings)
       }
       let texts = session.tree.nodes.values.compactMap { node -> String? in
         if case .text(let text) = node.properties { return text.value }
         return nil
       }
-      #expect(texts.contains("Compact count: 2"))
       #expect(texts.contains("Expanded count: 1"))
+      #expect(!texts.contains("Compact count: 2"))
+      #expect(session.activate(toggle))
+      #expect(try await session.refresh())
+      #expect(try await session.presented(#require(session.ticket)))
+      #expect(
+        session.tree.nodes.values.contains {
+          if case .text(let value) = $0.properties { return value.value == "Compact count: 2" }
+          return false
+        })
       await session.close()
     } catch {
       await session.close()
@@ -261,23 +275,16 @@ extension NativeRuntimeTests {
 }
 
 extension MorphingSurfaceTests {
-  @Test(arguments: [1, 2, 3])
-  func emptyBranchesRetainTheirLayoutSlots(emptyMask: Int) async throws {
+  @Test func emptyActiveContentHasOnlySurfaceInsets() async throws {
     initializeAccessibilityApplication()
     let tree = RenderTree()
-    var operations = [TreeFixture.morph(expand: 0, collapse: 0)]
-    for (id, height, mask) in [(UInt64(2), 40.0, 1), (UInt64(3), 140.0, 2)] {
-      if emptyMask & mask != 0 {
-        operations.append(TreeFixture.create(id, kind: NodeKindId.empty))
-      } else {
-        operations += [
-          TreeFixture.layoutFrame(id, width: 200, height: height),
-          TreeFixture.text(id + 2, "Content"), TreeFixture.children(id, [id + 2]),
-        ]
-      }
-    }
-    operations += [TreeFixture.children(1, [2, 3]), TreeFixture.root(1)]
-    var store = try NodeStore().staging(TreeFixture.frame(operations)).tree
+    var store = try NodeStore().staging(
+      TreeFixture.frame([
+        TreeFixture.morph(expand: 0, collapse: 0),
+        TreeFixture.create(2, kind: NodeKindId.empty),
+        TreeFixture.children(1, [2]), TreeFixture.root(1),
+      ])
+    ).tree
     tree.commit(store)
     let host = NSHostingView(
       rootView: NativeNodeView(node: try #require(tree.root), activate: { _ in }))
@@ -290,9 +297,68 @@ extension MorphingSurfaceTests {
       ).tree
       tree.commit(store)
       try await settleAccessibility(host)
-      let expected =
-        expanded ? (emptyMask & 2 != 0 ? 12.0 : 152.0) : (emptyMask & 1 != 0 ? 0.0 : 40.0)
-      #expect(abs(host.fittingSize.height - expected) < 1)
+      #expect(abs(host.fittingSize.height - (expanded ? 12 : 0)) < 1)
+    }
+  }
+}
+
+extension NativeRuntimeTests {
+  @Test @MainActor func actualMailCoordinatesSurfaceExtentsAndRemovesCollapsedDetails() async throws
+  {
+    initializeAccessibilityApplication()
+    let session = BonsaiSession()
+    session.isVisible = true
+    let window = NSWindow(
+      contentRect: CGRect(x: 0, y: 0, width: 1000, height: 700),
+      styleMask: [.borderless], backing: .buffered, defer: false)
+    defer { window.contentView = nil }
+    do {
+      try await session.start(entrypoint: "mail-collection")
+      let host = NSHostingView(
+        rootView: NativeNodeView(
+          node: try #require(session.tree.root), activate: { session.activate($0) }
+        )
+        .environment(\.scenePhase, .active))
+      window.contentView = host
+      func settle(_ iterations: Int = 24) async throws {
+        for _ in 0..<iterations {
+          host.layoutSubtreeIfNeeded()
+          if let ticket = session.ticket { _ = try await session.presented(ticket) }
+          _ = try await session.refresh()
+          try await Task.sleep(for: .milliseconds(15))
+        }
+      }
+      func containsSender(_ node: RenderNodeState) -> Bool {
+        if case .text(let value) = node.properties, value.value == "Mara Vale" { return true }
+        return node.children.contains(where: containsSender)
+      }
+      func header() throws -> RenderNodeState {
+        try #require(
+          session.tree.nodes.values.first {
+            $0.kind == NodeKindId.button && containsSender($0)
+          })
+      }
+      try await settle()
+      let initial = session.tree.nodes.count
+      let shared = try header()
+      for _ in 0..<3 {
+        #expect(session.activate(try header()))
+        try await settle(3)
+        #expect(session.tree.nodes.count > initial)
+        #expect(try header() === shared)
+        let surfaces = session.tree.nodes.values.filter { $0.morphingSurfaceController != nil }
+        #expect(!surfaces.isEmpty)
+        #expect(surfaces.allSatisfy { $0.children.count == 1 })
+        #expect(surfaces.allSatisfy { $0.morphingSurfaceController?.displayedExtent == nil })
+        #expect(session.activate(try header()))
+        try await settle()
+        #expect(session.tree.nodes.count == initial)
+        #expect(try header() === shared)
+      }
+      await session.close()
+    } catch {
+      await session.close()
+      throw error
     }
   }
 }

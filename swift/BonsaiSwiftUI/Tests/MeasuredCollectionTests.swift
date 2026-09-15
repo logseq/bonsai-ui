@@ -21,7 +21,138 @@ import Testing
   }
 }
 
+@MainActor @Observable private final class MeasurementMountSettings {
+  var visible = true
+  var extent = 80.0
+  var node: UInt64 = 3
+}
+
+@MainActor private struct MeasurementMountHost: View {
+  let controller: CollectionController
+  let settings: MeasurementMountSettings
+  let vertical: Bool
+
+  var body: some View {
+    Group {
+      if settings.visible {
+        MeasuredCollectionRow(
+          controller: controller, key: Data("row".utf8),
+          identity: RenderIdentity(epoch: 1, node: settings.node), vertical: vertical,
+          content: Color.clear.frame(
+            width: vertical ? 80 : settings.extent,
+            height: vertical ? settings.extent : 80))
+      }
+    }
+    .frame(width: 320, height: 320, alignment: .topLeading)
+  }
+}
+
 @MainActor struct MeasuredCollectionTests {
+  @Test(arguments: [false, true])
+  func nativeRowMeasurementsSurviveRemovalReplacementAndContextChanges(vertical: Bool)
+    async throws
+  {
+    initializeAccessibilityApplication()
+    let key = Data("row".utf8)
+    let catalog = try RenderCollectionCatalog(
+      keys: [key], indices: [key: 0],
+      geometry: CollectionGeometry(count: 1, defaultExtent: 40), overscan: 4,
+      timing: .immediate, vertical: vertical, measurementRevision: 0)
+    let controller = CollectionController(catalog)
+    let settings = MeasurementMountSettings()
+    func synchronize() {
+      controller.synchronize(
+        RenderCollectionWindow(firstIndex: 0, keys: settings.visible ? [key] : []),
+        rows: settings.visible ? [RenderIdentity(epoch: 1, node: settings.node)] : [])
+    }
+    func configure(_ width: Double) {
+      controller.configureMeasurements(
+        CollectionMeasurementContext(
+          vertical: vertical, revision: 0, crossExtent: width,
+          dynamicType: .large, direction: .leftToRight, fontFamily: nil))
+    }
+    synchronize()
+    configure(320)
+    let host = NSHostingView(
+      rootView: MeasurementMountHost(
+        controller: controller, settings: settings, vertical: vertical))
+    let window = NSWindow(
+      contentRect: CGRect(x: 0, y: 0, width: 320, height: 320),
+      styleMask: [.borderless], backing: .buffered, defer: false)
+    window.contentView = host
+    defer {
+      window.contentView = nil
+      controller.dispose()
+    }
+    func settle() async throws {
+      for _ in 0..<15 {
+        host.layoutSubtreeIfNeeded()
+        try await Task.sleep(for: .milliseconds(10))
+      }
+    }
+    try await settle()
+    #expect(controller.viewport.geometry.extent(at: 0) == 80)
+    settings.extent = 110
+    try await settle()
+    #expect(controller.viewport.geometry.extent(at: 0) == 110)
+
+    settings.visible = false
+    synchronize()
+    try await settle()
+    settings.extent = 140
+    settings.node = 4
+    configure(240)
+    #expect(controller.viewport.geometry.extent(at: 0) == 40)
+    settings.visible = true
+    synchronize()
+    try await settle()
+    #expect(controller.viewport.geometry.extent(at: 0) == 140)
+
+    // An unchanged native size must be republished under the new context token.
+    configure(180)
+    #expect(controller.viewport.geometry.extent(at: 0) == 40)
+    try await settle()
+    #expect(controller.viewport.geometry.extent(at: 0) == 140)
+  }
+
+  @Test func unrelatedCommitsPreserveMeasurementsAndChangedSamplesBatch() async throws {
+    var store = try NodeStore().staging(
+      TreeFixture.frame([
+        TreeFixture.collection(keys: ["a", "b"], measurementRevision: 0),
+        TreeFixture.collectionWindow(first: 0, keys: ["a", "b"]),
+        TreeFixture.text(3, "A"), TreeFixture.text(4, "B"),
+        TreeFixture.children(2, [3, 4]), TreeFixture.children(1, [2]), TreeFixture.root(1),
+      ])
+    ).tree
+    let tree = RenderTree()
+    tree.commit(store)
+    let controller = try #require(tree.root?.collectionController)
+    controller.configureMeasurements(
+      CollectionMeasurementContext(
+        vertical: true, revision: 0, crossExtent: 320,
+        dynamicType: .large, direction: .leftToRight, fontFamily: nil))
+    let generation = controller.measurements.contextToken
+    store = try store.staging(
+      TreeFixture.frame(
+        [
+          TreeFixture.text(3, "Changed content", update: true)
+        ], base: 1, revision: 2)
+    ).tree
+    tree.commit(store)
+    #expect(controller.measurements.contextToken == generation)
+    let old = controller.viewport.geometry
+    for (key, id, extent) in [("a", UInt64(3), 80.0), ("b", UInt64(4), 90.0)] {
+      let token = CollectionMeasurementToken(
+        row: try #require(tree.nodes[id]).id, mount: UUID(), context: generation)
+      controller.attachMeasurement(key: Data(key.utf8), token: token)
+      controller.measure(extent, key: Data(key.utf8), token: token)
+    }
+    #expect(controller.viewport.geometry == old)
+    for _ in 0..<20 { await Task.yield() }
+    #expect(controller.viewport.geometry.extent(at: 0) == 80)
+    #expect(controller.viewport.geometry.extent(at: 1) == 90)
+  }
+
   @Test func nativeMeasurementsInvalidateAndPreserveTheVisibleKey() async throws {
     initializeAccessibilityApplication()
     let keys = (0..<10000).map(String.init)
@@ -246,25 +377,80 @@ extension MeasuredCollectionTests {
     }
     #expect(cache.configure(context(320)))
     #expect(!cache.configure(context(320)))
-    let generation = cache.generation
+    let generation = cache.contextToken
     let key = Data("b".utf8)
-    #expect(cache.accept(90, key: key, generation: generation, catalog: initial))
+    #expect(cache.accept([key: 90], context: generation, catalog: initial) != nil)
     let reordered = try catalog(["c", "a", "b", "d"])
     cache.reconcile(from: initial, to: reordered)
     #expect(cache.geometry(for: reordered).extent(at: 2) == 90)
-    #expect(!cache.accept(100, key: key, generation: generation, catalog: reordered))
+    #expect(cache.accept([key: 100], context: generation, catalog: reordered) != nil)
     for invalid in [0, -1, Double.nan, Double.infinity, 9_007_199_254_740_992] {
-      #expect(!cache.accept(invalid, key: key, generation: cache.generation, catalog: reordered))
+      #expect(cache.accept([key: invalid], context: cache.contextToken, catalog: reordered) == nil)
     }
     #expect(cache.configure(context(180)))
     #expect(cache.geometry(for: reordered).extent(at: 2) == 40)
-    #expect(cache.accept(3e15, key: key, generation: cache.generation, catalog: reordered))
+    #expect(cache.accept([key: 3e15], context: cache.contextToken, catalog: reordered) != nil)
     let changed = try catalog(
       ["c", "a", "b", "d"], overrides: [CollectionExtent(index: 0, extent: 6.1e15)])
+    let beforeInvalidation = cache.contextToken
     cache.reconcile(from: reordered, to: changed)
-    let beforeInvalidation = cache.generation
     #expect(cache.geometry(for: changed) == changed.geometry)
-    #expect(cache.generation != beforeInvalidation)
-    #expect(!cache.accept(90, key: key, generation: beforeInvalidation, catalog: changed))
+    #expect(cache.contextToken != beforeInvalidation)
+    #expect(cache.accept([key: 90], context: beforeInvalidation, catalog: changed) == nil)
+  }
+}
+
+extension MeasuredCollectionTests {
+  @Test func queuedMeasurementsRespectMountContextAndAtomicGeometryValidation() async throws {
+    let keys = [Data("a".utf8), Data("b".utf8)]
+    let rows = [RenderIdentity(epoch: 1, node: 3), RenderIdentity(epoch: 1, node: 4)]
+    let catalog = try RenderCollectionCatalog(
+      keys: keys, indices: [keys[0]: 0, keys[1]: 1],
+      geometry: CollectionGeometry(count: 2, defaultExtent: 40), overscan: 4,
+      timing: .immediate, vertical: true, measurementRevision: 0)
+    let controller = CollectionController(catalog)
+    controller.synchronize(RenderCollectionWindow(firstIndex: 0, keys: keys), rows: rows)
+    func configure(_ width: Double) {
+      controller.configureMeasurements(
+        CollectionMeasurementContext(
+          vertical: true, revision: 0,
+          crossExtent: width, dynamicType: .large, direction: .leftToRight, fontFamily: nil))
+    }
+    func attach(_ index: Int) -> CollectionMeasurementToken {
+      let token = CollectionMeasurementToken(
+        row: rows[index], mount: UUID(),
+        context: controller.measurements.contextToken)
+      controller.attachMeasurement(key: keys[index], token: token)
+      return token
+    }
+    func flush() async { for _ in 0..<20 { await Task.yield() } }
+    configure(320)
+    let original = attach(0)
+    controller.measure(80, key: keys[0], token: original)
+    controller.detachMeasurement(key: keys[0], mount: original.mount)
+    let remounted = attach(0)
+    controller.measure(90, key: keys[0], token: original)
+    await flush()
+    #expect(controller.viewport.geometry == catalog.geometry)
+    controller.measure(90, key: keys[0], token: remounted)
+    configure(180)
+    await flush()
+    #expect(controller.viewport.geometry == catalog.geometry)
+    let first = attach(0)
+    let second = attach(1)
+    controller.measure(3e15, key: keys[0], token: first)
+    controller.measure(6.1e15, key: keys[1], token: second)
+    await flush()
+    #expect(controller.viewport.geometry == catalog.geometry)
+    controller.measure(80, key: keys[0], token: first)
+    controller.measure(90, key: keys[1], token: second)
+    await flush()
+    #expect(controller.viewport.geometry.totalExtent == 170)
+    controller.detachMeasurement(key: keys[0], mount: first.mount)
+    #expect(controller.measurements.geometry(for: catalog).extent(at: 0) == 80)
+    controller.measure(100, key: keys[1], token: second)
+    controller.dispose()
+    await flush()
+    #expect(controller.viewport.geometry.totalExtent == 170)
   }
 }

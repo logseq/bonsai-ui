@@ -363,23 +363,38 @@ through reordering and dropping removed keys. A changed declared estimate for a
 key invalidates its cached measurement. Change the nonnegative measurement
 revision whenever content changes can invalidate offscreen sizes. A changed
 cross-axis viewport size, Dynamic Type category, layout direction, scoped font
-family or axis automatically discards the cache. Each committed native tree
-advances a measurement generation; callbacks from older rows are ignored.
+family or axis automatically discards the cache. Only actual context changes
+advance the context token. Unrelated commits and window slides preserve retained
+rows. Each native mount has its own token, combined with the full row identity;
+evicted or remounted rows cannot submit stale samples. Cached extents survive
+virtualization and append-only paging when existing sizing inputs are unchanged.
+The mount UUID is created on first appearance from a stable empty State value.
+Constructing a new UUID in the view initializer would invalidate retained
+measurement wrappers whenever the parent supplies a new row window. Samples
+are accepted after the mount token is available; appearance and context changes
+replay the latest matching sample so the first measurement is not lost.
 
 Measured updates restore the leading stable key and intra-item offset while
 SwiftUI settles its geometry. Native ScrollPosition writeback is observed
 without publishing another programmatic scroll, avoiding a layout feedback
 loop when content shrinks. A new explicit scroll command or user scroll takes
-ownership from the pending measurement anchor. Measurements resolve immediately;
-the declared-extent mode retains its explicit expansion/collapse animation
-contract. Neither layout nor measurement calls OCaml synchronously.
+ownership from the pending measurement anchor. Changed samples are validated and
+published in one scheduled main-actor batch. Equal samples publish nothing.
+Measurements and context changes preserve the last accepted handler/range.
+They request a new window only when the resulting visible range or handler
+changes; clearing an unfilled visible window still permits a retry.
+Scroll commands are issued only when the effective display-pixel position changes;
+RTL document growth is included in that comparison. Initial row measurements are
+immediate; subsequent active-row extent changes use the collection timing. The
+collection is the sole owner of extent interpolation for active-content surfaces.
+Neither layout nor measurement calls OCaml synchronously.
 
 `MeasuredCollectionTests` checks native offsets in a 10,000-item vertical
 collection after narrowing the window, enlarging the font, replacing long text
 with short text and switching to exact declared extents. Actual Gallery tests
 exercise OCaml catalog encoding, native measurement, asynchronous bounded row
 materialization, a jump to item 5,000 and deletion before that item on both axes
-and in LTR/RTL. Cache tests cover stale generations and aggregate coordinate
+and in LTR/RTL. Cache tests cover stale attachment/context tokens and aggregate coordinate
 overflow. These are macOS tests; the larger font is supplied explicitly and is
 not evidence of physical iOS Dynamic Type behavior.
 

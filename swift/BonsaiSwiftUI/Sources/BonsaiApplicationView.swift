@@ -47,22 +47,9 @@ public struct BonsaiApplicationView: View {
     .background {
       NativeHostEnvironmentObserver(session: session)
     }
-    .modifier(NativeLayoutObserver(tree: session.tree))
+    .modifier(NativeLayoutObserver(requests: session.windowHost.layoutRequests))
     .modifier(NativeFileDialogPresenter(controller: session.windowHost.fileDialogs))
-    .background(
-      PresentationProbe(
-        ticket: session.isActive ? session.ticket : nil,
-        title: session.application?.title,
-        windowHost: session.windowHost,
-        onVisibility: { session.isVisible = $0 },
-        onPresented: { observed in
-          do { return try await session.presented(observed) } catch {
-            if session.lifetimeIdentity == observed.session { report(error) }
-            await session.close(ifCurrent: observed.session)
-            return false
-          }
-        })
-    )
+    .background(SessionPresentationObserver(session: session, failed: report))
     .onChange(of: scenePhase, initial: true) { _, phase in session.isActive = phase == .active }
     .task {
       let lifetime = UUID()
@@ -86,5 +73,25 @@ public struct BonsaiApplicationView: View {
     Logger(subsystem: "org.bonsai-swiftui", category: "host").error(
       "\(String(describing: error), privacy: .public)")
     failed = true
+  }
+}
+
+private struct SessionPresentationObserver: View {
+  let session: BonsaiSession
+  let failed: (any Error) -> Void
+
+  var body: some View {
+    PresentationProbe(
+      ticket: session.isActive ? session.ticket : nil,
+      title: session.application?.title,
+      windowHost: session.windowHost,
+      onVisibility: { session.isVisible = $0 },
+      onPresented: { observed in
+        do { return try await session.presented(observed) } catch {
+          if session.lifetimeIdentity == observed.session { failed(error) }
+          await session.close(ifCurrent: observed.session)
+          return false
+        }
+      })
   }
 }

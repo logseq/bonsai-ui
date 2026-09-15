@@ -1,7 +1,7 @@
 # Native Workflows
 
 `Workflow` replaces Material's multi-step Stepper with native Button headers,
-SF Symbol status markers, keyed layout, and retained content surfaces. It is a
+SF Symbol status markers, keyed layout, and active content surfaces. It is a
 controlled workflow rather than SwiftUI's numeric Stepper. OCaml owns the current
 step and every application action.
 
@@ -31,13 +31,12 @@ its status as an accessibility value in addition to its visible marker. These
 default status descriptions are currently English. Application text and action
 labels remain caller supplied.
 
-Vertical layout puts each header above its own retained body. Horizontal layout
-wraps headers through the native Flow layout and places the active body below
-them. A layout change changes structure; reordering within a layout preserves
-keyed headers and bodies. Both layouts keep inactive bodies in the logical and
-native trees, with zero-height compact content, and exclude them from input and
-accessibility actions. The retained surface uses zero-duration transitions.
-Body state survives selecting another step and returning to it.
+Vertical layout puts each header above its keyed surface. Horizontal layout
+wraps headers through Flow layout and places the active body below them.
+Inactive surfaces contain only an empty child; their detail controls are removed
+from the logical and native trees. Surface transitions have zero duration.
+Reordering preserves keyed headers and active bodies. State that must survive
+switching steps belongs in OCaml; invisible native editor state is not retained.
 
 ## Verification
 
@@ -46,8 +45,8 @@ initial native App could not display its first state. The Gallery now uses
 `Workflow`, both in its combined view and the independently runnable native
 fixture. OCaml checks cover empty workflows, duplicate IDs, absent current IDs
 and blank action labels. Native integration checks selection, Continue/Back,
-disabled controls, hidden-content input rejection, node identity after selecting
-another step and after reordering, layout changes and session closure.
+disabled controls, hidden-content input rejection, durable application state after selecting
+another step and active node identity after reordering, layout changes and session closure.
 
 The native App executes actual accessibility controls at 640 and 360 points.
 It checks all five state descriptions, disabled state, current-step selection
@@ -55,12 +54,9 @@ traits, hidden-body accessibility, reordering, both layouts, and Continue/Back.
 These checks do not establish pointer, keyboard, VoiceOver or physical iOS
 acceptance, or replace visual inspection of the full Gallery.
 
-The first native App run also exposed an existing retained-surface bug:
-SwiftUI omitted EmptyView from Layout subviews, causing an out-of-range access.
-Each surface branch now has a stable ZStack layout slot. Focused tests cover
-an empty compact branch, an empty expanded branch and two empty branches, in
-both states. Existing animation, native input isolation and editor-state
-retention tests continue to pass.
+Empty active content has a stable native layout slot. Surface tests cover empty
+content, active sizing, animation reversal and removal of native editor input
+and focus ownership.
 
 The Material.Stepper API, private node 132, Step_selected/Step_continue/Step_cancel
 events, payload types, codecs and protocol fixtures are removed. There is no

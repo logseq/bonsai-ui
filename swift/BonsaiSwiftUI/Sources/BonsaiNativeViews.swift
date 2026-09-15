@@ -194,9 +194,11 @@ struct NativeViewEmission: Equatable, Sendable {
 }
 @MainActor protocol NativeModalResource: AnyObject {
   var blocksBackgroundInput: Bool { get }
+  var onPresentationChange: (() -> Void)? { get set }
 }
 
 @MainActor @Observable final class NativeViewInstance {
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
   let id = UUID()
   var prepared: PreparedNativeView
   private(set) var generation: UInt64 = 0
@@ -220,6 +222,9 @@ struct NativeViewEmission: Equatable, Sendable {
     bindings = node.bindings
     children = node.children
     resource = prepared.definition.makeResource()
+    (resource as? any NativeModalResource)?.onPresentationChange = { [weak self] in
+      self?.onPresentationChange?()
+    }
   }
   func synchronize(_ next: PreparedNativeView, node: RenderNode) {
     if prepared.envelope != next.envelope || bindings != node.bindings || children != node.children
@@ -238,10 +243,12 @@ struct NativeViewEmission: Equatable, Sendable {
     guard value != isPresented else { return }
     isPresented = value
     generation += 1
+    onPresentationChange?()
   }
   func mount() {
     guard !disposed else { return }
     mounted += 1
+    if mounted == 1 { onPresentationChange?() }
   }
   func unmount() {
     guard mounted > 0 else { return }
@@ -249,15 +256,22 @@ struct NativeViewEmission: Equatable, Sendable {
     if mounted == 0 {
       generation += 1
       childMounts.removeAll()
+      onPresentationChange?()
     }
   }
   func mountChild(_ id: RenderIdentity) {
     guard !disposed else { return }
     childMounts[id, default: 0] += 1
+    if childMounts[id] == 1 { onPresentationChange?() }
   }
   func unmountChild(_ id: RenderIdentity) {
     if let count = childMounts[id] {
-      if count <= 1 { childMounts.removeValue(forKey: id) } else { childMounts[id] = count - 1 }
+      if count <= 1 {
+        childMounts.removeValue(forKey: id)
+        onPresentationChange?()
+      } else {
+        childMounts[id] = count - 1
+      }
     }
   }
   func containsMountedChild(_ id: RenderIdentity) -> Bool {
@@ -271,6 +285,8 @@ struct NativeViewEmission: Equatable, Sendable {
     childMounts.removeAll()
     if let resource { prepared.definition.dispose(resource) }
     resource = nil
+    onPresentationChange?()
+    onPresentationChange = nil
   }
 }
 struct NativeRegisteredView: View {

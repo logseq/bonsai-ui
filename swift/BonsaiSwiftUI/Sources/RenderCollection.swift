@@ -75,6 +75,11 @@ struct RenderCollectionWindow: Equatable, Sendable {
   private var lastRequest: (handler: UInt64, range: Range<Int>)?
   private var window: RenderCollectionWindow?
   private var active = true
+  private var rows: [Data: RenderIdentity] = [:]
+  private var attachments: [Data: CollectionMeasurementToken] = [:]
+  private var pendingMeasurements: [Data: (extent: Double, token: CollectionMeasurementToken)] = [:]
+  private var measurementTask: Task<Void, Never>?
+  private var measuredMounts: Set<UUID> = []
 
   init(_ catalog: RenderCollectionCatalog) {
     self.catalog = catalog
@@ -142,10 +147,13 @@ struct RenderCollectionWindow: Equatable, Sendable {
     if let lastRequest, lastRequest.handler == handler, lastRequest.range == range { return nil }
     return range
   }
-  func synchronize(_ window: RenderCollectionWindow) {
-    // Every committed frame invalidates callbacks from an older native row
-    // body, without discarding valid offscreen size estimates.
-    if catalog.measurementRevision != nil { measurements.advance() }
+  func synchronize(_ window: RenderCollectionWindow, rows: [RenderIdentity]) {
+    self.rows = Dictionary(uniqueKeysWithValues: zip(window.keys, rows))
+    attachments = attachments.filter { self.rows[$0.key] == $0.value.row }
+    measuredMounts.formIntersection(Set(attachments.values.map(\.mount)))
+    pendingMeasurements = pendingMeasurements.filter {
+      validMeasurement(key: $0.key, token: $0.value.token)
+    }
     guard self.window != window else { return }
     self.window = window
     let visible = viewport.visibleRange
@@ -159,6 +167,12 @@ struct RenderCollectionWindow: Equatable, Sendable {
   func accepted(_ range: Range<Int>, handler: UInt64) { lastRequest = (handler, range) }
   func dispose() {
     active = false
+    measurementTask?.cancel()
+    measurementTask = nil
+    pendingMeasurements.removeAll()
+    attachments.removeAll()
+    measuredMounts.removeAll()
+    rows.removeAll()
     measurements.clear()
     viewport.finishAnimation()
     lastRequest = nil
@@ -168,18 +182,70 @@ struct RenderCollectionWindow: Equatable, Sendable {
     guard active, catalog.measurementRevision != nil,
       measurements.configure(context)
     else { return }
-    viewport.replace(measurements.geometry(for: catalog), preserveMeasurementAnchor: true)
-    lastRequest = nil
+    viewport.replace(
+      measurements.geometry(for: catalog), timing: catalog.timing, preserveMeasurementAnchor: true)
   }
 
-  func measure(_ extent: Double, key: Data, generation: UInt64) {
-    guard active, catalog.measurementRevision != nil,
-      window?.keys.contains(key) == true,
-      measurements.accept(extent, key: key, generation: generation, catalog: catalog)
-    else { return }
-    viewport.replace(measurements.geometry(for: catalog), preserveMeasurementAnchor: true)
-    lastRequest = nil
+  func attachMeasurement(key: Data, token: CollectionMeasurementToken) {
+    guard active, rows[key] == token.row, token.context == measurements.contextToken else { return }
+    if let previous = attachments[key], previous.mount != token.mount {
+      measuredMounts.remove(previous.mount)
+    }
+    attachments[key] = token
   }
+
+  func detachMeasurement(key: Data, mount: UUID) {
+    guard attachments[key]?.mount == mount else { return }
+    measuredMounts.remove(mount)
+    attachments.removeValue(forKey: key)
+    pendingMeasurements.removeValue(forKey: key)
+  }
+
+  private func validMeasurement(key: Data, token: CollectionMeasurementToken) -> Bool {
+    active && catalog.measurementRevision != nil && rows[key] == token.row
+      && attachments[key] == token && token.context == measurements.contextToken
+  }
+
+  func measure(_ extent: Double, key: Data, token: CollectionMeasurementToken) {
+    guard validMeasurement(key: key, token: token), extent.isFinite, extent > 0,
+      extent <= 9_007_199_254_740_992
+    else { return }
+    // A newer equal sample also withdraws an earlier changed sample in this batch.
+    guard measurements.isChanged(extent, key: key, catalog: catalog) else {
+      measuredMounts.insert(token.mount)
+      pendingMeasurements.removeValue(forKey: key)
+      return
+    }
+    pendingMeasurements[key] = (extent, token)
+    guard measurementTask == nil else { return }
+    measurementTask = Task { @MainActor [weak self] in
+      await Task.yield()
+      guard !Task.isCancelled, let self else { return }
+      self.flushMeasurements()
+    }
+  }
+
+  private func flushMeasurements() {
+    measurementTask = nil
+    let valid = pendingMeasurements.filter {
+      validMeasurement(key: $0.key, token: $0.value.token)
+    }
+    let animatedIndices = Set(
+      valid.compactMap { key, sample in
+        measuredMounts.contains(sample.token.mount) ? catalog.indices[key] : nil
+      })
+    measuredMounts.formUnion(valid.values.map { $0.token.mount })
+    let samples = valid.mapValues(\.extent)
+    pendingMeasurements.removeAll()
+    guard
+      let geometry = measurements.accept(
+        samples, context: measurements.contextToken, catalog: catalog)
+    else { return }
+    viewport.replace(
+      geometry, timing: catalog.timing, preserveMeasurementAnchor: true,
+      animatedIndices: animatedIndices)
+  }
+
 }
 
 struct NativeCollectionNodeView: View {
@@ -220,6 +286,7 @@ struct NativeCollectionNodeView: View {
             maxHeight: vertical ? nil : .infinity
           )
           .clipped()
+          .environment(\.collectionCoordinatesExtent, true)
         }
       }
       .onGeometryChange(for: CollectionMeasurementContext.self) { proxy in
@@ -238,7 +305,7 @@ struct NativeCollectionNodeView: View {
   ) -> some View {
     if measured {
       MeasuredCollectionRow(
-        controller: controller, key: key, generation: controller.measurements.generation,
+        controller: controller, key: key, identity: child.id,
         vertical: vertical,
         content: NativeNodeView(node: child, activate: activate))
     } else {

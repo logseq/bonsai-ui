@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bonsai UI Benchmark"
+  short_description: "Benchmark bridge traffic and SwiftUI scrolling"
+  default_prompt: "Use $bonsai-ui-benchmark to measure SwiftUI/OCaml traffic and verify roughly 60 FPS for basic widgets and scrolling lists."

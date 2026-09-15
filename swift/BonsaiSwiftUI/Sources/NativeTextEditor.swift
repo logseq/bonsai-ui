@@ -35,6 +35,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
   private var disposed = false
   private var focused = false
   private var hostEnabled = true
+  private var contentActive = true
 
   init(
     snapshot: TextSnapshot, configuration: TextEditorConfiguration,
@@ -51,7 +52,8 @@ struct TextEditorConfiguration: Equatable, Sendable {
     view.acceptsInput = { [weak self] in
       guard let self, !disposed else { return false }
       return applying
-        || (self.hostEnabled && self.configuration.enabled && !self.configuration.readOnly)
+        || (self.hostEnabled && self.contentActive && self.configuration.enabled
+          && !self.configuration.readOnly)
     }
     #if os(macOS)
       view.isRichText = false
@@ -83,6 +85,11 @@ struct TextEditorConfiguration: Equatable, Sendable {
     updateAvailability()
   }
 
+  func setContentActive(_ active: Bool) {
+    guard !disposed, active != contentActive else { return }
+    contentActive = active
+    updateAvailability()
+  }
   func setHostEnabled(_ enabled: Bool) {
     guard !disposed, enabled != hostEnabled else { return }
     hostEnabled = enabled
@@ -90,7 +97,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
   }
 
   private func updateAvailability() {
-    let enabled = hostEnabled && configuration.enabled
+    let enabled = hostEnabled && contentActive && configuration.enabled
     view.isEditable = enabled && !configuration.readOnly
     view.isSelectable = enabled
     if !enabled {
@@ -105,6 +112,8 @@ struct TextEditorConfiguration: Equatable, Sendable {
   func dispose() {
     guard !disposed else { return }
     disposed = true
+    hostEnabled = false
+    updateAvailability()
     view.changed = nil
     view.focusChanged = nil
     view.acceptsInput = nil
@@ -196,7 +205,8 @@ struct TextEditorConfiguration: Equatable, Sendable {
 
   private func shouldReplace(_ range: NSRange, with replacement: String?) -> Bool {
     if applying { return true }
-    guard !disposed, hostEnabled, configuration.enabled, !configuration.readOnly else {
+    guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly
+    else {
       return false
     }
     guard let replacement else { return true }
@@ -213,7 +223,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
   }
 
   private func submit() -> Bool {
-    guard !disposed, hostEnabled, configuration.enabled, !configuration.readOnly,
+    guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly,
       configuration.submitOnReturn, markedRange == nil
     else { return false }
     _ = emit(.textSubmit(session.value.text))

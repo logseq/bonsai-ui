@@ -42,7 +42,10 @@ struct RenderTab: Equatable, Sendable {
     let serial: UInt64
     let key: RenderTabKey
   }
-  private(set) var selection: RenderTabKey
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  private(set) var selection: RenderTabKey {
+    didSet { if oldValue != selection { onPresentationChange?() } }
+  }
   private(set) var pending: Request?
   private var authoritative: RenderTabKey
   private var options: [RenderTabKey: RenderIdentity] = [:]

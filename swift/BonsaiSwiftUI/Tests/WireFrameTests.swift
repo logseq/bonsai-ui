@@ -22,7 +22,7 @@ extension NativeRuntimeTests {
       }
     }
     let mutations: [(Int, UInt8, WireError)] = [
-      (0, 0, .invalidMagic), (4, 255, .incompatibleVersion),
+      (0, 0, .invalidMagic), (4, 4, .incompatibleVersion), (4, 255, .incompatibleVersion),
       (6, 255, .incompatibleVersion), (8, 47, .invalidHeader),
       (10, 4, .invalidFrameKind), (11, 1, .invalidHeader),
       (19, 255, .invalidHeader), (40, 1, .invalidHeader),

@@ -69,7 +69,7 @@ import SwiftUI
     try capture(window, state: "inbox", revision: session.displayedRevision)
     window.makeKeyAndOrderFront(nil)
     try await verifyRowDrag(window, content: content)
-    let element = try button("Mara Vale", window: window)
+    let element = try button("Unread message from Mara Vale", window: window)
     guard element.press() else { throw failure("Mail row did not accept expansion") }
     try await waitFor("Reply", window: window)
     try await settleAccessibility(content)
@@ -97,7 +97,7 @@ import SwiftUI
     for _ in 0..<4 { try await settleAccessibility(content) }
     guard abs(collection.viewport.geometry.extent(at: 0) - compact) < 1
     else { throw failure("Collapsed Mail row retained its expanded measurement") }
-    guard try button("Mara Vale", window: window).press()
+    guard try button("Unread message from Mara Vale", window: window).press()
     else { throw failure("Mail re-expansion action was rejected") }
     for _ in 0..<4 { try await settleAccessibility(content) }
 
@@ -146,7 +146,7 @@ import SwiftUI
   }
 }
 @MainActor private func verifyRowDrag(_ window: NSWindow, content: NSView) async throws {
-  let row = try button("Mara Vale", window: window)
+  let row = try button("Unread message from Mara Vale", window: window)
   let selector = NSSelectorFromString("accessibilityFrame")
   guard row.object.responds(to: selector) else { throw failure("Missing Mail row frame") }
   typealias FrameGetter = @convention(c) (AnyObject, Selector) -> CGRect

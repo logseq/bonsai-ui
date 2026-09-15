@@ -41,7 +41,7 @@ import Testing
       rootView: NativeNodeView(node: try #require(tree.root)) { node in
         #expect(node === button)
         actions += 1
-      }.modifier(NativeLayoutObserver(tree: tree)))
+      })
     let window = NSWindow(
       contentRect: CGRect(x: 0, y: 0, width: 400, height: 160),
       styleMask: [.titled], backing: .buffered, defer: false)
@@ -69,7 +69,7 @@ import Testing
     #expect(actions == 1)
     try space(window, modifiers: .command)
     #expect(actions == 1)
-    #expect(button.layoutFrame != nil)
+    #expect(focus.hasFocus)
 
     #expect(window.makeFirstResponder(field))
     try await settleAccessibility(host)

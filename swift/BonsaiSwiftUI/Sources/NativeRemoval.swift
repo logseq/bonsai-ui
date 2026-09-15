@@ -26,12 +26,19 @@ struct RenderRemoval: Equatable, Sendable {
 @MainActor @Observable final class RemovalController: NativePanTarget {
   private(set) var properties: RenderRemoval
   private(set) var value = AnimatablePair(1.0, 0.0)
-  private(set) var offset = 0.0
+  private(set) var offset = 0.0 {
+    didSet { if (oldValue == 0) != (offset == 0) { onPresentationChange?() } }
+  }
   private(set) var generation: UInt64 = 0
   private(set) var dispatching = false
-  private var waiting = false
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  private var waiting = false {
+    didSet { if oldValue != waiting { onPresentationChange?() } }
+  }
   private var consumed: Int64?
-  private var dragging = false
+  private var dragging = false {
+    didSet { if oldValue != dragging { onPresentationChange?() } }
+  }
   private var size = CGSize.zero
   private var rtl = false
   private var reducedMotion = false

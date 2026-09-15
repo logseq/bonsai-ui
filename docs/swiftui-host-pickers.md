@@ -36,7 +36,7 @@ is blocked and notification timeout accounting pauses while a dialog is open.
 Presenter/request UUIDs fence retained actions across cancellation and restart.
 Draft bindings also reject obsolete field snapshots within one request.
 
-## BSFR 4.0 payloads
+## BSFR 5.0 payloads
 
 Request headers retain their existing request IDs and kind IDs. All integer
 fields use the protocol's little-endian encoding.

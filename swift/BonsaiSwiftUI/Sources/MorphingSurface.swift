@@ -18,6 +18,9 @@ struct RenderMorphingSurface: Equatable, Sendable {
 final class MorphingSurfaceController {
   private(set) var progress: Double
   private(set) var animationID: UInt64 = 0
+  private(set) var displayedExtent: Double?
+  @ObservationIgnored private var targetExtent: Double?
+  @ObservationIgnored private var extentTransition: Transition?
   @ObservationIgnored private var properties: RenderMorphingSurface
   @ObservationIgnored private var mounted = 0
   @ObservationIgnored private var active = true
@@ -63,6 +66,30 @@ final class MorphingSurfaceController {
     transition = Transition(from: from, target: target, started: time, duration: duration)
     animationID &+= 1
   }
+  func measureExtent(_ extent: Double, coordinated: Bool) {
+    guard extent.isFinite, extent >= 0 else { return }
+    if coordinated {
+      targetExtent = nil
+      displayedExtent = nil
+      extentTransition = nil
+      return
+    }
+    guard targetExtent != extent else { return }
+    targetExtent = extent
+    let duration =
+      Double(
+        properties.expanded
+          ? properties.expandMilliseconds : properties.collapseMilliseconds) / 1000
+    guard let from = displayedExtent, mounted > 0, active, !reducedMotion,
+      duration > 0, !disposed
+    else {
+      displayedExtent = extent
+      extentTransition = nil
+      return
+    }
+    extentTransition = Transition(from: from, target: extent, started: now, duration: duration)
+    animationID &+= 1
+  }
   func attach() { mounted += 1 }
   func detach() {
     mounted = max(0, mounted - 1)
@@ -81,88 +108,93 @@ final class MorphingSurfaceController {
     finish()
   }
   private func finish() {
-    if transition != nil { animationID &+= 1 }
+    if transition != nil || extentTransition != nil { animationID &+= 1 }
     transition = nil
+    extentTransition = nil
+    displayedExtent = targetExtent
     progress = properties.expanded ? 1 : 0
   }
   func runAnimation(_ id: UInt64) async {
-    while !Task.isCancelled, !disposed, id == animationID, let transition {
+    while !Task.isCancelled, !disposed, id == animationID {
       let time = now
-      progress = transition.sample(time)
-      if time >= transition.started + transition.duration {
-        finish()
-        return
+      if let transition {
+        progress = transition.sample(time)
+        if time >= transition.started + transition.duration {
+          progress = properties.expanded ? 1 : 0
+          self.transition = nil
+        }
       }
+      if let extentTransition {
+        displayedExtent = extentTransition.sample(time)
+        if time >= extentTransition.started + extentTransition.duration {
+          displayedExtent = targetExtent
+          self.extentTransition = nil
+        }
+      }
+      guard transition != nil || extentTransition != nil else { return }
       do { try await Task.sleep(for: .milliseconds(16)) } catch { return }
     }
   }
 }
 
-private struct MorphingSurfaceLayout: Layout {
-  let progress: Double
-  func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-    let width = proposal.width.flatMap { $0.isFinite ? max(0, $0) : nil }
-    let sizes = subviews.map { $0.sizeThatFits(ProposedViewSize(width: width, height: nil)) }
-    let intrinsicHeight = sizes[0].height + (sizes[1].height - sizes[0].height) * progress
-    return CGSize(
-      width: width ?? sizes.map(\.width).max() ?? 0,
-      height: proposal.height.flatMap { $0.isFinite ? max(0, $0) : nil } ?? intrinsicHeight)
-  }
-  func placeSubviews(
-    in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()
-  ) {
-    let expandedOpacity = min(1, max(0, (progress - 0.2) / 0.5))
-    for (index, child) in subviews.enumerated() {
-      child.place(
-        at: CGPoint(x: bounds.minX, y: bounds.minY + (index == 1 ? 8 * (1 - expandedOpacity) : 0)),
-        anchor: .topLeading, proposal: ProposedViewSize(width: bounds.width, height: nil))
-    }
+private struct CollectionCoordinatesExtent: EnvironmentKey {
+  static let defaultValue = false
+}
+
+extension EnvironmentValues {
+  var collectionCoordinatesExtent: Bool {
+    get { self[CollectionCoordinatesExtent.self] }
+    set { self[CollectionCoordinatesExtent.self] = newValue }
   }
 }
 
 struct NativeMorphingSurface: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(\.scenePhase) private var scenePhase
+  @Environment(\.collectionCoordinatesExtent) private var coordinated
   let node: RenderNodeState
   let properties: RenderMorphingSurface
   let controller: MorphingSurfaceController
   let activate: @MainActor (RenderNodeState) -> Void
 
-  var body: some View {
+  private var styledContent: some View {
     let progress = controller.progress
     let corner = 16 * min(1, progress * 2)
-    MorphingSurfaceLayout(progress: progress) {
-      // EmptyView contributes no Layout subview; each branch needs a stable slot.
-      ZStack(alignment: .topLeading) {
-        NativeNodeView(node: node.children[0], activate: activate)
-      }
-      .opacity(max(0, 1 - progress / 0.35))
-      .allowsHitTesting(!properties.expanded).disabled(properties.expanded)
-      .accessibilityHidden(properties.expanded)
-      ZStack(alignment: .topLeading) {
-        NativeNodeView(node: node.children[1], activate: activate)
-      }
-      .opacity(min(1, max(0, (progress - 0.2) / 0.5)))
-      .allowsHitTesting(properties.expanded).disabled(!properties.expanded)
-      .accessibilityHidden(!properties.expanded)
+    return ZStack(alignment: .topLeading) {
+      NativeNodeView(node: node.children[0], activate: activate)
     }
     .background(.background, in: RoundedRectangle(cornerRadius: corner))
     .clipShape(RoundedRectangle(cornerRadius: corner))
     .shadow(color: .black.opacity(0.15 * progress), radius: 3 * progress, y: progress)
-    .padding(.horizontal, 8 * progress).padding(.vertical, 6 * progress)
-    .onAppear {
-      controller.setReducedMotion(reduceMotion)
-      controller.setAnimationsActive(scenePhase == .active && node.progressAnimationsActive)
-      controller.attach()
-    }
-    .onDisappear { controller.detach() }
-    .onChange(of: reduceMotion) { _, value in controller.setReducedMotion(value) }
-    .onChange(of: scenePhase) { _, value in
-      controller.setAnimationsActive(value == .active && node.progressAnimationsActive)
-    }
-    .onChange(of: node.progressAnimationsActive) { _, value in
-      controller.setAnimationsActive(value && scenePhase == .active)
-    }
-    .task(id: controller.animationID) { await controller.runAnimation(controller.animationID) }
+    .padding(.horizontal, properties.expanded ? 8 : 0)
+    .padding(.vertical, properties.expanded ? 6 : 0)
+    .fixedSize(horizontal: false, vertical: true)
+  }
+
+  var body: some View {
+    styledContent
+      .onGeometryChange(for: Double.self) { proxy in
+        Double(proxy.size.height)
+      } action: { extent in
+        controller.measureExtent(extent, coordinated: coordinated)
+      }
+      .frame(
+        height: coordinated ? nil : controller.displayedExtent.map { CGFloat($0) }, alignment: .top
+      )
+      .clipped()
+      .onAppear {
+        controller.setReducedMotion(reduceMotion)
+        controller.setAnimationsActive(scenePhase == .active && node.progressAnimationsActive)
+        controller.attach()
+      }
+      .onDisappear { controller.detach() }
+      .onChange(of: reduceMotion) { _, value in controller.setReducedMotion(value) }
+      .onChange(of: scenePhase) { _, value in
+        controller.setAnimationsActive(value == .active && node.progressAnimationsActive)
+      }
+      .onChange(of: node.progressAnimationsActive) { _, value in
+        controller.setAnimationsActive(value && scenePhase == .active)
+      }
+      .task(id: controller.animationID) { await controller.runAnimation(controller.animationID) }
   }
 }

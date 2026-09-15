@@ -2029,16 +2029,20 @@ let morph_component handlers graph =
         ; Ui.View.Morphing_surface.create
             ~key:(Ui.Key.string "gallery-morph")
             ~expanded:is_expanded
-            ~compact_content:
-              (Ui.View.column
-                 [ Ui.View.text (Printf.sprintf "Compact count: %d" compact_count)
-                 ; button "Increment compact" compact
-                 ])
-            ~expanded_content:
-              (Ui.View.column
-                 [ Ui.View.text (Printf.sprintf "Expanded count: %d" expanded_count)
-                 ; button "Increment expanded" expanded
-                 ])
+            ~content:
+              (if is_expanded
+               then
+                 Ui.View.column
+                   ~key:(Ui.Key.string "expanded-content")
+                   [ Ui.View.text (Printf.sprintf "Expanded count: %d" expanded_count)
+                   ; button "Increment expanded" expanded
+                   ]
+               else
+                 Ui.View.column
+                   ~key:(Ui.Key.string "compact-content")
+                   [ Ui.View.text (Printf.sprintf "Compact count: %d" compact_count)
+                   ; button "Increment compact" compact
+                   ])
             ()
         ])
 ;;

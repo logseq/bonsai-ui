@@ -181,7 +181,7 @@ extension NativeRuntimeTests {
       let host = NSHostingView(
         rootView: NativeNodeView(
           node: try #require(session.tree.root), activate: { session.activate($0) }
-        ).modifier(NativeLayoutObserver(tree: session.tree)))
+        ))
       let window = NSWindow(
         contentRect: CGRect(x: 0, y: 0, width: 400, height: 240), styleMask: [.titled],
         backing: .buffered, defer: false)
@@ -200,7 +200,7 @@ extension NativeRuntimeTests {
       }
       #expect(fields.count == 3)
       for node in session.tree.nodes.values where node.fieldController != nil {
-        let frame = try #require(node.layoutFrame)
+        let frame = try #require(node.fieldController?.field.frame)
         #expect(frame.width > 0 && frame.height > 0)
       }
       func history(_ title: String) -> String? {

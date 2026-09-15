@@ -22,8 +22,7 @@ final class RenderNodeState: Identifiable, Equatable {
   let emit: (NativeEventPayload) -> Bool
   var accessibilityHidden = false
   var progressAnimationsActive = true
-  @ObservationIgnored var layoutOwner: UUID?
-  @ObservationIgnored var layoutFrame: CGRect?
+  let layoutTarget: NodeLayoutTarget
   let imageResource: ImageResource?
   let textController: NativeTextController?
   let fieldController: NativeTextFieldController?
@@ -53,6 +52,17 @@ final class RenderNodeState: Identifiable, Equatable {
   let keyboardController: KeyboardListenerController?
   var nativeView: NativeViewInstance?
 
+  func setPresentationChange(_ changed: (() -> Void)?) {
+    nativeView?.onPresentationChange = changed
+    presentationController?.onPresentationChange = changed
+    booleanControlController?.onPresentationChange = changed
+    tabsController?.onPresentationChange = changed
+    navigationController?.onPresentationChange = changed
+    tableController?.onPresentationChange = changed
+    removalController?.onPresentationChange = changed
+    swipeController?.onPresentationChange = changed
+  }
+
   init(
     epoch: UInt64, node: RenderNode, imageLoader: any ImageLoading,
     imageClock: @escaping @Sendable () -> ContinuousClock.Instant,
@@ -61,6 +71,7 @@ final class RenderNodeState: Identifiable, Equatable {
     failed: @escaping (any Error) -> Void
   ) {
     id = RenderIdentity(epoch: epoch, node: node.id)
+    layoutTarget = NodeLayoutTarget(identity: id)
     let identity = RenderIdentity(epoch: epoch, node: node.id)
     emit = { input(identity, $0) }
     kind = node.kind
@@ -231,6 +242,18 @@ final class RenderTree {
   private(set) var nodes: [UInt64: RenderNodeState] = [:]
   private(set) var nativeViewNodes: [RenderNodeState] = []
   private(set) var presentationNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var fieldNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var collectionNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var focusAndGestureNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var scrollNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var hoverNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var opacityNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var animationNodes: [RenderNodeState] = []
+  @ObservationIgnored var onPresentationChange: (() -> Void)?
+  @ObservationIgnored private var committing = false
+  private func presentationChanged() {
+    if !committing { onPresentationChange?() }
+  }
   @ObservationIgnored private(set) var parents: [UInt64: UInt64] = [:]
   private(set) var epoch: UInt64 = 0
   private(set) var revision: UInt64 = 0
@@ -300,6 +323,11 @@ final class RenderTree {
   }
 
   func commit(_ store: NodeStore) {
+    committing = true
+    defer {
+      committing = false
+      onPresentationChange?()
+    }
     var next: [UInt64: RenderNodeState] = [:]
     for (id, node) in store.nodes {
       if epoch == store.epoch, let existing = nodes[id], existing.kind == node.kind {
@@ -391,6 +419,7 @@ final class RenderTree {
       for child in children { parents[child.id.node] = id }
     }
     for state in next.values {
+      state.layoutTarget.contentChanged()
       if case .keyboardListener(let properties) = state.properties {
         state.keyboardController?.synchronize(properties, handler: state.bindings[EventTagId.key])
       }
@@ -454,10 +483,12 @@ final class RenderTree {
       if let controller = state.collectionController, let window = state.children.first,
         case .collectionWindow(let properties) = window.properties
       {
-        controller.synchronize(properties)
+        controller.synchronize(properties, rows: window.children.map(\.id))
       }
     }
     for (id, old) in nodes where next[id] !== old {
+      old.setPresentationChange(nil)
+      old.layoutTarget.dispose()
       old.nativeView?.dispose()
       old.imageResource?.cancel()
       old.textController?.dispose()
@@ -488,8 +519,15 @@ final class RenderTree {
     }
     preparedViews.removeAll()
     nodes = next
-    nativeViewNodes = next.values.filter { $0.nativeView != nil }
-    presentationNodes = next.values.filter { $0.presentationController != nil }
+    nativeViewNodes = []
+    presentationNodes = []
+    fieldNodes = []
+    collectionNodes = []
+    focusAndGestureNodes = []
+    scrollNodes = []
+    hoverNodes = []
+    opacityNodes = []
+    animationNodes = []
     epoch = store.epoch
     revision = store.revision
     let newRoot = store.root.flatMap { next[$0] }
@@ -509,12 +547,36 @@ final class RenderTree {
             controller.region(subtree: start..<order, order: start, blocksBehind: blocksBehind))
         }
       } else {
+        node.setPresentationChange { [weak self] in self?.presentationChanged() }
+        if node.nativeView != nil { nativeViewNodes.append(node) }
+        if node.presentationController != nil { presentationNodes.append(node) }
+        if node.fieldController != nil || node.textController != nil { fieldNodes.append(node) }
+        if node.collectionController != nil { collectionNodes.append(node) }
+        if node.focusController != nil || node.keyboardController != nil
+          || node.gestureController != nil
+        {
+          focusAndGestureNodes.append(node)
+        }
+        if node.removalController != nil || node.refreshController != nil
+          || node.scrollCommand != nil || node.scrollObserver != nil
+        {
+          scrollNodes.append(node)
+        }
+        if node.hoverController != nil { hoverNodes.append(node) }
+        if node.opacityController != nil { opacityNodes.append(node) }
+        if node.collectionController != nil || node.morphingSurfaceController != nil
+          || node.kind == NodeKindId.progress
+        {
+          animationNodes.append(node)
+        }
         starts[node.id] = order
         order += 1
         pending.append((node, true))
         for child in node.children.reversed() { pending.append((child, false)) }
       }
     }
+    fieldNodes.sort { $0.id.node < $1.id.node }
+    collectionNodes.sort { $0.id.node < $1.id.node }
     hoverRouter.replace(regions)
     keyboardHost.replace(next.values.compactMap(\.keyboardController), parents: parents)
   }
@@ -525,10 +587,7 @@ struct NativeNodeView: View {
   let activate: @MainActor (RenderNodeState) -> Void
 
   var body: some View {
-    identifiedContent.transformAnchorPreference(key: NodeLayoutAnchors.self, value: .bounds) {
-      values, anchor in
-      values[node.id] = anchor
-    }
+    identifiedContent.modifier(NativeLayoutPublisher(target: node.layoutTarget))
   }
 
   private var identifiedContent: AnyView {

@@ -32,6 +32,10 @@ consumed at most once.
 
 This gives expected `O(old_count + new_count)` matching. Before allocation or
 matching, candidate sibling keys are validated in deterministic preorder.
+An identical immutable root from an existing mounted tree reuses that tree's
+successful validation, so unchanged reconciliation does not traverse its nodes.
+Revision and handler-base checks still run; changed candidates and full snapshots
+still validate their complete tree before allocation.
 Duplicate sibling keys are application/widget-tree invariant violations and
 produce a structured `Duplicate_key` error in every build mode. Mounted trees
 can only originate from a successful validation, so an existing mounted tree

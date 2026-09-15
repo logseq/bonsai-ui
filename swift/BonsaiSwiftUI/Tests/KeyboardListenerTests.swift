@@ -85,7 +85,7 @@ extension NativeRuntimeTests {
       let host = NSHostingView(
         rootView: NativeNodeView(
           node: try #require(session.tree.root), activate: { session.activate($0) }
-        ).modifier(NativeLayoutObserver(tree: session.tree)))
+        ))
       let window = NSWindow(
         contentRect: CGRect(x: 0, y: 0, width: 400, height: 240), styleMask: [.titled],
         backing: .buffered, defer: false)
@@ -131,7 +131,7 @@ extension NativeRuntimeTests {
       #expect(try history() == expected)
       #expect(editor.string == (handled ? "Draft" : "aaa"))
       for node in session.tree.nodes.values where node.fieldController != nil {
-        #expect(try #require(node.layoutFrame).height > 0)
+        #expect(try #require(node.fieldController?.field.frame).height > 0)
       }
       #expect(window.makeFirstResponder(fields[1]))
       try await settleAccessibility(host)
