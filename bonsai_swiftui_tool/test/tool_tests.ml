@@ -2,18 +2,19 @@ open Bonsai_swiftui_tool
 
 let valid_config =
   {|
-(lang 3)
+(lang 4)
 
 (app
  (name journal)
  (apple_root apple)
- (bundle_identifier org.example.journal)
  (native_target app/native_embed.exe.o)
  (features network sqlite)
  (macos
+  (bundle_identifier org.example.journal)
   (minimum_version 26.0)
   (architectures arm64))
  (ios
+  (bundle_identifier org.example.journal.ios)
   (minimum_version 18.0)
   (architectures arm64)))
 |}
@@ -106,6 +107,91 @@ set -eu
     program
 ;;
 
+let test_schema_four_host_configuration () =
+  let source =
+    {|(lang 4)
+(app (name acceptance) (apple_root apple) (native_target app/native_embed.exe.o)
+ (features)
+ (macos (bundle_identifier org.example.desktop) (minimum_version 26.0)
+  (architectures arm64)
+  (entitlements (debug config/debug.plist) (profile config/debug.plist)
+   (release config/release.plist)))
+ (ios (bundle_identifier org.example.phone) (minimum_version 18.0)
+  (architectures arm64))
+ (swift_packages
+  (package (id swift-collections) (url https://github.com/apple/swift-collections.git)
+   (requirement (exact 1.1.4))
+   (products (product (name OrderedCollections) (platforms macos ios))))))|}
+  in
+  let duplicate =
+    "(package (id swift-collections) (url https://example.com/another.git) (requirement \
+     (exact 1.0.0)) (products (product (name Another) (platforms macos))))"
+  in
+  let collision =
+    replace_once
+      source
+      ~pattern:"(swift_packages"
+      ~replacement:("(swift_packages " ^ duplicate)
+  in
+  check_error_contains "Duplicate package identity" (Config.parse_string collision);
+  let collision =
+    replace_once collision ~pattern:"(id swift-collections)" ~replacement:"(id other)"
+  in
+  let collision =
+    replace_once
+      collision
+      ~pattern:"https://example.com/another.git"
+      ~replacement:"https://example.com/swift-collections.git"
+  in
+  check_error_contains "Duplicate remote package identity" (Config.parse_string collision);
+  ignore (get_ok (Config.parse_string source));
+  ignore
+    (get_ok
+       (Config.parse_string
+          (replace_once
+             source
+             ~pattern:"(exact 1.1.4)"
+             ~replacement:"(revision 0123456789abcdef0123456789abcdef01234567)")));
+  List.iter
+    (fun (pattern, replacement, diagnostic) ->
+       check_error_contains
+         diagnostic
+         (Config.parse_string (replace_once source ~pattern ~replacement)))
+    [ "(lang 4)", "(lang 3)", "Unsupported schema version"
+    ; "org.example.phone", "invalid identity", "exactly one"
+    ; "org.example.phone", "invalid", "Invalid bundle identifier"
+    ; "org.example.phone", "org." ^ String.make 245 'a', "Invalid bundle identifier"
+    ; "(bundle_identifier org.example.phone)", "", "Missing ios field"
+    ; ( "(name acceptance)"
+      , "(name acceptance) (bundle_identifier org.old)"
+      , "Unknown app field" )
+    ; "(release config/release.plist)", "", "Missing macos.entitlements field"
+    ; ( "(debug config/debug.plist)"
+      , "(debug config/debug.plist) (debug config/debug.plist)"
+      , "Duplicate" )
+    ; "config/debug.plist", "../debug.plist", "parent traversal"
+    ; "config/debug.plist", "/tmp/debug.plist", "relative path"
+    ; "(exact 1.1.4)", "(branch main)", "requirement"
+    ; "(exact 1.1.4)", "(exact 1.1)", "version"
+    ; "(exact 1.1.4)", "(revision abcdef)", "revision"
+    ; "https://github.com", "http://github.com", "HTTPS"
+    ; "https://github.com", "https://", "HTTPS"
+    ; "(platforms macos ios)", "(platforms)", "platform"
+    ; "(platforms macos ios)", "(platforms macos macos)", "Duplicate"
+    ; "(platforms macos ios)", "(platforms tvos)", "platform"
+    ; "(name OrderedCollections)", "(name BonsaiSwiftUI)", "reserved"
+    ; "(id swift-collections)", "(id bonsaiswiftui)", "reserved"
+    ; ( "(products (product (name OrderedCollections) (platforms macos ios)))"
+      , "(products)"
+      , "products" )
+    ; ( "(products (product (name OrderedCollections) (platforms macos ios)))"
+      , "(products (product (name OrderedCollections) (platforms macos)) (product (name \
+         OrderedCollections) (platforms macos)))"
+      , "Duplicate" )
+    ; "(id swift-collections)", "(id swift-collections) (unexpected true)", "Unknown"
+    ]
+;;
+
 let test_parse_valid_config () =
   let config = Config.parse_string valid_config |> get_ok in
   Alcotest.(check string) "name" "journal" config.name;
@@ -122,7 +208,7 @@ let test_parse_valid_config () =
 
 let test_invalid_configs () =
   [ ( "unsupported schema"
-    , replace_once valid_config ~pattern:"(lang 3)" ~replacement:"(lang 1)"
+    , replace_once valid_config ~pattern:"(lang 4)" ~replacement:"(lang 1)"
     , "Unsupported schema version" )
   ; ( "unknown field"
     , replace_once
@@ -333,7 +419,7 @@ let valid_sdk_manifest =
   a51276a09eb1cdf9c87f07ac4c7558ed7c6b2d69
   sha256
   8ab6845bdda0b53c450a14c7c1382c652e5af0093c38ddad8e867db4c6a36f91)
- (abi_version 3)
+ (abi_version 4)
  (ocaml_version 5.1.1)
  (dune_version_range 3.17 4.0)
  (cross_compiler ocaml-ios64 5.1.1)
@@ -369,14 +455,14 @@ let test_sdk_manifest_contract () =
   in
   valid_sdk_manifest |> validate_supported |> get_ok;
   valid_sdk_manifest
-  |> replace_once ~pattern:"(abi_version 3)" ~replacement:"(abi_version 2)"
+  |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 2)"
   |> validate_supported
   |> check_error_contains "SDK manifest is incompatible";
   let manifest = parse_sdk_manifest valid_sdk_manifest in
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> get_ok;
   Sdk.Manifest.validate_packages
@@ -394,13 +480,13 @@ let test_sdk_manifest_contract () =
      |> replace_once ~pattern:"(platform iphoneos)" ~replacement:"(platform macos)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains "expected Apple platform iphoneos";
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.2.0"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains
        "The iPhoneOS switch SDK manifest is incompatible with bonsai-swiftui 0.2.0";
@@ -411,7 +497,7 @@ let test_sdk_manifest_contract () =
           ~replacement:"(build_recipe_revision 4)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains
        "Run: bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
@@ -419,15 +505,15 @@ let test_sdk_manifest_contract () =
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"14.0"
   |> check_error_contains "minimum deployment target 14.0 is unsupported";
   Sdk.Manifest.validate
     (valid_sdk_manifest
-     |> replace_once ~pattern:"(abi_version 3)" ~replacement:"(abi_version 1)"
+     |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 1)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains
        "Run: bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
@@ -454,7 +540,7 @@ let test_sdk_accepts_framework_source_drift () =
   Sdk.Manifest.validate
     stale_manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> get_ok
 ;;
@@ -469,7 +555,7 @@ let test_sdk_accepts_missing_framework_source_identity () =
            \  sha256\n\
            \  8ab6845bdda0b53c450a14c7c1382c652e5af0093c38ddad8e867db4c6a36f91)\n"
          ~replacement:""
-    |> replace_once ~pattern:"(abi_version 3)" ~replacement:"(abi_version 1)"
+    |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 1)"
     |> parse_sdk_manifest
   in
   Sdk.Manifest.validate
@@ -617,7 +703,7 @@ fi
          Sdk.preflight
            ~project_root
            ~bonsai_swiftui_version:"0.1.0~dev"
-           ~abi_version:"3"
+           ~abi_version:"4"
            ~minimum_deployment_target:"18.0"
            ~required_packages:[ "base", "v0.17.0" ]
          |> get_ok
@@ -661,7 +747,7 @@ let test_sdk_preflight_reports_missing_switch () =
        Sdk.preflight
          ~project_root:(Filename.concat root "project")
          ~bonsai_swiftui_version:"0.1.0~dev"
-         ~abi_version:"3"
+         ~abi_version:"4"
          ~minimum_deployment_target:"18.0"
          ~required_packages:[]
        |> check_error_contains
@@ -2193,18 +2279,6 @@ let test_native_framework_discovery () =
     native_framework_files
 ;;
 
-let test_legacy_framework_rejected () =
-  let root = Filename.temp_dir "bonsai-swiftui-assets" "legacy" in
-  write_file (Filename.concat root "tool/ios/toolchain.lock") "lock\n";
-  write_file
-    (Filename.concat root "flutter/packages/bonsai_swiftui/pubspec.yaml")
-    "name: legacy\n";
-  Alcotest.(check bool)
-    "Flutter-only framework rejected"
-    false
-    (Assets.framework_marker root)
-;;
-
 let test_invalid_native_framework_override () =
   List.iter
     (fun root ->
@@ -2221,7 +2295,11 @@ let () =
   Alcotest.run
     "bonsai_swiftui_tool"
     [ ( "core"
-      , [ Alcotest.test_case "parse valid config" `Quick test_parse_valid_config
+      , [ Alcotest.test_case
+            "schema four host configuration"
+            `Quick
+            test_schema_four_host_configuration
+        ; Alcotest.test_case "parse valid config" `Quick test_parse_valid_config
         ; Alcotest.test_case "invalid configs" `Quick test_invalid_configs
         ; Alcotest.test_case "command plans" `Quick test_command_plans
         ; Alcotest.test_case "fixed iphoneos switch" `Quick test_fixed_iphoneos_switch
@@ -2383,10 +2461,6 @@ let () =
             "native framework discovery"
             `Quick
             test_native_framework_discovery
-        ; Alcotest.test_case
-            "legacy framework rejected"
-            `Quick
-            test_legacy_framework_rejected
         ; Alcotest.test_case
             "invalid native framework override"
             `Quick

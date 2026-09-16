@@ -45,7 +45,9 @@ Create an application in an empty directory:
 ```sh
 mkdir journal
 cd journal
-bonsai-swiftui init --name journal --bundle-identifier org.example.journal
+bonsai-swiftui init --name journal \
+  --macos-bundle-identifier org.example.journal \
+  --ios-bundle-identifier org.example.journal.ios
 bonsai-swiftui build macos --profile debug
 bonsai-swiftui run macos --profile debug
 ```
@@ -78,6 +80,10 @@ archive outside the framework checkout. It is not available from the default
 opam repository. See [the CLI guide](swiftui-cli.md) for signing and device launch.
 
 ## Maintainer release packaging
+
+The canonical source repository is
+[`logseq/bonsai-ui`](https://github.com/logseq/bonsai-ui). Package homepage,
+issue tracker, development repository and commit archive URLs use this location.
 
 From the framework worktree:
 
@@ -124,6 +130,13 @@ as a published commit. Invalid archives are rejected before replacing output.
 The default generation mode still uses the immutable commit in
 `tool/ios/sdk_repository.lock`.
 
+The repository-location update generated framework SDK snapshot `0.1.0~dev.41`
+from the local archive at
+`~/.local/share/bonsai-swiftui/releases/2026-09-16-logseq-repository/bonsai-swiftui-0.1.0~dev.tar.gz`,
+with SHA-256 `04b2a6732f5abd66520eef0502683c994b5670cf6cab97fb6e2cc7146c50d44b`.
+This refreshes package links and generated checksums. The subsequent user-requested
+local package update installed snapshot 41; no public release was published.
+
 After generation, package and install the CLI again so its installed resources
 contain the matching SDK repository. Keep the source archive at its immutable
 local location. For distribution to other machines, a published commit/release
@@ -168,8 +181,7 @@ The subsequent local installation on 2026-09-16 installed host packages
 `bonsai_swiftui_ios_sdk.0.1.0~dev.40` with runtime SDK `0.1.0~dev.7` into
 `bonsai-swiftui-ios`. The target is physical iOS 18 arm64 with OCaml 5.1.1.
 The host switch was subsequently renamed to `bonsai-ui`, retaining all 279
-installed package versions. The previous host switch and the old Flutter iOS
-switch have been removed. Refresh existing shells with:
+installed package versions. The previous switches have been removed. Refresh existing shells with:
 
 ```sh
 eval "$(opam env --switch=bonsai-ui --set-switch)"
@@ -189,6 +201,22 @@ Both are installed from immutable local releases under
 `~/.local/share/bonsai-swiftui/releases/`; application builds use the opam prefix.
 Neither archive constitutes a public release.
 
+### Repository-location package update
+
+The later update on 2026-09-16 reinstalled `bonsai_swiftui.0.1.0~dev` and
+`bonsai_swiftui_tool.0.1.0~dev` in `bonsai-ui` from
+`~/.local/share/bonsai-swiftui/releases/2026-09-16-logseq-installed/`.
+The archive SHA-256 is
+`1e4be4d52491d889ff2f848dca358eddfb6687e4ea36f5cbccd929fe0a389f5a`.
+The iOS switch also reinstalled its host UI library and upgraded the framework
+SDK to `0.1.0~dev.41`; the runtime remains `0.1.0~dev.7`.
+The installed framework, CLI and framework SDK metadata now point to
+`https://github.com/logseq/bonsai-ui`.
+
+Installed CLI toolchain verification and both installed-consumer tests pass
+(36.413 seconds), including the independent unsigned Release iOS App and Zarith
+linking. The active switch remains `bonsai-ui`.
+
 ## Framework development
 
 Only framework contributors running an uninstalled CLI need this setup:
@@ -202,3 +230,21 @@ export OCAMLPATH="$PWD/_build/install/default/lib${OCAMLPATH:+:$OCAMLPATH}"
 
 These paths belong to framework development and are not application installation
 instructions.
+
+## Schema-4 host configuration release
+
+The local release at
+`~/.local/share/bonsai-swiftui/releases/2026-09-16-host-configuration-final-01/`
+installs schema-4 platform identities, profile entitlement inputs and locked
+remote Swift package products. All three host packages at `0.1.0~dev` were
+explicitly reinstalled in `bonsai-ui` from archive SHA-256
+`dbce93fc108e052328dc0b94576930a3c1caceb1d60b84b05e19382f9f1161fc`.
+
+Framework SDK `0.1.0~dev.42` in `bonsai-swiftui-ios` identifies source archive
+`2eaa76457fa3638e68b772c26411052416e8d4871e45ae6c83ea3db7864aad88`; runtime SDK
+`0.1.0~dev.7` is unchanged. The source and final release hashes intentionally
+differ because the final CLI includes the newly generated SDK metadata.
+Installed `doctor`, SDK verification and the real consumer profile/platform
+matrix pass. See the [acceptance and provenance report](test-reports/2026-09-16-swiftui-host-configuration/README.md)
+for recorded package checksums, remote transitive pins and signing/device limits.
+This is a local immutable release, not public source or SDK publication.

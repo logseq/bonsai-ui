@@ -126,7 +126,8 @@ let app_dune =
 
 let configuration_text
       ~name
-      ~bundle_identifier
+      ~macos_bundle_identifier
+      ~ios_bundle_identifier
       ~features
       ~macos_minimum_version
       ~ios_minimum_version
@@ -142,25 +143,27 @@ let configuration_text
     | features -> " (features " ^ String.concat " " features ^ ")"
   in
   Printf.sprintf
-    {|(lang 3)
+    {|(lang 4)
 
 (app
  (name %s)
  (apple_root apple)
- (bundle_identifier %s)
  (native_target app/native_embed.exe.o)
 %s
  (macos
+  (bundle_identifier %s)
   (minimum_version %s)
   (architectures arm64))
  (ios
+  (bundle_identifier %s)
   (minimum_version %s)
   (architectures arm64)))
 |}
     name
-    bundle_identifier
     feature_line
+    macos_bundle_identifier
     macos_minimum_version
+    ios_bundle_identifier
     ios_minimum_version
 ;;
 

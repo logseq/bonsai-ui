@@ -31,7 +31,7 @@ int main(void) {
       bs_runtime_create(config, sizeof(config) - 1);
 
   assert(runtime != NULL);
-  assert(bs_abi_version_major() == 3);
+  assert(bs_abi_version_major() == 4);
   assert(bs_abi_version_minor() == 0);
   assert(bs_protocol_version_major() == 8);
   assert(bs_protocol_version_minor() == 0);

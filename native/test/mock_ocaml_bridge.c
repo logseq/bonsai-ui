@@ -203,3 +203,7 @@ uint64_t bs_mock_last_presentation_id(void) { return last_presentation_id; }
 uint64_t bs_mock_last_revision(void) { return last_revision; }
 int32_t bs_mock_last_rejection_reason(void) { return last_rejection_reason; }
 uint64_t bs_mock_last_destroyed_handle(void) { return last_destroyed_handle; }
+
+bs_status bs_ocaml_bridge_shutdown_pump(uint64_t handle, int64_t time, const uint8_t *input, size_t length, bs_ocaml_response *response) {
+  return bs_ocaml_bridge_pump(handle, time, input, length, response);
+}

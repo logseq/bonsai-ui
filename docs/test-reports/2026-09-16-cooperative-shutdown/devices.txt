@@ -1,0 +1,3 @@
+Name       Hostname                     Identifier                             State         Model                 
+--------   --------------------------   ------------------------------------   -----------   ----------------------
+c的iPhone   cdeiPhone.coredevice.local   BCB5141F-CC35-5D7F-9979-2CA8A37D53FE   unavailable   iPhone 13 (iPhone14,5)

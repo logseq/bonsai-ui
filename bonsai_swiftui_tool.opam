@@ -9,9 +9,9 @@ SwiftUI applications with OCaml application logic and generated Xcode hosts.
 maintainer: "bonsai_swiftui contributors"
 authors: ["bonsai_swiftui contributors"]
 license: "MIT"
-homepage: "https://github.com/rcmerci/bonsai_flutter"
-bug-reports: "https://github.com/rcmerci/bonsai_flutter/issues"
-dev-repo: "git+https://github.com/rcmerci/bonsai_flutter.git"
+homepage: "https://github.com/logseq/bonsai-ui"
+bug-reports: "https://github.com/logseq/bonsai-ui/issues"
+dev-repo: "git+https://github.com/logseq/bonsai-ui.git"
 depends: [
   "ocaml" {= "5.1.1"}
   "dune" {>= "3.17"}

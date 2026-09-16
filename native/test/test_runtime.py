@@ -49,7 +49,7 @@ class NativeRuntimeTests(unittest.TestCase):
     def test_version_and_obsolete_exports(self):
         major = self.function("bs_abi_version_major", [], ctypes.c_uint16)
         minor = self.function("bs_abi_version_minor", [], ctypes.c_uint16)
-        self.assertEqual((major(), minor()), (3, 0))
+        self.assertEqual((major(), minor()), (4, 0))
         for name in ("bf_runtime_create", "bf_runtime_pump", "bf_abi_version_major"):
             self.assertIsNone(getattr(self.library, name, None), name)
 
@@ -92,6 +92,28 @@ class NativeRuntimeTests(unittest.TestCase):
         self.assertGreater(output.presentation_id, token)
         self.assertEqual(output.revision, revision)
         self.assertEqual(self.consume(runtime, output), b"")
+
+    def test_terminal_shutdown_retires_pending_token_without_presentation(self):
+        runtime = self.start()
+        shutdown = self.function("bs_runtime_shutdown_pump", [ctypes.c_void_p,
+            ctypes.c_int64, ctypes.c_char_p, ctypes.c_size_t, ctypes.POINTER(Output)], ctypes.c_int32)
+        output = Output()
+        self.assertEqual(self.pump(runtime, 1, None, 0, ctypes.byref(output)), 0)
+        token, revision = output.presentation_id, output.revision
+        self.consume(runtime, output)
+        self.assertEqual(shutdown(runtime, 2, None, 0, ctypes.byref(output)), 0)
+        self.assertEqual((output.presentation_id, output.revision), (0, 0))
+        self.assertEqual(self.consume(runtime, output), b"BSSD" + bytes(4))
+        self.assertNotEqual(self.present(runtime, token, revision, 3, ctypes.byref(output)), 0)
+        self.consume(runtime, output)
+        self.assertNotEqual(self.pump(runtime, 4, None, 0, ctypes.byref(output)), 0)
+        self.consume(runtime, output)
+        self.assertNotEqual(shutdown(runtime, 1, None, 0, ctypes.byref(output)), 0)
+        self.consume(runtime, output)
+        self.assertNotEqual(shutdown(runtime, 5, b"bad", 3, ctypes.byref(output)), 0)
+        self.consume(runtime, output)
+        self.assertEqual(shutdown(runtime, 6, None, 0, ctypes.byref(output)), 0)
+        self.assertEqual(self.consume(runtime, output), b"BSSD" + bytes(4))
 
     def test_rejected_frame_recovers_with_full_snapshot(self):
         runtime = self.start()

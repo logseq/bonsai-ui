@@ -1,0 +1,207 @@
+generator tests passed
+protocol tests passed
+ok - native navigation properties preserve identity and reject empty keys
+cross-language fixture tests passed
+text editing tests passed
+ok - SwiftUI button semantics
+ok - button is a typed core widget
+ok - initial mount is a full snapshot
+ok - physical equality emits no patch
+ok - unchanged reconciliation allocations do not scale with tree size
+ok - unchanged reconciliation preserves validation fences
+ok - one text change is one prop update
+ok - keyed reorder preserves identity
+ok - keyed insert and delete are incremental
+ok - virtual window shift preserves keyed overlap
+ok - virtual list duplicate item keys are rejected
+ok - kind replacement remounts
+ok - duplicate keys fail without consuming IDs
+ok - nested duplicate keys fail
+ok - existing duplicate key formatting
+ok - mixed siblings detect duplicates
+ok - single-child ancestor still validates nested duplicates
+ok - optimized key validation matches reference
+ok - mixed keyed and unkeyed children match by index
+ok - nested removal drops complete subtree
+ok - persistent handler frame derivation
+ok - handler deltas avoid full-tree collection
+ok - handler delta add replace remove and drop
+ok - handler change gets a new ID and one-revision grace
+ok - unchanged handler reuses ID
+ok - handler registry validates epoch, sequence, and binding
+ok - handler exception is structured
+ok - handler retirement is separate from presentation marking
+ok - node IDs are never reused
+ok - 10,000 keyed children reverse in linear shape
+ok - randomized patch invariant
+ok - layout, Material, and semantics widgets update incrementally
+ok - frame reconciles optional maximum transitions
+ok - linear progress indicator reconciles value and kind
+ok - text input props and typed edit are incremental
+ok - Native text field UTF-8 limit contract
+event dispatch tests passed
+PASS: cleared search rejects delayed edits
+PASS: initial document and light appearance
+PASS: templates search, empty, clear and native dismissal
+PASS: selection, close, and seed isolation
+PASS: independent disclosures retain identity
+PASS: editing, Unicode, reopening and fresh template
+PASS: themes, insertion and named mock actions
+Testing `network spike'.
+This run has ID `YP8NO2YK'.
+
+  [OK]          TLS            0   unknown CA is rejected.
+  [OK]          TLS            1   trusted certificate and hostname succeed.
+  [OK]          TLS            2   wrong hostname is rejected.
+  [OK]          HTTPS          0   httpun-eio consumes the TLS adapter.
+  [OK]          HTTPS          1   cancellation closes transport.
+  [OK]          WSS            0   httpun-ws consumes the TLS adapter.
+  [OK]          WSS            1   disconnect closes transport.
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/tool/network_spike/_build/_tests/network spike'.
+Test Successful in 0.047s. 7 tests run.
+Testing `network policy'.
+This run has ID `DD2NJJ0N'.
+
+  [OK]          URI             0   normalizes HTTPS.
+  [OK]          URI             1   supports WSS custom ports.
+  [OK]          URI             2   rejects unsafe URI forms.
+  [OK]          URI             3   enforces redirect policy.
+  [OK]          Bounds          0   enforces size limits.
+  [OK]          Bounds          1   truncates UTF-8 safely.
+  [OK]          Bounds          2   bounds the transcript.
+  [OK]          State           0   sanitizes stable errors.
+  [OK]          State           1   fences connection generations.
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/examples/network/test/_build/_tests/network policy'.
+Test Successful in 0.001s. 9 tests run.
+Testing `network TLS'.
+This run has ID `IBFH64GO'.
+
+  [OK]          Configuration          0   initializes RNG once.
+  [OK]          Configuration          1   classifies unknown CA.
+  [OK]          Configuration          2   classifies wrong hostname.
+  [OK]          Configuration          3   classifies expired certificates.
+  [OK]          Configuration          4   classifies peer alerts.
+  [OK]          Configuration          5   classifies premature EOF.
+  [OK]          Configuration          6   classifies protocol failures.
+  [OK]          Resources              0   delegates adapter capabilities.
+  [OK]          Resources              1   times out and closes transport.
+  [OK]          Resources              2   explicit close closes transport.
+  [OK]          Resources              3   cancellation closes transport.
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/examples/network/test/_build/_tests/network TLS'.
+Test Successful in 0.086s. 11 tests run.
+Testing `network service'.
+This run has ID `9EIYJ1I6'.
+
+  [OK]          HTTPS              0   routes results, cancels structurally, ...
+  [OK]          WebSocket          0   routes commands and push topics.
+  [OK]          WebSocket          1   shuts down once and suppresses late pu...
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/examples/network/test/_build/_tests/network service'.
+Test Successful in 0.004s. 3 tests run.
+Testing `network example'.
+This run has ID `ZV6FJ35S'.
+
+  [OK]          Configuration          0   renders the verified public smoke ...
+  [OK]          HTTPS                  0   renders initial state, success, ca...
+  [OK]          WebSocket              0   preserves revisions and bounds gen...
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/examples/network/test/_build/_tests/network example'.
+Test Successful in 0.017s. 3 tests run.
+Testing `network HTTP'.
+This run has ID `BTZXSQL6'.
+
+  [OK]          Success            0   formats GET and summarizes response.
+  [OK]          Success            1   handles an empty body.
+  [OK]          Success            2   handles informational responses.
+  [OK]          Success            3   bounds the preview.
+  [OK]          Limits             0   rejects oversized headers.
+  [OK]          Limits             1   rejects oversized bodies.
+  [OK]          Limits             2   rejects malformed and early EOF.
+  [OK]          Limits             3   follows only bounded secure redirects.
+  [OK]          Lifecycle          0   times out and closes.
+  [OK]          Lifecycle          1   cancels and closes.
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/examples/network/test/_build/_tests/network HTTP'.
+Test Successful in 0.148s. 10 tests run.
+Testing `network WebSocket'.
+This run has ID `WE2H3ZST'.
+
+  [OK]          Protocol           0   connects, echoes, disconnects, and rej...
+  [OK]          Protocol           1   reassembles fragments and answers ping.
+  [OK]          Protocol           2   classifies unsupported messages and ou...
+  [OK]          Protocol           3   rejects oversized incoming messages.
+  [OK]          Protocol           4   rejects invalid upgrade.
+  [OK]          Protocol           5   rejects commands promptly while connec...
+  [OK]          Lifecycle          0   classifies clean and abnormal close.
+  [OK]          Lifecycle          1   bounds queue and emits nothing after s...
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/examples/network/test/_build/_tests/network WebSocket'.
+Test Successful in 0.054s. 8 tests run.
+Testing `SwiftUI native build'.
+This run has ID `901OFWKJ'.
+
+  [OK]          native          0   direct object, profiles, incremental source.
+  [OK]          native          1   actual Counter staging without aliases.
+  [OK]          native          2   direct target validation.
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/bonsai_swiftui_tool/test/_build/_tests/SwiftUI native build'.
+Test Successful in 15.740s. 3 tests run.
+Testing `bonsai_swiftui_tool'.
+This run has ID `X2O5Q0KT'.
+
+  [OK]          core          0   parse valid config.
+  [OK]          core          1   invalid configs.
+  [OK]          core          2   command plans.
+  [OK]          core          3   fixed iphoneos switch.
+  [OK]          core          4   sdk manifest contract.
+  [OK]          core          5   sdk accepts framework source drift.
+  [OK]          core          6   sdk accepts missing framework source identity.
+  [OK]          core          7   sdk validates only reachable application lo...
+  [OK]          core          8   sdk manifest fingerprint is canonical.
+  [OK]          core          9   sdk preflight is read only.
+  [OK]          core         10   sdk preflight reports missing switch.
+  [OK]          core         11   toolchain show and verify are read only.
+  [OK]          core         12   toolchain remove uses only fixed switch.
+  [OK]          core         13   toolchain install uses locked repository an...
+  [OK]          core         14   toolchain install rejects existing switch a...
+  [OK]          core         15   feature validation.
+  [OK]          core         16   cache keys.
+  [OK]          core         17   scaffold preserves user source.
+  [OK]          core         18   scaffold adopts existing layout without def...
+  [OK]          core         19   scaffold adoption rejects conflicting config.
+  [OK]          core         20   scaffold generates and preserves applicatio...
+  [OK]          core         21   scaffold preserves native dune.
+  [OK]          core         22   project root discovery.
+  [OK]          core         23   project lock serializes processes.
+  [OK]          core         24   clean removes only selected platform.
+  [OK]          core         25   clean all does not follow symlinks.
+  [OK]          core         26   native builds use project local dune worksp...
+  [OK]          core         27   iphoneos build requires committed applicati...
+  [OK]          core         28   unchanged native build preserves outputs.
+  [OK]          core         29   ios app bundle paths.
+  [OK]          core         30   ios device command plans.
+  [OK]          core         31   artifact layout.
+  [OK]          core         32   macos artifact staging contract.
+  [OK]          core         33   macos network artifact embeds static gmp.
+  [OK]          core         34   dune closure follows local app.
+  [OK]          core         35   dune closure follows arbitrary local library.
+  [OK]          core         36   dune closure excludes local component roots.
+  [OK]          core         37   dune closure follows transitive local chain.
+  [OK]          core         38   dune closure ignores unreachable stanzas.
+  [OK]          core         39   dune closure combines direct and indirect e...
+  [OK]          core         40   dune closure keeps ppx only stanzas host only.
+  [OK]          core         41   dune closure accepts omitted dependency fre...
+  [OK]          core         42   dune closure ignores omitted leaf and keeps...
+  [OK]          core         43   dune closure accepts real dune omitted loca...
+  [OK]          core         44   dune closure accepts selected ios context.
+  [OK]          core         45   dune closure rejects invalid semantic output.
+  [OK]          core         46   dune closure output is deterministic.
+  [OK]          core         47   native framework discovery.
+  [OK]          core         48   legacy framework rejected.
+  [OK]          core         49   invalid native framework override.
+
+Full test results in `~/.codex/worktrees/cooperative-shutdown-20260916/bonsai-ui/_build/default/bonsai_swiftui_tool/test/_build/_tests/bonsai_swiftui_tool'.
+Test Successful in 30.744s. 50 tests run.

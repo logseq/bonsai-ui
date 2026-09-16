@@ -283,7 +283,13 @@ let verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_code
     capture ~project_root "plutil" [ "-extract"; minimum_key; "raw"; "-o"; "-"; plist ]
   in
   let* () =
-    if identifier = config.bundle_identifier && actual_minimum = minimum
+    if
+      (identifier
+       =
+       match target with
+       | Plan.Macos -> config.macos.bundle_identifier
+       | Plan.Iphoneos -> config.ios.bundle_identifier)
+      && actual_minimum = minimum
     then Ok ()
     else Error "Built application metadata does not match its configuration"
   in
@@ -309,6 +315,7 @@ let build_apple
       ~profile
       ~no_codesign
       ~development_team
+      ~signing_identity
       ~native_object
   =
   let target =
@@ -316,6 +323,7 @@ let build_apple
     | Plan.Macos_platform -> Plan.Macos
     | Plan.Ios_platform -> Plan.Iphoneos
   in
+  let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Locked in
   Lock.with_lock
     (Filename.concat project_root "_build/bonsai-swiftui/locks/apple.lock")
     (fun () ->
@@ -338,7 +346,8 @@ let build_apple
               ~platform
               ~profile
               ~no_codesign
-              ~development_team)
+              ~development_team
+              ~signing_identity)
        in
        verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_codesign)
 ;;
@@ -351,6 +360,7 @@ let run_apple
       ~profile
       ~device
       ~development_team
+      ~signing_identity
       ~native_object
       ~arguments
   =
@@ -366,6 +376,7 @@ let run_apple
         ~profile
         ~no_codesign:false
         ~development_team
+        ~signing_identity
         ~native_object
     in
     match platform with
@@ -379,7 +390,7 @@ let run_apple
         Plan.ios_device_launch
           ~project_root
           ~device
-          ~bundle_identifier:config.Config.bundle_identifier
+          ~bundle_identifier:config.Config.ios.bundle_identifier
       in
       Process_runner.run { command with arguments = command.arguments @ arguments }
     | Plan.Macos_platform ->
@@ -412,6 +423,7 @@ let exec
   match command with
   | [] -> Error "A command is required after --"
   | program :: arguments ->
+    let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Validate in
     Lock.with_lock
       (Filename.concat project_root "_build/bonsai-swiftui/locks/apple.lock")
       (fun () ->

@@ -29,6 +29,7 @@ public final class NativeRuntime: Sendable {
     var handle: OpaquePointer?
     var pending: (id: UInt64, revision: UInt64)?
     var lastTime: Int64 = 0
+    var draining = false
 
     func requireHandle() throws -> OpaquePointer {
       guard let handle else { throw NativeRuntimeError.disposed }
@@ -102,7 +103,7 @@ public final class NativeRuntime: Sendable {
     else { throw NativeRuntimeError.startupFailed }
     let runtime = NativeRuntime()
     try await runtime.perform { state in
-      guard bs_abi_version_major() == 3, bs_abi_version_minor() == 0,
+      guard bs_abi_version_major() == 4, bs_abi_version_minor() == 0,
         bs_protocol_version_major() == ProtocolVersion.protocolMajor,
         bs_protocol_version_minor() == ProtocolVersion.protocolMinor
       else { throw NativeRuntimeError.incompatibleVersion }
@@ -125,6 +126,7 @@ public final class NativeRuntime: Sendable {
   {
     try await perform { state in
       let handle = try state.requireHandle()
+      guard !state.draining else { throw NativeRuntimeError.disposed }
       guard state.pending == nil else { throw NativeRuntimeError.presentationPending }
       try state.validateClock(monotonicNanoseconds)
       var output = bs_output_buffer()
@@ -144,6 +146,31 @@ public final class NativeRuntime: Sendable {
           throw NativeRuntimeError.malformedOutput
         }
         state.pending = (result.presentationID, result.revision)
+      }
+      return result
+    }
+  }
+
+  func shutdownPump(monotonicNanoseconds: Int64, events: Data) async throws -> NativeOutput {
+    try await perform { state in
+      let handle = try state.requireHandle()
+      try state.validateClock(monotonicNanoseconds)
+      var output = bs_output_buffer()
+      let status = events.withUnsafeBytes {
+        bs_runtime_shutdown_pump(
+          handle, monotonicNanoseconds,
+          $0.bindMemory(to: UInt8.self).baseAddress, $0.count, &output)
+      }
+      let result = try state.copyOutput(output, status: status, handle: handle)
+      guard status != BS_STATUS_FATAL_ERROR else {
+        state.close()
+        throw NativeRuntimeError.nativeFailure(status: status, code: result.errorCode)
+      }
+      guard result.presentationID == 0 else { throw NativeRuntimeError.malformedOutput }
+      if status == BS_STATUS_OK {
+        state.pending = nil
+        state.draining = true
+        state.lastTime = monotonicNanoseconds
       }
       return result
     }

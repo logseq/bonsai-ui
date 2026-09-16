@@ -10,7 +10,7 @@
 
 #define BS_PROTOCOL_MAJOR 8
 #define BS_PROTOCOL_MINOR 0
-#define BS_ABI_MAJOR 3
+#define BS_ABI_MAJOR 4
 #define BS_ABI_MINOR 0
 
 typedef struct bs_allocation {
@@ -266,6 +266,49 @@ bs_status bs_runtime_pump(bs_runtime *runtime,
                              input_length,
                              &response);
     return bs_apply_ocaml_response(runtime, output, status, &response, 1);
+  }
+#else
+  (void)input;
+  return bs_set_error(runtime,
+                      output,
+                      BS_STATUS_FATAL_ERROR,
+                      BS_ERROR_NATIVE_LIBRARY_LOADING_ERROR,
+                      "OCaml runtime backend is not linked");
+#endif
+}
+
+bs_status bs_runtime_shutdown_pump(bs_runtime *runtime,
+                          int64_t monotonic_now_ns,
+                          const uint8_t *input,
+                          size_t input_length,
+                          bs_output_buffer *output) {
+  if (runtime == NULL || output == NULL) {
+    return BS_STATUS_FATAL_ERROR;
+  }
+  if (input == NULL && input_length != 0) {
+    return bs_set_error(runtime,
+                        output,
+                        BS_STATUS_RECOVERABLE_ERROR,
+                        BS_ERROR_PROTOCOL,
+                        "Input pointer is null for a nonempty batch");
+  }
+  if (monotonic_now_ns < 0) {
+    return bs_set_error(runtime,
+                        output,
+                        BS_STATUS_RECOVERABLE_ERROR,
+                        BS_ERROR_INVALID_MONOTONIC_TIME,
+                        "Monotonic time must be nonnegative");
+  }
+#if defined(BS_WITH_OCAML)
+  {
+    bs_ocaml_response response = {0};
+    bs_status status =
+        bs_ocaml_bridge_shutdown_pump(runtime->backend_handle,
+                             monotonic_now_ns,
+                             input,
+                             input_length,
+                             &response);
+    return bs_apply_ocaml_response(runtime, output, status, &response, 0);
   }
 #else
   (void)input;

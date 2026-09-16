@@ -33,7 +33,7 @@ def main():
     host = build / "host"
     project = generate_project(
         framework_root=ROOT, application_root=application, host_directory=host,
-        product_name="DataScriptWorkerProbe", bundle_identifier=args.bundle_identifier,
+        product_name="DataScriptWorkerProbe", bundle_identifiers={"macos": args.bundle_identifier, "ios": args.bundle_identifier},
         development_team=args.development_team,
     )
     staged = host / "Native/iphoneos/Release/runtime.complete.o"

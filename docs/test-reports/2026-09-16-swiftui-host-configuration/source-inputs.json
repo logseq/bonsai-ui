@@ -1,0 +1,5262 @@
+{
+  "head": "09bd1571f7f1e76327b9402274d31119b7df7ecc",
+  "archive": "/Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16-host-configuration-source-01/bonsai-swiftui-0.1.0~dev.tar.gz",
+  "sha256": "2eaa76457fa3638e68b772c26411052416e8d4871e45ae6c83ea3db7864aad88",
+  "files": [
+    {
+      "path": ".ocamlformat",
+      "sha256": "4e21f52009fadccbf390a17661391054d3d70ff5e918d10d6cff9900f7409829",
+      "mode": "0o644"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "b774d4bdca45da7f33bb2c63fe73af3788fa23735851df19aa71ffd844f9e611",
+      "mode": "0o644"
+    },
+    {
+      "path": "Package.swift",
+      "sha256": "2afc24128c74e9c00fcfcf531222c07f725908cb0920208803215e22454d9093",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui.opam",
+      "sha256": "736cec843064c41de60cad48d9de083769c2200c5caec0772fba1cffe0a42361",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_test.opam",
+      "sha256": "b91efb089f24e511b8a73b8e3392c99870a2c984a2b50c91c433d1d9e54caa53",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool.opam",
+      "sha256": "2818764dcb60bab731d982ef35022e1cb1861798da03bfbf8cf22787597bb4af",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/bin/dune",
+      "sha256": "562812fd8c067f5eeeaf50fef670ccf48ef048a0064822d8aca5d17da7b11789",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/bin/main.ml",
+      "sha256": "adab9835b8cf0b671f5733367928a6a27d44dcf69c319786a0419c81b48de89a",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/artifact.ml",
+      "sha256": "9a5859a0560c534a8aeb984ef6689c6d5be8d283141fc6b5ba8575f477cd0990",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/assets.ml",
+      "sha256": "7e2a5d2e152bfa2a05100d37d4c41fd0d00463d814ed5c7d816609dee9479174",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/build_system.ml",
+      "sha256": "96d3aaac001d37d736bf6803d6363f2aa5d9a0846dfc203d1dbc2d96e727d8fa",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/cache.ml",
+      "sha256": "63ae86f29c28151bdfc9b7460ad071884ebfe629ec57533f628fce9c834bb3c5",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/clean.ml",
+      "sha256": "4be208bff39f7ac4214b2ba2f81cdf6a4055b65e0b7b610d08dccb2f5633337d",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/config.ml",
+      "sha256": "bbcac2ddd5339a5d0645635778c4e56cc416c5ac6abc19adc7c7f0034ed0bf2a",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/doctor.ml",
+      "sha256": "0645a50d772f83407cec31543d6400d037ba47299f6d1df73de510acbdbb00b5",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/dune",
+      "sha256": "35ea9cc4e3d9e7efd9a3222b901bb8c0eb4be6365d2646a29165f5484228a02c",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/dune_closure.ml",
+      "sha256": "232c6c852ececa0964f95af6a10b2afb28c2d55a0d77242d254b79020be7f54a",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/feature.ml",
+      "sha256": "2be24308543d840478fe7f1b136e80e1a6a59b7bec68cbe6e44e09c1e410068e",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/host.ml",
+      "sha256": "99ada78f6c2235e34327a41bc20d397218ab859a1e240aafa770af9b52111219",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/lock.ml",
+      "sha256": "a5aca35a88e4591d6480a31cf60621c11cb14d8038ecb425d280e1cb55726427",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/plan.ml",
+      "sha256": "ef67ca4c41a9f5b01a072d398b6c854a59df35619929d12d60b4f9bc4fae6a9f",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/process_runner.ml",
+      "sha256": "a49832379629c034cf24344eada412fcb9c0ce244c5384dcf9997b83b4c6d6a2",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/project.ml",
+      "sha256": "fb2be8a52e8017639cef1b254cfccbfa4e49b19b6fe9ed5d8fb3fb474ec02240",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/scaffold.ml",
+      "sha256": "976553e69ab3f6f46a0447581e8b5d8f347643828377124dcdb67a968f0f90ee",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/sdk.ml",
+      "sha256": "2e6b404d7c48e85b9d394a3f89e7aba06dd624676ab9bdb6fd99a95be610e2db",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/lib/toolchain.ml",
+      "sha256": "179fc63f81b46600b9372b1e44cdf18dcb15fb1db74082c1880f64e85796049c",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/test/dune",
+      "sha256": "7e4b03e42b4481dac5a42798820f6b96f04ab13f74c9530a12ecd6125664ffb1",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/test/native_plan_tests.ml",
+      "sha256": "723887321fe3f81b1d2599df9480e0d94c3b9deac98c3e3b95caf6f6c7dfcc29",
+      "mode": "0o644"
+    },
+    {
+      "path": "bonsai_swiftui_tool/test/tool_tests.ml",
+      "sha256": "57a310b62f217af1d16b68ccd084fc1898f54970e33ba9fa3fba51a84f286cba",
+      "mode": "0o644"
+    },
+    {
+      "path": "dune-project",
+      "sha256": "c8164847ca3f0f950a62321f8c9f8cebcb67dc057d0d4ca1035988f21cbfccab",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/README.md",
+      "sha256": "4e8bd173aa295fee7903a31ace9cb2deb0336a574a67be4668691ef148efd87b",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/BonsaiClock.xcodeproj/project.pbxproj",
+      "sha256": "4477f55ec170669f03169e9340b710db4aa5855e847cd2145dc439fd103e34f1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/BonsaiClock.xcodeproj/xcshareddata/xcschemes/BonsaiClock-iOS.xcscheme",
+      "sha256": "a34f37017011bb00bbd926a9a9ca9601d443d88d3422c12751dd87362f55d9b9",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/BonsaiClock.xcodeproj/xcshareddata/xcschemes/BonsaiClock-macOS.xcscheme",
+      "sha256": "6fd9010eb8fd4eb016f854f6634d8bbb7634a4e347b3674777d9373619cdb8a2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/bonsai-swiftui.sexp",
+      "sha256": "114b1097d1af0f3b419a6fbc7e6fdc890e9d49cecd56ed708e5620bcee600b5f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/bonsai_swiftui_clock_example.opam",
+      "sha256": "96b46e79d9451cc466abd9e3c53f3bbab4c088ac3522e32c1ba79713a56ba45b",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/bonsai_swiftui_clock_example.opam.locked",
+      "sha256": "d3ad34607d4f11bd61123a647640be746241a4b13fbf79f60b2b1b8692f2039f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/dune-project",
+      "sha256": "cfab62bd0fa591fa01011f65a8fd6326565bf70c0f3ffb5c45a87cbd3c8c6b53",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/ocaml/clock.ml",
+      "sha256": "5faaad790d3a714fd95e0d16333d7ebf7b91d576b73196e8a45c88ca0d47392c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/ocaml/clock.mli",
+      "sha256": "eddbfe1015f1cfbb2465f6eac111b4f081aae0e40d525b67ec5a375f5d7de5a0",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/ocaml/dune",
+      "sha256": "4143596fc589965aa707fa970e70c1b13cb67a71de447fc0d160353769ceed76",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/ocaml/native_embed.ml",
+      "sha256": "3f1050b5ded365bf4921f08de37437ce35f61b16f8df2234ec9cc5a318880d71",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/clock/swift/App.swift",
+      "sha256": "e2499ad125a599629d601ad09a4727b7e4235f69a170a2a14d38136a2b78251f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/README.md",
+      "sha256": "4da963818d6fd62b31380aa9c8ab235158bd815820c87e832a55dcb0a8b66908",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/BonsaiCounter.xcodeproj/project.pbxproj",
+      "sha256": "68463e582c3ee477e00c8ea1bd57dfdd97c4b2fc1742665f59ad1d01d6fa746c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/BonsaiCounter.xcodeproj/xcshareddata/xcschemes/BonsaiCounter-iOS.xcscheme",
+      "sha256": "fa88ed7e1e71ba05b0de7b0c2f3daf549e5c928f37c1d40eb8da5e6e2c6b9e86",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/BonsaiCounter.xcodeproj/xcshareddata/xcschemes/BonsaiCounter-macOS.xcscheme",
+      "sha256": "1093a4f508431740e4edf482302489645934c26e03c7c8ec392f05ffb73a5995",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/bonsai-swiftui.sexp",
+      "sha256": "9c41d8b38926612f031f52bd07d9afba3baece3118bf371472acd2bfe841ea4d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/bonsai_swiftui_counter_example.opam",
+      "sha256": "f8ea92f0b2a586cb6ddb4699f0991d52f7b54f75e3460136e12a52b37b271ebe",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/bonsai_swiftui_counter_example.opam.locked",
+      "sha256": "fc095da9d2a973a0ea720351d2c5f86d4a56d31f1c595e27705ce67fd214e897",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/dune-project",
+      "sha256": "9d838388b6f50cefd4fa87a1f5e49abb5453fd6388a855a1481e8b6223a2ced6",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/ocaml/counter.ml",
+      "sha256": "8f47bd2d600e3e6c055ae8ea6d8ef7ac4e198b0cb95a53413d4868d9a246a606",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/ocaml/counter.mli",
+      "sha256": "a4586eaaa1f6fcb3b60f33f237c470c0470c606e0cf3bccd415c16b413cb5616",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/ocaml/dune",
+      "sha256": "9489551e80831d0019c1ee4bd10c5117dafa0b4767d8e785c5268248991b3a3e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/ocaml/native_embed.ml",
+      "sha256": "16a8b184c2d3f0fc061dba1676fdcdebc69b623662a7976c293740bf6e0218cb",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/counter/swift/App.swift",
+      "sha256": "b26b6b7d146c87670ed3e6553a1fb245a3c84700d20d318fb4fc34f5e3a6dd17",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/README.md",
+      "sha256": "04e45b3e691a7afac14438cc815f84a4245fa7d67ffe0a3581639d04b1742a11",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/BonsaiGallery.xcodeproj/project.pbxproj",
+      "sha256": "6e1312214f26363f9e9f32b4f6d55b22f77f242647be1b1d51798df99b5b83ef",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/BonsaiGallery.xcodeproj/xcshareddata/xcschemes/BonsaiGallery-iOS.xcscheme",
+      "sha256": "2169b77eb88cd4e75362822274c067bedc7436a5bcc709963d115052dec2ad5e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/BonsaiGallery.xcodeproj/xcshareddata/xcschemes/BonsaiGallery-macOS.xcscheme",
+      "sha256": "f11444a58e3edbc5466322be5eef8af03ed9faa85a5da1462cae0469ed8f459f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/bonsai-swiftui.sexp",
+      "sha256": "19aeba661b9e1a427b75aeed8e93f3c60769e4778505ef5580130373f075c009",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/bonsai_swiftui_gallery.opam",
+      "sha256": "9bc6248abee460803fa81223649bb3b69eac2b953a5e85d6286b6db80ad26f23",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/bonsai_swiftui_gallery.opam.locked",
+      "sha256": "78205466968b6ea144efe803ca207d617f0d981e2a7b543006b362bf6c72f523",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/dune-project",
+      "sha256": "924d921f7767008c7dc3a6cd3d69cf6c0afd34ca13b935e3386850403f3de5f1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/app_bar_catalog.ml",
+      "sha256": "bb67c73fac7e246e8fbe73170d81acbb9d6bd400bfd5b6a5867a246bdfee65eb",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/app_bar_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/carousel_catalog.ml",
+      "sha256": "18d410e9b6a3ac605ff0d28562e1759845777b06e60e362872cf29db0d36a24e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/carousel_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/composer_catalog.ml",
+      "sha256": "8348f9f33480a3fb35f7657f267b405123ccaae8c50ddb64d3e4698e58f6d5e4",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/composer_catalog.mli",
+      "sha256": "e3327c6d7603256aa9ed724b2a14e4ffd555ff6b051904afccda9af652bfa2da",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/contextual_selection_catalog.ml",
+      "sha256": "45ed20f7b1e4c49514fc1c7c5670a96c20db5858add257b61d61f3e022f0fa95",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/contextual_selection_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/dropdown_catalog.ml",
+      "sha256": "601e4c4a026ce0f4518be1a5585c2509e0482f6b81d8461d46f4313f78ed75d5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/dropdown_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/dune",
+      "sha256": "25bee1803bf75abfd1ee4ed2661b7441ded7f546f161bc421a9bf46b0adf974a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/expandable_composer_catalog.ml",
+      "sha256": "a72f34d442ab34e4383ed24cf0f460a84e209775e77e480990fa74944c216f6c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/expandable_composer_catalog.mli",
+      "sha256": "0807619ad45c30ef4b970f9d53003e86f003e02809a07dd4bad23bfd06ff81d0",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/gallery.ml",
+      "sha256": "3147d4379407ae86dbc722e0ef799751a2c3673bf33d103b2fb96246fd7423d4",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/gallery.mli",
+      "sha256": "995b3794f84b8176d0a9fbd828a7db618a4827c98e6b77d2a2042f99fdb70a0d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/initial_scroll_catalog.ml",
+      "sha256": "4592124ffb7c5c5875ba5352d315f9f94fdfda93f0f4e406fc28b660bad17613",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/initial_scroll_catalog.mli",
+      "sha256": "e794e4ff5c87800057bcdd441ecb89e90d394da970599b22f0cc054c69a33c7b",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/mixed_collection_catalog.ml",
+      "sha256": "fd2ca59c794e760d7d49e992339bd7595c449f09b552518c2e117423a36bf5af",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/mixed_collection_catalog.mli",
+      "sha256": "448661b94e5f70aba81f0985adbb1799e3d04f2126c24dd8b72ee22251ebf2c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/native_embed.ml",
+      "sha256": "2ca75db84524392a808c8a74a5b68de6f4a26acd5bc8476c9311943617531a38",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/native_view_catalog.ml",
+      "sha256": "1a02c3009644192562c3a4c2a3c7e77e2419258aa6b22c8e1d2dbf3e43063d56",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/native_view_catalog.mli",
+      "sha256": "8989724ef686244bf24e4043cc883a2f810f82373c5f3f41fc67bb210febf3c9",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/page_layout_catalog.ml",
+      "sha256": "7dca3fbe0be3c9df9f2b5a22da8e01f01540fa8efbc4d67b8e27966b1fa3d1b2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/page_layout_catalog.mli",
+      "sha256": "fc3acfc70e338c2ceba86e876d6afa2e54b66cd2e2e783f38e1e5b91a776527a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/refresh_catalog.ml",
+      "sha256": "c113087f66e2188f1a7378293c5e8fd2119d5033f4efc0ee8280d51beef70fb2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/refresh_catalog.mli",
+      "sha256": "45ba0c2786ca73e7c4c57b87265aeb63b165619d805a6ab6932095d21f86a138",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/removal_catalog.ml",
+      "sha256": "53187ec7538abc9c71d4e7a295c938d58d7052d0571db7b1582b88cc1c28da3e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/removal_catalog.mli",
+      "sha256": "c7f2b6ecd523c9f34a5f88360e2bb4613523366d0332ab03aa632ae3831513af",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/scroll_fill_catalog.ml",
+      "sha256": "9cfdbd27653a5d31119737f03f06a9ffe338a994c355e70e05de0df637f12f53",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/scroll_fill_catalog.mli",
+      "sha256": "448661b94e5f70aba81f0985adbb1799e3d04f2126c24dd8b72ee22251ebf2c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/scroll_observer_catalog.ml",
+      "sha256": "cf39ebceaa7db3e15b3098e0a65ef922271f30b4035309b7d5b682cce2178fe2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/scroll_observer_catalog.mli",
+      "sha256": "e817fa675e4130ea25b9ae6904801b9d3e04b42724b612db48f4d03d48b83ade",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/scroll_sections_catalog.ml",
+      "sha256": "b189c6c06f58da268297bf5eae8f4fcf86178493b89b16d31b2b783af8d85690",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/scroll_sections_catalog.mli",
+      "sha256": "448661b94e5f70aba81f0985adbb1799e3d04f2126c24dd8b72ee22251ebf2c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/search_catalog.ml",
+      "sha256": "fdd616825d5b1ebab925574691525a2b54bcade734357683e303ed7d8a156a7a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/search_catalog.mli",
+      "sha256": "ea1f48581018bfae05f1c9799923fa3cd803386ff9a99b5658f460e65253e218",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/selection_catalog.ml",
+      "sha256": "ea82aa9e074c974bd9572f1d32e0b1479682882a12796597e8a994ecaeadff6f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/selection_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/sheet_catalog.ml",
+      "sha256": "6235959d933d498094340438840d868d7b3ef6b74442d682866be11f3e096ff3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/sheet_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/sidebar_catalog.ml",
+      "sha256": "045f248336284b120a65dcbff97ac31902a5f0a07c489c38bb1db8422ff57948",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/sidebar_catalog.mli",
+      "sha256": "fc3acfc70e338c2ceba86e876d6afa2e54b66cd2e2e783f38e1e5b91a776527a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/table_catalog.ml",
+      "sha256": "fc29d8db34fdbc3b75088e6a3b6b0d4deb230deb89bbbf39e817a0c807644c63",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/table_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/toolbar_catalog.ml",
+      "sha256": "267a4d101d3086be8071601811fbba016253b2a8cec6c380ff1740ce87f058f6",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/ocaml/toolbar_catalog.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/resources/gallery-animation.gif",
+      "sha256": "292ebc3d066183754260d8a0633f0bc1e54a5780b6dd23a6616a7fb744b75bb6",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/resources/gallery-demo.png",
+      "sha256": "2ed386e519bb04ba289b3e0555b73f07cfcabbf6ce6ea5a8e00e0a86170f73ed",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/swift/App.swift",
+      "sha256": "c034aa5a6186efcb5f277f28bc308349ca95066b1c93bc70a01e8bb605203d10",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/gallery/swift/GalleryNativeViews.swift",
+      "sha256": "a3adb58ef637fd300aa554a2edb7b25422db96456bad74ad2331ee3cb4513c42",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/README.md",
+      "sha256": "2bbea4980317c03307f234ffea796312ae84fadefb1a8d87970c4f13d0b6b5db",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple-ui-tests/ios/EnvironmentUITests.swift",
+      "sha256": "663152108cdd145a2d40e63d3ae5b5541a49a8b62bf0335a94fd45c167648901",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/BonsaiHostEffects.xcodeproj/project.pbxproj",
+      "sha256": "74f1a8b2a15d83517ba8e53478e7907d5659bffdec97f91f91593b9297357433",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/BonsaiHostEffects.xcodeproj/xcshareddata/xcschemes/BonsaiHostEffects-iOS.xcscheme",
+      "sha256": "b6a5e36e96d3c14e2cf8a126f0b0139f4e2580c9b3922e4605e3d40edf91ce1e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/BonsaiHostEffects.xcodeproj/xcshareddata/xcschemes/BonsaiHostEffects-macOS.xcscheme",
+      "sha256": "df553001f11967dc72c4b9422d712ab4b43ffd488931607b49d56009dd6c9e02",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/bonsai-swiftui.sexp",
+      "sha256": "e56daf9571f9b919d21a61fb6637821b2de76b6247010c0a5cce59cf39e91df0",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/bonsai_swiftui_host_effects_example.opam",
+      "sha256": "dcf2c7fe054b6ffaab84c28e1f67517c80a31f0635606dfb8be9f257d137f1e1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/bonsai_swiftui_host_effects_example.opam.locked",
+      "sha256": "9c60e779cdf063a6ce3d1880c601b3eed8df028a7462611b6a33ea0b1313b993",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/dune-project",
+      "sha256": "cbbc89a3750bf19af1beacfd6fa6fe073b6701fa10a01157dde4c207cd61f2ca",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/ocaml/dune",
+      "sha256": "10bc9c51ec25d4d5d419f6dddaa9304368a9511839def27dce3f5411c2c9aca7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/ocaml/host_effects.ml",
+      "sha256": "06323996164ad438f03ec9dd25c32adca252004bacb8248d81ebae69e07b0bd3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/ocaml/host_effects.mli",
+      "sha256": "eddbfe1015f1cfbb2465f6eac111b4f081aae0e40d525b67ec5a375f5d7de5a0",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/ocaml/native_embed.ml",
+      "sha256": "4726ed024fed427229d1bfde82ec95f69cccfeddc3373ebdfcafb9c7e5baedc3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/swift/App.swift",
+      "sha256": "8b833a705d6de88bc3f9ce9472ac7435ec471252d7d1f172840d10c243d129e3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_effects/swift/ApplicationBridge.swift",
+      "sha256": "613e6b593751fab6ac51e2817a7dce6a4cad8bec736ad9e90680bddb40e80599",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/README.md",
+      "sha256": "986844044a58ce3ed67783b0e7c75a84b49ad4c96a4d5a4f375982b1aeec1148",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/BonsaiHostNavigation.xcodeproj/project.pbxproj",
+      "sha256": "8e8d6ea8ebb4eea93be6258f72ab5ea029c72eada8079d90e0f7be1dbc2443e7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/BonsaiHostNavigation.xcodeproj/xcshareddata/xcschemes/BonsaiHostNavigation-iOS.xcscheme",
+      "sha256": "67790965c6248252499e8613a5b6027b5611d3703ad99f8e8fc6ddd5a3e40097",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/BonsaiHostNavigation.xcodeproj/xcshareddata/xcschemes/BonsaiHostNavigation-macOS.xcscheme",
+      "sha256": "b18f10ae9e178875b81535917ee586121dc644aae91f5402a3b623e8bdea202a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/bonsai-swiftui.sexp",
+      "sha256": "91294034acde1f467c9d1ca27df16fb7730e3b67c8b959f7caba69ebc2ff7755",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/bonsai_swiftui_host_navigation_example.opam",
+      "sha256": "f2f79ec00b6ccd0f8dc7e1c3ac5a8281cc538c25a2c67a39ea14d3915d8117f1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/bonsai_swiftui_host_navigation_example.opam.locked",
+      "sha256": "9126b6b450bbcb2f83e890b2ff31f89f159c7e3e68b8b6130dec688a5d5c254a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/dune-project",
+      "sha256": "6d11362f4bd4d9524e5f631a2e483ee4fa3f000b20c48f02250e49c0184d7275",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/ocaml/dune",
+      "sha256": "ae877f48e51f99c9d4f1bcc28167b5eed898c069df80553718e5959fafb437f8",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/ocaml/host_navigation.ml",
+      "sha256": "3e5d2197877d4026f8505d3f0a6a367fa8de5a53759d4ae6392eb628733bc598",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/ocaml/host_navigation.mli",
+      "sha256": "a4586eaaa1f6fcb3b60f33f237c470c0470c606e0cf3bccd415c16b413cb5616",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/ocaml/native_embed.ml",
+      "sha256": "698c43cc7084bd3de839270b75672d6e9350942337f95ce17a261216532a33ce",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/host_navigation/swift/App.swift",
+      "sha256": "c4f3f2e2fe9d38dc064fd9c9b29ae92a7f54f2f70faedad6de0c92f8759eab83",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/README.md",
+      "sha256": "bca93f81ccd95ad8354b5a11aa3462ec79d79858b4d47e870fb48fb2b05817b4",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple-tests/MailRuntimeTests.swift",
+      "sha256": "9c46b50c3533f552d4cc0469cf063fe07c6de47624391e0b838df6881316f11a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple-ui-tests/ios/MailUITests.swift",
+      "sha256": "6aff1184743816851653b28489e26e24e14e852af3c795357aedca729bc7a63a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/BonsaiMail.xcodeproj/project.pbxproj",
+      "sha256": "459ec4314bbf67931c1a4548d501ea0f224854acd43a4d12eeced0c4fb4229ce",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/BonsaiMail.xcodeproj/xcshareddata/xcschemes/BonsaiMail-iOS.xcscheme",
+      "sha256": "adccaa00f75e4678d72a33c2b72713a0862a4c45012f8e93be4b27d10ff77b5f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/BonsaiMail.xcodeproj/xcshareddata/xcschemes/BonsaiMail-macOS.xcscheme",
+      "sha256": "50cbdb062f0a14388e6e06b2c0f0edcabb0f1eadd78473cfe66aa20852d65976",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/Info-iOS.plist",
+      "sha256": "69db85c2f10113a615d0d025b7a2827791638d092fefa4f9314a50fd16c54804",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/Info-macOS.plist",
+      "sha256": "6839a3017a6cba9ea64ca0f8494bd2fdf07e58a81f1722981e5ca9fdc791e337",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/TestHost.swift",
+      "sha256": "0934b28a93706852020c5f221ad80969dbb0533fb447f0042154e31e42a2855c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/bonsai-swiftui.sexp",
+      "sha256": "e3b0f911baac8e0273f248371b389d5444c493efae88cd9323cd1fcc6e5722f7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/bonsai_swiftui_mail_example.opam",
+      "sha256": "a97f891490b5bad5a96379e7321773b98cd2d38d644876ccf8fe258919417456",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/bonsai_swiftui_mail_example.opam.locked",
+      "sha256": "b3f8483c9c03a97189a339cf731fa93e9234064a9551fcf05a557ea7446e34b4",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/dune-project",
+      "sha256": "baf3ba50943df68faf5918bcc12bb80f78670a3c8fe5cec58f4e22ed94056308",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/ocaml/dune",
+      "sha256": "9da9a575e1bb7e085cd3fb654b1a84a094afe5fba5942c17b4a338d849763655",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/ocaml/mail.ml",
+      "sha256": "fde67ab6b1ee23126b431c6002e44fe8dacf50fc7bddaea73063210319049bfc",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/ocaml/mail.mli",
+      "sha256": "6279ed64f3e7714a54e97107d958711a685d3a2a64017f272ab2e996a7e407e6",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/ocaml/native_embed.ml",
+      "sha256": "7b0f438f91433574b49ce67851a7f31c66caf14e3e9190c721dbab37d7b9f071",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/swift/App.swift",
+      "sha256": "19d53c5124d729dfe04222634a958958e979779e45bac4fcb39a7d71d892da83",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/test/dune",
+      "sha256": "bd8da9dfb6008ecbf82e58d916d96d41395418196dd972a0b4ee1d2fe1d594ea",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/mail/test/mail_example_tests.ml",
+      "sha256": "c3c9ce1d82b2b11cad02cee067245cc1af5f52c906d5077cb6c01867dbc1a8a8",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/README.md",
+      "sha256": "f3da707acd40bea002964147e38cf387b42711bae3fbf243b6c53904353b0bf3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/BonsaiNavigation.xcodeproj/project.pbxproj",
+      "sha256": "1b66b29031f085bf99c2eb81806b1dcaf5a030843e2fdc4ed02aefeb65954848",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/BonsaiNavigation.xcodeproj/xcshareddata/xcschemes/BonsaiNavigation-iOS.xcscheme",
+      "sha256": "578c588259611df67684227c5c1b7258f94d522c53e8f832994fac9ab679c744",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/BonsaiNavigation.xcodeproj/xcshareddata/xcschemes/BonsaiNavigation-macOS.xcscheme",
+      "sha256": "fdf799224f262349dce2bd888747666475595d6b18e013e246b09f80976eb3f7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/bonsai-swiftui.sexp",
+      "sha256": "6989f5fd9bdb41759ecb9ec65ee835702067d3fadbd9db325185e2d5aee36eb7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/bonsai_swiftui_navigation_example.opam",
+      "sha256": "fa730bbf1f8a5b5589411af5deed4194b80f9caa60093aa914ac84cd08c2f098",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/bonsai_swiftui_navigation_example.opam.locked",
+      "sha256": "41c1053303195fc1c840927c9b3f60a4666a90597e488730817c83ea71dccb5a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/dune-project",
+      "sha256": "d67b4c4d7b0ffc4a1092c270150790c65f64ca335ad96b90a74c508ce113184d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/ocaml/dune",
+      "sha256": "650060069313c59a69d04c6660a1aef59caae892084e6d02c522b97ff13b1e1f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/ocaml/native_embed.ml",
+      "sha256": "018db915c807a96428d8ffbd2629e02a7a8929b8637674dc2de70a593e51c3ba",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/ocaml/navigation.ml",
+      "sha256": "896516a7905f4b589bf8330b20b4f98577398d30d48cf5e27e88ddd9d1f9835e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/ocaml/navigation.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/navigation/swift/App.swift",
+      "sha256": "fdc3d049aa49e48f2f3759384e251bf288c5c3c28f273d5c76a2879b7f19a839",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/README.md",
+      "sha256": "8063e91cdc1e4aa04e26d768c9a85d696c56bb363b804ebfa00571aa97e5c7f0",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/BonsaiNetwork.xcodeproj/project.pbxproj",
+      "sha256": "cda08c944c4e514f4b078ef3f2fed3f5ce4b0f343a00e3a0b05c9f8cf58d151c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/BonsaiNetwork.xcodeproj/xcshareddata/xcschemes/BonsaiNetwork-iOS.xcscheme",
+      "sha256": "ce466b7fb3f20edce2479db28f6c6c763137006204674b8ac02cabd3df957094",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/BonsaiNetwork.xcodeproj/xcshareddata/xcschemes/BonsaiNetwork-macOS.xcscheme",
+      "sha256": "bf6f43b328ed12b96a6c62c7f3f08a73869f8aade5b32b073fa900f0752a30fb",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/Info-iOS.plist",
+      "sha256": "69db85c2f10113a615d0d025b7a2827791638d092fefa4f9314a50fd16c54804",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/Info-macOS.plist",
+      "sha256": "6839a3017a6cba9ea64ca0f8494bd2fdf07e58a81f1722981e5ca9fdc791e337",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/bonsai-swiftui.sexp",
+      "sha256": "f120c8166a62f4dd5e2d99b2e1018a9c2c08c8c39ecde0f2038143a17e098f1e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/bonsai_swiftui_network_example.opam",
+      "sha256": "9fe15794d2f79345ade92305801e693013df3038a0c311f1e7270d40cfe1e1db",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/bonsai_swiftui_network_example.opam.locked",
+      "sha256": "bdf90803f4d55563462b8d705a8a6b04369e1949f9cb1c5229d780dcd4a13833",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/dune-project",
+      "sha256": "fc9fd7a17c8a96d39f4ebcdf9415112711214109330dc957eee07d30b97d1556",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/dune",
+      "sha256": "81e6cea23c72bbe34ca86c59a93fa0d4497362df35c079c1410252f4fa109135",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/native_embed.ml",
+      "sha256": "77a3506de4cceb757aa5d8c58d1b7150a1b0754410810d96e91a74c648128f7f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_example.ml",
+      "sha256": "a7fb7d09ef16de0c6d762341e1095f242e0b088d5f6678ecb04d5785ac9b29bc",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_example.mli",
+      "sha256": "a82e3a2526c459e89b2fc011784f2ab98e3a8f4d2fd49230c0b329a5f0fbc7f3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_http.ml",
+      "sha256": "f7ad1e4d68cd603c4168f942757a0e0f9a37e9fb1952f3ab6b9de5b118fc5bbd",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_http.mli",
+      "sha256": "e0b35e0973818022b6fbb8daaf79f386f3721ac5d2b79cde156452a31af58a5c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_policy.ml",
+      "sha256": "1b6436d4c375c446ce30d045a91dbfb82e3530d4637c572e3dd5a6439906d493",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_policy.mli",
+      "sha256": "acb323165df3c89718fe6c2e070f16f063e0c337cc16010a3847632a7bce1007",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_protocol.ml",
+      "sha256": "6e9bf9cd2d9f50e4163044af31ce519711fa68db08b50d92bbbf6d9c1e359d16",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_protocol.mli",
+      "sha256": "deb91a80f7a8de566edbc0d4a3706188b5653c5c45f387708481e3fa70a246f3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_service.ml",
+      "sha256": "c7ab77437336644a7d8def2c6235a5cf67d62b46df2fa4de306b5ef2651e9935",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_service.mli",
+      "sha256": "e67075605c3187f16ec8c6a39953091a37f2fa3863c02d09b21cabdf19e673d9",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_smoke_cli.ml",
+      "sha256": "588f6f3429d51646c0d5e83bdac22d2092b73f185ec7fba5cb44bd95355532ab",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_tls.ml",
+      "sha256": "b42d6fb3deade513e88018afba57a9485d772ef0b626f850b387da13f28ac086",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_tls.mli",
+      "sha256": "7233a589058402eaf7ff38c0bb98c279172a7e917a00a29424357b4fe821f581",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_websocket.ml",
+      "sha256": "f19ac594772b8d8e7034d4a86ff1e2ecb9063248dd3922417e3e6ebfed0bb51b",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/ocaml/network_websocket.mli",
+      "sha256": "6a02c99a565688f80b644f69e2802e5de9dac2998a36e690f9524539a8b3c3e1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/swift/App.swift",
+      "sha256": "79e0ae88a5219dc619af46c64fc08257e45813e3a32093558e8fc36f2b110da9",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/dune",
+      "sha256": "612aae4027f42ae937620c793f5b4d10ecc9c753798c154cf17ee062faa9e559",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/fixtures/localhost-cert.pem",
+      "sha256": "eec91ba360d3eff4d1019c71ffad93d51f0ea6e2c70cf0864211cdd285f964bb",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/fixtures/localhost-key.pem",
+      "sha256": "cca17a34c98f0fd8e8db613be903ac95cc2005209099323b4db729b6e5b1872e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/network_example_tests.ml",
+      "sha256": "049364a39d943cfcb303deff074910410414eedc6e1abf91f280b0810249e9ea",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/network_http_tests.ml",
+      "sha256": "2edadb98eb0876c4de56f81b6f24d3384b3b4ea48002279154f09587ad5602c5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/network_policy_tests.ml",
+      "sha256": "12740e6f7655d5f3fbf6f8faa9c349cfaf5e5c47aba27fc41b75e903254a4417",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/network_service_tests.ml",
+      "sha256": "47f5861b773b805eed65e54d1d21cf658c0ef3e7551a528a3247c6dcfe371424",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/network_tls_tests.ml",
+      "sha256": "b758cbe669cfe5120ae32187bd00461e9ad3de0ba1029a03f7b7656b2fb91b7c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/network/test/network_websocket_tests.ml",
+      "sha256": "57ca3c173c228406b08b6dc366143a9d4c39fcd82f0fbe04b074ff5ae707ffe5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/ASSETS.md",
+      "sha256": "824c99a09998224bc615f1099ba85983ef0c58c80a43f3174fcba736927543e1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/README.md",
+      "sha256": "7cd2ec385690273787ac93c2cf98ba3245fe0b123e64896601c951123b875947",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple-tests/NoteRuntimeTests.swift",
+      "sha256": "d7a26a60be23ec7733446b5717f20a3c091c886f5212d51f111528fd4c0b6c6b",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple-ui-tests/ios/NoteUITests.swift",
+      "sha256": "633373c01118ed4ef5b5b94964301a59798bbe6a0da83ec07cc8eec0c1bf16e4",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/BonsaiNote.xcodeproj/project.pbxproj",
+      "sha256": "0e48097254a824068e01f750a3477e92f9d2973fd9adda021e3adec874fa81e1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/BonsaiNote.xcodeproj/xcshareddata/xcschemes/BonsaiNote-iOS.xcscheme",
+      "sha256": "6961b923c25cf67facb65e3b1c1ed70a02777f0607c2e32b8599b2af674b3fb7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/BonsaiNote.xcodeproj/xcshareddata/xcschemes/BonsaiNote-macOS.xcscheme",
+      "sha256": "ca3142a11f23092dbe68860a7eccca0e61f302a6f440e7a42e81dd4710b232c9",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/Info-iOS.plist",
+      "sha256": "69db85c2f10113a615d0d025b7a2827791638d092fefa4f9314a50fd16c54804",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/Info-macOS.plist",
+      "sha256": "6839a3017a6cba9ea64ca0f8494bd2fdf07e58a81f1722981e5ca9fdc791e337",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/TestHost.swift",
+      "sha256": "0934b28a93706852020c5f221ad80969dbb0533fb447f0042154e31e42a2855c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/bonsai-swiftui.sexp",
+      "sha256": "03492a631c2fad832ce3b9bd378cf46ef4fa739645e8a250c2e2a0b67c4c7353",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/bonsai_swiftui_note_example.opam",
+      "sha256": "72e6635aa0d27f431fa1a92787786ac7b1a13cfef0d7350a8a8a5afd22c8de56",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/bonsai_swiftui_note_example.opam.locked",
+      "sha256": "bd8e10348dc6dd9ce6d18761da983f840bf9fcb2566fc62c695dd95d1a97a268",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/dune-project",
+      "sha256": "aa2946ce17560a525354180d5d2529d70599513c4f4aa14e355884fc9aa1a5ba",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/ocaml/dune",
+      "sha256": "b572227b7222b107c7ea1f1a35202544ab1b37551713753b2239e1ddf3c565e2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/ocaml/native_embed.ml",
+      "sha256": "eff7d8238236252ba9a7d801ecebe5d8da0196af815db9e8c4f09dd074114f3f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/ocaml/note.ml",
+      "sha256": "e9f5665e7cd2abc6554d2873530c713fbd7cca79965ee943e46260fd66139ede",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/ocaml/note.mli",
+      "sha256": "27087db2dd4c429213ac0dc14ea2aeaa25690b5058a5ffd9d6b0dab508b751da",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/resources/typewriter.png",
+      "sha256": "8783d4bce956b4b82a1840d520fdc22d13d517a07f305b3fdb3279da038ea6ea",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/swift/App.swift",
+      "sha256": "263e818c75b943a9dcbd2c7a763623b603ca8b2ad6c6b3066443dfcb54deb63a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/test/dune",
+      "sha256": "d9fb5cb601e9da842fe1fd0be18f43a1bac4eb7099f3478f12a3484863f988bf",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/note/test/note_example_tests.ml",
+      "sha256": "a19e76e2d7a717b5aee555444fa0d6690522c1b623e9a39cb0da0491aa44d920",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/README.md",
+      "sha256": "3438d61ea5dcaebf61cbc9214c60e2d5c438080fe704df13caff61f111d33ced",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/BonsaiSqliteWorker.xcodeproj/project.pbxproj",
+      "sha256": "8706ad8ac84f288ec2ccf6453d6450d279a6a10fc3cf82a589192fe7629a4ebd",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/BonsaiSqliteWorker.xcodeproj/xcshareddata/xcschemes/BonsaiSqliteWorker-iOS.xcscheme",
+      "sha256": "87092ae0917e29b706db0b84942ec51b611ae0a033c8b6256adf4f011af3354c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/BonsaiSqliteWorker.xcodeproj/xcshareddata/xcschemes/BonsaiSqliteWorker-macOS.xcscheme",
+      "sha256": "4f5d6094f7ec9618f39048714b9b20a04821b0e432950ab991eed8fe7c145f53",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/bonsai-swiftui.sexp",
+      "sha256": "8f428c1f6e2ed61c3c3f152ef0ca03fa2d96d08c533a254cbca041cb06e2a1eb",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/bonsai_swiftui_sqlite_worker_example.opam",
+      "sha256": "b62349a9320d8ce7e98b80a81e40eb782be65a26534514e69787be9c15aea57b",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/bonsai_swiftui_sqlite_worker_example.opam.locked",
+      "sha256": "3e57021ff3d62b5bf287bb558c80948d879a268c40a666e01a92c09cb137e42c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/dune-project",
+      "sha256": "b18944a6d01a289eef07f858b4605a55eb73d7f61e76db557f672534b4e2e383",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/dune",
+      "sha256": "8211b47dbdfc2003358020b70ddd8730e23a98affb19b6f1ef0997b228e12b34",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/native_embed.ml",
+      "sha256": "814c6f7058816cad88a9c972a88a00a351ea0aa87527d6f17a041b7d67563291",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_config.ml",
+      "sha256": "263cc67e642e718ee6c775550f09bc8b1a26b3a46a9ed14ac15420fb3642b780",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_config.mli",
+      "sha256": "84fe688e87b4e6ed661c03bfd1f5ba505e892e43d3e01b0cab6f2507914dacf1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_example.ml",
+      "sha256": "770dd9b9b8ced70e0496364b5585ac690fe0e2277dcc2b39facbed94ca81f3c3",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_example.mli",
+      "sha256": "2eaeb064dec1ce22d10618b751859beef8d55545dca18f90e7493d6aff30c05c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_file_demo.ml",
+      "sha256": "15db156f62ebcfa6e3b3d345682ccbf1dfed600e4911d48b56e91962dc74847f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_file_demo.mli",
+      "sha256": "958bc3f8708e7c1d3570a1af02d8e914a021f49ab5687bb3adc08e1fac672e8f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_protocol.ml",
+      "sha256": "3ce3c9d1def3e37ec2ad787a504222e46a3422fa12eab74edb3d72450c8240b2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_protocol.mli",
+      "sha256": "73ce2ae9a5c2ad12ee1a87f0e90a0caf9ef4841b1d255cf07d8517a9ffb475fa",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_service.ml",
+      "sha256": "0fba67071d9ae30b1508586c95020370cede07aa2d2fa6911b7f2e63a5981001",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_service.mli",
+      "sha256": "585696c8cde81c3c1deaa869756ac4e572ff17ec879b5e6e9e23891d4085258f",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_store.ml",
+      "sha256": "5d317737fbb9bf463d982e20bbddf3ebfe1bea8c5ee33e024825fba01c2bb61e",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/ocaml/sqlite_worker_store.mli",
+      "sha256": "f42a91bbd50a5974760c1bf80d8da0cf2267f0d0e5e6e5716e7996d3ba338e26",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/swift/App.swift",
+      "sha256": "25016a18b9717656e22fdc08d264e3cb6f32b653b778ccb21c515fb0cacfd4a7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/swift/Startup.swift",
+      "sha256": "00af15bc0b415b3ce96602a0ef6c585a25b51f57c98e04dd1f7c2b7e7de026a7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/test/dune",
+      "sha256": "c0a84e63c15663bb9e7d9b61117769c49c77f9758984a0501976a7e022805939",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/test/sqlite_worker_example_tests.ml",
+      "sha256": "bb245d6ec8e04fb85392a5aaf99ca53a93025066003aa25a79b9c9f05dc42a69",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/test/sqlite_worker_file_demo_tests.ml",
+      "sha256": "4565e06415ffd2e90fff0464dbfc0ab1f4f8831cd1de00fa0ce1edf2fdc802be",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/sqlite_worker/test/sqlite_worker_store_tests.ml",
+      "sha256": "93780a50e36a47934236da76600c0d906e8f5c91ea9d1bb2bbdd0083018be317",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/README.md",
+      "sha256": "d9a845f477c17d95f505ae5bc096be28535bff7b4dbacc0001cf1a68a4927861",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple-tests/TextInputRuntimeTests.swift",
+      "sha256": "9bb9a205ff5bc0f50aa076c71c7ef4c25dfc71cfdde50e61f626f4db3605198a",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/BonsaiTextInput.xcodeproj/project.pbxproj",
+      "sha256": "6f8cf96d31043034f4498b1e368cfe4cfed097df45df4eb4539b1c80fd1669d7",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/BonsaiTextInput.xcodeproj/xcshareddata/xcschemes/BonsaiTextInput-iOS.xcscheme",
+      "sha256": "d3e4fb1d6fdc76ba131417fdeea57fc79123708c090daa838b042f6c929626ef",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/BonsaiTextInput.xcodeproj/xcshareddata/xcschemes/BonsaiTextInput-macOS.xcscheme",
+      "sha256": "55a3f119521d0ea61780658e996f19db0aecaa6193e609e76b366863419aee27",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/Info-iOS.plist",
+      "sha256": "69db85c2f10113a615d0d025b7a2827791638d092fefa4f9314a50fd16c54804",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/Info-macOS.plist",
+      "sha256": "6839a3017a6cba9ea64ca0f8494bd2fdf07e58a81f1722981e5ca9fdc791e337",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/TestHost.swift",
+      "sha256": "0934b28a93706852020c5f221ad80969dbb0533fb447f0042154e31e42a2855c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/bonsai-swiftui.sexp",
+      "sha256": "06719cbd245f58c4d6e3b0cc455f39899afffd496599ea0c9b901364e7d965ed",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/bonsai_swiftui_text_input_example.opam",
+      "sha256": "071c86ade8e34c50efa7395a2025e9049da2ca0ecb7febff8f9e74b0b331cfc9",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/bonsai_swiftui_text_input_example.opam.locked",
+      "sha256": "64f535fcd5c0f02b3d84967acd5b48924bae955d47ab57d417623ba388477789",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/dune-project",
+      "sha256": "9351466aafcdcbfd960f882337ed3fbd523c3fd169ccb707f983ce1dfb0c15fc",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/ocaml/dune",
+      "sha256": "08850bb4ea225f4bcf05f06a4e266713cd71f5641e006e3b58da5a02ee797a79",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/ocaml/native_embed.ml",
+      "sha256": "924ca903eb07633de89aff60a89e4726952ac4717d7742beee7ac81a7973d0ab",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/ocaml/text_input_example.ml",
+      "sha256": "8f71391688eada4419deb340ec38fc740afc92adb55b6f325bebe812da677235",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/ocaml/text_input_example.mli",
+      "sha256": "8e5d943b5369be0c076349fda9f663d52e37cc773a267f16fef74ce59eb83cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/text_input/swift/App.swift",
+      "sha256": "180ac4b68b9d81f9078a3a3de11359902f92868dbc5fd1c9a9b1edcff5319d78",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/.ocamlformat",
+      "sha256": "0a5d5ace5d4cd724ae3b473d36ff899be2ff934ff084ccd9bce8ab1f377bc53d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/README.md",
+      "sha256": "1b96449281a9ec6364186d0876177e4f4a85117fedbd76e66ec5f7e80e0ccd94",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/BonsaiTodo.xcodeproj/project.pbxproj",
+      "sha256": "ccf8292cdb6c63904e2eeb4dea865ce2c9eb95855f16bc814c083a4fe9271e87",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/BonsaiTodo.xcodeproj/xcshareddata/xcschemes/BonsaiTodo-iOS.xcscheme",
+      "sha256": "da5df8b97e693f61a14671d2f7ba2c6df3a7e7d6541f4e7176e98341f9b055f1",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/BonsaiTodo.xcodeproj/xcshareddata/xcschemes/BonsaiTodo-macOS.xcscheme",
+      "sha256": "4b6e72cfd3672fde806f50e39943c9e9bfa9fe01db8123be68401601c3a8af6d",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/Info-iOS.plist",
+      "sha256": "c85d4cb4f5166cc7da946dd9cfbc0992d8e91f816daf7101ecc74f0b16077ded",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/Info-macOS.plist",
+      "sha256": "6c1a7933655a2885dad0304b3024f76b4948a72b0caa78da8616fb30c6b8de00",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/iOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/apple/macOS.entitlements",
+      "sha256": "97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/bonsai-swiftui.sexp",
+      "sha256": "fb0b14c0d17de1640678d21bd56e84bd88c509153478c8c705b95fe0eabd1153",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/bonsai_swiftui_todo_example.opam",
+      "sha256": "0aaa49e273c3158d136dd20ee2278c2e628e26b782edad8545027324dcd9d980",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/bonsai_swiftui_todo_example.opam.locked",
+      "sha256": "b784a2aca8e0bd9e857918cd73205d2202cebf0951b55555c40654054215b5b6",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/dune-project",
+      "sha256": "25a78207931c53cbf570ae8d7a40c118b6852bf5efd558da62e544d905b471ce",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/ocaml/dune",
+      "sha256": "a12406e3a94c75aa57a06c6002285380045cb5519e660df9c6ccea78388549e8",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/ocaml/native_embed.ml",
+      "sha256": "9b0d0c2a6a1b36182b1ffc5bf1d21c155f9f1bdc1ea26b48cdeefb665efb62ad",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/ocaml/todo.ml",
+      "sha256": "d0926d8385018c240c661fdac482a4b57fc90d0307e5f31e90e2195a25508ac2",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/ocaml/todo.mli",
+      "sha256": "eddbfe1015f1cfbb2465f6eac111b4f081aae0e40d525b67ec5a375f5d7de5a0",
+      "mode": "0o644"
+    },
+    {
+      "path": "examples/todo/swift/App.swift",
+      "sha256": "83493ff55923028e1543e829cbd2e3d63a6c8e79e3371b3ffeb82118a21e406a",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/dune",
+      "sha256": "c7805523bd9defb65ae386956df360cd1559a771a6878c1da3b4a9e0e321c17b",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/bonsai_swiftui_exports.txt",
+      "sha256": "22a862addb330cc675342b48467bf85ceb608167d8ee8f1bc65f6141f03b7e72",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/bonsai_swiftui_ios_process_stubs.c",
+      "sha256": "c44dba6dc1449923ba3b7b488b13ab445e077e4073244231fe29bc4e5c3867a1",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/bonsai_swiftui_native.c",
+      "sha256": "21f8e63ebc2a34938e617150bf1cfd2d5034c10202392a3010e5a7e8e59e558a",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/bonsai_swiftui_native.h",
+      "sha256": "9ba0378bc516ad9a16ef593a060b9dcfe55ad3dc02c5b8938e4aa4f8afd425ae",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/bonsai_swiftui_ocaml_bridge.c",
+      "sha256": "71ee8052d9784943371cb0ad2cabf6644be09af0c43c7a98eeb9788c01030ba2",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/bonsai_swiftui_ocaml_bridge.h",
+      "sha256": "f1e97f3abf2253fa523825eb5a0f2d9f55541a093afa76f6a473bb29c9a9c0e9",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/src/module.modulemap",
+      "sha256": "6eaabc9d24ed92e996136c0190c7db4e58d818c939caf42239fd5f2f7687a64d",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/badge_window.swift",
+      "sha256": "0a7e23bed68883ef8b3968f266aef9f124ade8560ffd7b61637ce75203bc2385",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/button_window.swift",
+      "sha256": "ac92a419f8ff3d48aec2ab0b9d36970d2ecc7439f57158f831c385f8b7c8bd45",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/carousel_window.swift",
+      "sha256": "b688f485a2c74fd99b620cf2e8b8f0fdf41367b03f6e37552ab3f07718b61e0d",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/clock_window.swift",
+      "sha256": "2626d04aa745df5316d3f9044ef4130d5a91ea8e3ec0d0cd7b3a97afd2bd4b6e",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/compare_note_reference.py",
+      "sha256": "1f6031ec8c245cfbc2bbcce512dea81454a708c1fca0b6872052cc4f1b2d4a86",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/composer_window.swift",
+      "sha256": "a1027031a77bb82dc37f0be34fdfcb658f5fbea5f377ad0027775a7bde60d118",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/contextual_selection_window.swift",
+      "sha256": "f3f74d58707b5e60390af77e76993baa87de908b518c301d3a21b50d5d54eb4e",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/datascript_worker/dune",
+      "sha256": "89fd154c91aa2cb9089490351b2062c5567f5ffcd549ce5c46168571fa0963dc",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/disclosure_window.swift",
+      "sha256": "ec4590fcd9f3584cb60f527fa4a1eb53aee68c27535b8878680ea130ad68a0b7",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/dune",
+      "sha256": "2b9fd9228e46d32726e46be4c075df895c3ff32d43ba09f9a73608df797e6090",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/expandable_composer_window.swift",
+      "sha256": "ace172aaff135e326a0b17f27754761b413cb01d49562eb8fe44ad58175f2fcd",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/gesture_window.swift",
+      "sha256": "523a47715302af324acf745067118b6ee67da93993c1446afb3e4ac363cc75b2",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/group_box_window.swift",
+      "sha256": "86f51795bf9e3d0e4098d6cc3e371a9b1cc1dad325f01020add00dc0b52684b8",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/host_effects_window.swift",
+      "sha256": "37a6ba21dea036ca2e64737c13d07124e43902d6ec8fb9b20577857987ef12f0",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/host_navigation_window.swift",
+      "sha256": "b233cc30e1d419fbae823da519d4c47986f279dbdef27da7f867a6e506cb8b69",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/hover_window.swift",
+      "sha256": "70342bbc9dff490036a6a3bb50dd36f28f764a47d2b40598d0248e0376d9c225",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/label_window.swift",
+      "sha256": "1757082f55aadd2e9b01873e7a09b42c7d10ea9551809ab041862c26eec727e5",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/mail_window.swift",
+      "sha256": "e9f7de3731573a7a299cc440a14262cf5a762fae44cd64332236917da4118bbc",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/menu_window.swift",
+      "sha256": "c79455c5fc5547ae1d48bfd7ec4094c1b6f0343fd1ac8059b28fae208cf203ea",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/mixed_collection_window.swift",
+      "sha256": "7166a8438c47af0fc633a4dac75c3544116b4d800e4c95b114f6f02aca2b8f1d",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/mock_ocaml_bridge.c",
+      "sha256": "bd781d9e67c73ae320bea7b7dec5d6c529c0cd4e69c6efc28024d374941bed2e",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/multiple_selection_window.swift",
+      "sha256": "d655684bea65515c678726dc2d2c66da0697576ad01930112db1507a474dc31e",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/native_bridge_test.c",
+      "sha256": "d94bd991d15bda7da750f3e29560df153097831d85a74f0b88c2fccf33f399a2",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/native_view_window.swift",
+      "sha256": "e96ca5296416a86b456720a0e210eeab30c17f6e67e989fc6806409c88ca658c",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/navigation_window.swift",
+      "sha256": "1df38c87f18e897a134b9851fd6c706748b3d44c6b860cc921371cb7f001b8f8",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/network_fixture.ml",
+      "sha256": "c15378ecdc308490fc0908d05d27db4ec4de5ac136fb79f669f09874d75e2b24",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/network_window.swift",
+      "sha256": "113d2f86dfe7bb1e3e502e1aba5edc4aa97c4ae877538e6852a3fb30edf8970f",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/note_device.swift",
+      "sha256": "a86decf0ab6f0e5c2d26a65745e9f559dba25f403896a09e9fbfe0c5b4e20b41",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/note_window.swift",
+      "sha256": "0a3cd53638e234b4648f734f5a191b13dc74ce2808ff060a99ef8ae80b235695",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/notice_window.swift",
+      "sha256": "c42d0127343e3b0c32a584ac0dbafa84fb59d005898fb9efe95715b342d2b652",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/opacity_window.swift",
+      "sha256": "6d6ef64f5fb989cfcc8608df5f6ffd2fb57a4c1765d992827c62062ebf2c4aec",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/picker_window.swift",
+      "sha256": "702965ca5992aebbcabefbba3353823ede895858c1560c9f21e268a3a4ce8872",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/projection_window.swift",
+      "sha256": "483678ab94ab1a21794f4c3ac45fa7578b45e0479a13fd49a37df9b3910c5ee9",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/removal_window.swift",
+      "sha256": "c411cac847028ea57c852a48498cb27c86a910dbcdf5f7bd65d4984cb42811d4",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/runtime_fixture.ml",
+      "sha256": "1cb13bf7b92f84b2bd9f41a874c97988803715ede25297983e5e77df0d6d633d",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/search_window.swift",
+      "sha256": "92b6f0739524142250f7dccad9db1fc6eb1ddf9a3d23270800172aa0ab8f6503",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/selection_catalog_window.swift",
+      "sha256": "9a30a1dbbb29f8e57872dac515155c79dfbc23e680ad44855c3ad6f5adfa34bb",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/slider_window.swift",
+      "sha256": "e278e2c851649798e07e3be1e979a3e443be79810b4741dd318ffb2643e2c7ed",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/sqlite_worker_window.swift",
+      "sha256": "2dd582d77510139d8313e2cabaa4681755f5461270721fbd6bff25dd39c1f553",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/swipe_window.swift",
+      "sha256": "1d8a5d7b837d0fae5fa8c6dfbebd372ccf5d2e4fe2d69b5588db758263393afa",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/table_window.swift",
+      "sha256": "fca187569a5a1d9aebbf338c00e075b40777b413ce356992396af868e39ab175",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/tag_window.swift",
+      "sha256": "7c221fe240c59092379bbf38bf5bb3f2589b74aae044f0027261e4fb5415f855",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_badge_window.py",
+      "sha256": "26730e3b48a619cfc54be6dec7f0959d655d19651ea7b29cf1cfaaa149a0b992",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_button_window.py",
+      "sha256": "d2cc045dc706b53af23917ba82b0e19be2117242ffcd5ebdf79142f24913a5f9",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_carousel_window.py",
+      "sha256": "14ec21d6404c83238afcb15b1373ce0e61c9c59fe48d4865c2863ffc17ed48ae",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_clock_window.py",
+      "sha256": "8fdfad776cf6fe133adf7cd92f07200bf16885e50463f672a2ce35c104f9a45f",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_composer_window.py",
+      "sha256": "05ac2cc5e594a60bf566e1920069c69936c97090ad32cd23e202f9869ac16a14",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_contextual_selection_window.py",
+      "sha256": "ed859e565e09c11021979f7db7a2f94ec169746fa794ac476de6a20dd987cfee",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_datascript_worker_probe.py",
+      "sha256": "181366f3d52c1a6686dfc75e5644c34a4800ac5d309b0a41be40ab1a28a5c2f6",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_disclosure_window.py",
+      "sha256": "6237c6c1f33659e31f365c454d731e204b7280a3144f13ccd9ed084121c148aa",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_expandable_composer_window.py",
+      "sha256": "7f7e679d78b21bdbb483f1f435af1fcc4f9ed5bac7dec5c1cc55e5a5b6649ccc",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_gesture_window.py",
+      "sha256": "41109e6e773c1c114194f023b44a6f7055937b95b837a0140dc438faecce0579",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_group_box_window.py",
+      "sha256": "509c14b38f8b088326c813f1ac848ec0ebf5425f42ad460cf990d1b5f0fb56e1",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_host_effects_window.py",
+      "sha256": "2a20ed2ecf5f4a9f8154adb47f828105c0e153510652fdb8f01b4baf9820585a",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_host_navigation_window.py",
+      "sha256": "d4cde527ad2a07a6563d7188674e8b03d902ffb3c1c93fe7ea5870b457a497b6",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_hover_window.py",
+      "sha256": "1eb6b491cc1762bc887702ac9966145dacb2f230bd3a9ad0a8b9f45e6e5aca20",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_label_window.py",
+      "sha256": "9e9011000a48078c58e98f6778f66cf25bedcc8eca0c9fd370c208a55db65d3e",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_mail_window.py",
+      "sha256": "90530ffe3ae1c5e3748222c15b22657a981973657f686eefc3ff804c749170e8",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_menu_window.py",
+      "sha256": "2c24c679628baafc6e2b211b2ead8a790a5626fbdae7a0b93744676eeb5d096a",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_mixed_collection_window.py",
+      "sha256": "54ae01b81b17f042d96bfe71572308a8822c0ca3a8f3b7b62223efa5c1100d09",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_multiple_selection_window.py",
+      "sha256": "f3f186b52fa9be5f4dd6559d92863ad9ab51154a5a89da944c656bfa14391ec3",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_native_view_window.py",
+      "sha256": "0e710d94d0b22413d8df9e9bb713cb391784908ad4f835014e82c31fbaaaaf82",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_navigation_window.py",
+      "sha256": "2a04c5794a14a76f663ac8061b5b5041f26d7c5544a08573e1c4a71506d6305c",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_network_window.py",
+      "sha256": "b6d5f21a1fa8d0c175b039835b72cb8307616a7e8ab1acdad4d0fe7737651dfe",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_note_device.py",
+      "sha256": "07736941fd96684b63cf91e13dc03a07483f2b85a62e828b6c1cdc6bec311f82",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_note_window.py",
+      "sha256": "de7cf63cf777715a4a8965a2b8a714f6032e5be94f529a0c98c5b275dbde60ec",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_notice_window.py",
+      "sha256": "c262d6fc2f55e3e5a1a49aaf8bc434c402c9f9e1090518389ec9e9afd7a6c403",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_opacity_window.py",
+      "sha256": "f058002d97cbc026073c130d2cddf039b18a5c5a6b72a8ff3a1c387644003559",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_picker_window.py",
+      "sha256": "934758565ae6135ebb8de28bb378fbc90e8c25f6e95e35200da2f3376d230238",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_projection_window.py",
+      "sha256": "5d801f28af021538bd23aa3203d3529428de4fb522439b47509ee3426eb537cf",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_removal_window.py",
+      "sha256": "f7599867fea964a32538a4b73c5532f19a54f0e9b450365dbf94a49e9416f0d6",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_runtime.py",
+      "sha256": "ff463d95dea02a5e94c34f3b48e5996a20074070f10a705f0a1ccef2f3fa7ddb",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_search_window.py",
+      "sha256": "d78a9155f985491c469b7b2fdea940958eafebc6fb5064b40dfff02e33e606e0",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_selection_catalog_window.py",
+      "sha256": "05f58667df13481d10047c962f2c4cbe129a613113f87be1515ab0c08dbd013b",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_slider_window.py",
+      "sha256": "27da856bba5e9db8b92248061d7e6786ed5046a5d736524f3608c2fd423842fb",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_sqlite_worker_window.py",
+      "sha256": "da0ad348f1ca21ab19d82e1eb095fe61ea0950930992d72f0fd1224a28e2af27",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_swipe_window.py",
+      "sha256": "5a1fcaf0a0fdeac1c6074a20a18fdfa52374d4162606f2aaf8e21386b863789b",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_table_window.py",
+      "sha256": "1a3b95668d9e575608e796d353e5da3e7b5b6690e8a471c47efa163ae408fae7",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_tag_window.py",
+      "sha256": "ff1f08b9beb1e3070b78d521959cabf606c10cf5bb5429388527c6eb5f8f09d2",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/test_workflow_window.py",
+      "sha256": "e1b561c28ac98ace402e80aa17b02b13500ae9bdd9cb37e7784a2bc5d37e6426",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/url_receiver.swift",
+      "sha256": "ed419a02c8ec167e5b49541e03cc501fa8dc52343bc6ff789a921ad12ee7c055",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/worker_signal_probe.py",
+      "sha256": "bc72e7785d57e7cb7300148f20621486c33c21902df694c096d9a41df46987ce",
+      "mode": "0o644"
+    },
+    {
+      "path": "native/test/workflow_window.swift",
+      "sha256": "7112446ccbbcb49078fd2a94fcffc25b7b501f0003941b7afe890562f130384d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/bench/dune",
+      "sha256": "338a8a547699e44c5b2c70e16064152a20474e3942f5e6decb6e1f5b261e9699",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/bench/runtime_bench.ml",
+      "sha256": "49d92de51b1400bae6d6f05b0651e9bf2467c35703179e29eedd15e970f1e8b7",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/bonsai_swiftui.ml",
+      "sha256": "c2901625b12465e5cf05fb2f296637e8b1dcf945122b7320bfae7e67047417bf",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/bonsai_swiftui.mli",
+      "sha256": "c80b6fd128ce62b2e2685d57f32ef889bfb0940d18e509128b8fab14c85c7682",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/dune",
+      "sha256": "58d55c46230db54ee8626e643b518240d896843a3d30b470d31748c5f20cb9d5",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ffi/bonsai_swiftui_native_embed.c",
+      "sha256": "891eda1cc242eb2e1ebd4f36487055a2f11ef5f602736c6c8b5a2cc90a272ab6",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ffi/dune",
+      "sha256": "5406cf79df7cf530740f5c38a62f8face138515e110648e96b73ce8ff5eea63e",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ffi/native_backend.ml",
+      "sha256": "b41c6271488b267dce70f25d4bdfffecacb1731df6b6c80584457622ac01056e",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ffi/native_backend.mli",
+      "sha256": "3d28ce8b74ff20cb3e9a59d9bf0f9bef0e14535fc777c621accdebd3ebe21e62",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/binary_codec.ml",
+      "sha256": "27579f79530b3f7def544622f0d2418f0d35fabfce59f7a62b6ac6d56a09e8e2",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/binary_codec.mli",
+      "sha256": "ce628a90a799829ed598682cedd8ac36b135e8acd8964f16241dbf584fded384",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/dune",
+      "sha256": "b8c4b365703c0a5090c3439d4562d79a61e7ffb621288e9d7362f00d5c94c8fe",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/event_batch_codec.ml",
+      "sha256": "14f28893aa43659861389b1fc5d7a107994b6ba81398acd12fc048162ca5c873",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/event_batch_codec.mli",
+      "sha256": "1b8c802b7556b4b21066348ccd6c6e881853f2823e66b6dcae2ffd4ef8f17969",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/generated_protocol.ml",
+      "sha256": "decb38160145c49137bf3a46c61f1d2627b7e29c49f6806833f1850b297e858b",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/generated_protocol.mli",
+      "sha256": "28c6d611636304ea4283b2c830635ce19485b5f11fdfa2c610b9a3e4d1282534",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/inbound_event.ml",
+      "sha256": "92ebeff7bdcf67c4207fbbff40e1d5dcb8b5d8cac93d09e8379969b9ba6f6773",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/inbound_event.mli",
+      "sha256": "9a219023a5a82b052aefb643ec2aab9824d124c102c8da08330c7a5d85cea46a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/wire_frame.ml",
+      "sha256": "ecf5a53c1aebbd64d3f263b4538e79a797ef42f3d7535c81fd86ca61bf69d1b7",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/protocol/wire_frame.mli",
+      "sha256": "2a395545f2c7c12271fc311eadd90de877f38f0a4b3bc70c25781b953666bb2b",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/app.ml",
+      "sha256": "a62e6ec61e0acf6e765e5fa65496ca25c2710870d2d1aa82cd07f4e903b56b6a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/app.mli",
+      "sha256": "513088467a9f13932d8ca9061748261174d62bcc7e5874a32afe93374f0fe0d1",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/bonsai_runtime_adapter.ml",
+      "sha256": "ace23da61d3d92ca840caca23425538c6171ac0e665355f68f7cbfa7aa73c164",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/bonsai_runtime_adapter.mli",
+      "sha256": "484a789c73d7e98fe67d9efc289d975cd62ec87847baa81ca765c2c25d6a313d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/bonsai_v017.ml",
+      "sha256": "abcc1f6e14a68c7c3e1e6f40f50787a67cde052a171b53f6ef113b9a23bd99f5",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/bonsai_v017.mli",
+      "sha256": "44e72e0041aab7d1573390ad5e8f9bdd8466ef3c631525c0c1a04022be08f670",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/bounded_mailbox.ml",
+      "sha256": "1fb4440fa25b53b99cc22990b03f3b02cf0e4eabba43969ad1c406327103fac7",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/bounded_mailbox.mli",
+      "sha256": "f067f28464a6dedfacd0c080c464b195d3e67f3cb48add516b761e32be7f13f3",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/driver.ml",
+      "sha256": "08171aefc29b6dc03000303f816eb236fbe37e243da5a887cd481b45c774d6d8",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/driver.mli",
+      "sha256": "9211e7d454246aadedfda8c38115c467a0bb07a618741b878461c0138653dd0f",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/dune",
+      "sha256": "add7e89aaa2d74b168463c255d3c2c590dbb9a3ecadf75a8263307aa942f0026",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/entrypoint.ml",
+      "sha256": "42d6f461d30a09020aa346dfc7d5f925281ee20a12f4d74459aab27171d570a5",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/entrypoint.mli",
+      "sha256": "e9e5caec8d8b0a9a9a8de34075a6b8b0c5fa8b93cf6dbcadc48fe04e59db00f6",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/environment.ml",
+      "sha256": "b42bf7991be91f2e8c657ef3b045883e58cbf3070f9f0abef74bb01430572bc0",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/environment.mli",
+      "sha256": "374cee66454ea43be5101c26e5ec1ad87c49698fefd298bf6115529d0e1e255d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/event_dispatcher.ml",
+      "sha256": "6b61c7dbfe545469b33fab6511cf49cb9e7493e78da811629ef764fe164af66c",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/event_dispatcher.mli",
+      "sha256": "c3233150ecf03d7b431abf362cd18d93373acc1e40e4c16dee97e1d4da0c4bc3",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/frame_patch.ml",
+      "sha256": "0d0ce6ca32bb4efb04644ecf539767e322460036eed3a2d9e57234bdf572ba6a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/frame_patch.mli",
+      "sha256": "28a54bf224465c0263582deec739f95556c8f9f62bfe9dc92df580a9a0ba0021",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/handler_id.ml",
+      "sha256": "a99e93a1b849e6017534efa88d1c7e6896aa61545525a1d86d5e08ca675cd106",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/handler_id.mli",
+      "sha256": "67d7927721bd20328b3417cde6351c86164e024109668da575f2ed5f1a364d21",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/handler_registry.ml",
+      "sha256": "b8122a6f98093f5a21b46c3d92f90a68d66447559ae4c1a0b49c601ce0791ae6",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/handler_registry.mli",
+      "sha256": "ab4a6260034ee7574b225febf345f9740d1ef309767ef7b883d9661c20fe67f3",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/host_effect.ml",
+      "sha256": "05547e028d38978f8cb99d9b299975deef6782f025e0e2c5170b2a084bc092c2",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/host_effect.mli",
+      "sha256": "a7b66bf11b97ac04059ca8523625ffee236e1d37c06a959ecf93560706fb3735",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/mounted_tree.ml",
+      "sha256": "59f965c6544ea90bb6b8cb912135d052e321d407a6e65a94d10451491813af14",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/mounted_tree.mli",
+      "sha256": "5b4e5fc9972f2412f8fb787af6f47b02d7f0988ffc38c1cd5392c411a40f5f17",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/node_id.ml",
+      "sha256": "483d620965e1e81d3846881665d7bfa018647230fdbd3d33f3960b59d3053b05",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/node_id.mli",
+      "sha256": "49ee94920dacc480f73c9d541495b8c022e36c433b2a9e942319433d84f139ee",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/reconciler.ml",
+      "sha256": "1ac0a68d51ff12936b5b23a1b39b8fe0957099d13e1d87365e89a0ee666909a0",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/reconciler.mli",
+      "sha256": "36d38246f160aa6770ab2796d7c8288180340f60e7a5b3c273863e360d12075a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/runtime_bootstrap_config.ml",
+      "sha256": "d8be0d6eaac810fb0e82204b1e8ab8ec31d10af706bbf72fb5a1697c915abfca",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/runtime_bootstrap_config.mli",
+      "sha256": "0a4cb32b0fa00bd34b5b2a448e85569be9446b233deca039d343cf7ad2c964d4",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/runtime_error.ml",
+      "sha256": "0e199e642f3a8aae4c2c6506c6ed3372b4bbd1365b57d01521646ebd7b882f1d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/runtime_error.mli",
+      "sha256": "f92de56672eb1c5b9bf041bedf911705739ad2f0aff89c10e2f3e1e527832538",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/worker.ml",
+      "sha256": "e104bb9e55defc358a992bd3d0c7628e49eb755e14e09632b1e721b616d03b58",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/worker.mli",
+      "sha256": "88fd86cdb144ac2ff6bbf7bc44bc4ab999f60ec41967d933e7c1c27492a94d25",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/worker_eio_backend.ml",
+      "sha256": "6a969944737a63a14156a62e3c23cc7d28f4aac25a25042f76aa276c57d1c14f",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/worker_eio_backend.mli",
+      "sha256": "35cb705df4058b8fd8ec84614716d61d0f81ebe69a1307dcc50e38c7a22c480f",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/worker_runtime.ml",
+      "sha256": "b71f11d83e02b1333db1af4c8b155fbafcca851d47f0000d24c8704efc1cb722",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/runtime/worker_runtime.mli",
+      "sha256": "376f0590aa91a81a9b72300fc08032597bb6deffd34ef477441316b56b5ec6f2",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/spec/dune",
+      "sha256": "ff89199358adaa7fd7a4ebd96cce699320f03021ed6aca87161d8af0e5c0c6fb",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/spec/id.mli",
+      "sha256": "cf2e9ad387df4497eca93862ba776791ae6e9e5ec5608a3c9fd6f704158f6d29",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/spec/test/dune",
+      "sha256": "328c2ef6852dc66bba9ecf1a96a9d4736cc9aadb6ebb5a6b6e30b8aa929b5910",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/spec/test/id_contract_tests.ml",
+      "sha256": "5770c5ed1d3d3bc3e329feee4392194fba17e9f7d0dfb5388800e2956070b505",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/spec_impl/dune",
+      "sha256": "06bf3a9dc6f12b25e01bf39795405fcb4d59e76fe817040bf4df67d5e7f8a907",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/spec_impl/id.ml",
+      "sha256": "100df520551008c1366a6b7a9e9aa69ebcb85fc4c99636a47f8e80a7678b2636",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/bonsai_runtime_adapter_tests.ml",
+      "sha256": "8ae44dff194a7a9007d9b3755b4c1608762cbf08fa45ea1d18879cf7dc10fa52",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/bounded_mailbox_tests.ml",
+      "sha256": "4bed418c2854f05e82b7652c8d8d31c48241d66307808d7527d1f0a3d1222c39",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/control_surface_tests.ml",
+      "sha256": "b6dad62c703d9c93d523eef8b523dc3da6619ec58366aafafe37a41bd2a5e44c",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/core_surface_tests.ml",
+      "sha256": "e5b3772cfa18bd61fb43341801527dcf18b44f4b78cdde09fa03b47206103610",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/core_tests.ml",
+      "sha256": "79d0e028beb33422327d981256cc4c8d7e971adcf217bd8841b656d8c3d2ec7b",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/cross_language_fixture_tests.ml",
+      "sha256": "31689a2399b15e1088fd9249bc5d2dde251fff140be42f76ffdd79d16f151a9b",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/driver_counter_tests.ml",
+      "sha256": "5fde9cdc0d4bd2566de54fc87415da85df4965fe5cc96d3bc4070021d791ef80",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/dune",
+      "sha256": "7674da7f951e8e9075b05c9f4676bece917aae37b45678d209e376281b371df1",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/event_dispatch_tests.ml",
+      "sha256": "60437bb7166c73edcc3cda2e7498b3c5d14efda324a3337a175658f324275519",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/frame_driven_pump_tests.ml",
+      "sha256": "e24afd496315b426cac240b0b904d12bff308d7ba24bd3d53006f358be8d62a4",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/layout_driver_tests.ml",
+      "sha256": "5c31aa88931deaf1d3f26e828dcfd4b8e114ec024210c4ef175c0f8397f857f1",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/native_backend_tests.ml",
+      "sha256": "d1a8b760a259c1114cf592d26ff83db180d03848d5a4d190cc6d86ee615f7acf",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/native_backend_worker_tests.ml",
+      "sha256": "88506fd8806e37632baf892808181ba4594cad7dee9af503f13842a401dbc436",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/native_widget_tests.ml",
+      "sha256": "68eb706f7912973baec48b98ce1976b4871d0d4670add34ed657c8fc92a20770",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/protocol_tests.ml",
+      "sha256": "895daf61466eb144d711917c8900999c1cc8471b9c164c5e1dc82a9a1b67972a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/public_api_tests.ml",
+      "sha256": "1ab5d385dd93057457ed373487568318657e27c04ccb163e66d997af2f51b989",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/runtime_bootstrap_config_tests.ml",
+      "sha256": "ca2e7e56f893bfcc871d1b8859c8d3616b421e550fc437b850b1f9ba76d86b3a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/test_handle_tests.ml",
+      "sha256": "47209b52de74b175adcafb511f22cc70a4ed6483449895d20450675be45dc619",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/text_editing_tests.ml",
+      "sha256": "f57c3c5d66585329c7eeb25ee70927c123dd700a64843b6191eedb06f8a17106",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/trace_debug_tests.ml",
+      "sha256": "1dea0923d6c6492160889a997be60e96825fe493c47fc532ce30c70ff8d78db7",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/trace_release_tests.ml",
+      "sha256": "7c75a1237c579e95d1c102a36a0355204b27572f0cc3130609d3ebe73459a4fa",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/body_axis_mismatch.ml",
+      "sha256": "1cd515762cd7af6cd3ba870887753ed5d7ca6d89ea13b009111a3ebef1750817",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/collection_direct_key_items.ml",
+      "sha256": "1d8a1f2417d53796ffc8b935ed76cb23bc61d9c2e4105324bab5ec779107ea05",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/collection_unkeyed_items.ml",
+      "sha256": "2b52bd528755908c15b1ff9d527dd1c3aa38d8d9c58deed20cf388b1387e157f",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/horizontal_in_row.ml",
+      "sha256": "c4189c2eeb09dab9766a0d8eaaa69ede701b0f28cc50b157057ed842fa543780",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/valid.ml",
+      "sha256": "4385faddfb7ef753095a31345496683c10174b0d2f43f9ac3331d50617bcd541",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/vertical_in_column.ml",
+      "sha256": "df0982fdecbb3c1071d61c60ebc34ea6c0a1aa8863d651c81482c7de7da4373a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/viewport_compile/viewport_in_weighted_fixed.ml",
+      "sha256": "0eb547101b34ea6ff1e1ca331cec571ef653f7d83a373593815737c18103810b",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_driver_tests.ml",
+      "sha256": "b82ead1cde79e533119918147b466ddda894becdd92315d3be744a93e642029d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_eio_environment_tests.ml",
+      "sha256": "abb19744ac6d942d8806556c7b95673e8c01a8945bf24c632f410f45414592c9",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_eio_phase3_tests.ml",
+      "sha256": "b14a6820326e15a5a6bf8c111d1a21eb928209837b013e06d7f32cd032b862a4",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_eio_service_tests.ml",
+      "sha256": "e1ed6fd9b5c73a1aff3e06178e19e4ee9cc6ae06b0bdf1febee48259d590c695",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_runtime_attached_final_shutdown_tests.ml",
+      "sha256": "dd177bb8dd876f7e692014dcd1f6586b0a798106b3492e6553dd18391b6b2bb4",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_runtime_not_started_shutdown_tests.ml",
+      "sha256": "afcb6c526ecbb3082aef1687b34bd4a3269e5f8bc8cfa2f5bcb6c86f0392326a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_runtime_spawn_failure_tests.ml",
+      "sha256": "662cc791dcbeef687cabb7e4e8ab512d25cf4eddfaf1f6c814207f65789edec5",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test/worker_runtime_tests.ml",
+      "sha256": "ea3091b33d0f62291cacba7a9bada8af4460a9e730ecc13118ca8df2cdaa2e9e",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/bonsai_swiftui_test.ml",
+      "sha256": "84201c8ee9e565a32ab5881884ad7e74b1a1d16357056f522280040a5bfe958c",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/bonsai_swiftui_test.mli",
+      "sha256": "84201c8ee9e565a32ab5881884ad7e74b1a1d16357056f522280040a5bfe958c",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/dune",
+      "sha256": "77ce8858e161e1814248bce9daaaa36c009e950ed8340eb70e676c4cc1153ea7",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/handle.ml",
+      "sha256": "cc28fa85bd2053b95886c9bd7ce4d816c996c67ea403ab6389c85046507e53b8",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/handle.mli",
+      "sha256": "fc59861b691472e478f54f7443ead1cf760238dc62ba791e1c74b31d5f87e4ab",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/query.ml",
+      "sha256": "cea1c01e4bd62635bc7e1c9c558603ad1a4c018cc8959b397ca57fbf7f4f7b34",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/test_support/query.mli",
+      "sha256": "9ec42d13ae4efa121b0fc1569c065b2c9978479aba77dfde50a060dd27ef441d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/trace/debug/dune",
+      "sha256": "169def10d179c5fd66e5a346375230d7f5a7ef206203108a3e89251d339a0cef",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/trace/debug/trace.ml",
+      "sha256": "a075df434f12fcbf765b63e832d17027c4434f9cb59861726771d93a57e8dd5d",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/trace/dune",
+      "sha256": "96cac59db26005bee0e65aef87fbf600a1eca42f2569f12febcdfbbfb20d4bec",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/trace/release/dune",
+      "sha256": "33630656e13729225487363d876374598451b4d48ac42a7aec5942cbe429c9bd",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/trace/release/trace.ml",
+      "sha256": "a08019de4c552f5ad9b4889e02b8404004873ffc9bf9d14760f965ca9988ac49",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/trace/trace.mli",
+      "sha256": "16bb14a7ecc22adf74e09e75df94c579421911b32738123838e0026117b1ce7a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/animation.ml",
+      "sha256": "8a17dedba7a4b270bf88022ddbca581e89a3456c2802a9b4059ec1b701024b90",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/animation.mli",
+      "sha256": "90105e02355a856a2ac58f9cb83b58b4cbb0055a1c7e79e2f5cb3399a839ee5c",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/debug.ml",
+      "sha256": "6f06c84ba688da42e237d0333ab3ee309b45c84a638787580fe4cd5e965d3585",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/debug.mli",
+      "sha256": "e28e23f042a87ad8044493e566d5e883bede6259f3df7dd78185790f763e6f03",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/dune",
+      "sha256": "f94a7e56a2b13da435ee26875c2a63a964c7476c077241a6a2129710d58d4669",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/event.ml",
+      "sha256": "10cf740353a376271b246f252a7901a3d40687b685f9d3cba3da6a1b51d64fad",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/event.mli",
+      "sha256": "4756c8004f66495938aa918b29a89339046486a83c0474acc34e707d1820324c",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/key.ml",
+      "sha256": "35fe22457f8e5a304d22829d994553555d82d3b30e3ac5b6ffd18d36aed2e18f",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/key.mli",
+      "sha256": "8b54d8d055277994f3be854e244fc6e71ddc92d912a6a827a569d99220b30559",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/layout.ml",
+      "sha256": "492898281335dea56be4257bd642e7db94dd655894f5a1562a1b8b7a2aca79bc",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/layout.mli",
+      "sha256": "b5d980f4e2ad8414b0f698c448997eb463d5cc0a85548389bb57c3cece881784",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/native_widget.ml",
+      "sha256": "959504830bb34db29b3ea879aab10c88ba34b440ada9d2a2aa1927f356c039bc",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/native_widget.mli",
+      "sha256": "3023435b820b2402cde0313aaf662d6aff774f8ca9bf116388d3260a00770e54",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/navigation.ml",
+      "sha256": "d5151929ab38a8bad86c21ff13ba8ea42d5b80c4ce883814c3686bb6993a5b72",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/navigation.mli",
+      "sha256": "f5fb6e549a188ba21a1fe6f94434aa0ad01acb0eaa6105d9f2a3f59480e404e4",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/semantics.ml",
+      "sha256": "26d8493ee106cbb1498edcaee01a2cf0fe0a13219e8f92b4af6c5379db13c619",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/semantics.mli",
+      "sha256": "fc011979bf62e09437d3648dc091d8204bb4b0df2796359e1ea9d351ae61d750",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/style.ml",
+      "sha256": "afb6059fad736fdc55eecca62f6abd1de241ff06bebb7924b7225dcc6293022a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/style.mli",
+      "sha256": "963664769bf16bc07b6eb809d30be55dcd9310d85ccf058790edd0442955be5e",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/test_id.ml",
+      "sha256": "2aa9b6c5e5eb00ff81be8cec6ffef39b1eded690fbac7bde522a1a73748c8ffa",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/test_id.mli",
+      "sha256": "e0429f93eacdca1be7cdcf6e3ecc17d4ac5017a9f06f719548615894fa149d51",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/text_editing.ml",
+      "sha256": "a01b7822d592163b487ee6d0d7916534cddb8586d6177f8110b175f8f8192cbd",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/text_editing.mli",
+      "sha256": "e24469c964399a90738f757443298b75d5de8430f6844b3574312aa23b9485ad",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/theme.ml",
+      "sha256": "01b1df3ec3accf041b9e710180c9cc94f91a8fa14a40153c533babc91c16ff5a",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/theme.mli",
+      "sha256": "2f171053957906a7c54386d902fe5fee07762398bc9a1d1b9f23fd4c5026ec41",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/view.ml",
+      "sha256": "c216b8a97f058a4bee1aa92563777b4cca3dee6cf98b57eeb48c02ba93587deb",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/view.mli",
+      "sha256": "6ccd46f6e8e4ba0c1a3a7d68e9a159cc6acf58bb011e7d70a70b98e2fb553b77",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/workflow.ml",
+      "sha256": "d4ede13fb801145e89dd97d4403d0e5e6573943ed82d7c468b046acff94b0c28",
+      "mode": "0o644"
+    },
+    {
+      "path": "ocaml/ui/workflow.mli",
+      "sha256": "76e6202d0d99424dad616c51c32bea7421ad7856d91a09a4e4427bce9fe4101b",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/README.md",
+      "sha256": "eaeb5709f4b9db06646c7e91e0e98a8ff1edbc013628fb7a940680773246d39e",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/legacy_1_12_counter_full.hex",
+      "sha256": "0458596e1f98921af5cfd9feb4c309224d1c32d8f8da62473e25d7b291a0d609",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_additional_native_components.hex",
+      "sha256": "fd8221d34df3e8f34daeda9aed976e94bce39b6554cd97911c51d3ee7d898771",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_animated_opacity.hex",
+      "sha256": "0c463c61c7f3b39f38c110784e7ae22e18b04a1d68180a924b15a9733b738c65",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_application_request.hex",
+      "sha256": "39419f58c4fece2e34a8be81ff2dc4f5404b69c27d0023f468f84a73db264ae5",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_bounded_text_field.hex",
+      "sha256": "6c5e950f71b79c1ab834fda9ed6b61fd0d38fbd2043e0dd2f4f74a6009f2c49c",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_counter_full.hex",
+      "sha256": "cd84b68709d177b367181e6e80b9879349d3384eb7f25773d2fefc5703469955",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_empty_incremental.hex",
+      "sha256": "6ad5837c13acda77b98affe20cc8e8722d6b500c345823b54921d908aac89263",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_host_request.hex",
+      "sha256": "1c7fb9818c20280631f8931502373333712b083b8f05af0477f0fa31605b2b22",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_reordered_children.hex",
+      "sha256": "f1874ea3367666bb2e2b6bdf7b1065c1bc4a4e192aae7ecc539f8256d20a4e5b",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_scroll_sections.hex",
+      "sha256": "5688be72ca3ebe9b14f80af5a7a61c06d214788049ed9e0a6933cd0695545874",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_unicode_update.hex",
+      "sha256": "b7d448aef69abc9d1f8654294e921fd53428dcd7a952ee12479316641fcbb670",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/ocaml_viewport_body.hex",
+      "sha256": "c13369499cc37dbab1a8104b0f33b7485c183f1b98b4d0fb00062f468a2bfec9",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_application_event.hex",
+      "sha256": "b4bcbf12bca52b67123580e03ffa9ca78f636534277b44f8c72dbd309745dec9",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_application_response.hex",
+      "sha256": "d4daa77b688e213f3bd40809c6f9b2adb9330495df654c0f3d41fc01dab1fc74",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_counter_press.hex",
+      "sha256": "f22b7d57d1455dfaeed36db23130667b0ad9da0290358ab18dd1893790cb985f",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_environment_changed.hex",
+      "sha256": "628d093d885a95547fdb601511b85a4db4b4dcdf91878568535ac902bc19acc3",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_host_response.hex",
+      "sha256": "5dc31262c95de51071490f42697200556da0f77188eca94377f511d910d3948e",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_text_edit_unicode.hex",
+      "sha256": "78d694b06b27456d22c7fdf7451ba16065927f5ad80d7e886d7c953845127a7a",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/fixtures/swift_text_limit_reached.hex",
+      "sha256": "a6fd1d0fc1b5a42c2542e6da44b031974c3fcf9739a5ea3c8832010dc313eed7",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generated/protocol-ids.md",
+      "sha256": "0f30bced020a5f42f240e685437179558d4103dc411853ad6776d6d83a86dd6d",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/dune",
+      "sha256": "e2030355119dcaae499fd2c7fb65f77729a73bf4b6a1c9f83ca86a52a3f7a0cc",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/generate.ml",
+      "sha256": "b79754b9498befec234b678347c0b79e6469b257aa477d113f2bf31988a8d04d",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/generate_fixtures.ml",
+      "sha256": "ffa9adb078bdb80c2c15c573e879f008838bf7d0722ab6ce63543820e430245b",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/generator_tests.ml",
+      "sha256": "10cb040be13b68dbc88ae234e7f8f1c4883f4411e26f7d20c789692264e76f45",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/render.ml",
+      "sha256": "3135f347e23406bf05dcd638e327fc7fff77227f6ce06abf4781ba7bcd7743f6",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/render.mli",
+      "sha256": "63932f5069a47a387c1963f9b5f7d6e3251cbc2c4d4157be24efa27eb842e085",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/schema.ml",
+      "sha256": "764cf7cc857e19027c2807162fa3a60a935126c2b06a3fcd4c185c72d7c7bf25",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/schema.mli",
+      "sha256": "6b793b7e207ba09094f29f2b4424fab3e89d65dded3b32b9e8f32f365c0f8890",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/generator/test_swift_generator.py",
+      "sha256": "b79de896e287484d0e7382b27a50d46b99187964ab6bb57dad2828a5171264d6",
+      "mode": "0o644"
+    },
+    {
+      "path": "protocol/schema.sexp",
+      "sha256": "2a168cf864a2d322694a22a75ef46844c35b4bbae771722e84425bf7d33be40b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/AnimatedOpacity.swift",
+      "sha256": "5aae63e18cf8db4841f5117c2d7224a47ee7f9c5f53bcfd873d49763bd367507",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/AppKitHoverCapture.swift",
+      "sha256": "4cb9ebeb29634dd1177610cbd1c26c79e2bac07b61f0ca446ad230dc7798b941",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/AppKitHoverSource.swift",
+      "sha256": "f375ba4e0a84e906a1c416f83fc54b43aa4a153a2100610f84cf902b27c0843a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/AppKitPointerDevices.swift",
+      "sha256": "5717a239860b562754ece1558515d811bd0fa74110078eaecb07cc89476e4770",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/ApplicationTransport.swift",
+      "sha256": "28ce9e1683fe23376eddd77d815caea140077cc195dcf02cc6b60f1c93f24a6d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/BonsaiApplicationBridge.swift",
+      "sha256": "28ab7d3746622cd446b47f76ad892f57414c3dacace9185a18e08291929d3d8f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/BonsaiApplicationView.swift",
+      "sha256": "fb5757e86ea0ea2944104ca52b485bb0638498998ff387abce42847c8af73f64",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/BonsaiNativeViews.swift",
+      "sha256": "15519b6c8ec8ff067ea937768f3a965642e32dc29824f30e086f7b6fe6354c45",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/BonsaiSession.swift",
+      "sha256": "cf96416835033bce407619e36959a0fd5a23971724bc57a71d66ff321312a8ca",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/CivilDateDomain.swift",
+      "sha256": "10fdeb3fcb5e5301e8c8ff6c4f4d123ba73fb05e96457073e9a48ce07db294b5",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/CivilSelection.swift",
+      "sha256": "4885b943a806f73b22f8a482a1669ce4c2022861896c45824c932333ff8f780c",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/CollectionAnimation.swift",
+      "sha256": "6d515bc470b753f952a0fb2b0c3e9a07945ff55c7c7e50681424613890e0fc65",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/CollectionGeometry.swift",
+      "sha256": "f356719314073ce68077b3c425a95512e4f695007cd55da1d365a969780d2bde",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/CollectionMeasurements.swift",
+      "sha256": "76590becbfd046cbd1db07a75d1d77d948a66f7636ee6fc0f810d5f88b6bf4df",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/CollectionViewport.swift",
+      "sha256": "412d86bb6506ec5d33b768c04fe7bd079a58093004ce9e2cd27407fa4711fc71",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/EventBatch.swift",
+      "sha256": "425559f25ff8467677d1b5eb445c073ae43a80433cc259ac3af9eeab5b72b728",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/GeneratedProtocol.swift",
+      "sha256": "a4926efbf486380723d6eb544fa082a15e8a65da81bc9ae4cd00e1c54d3deb95",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/HostCommands.swift",
+      "sha256": "3d3bc9cee87f8b08b87899688ff2964f11c532dcb4e8f45a56d9b4dbc8c5c1f0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/HostServices.swift",
+      "sha256": "4990394d28b90eba5bb44618f6a2eb00bc86465450450a575d870a1e401c73aa",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/HoverInput.swift",
+      "sha256": "332d2cc41b570d045445a6dc9aabdac640e5e5dc9a6b26ba866f6ea777e9b088",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/HoverRouter.swift",
+      "sha256": "89b9e3153bc3b0db9d8565dba6bd15a6fde5de97c1562109e6d231c6f0fc1a03",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/HoverTransitions.swift",
+      "sha256": "32c40d018fbc937aef120903816a589638f89edde98958206a018122fce78c5e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/HoverWindowSources.swift",
+      "sha256": "c6b85bf54a6fe833ad6d51d82ad5a1df90ac90cd82e9bc904d667b2271188c0a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/MorphingSurface.swift",
+      "sha256": "45f7695533814daaebf99d67dee8a2d333da8e1fcb6895f73d0dd6a93ed79330",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeAlignment.swift",
+      "sha256": "f8687b9e4ac358c41b2b8694b3d3be363fc60911102ab944fd2a8e1ca989889b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeBadge.swift",
+      "sha256": "27b45dc869c2a2c9f80f82845cacf012f84ef2eae514df0d9df7cac6ec2273ab",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeBooleanControl.swift",
+      "sha256": "a3f3aff840086334290364391b099f0a50d50dfdbfb5cc0251eb1cfc5fb37f0b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeButtonFocus.swift",
+      "sha256": "5c8802bad1b55aca355a336e7a7c9f259733aafb76cbb7e405e6932eaa83ef83",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeCivilPicker.swift",
+      "sha256": "4ddd865a38b62597d0c7c5f437441b2c40f54728b3a40d15129e2d34565de402",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeEventQueue.swift",
+      "sha256": "9599a604a2d0fc8126e10f239e12853094d967e5dfe24d6a64f77fd4f500be56",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeExpandableComposer.swift",
+      "sha256": "f1ff76e2bf8443c4b65a0479751b9e0282a73c4b2b70b109ce2f1b867e8de3a9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeExportDocument.swift",
+      "sha256": "668c62a33e05d9930e9f7187ea8af56a916b53b8eae453718430058e3c4f0fa7",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeFileDialogs.swift",
+      "sha256": "88e15891144045ee4b3785959147ebb37b971c365bd00fa7e35158322c1847cd",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeFileImports.swift",
+      "sha256": "cfaa3b5ee2fcc697a1b86a9f355e0c3d9ad2956421becfdc14319b600ffb7b9a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeFlowLayout.swift",
+      "sha256": "67cdc32c0bcaa7b85f84fde8200c817e685b1b06ecef4d15a8d53b86e899c72e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeFocusScope.swift",
+      "sha256": "a4e60fbb37c561398bb3526bc222be7a76d9508d2e9f4cae6a0839e9ae4c4df6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeFrameModifier.swift",
+      "sha256": "c0381afa224e0b4384e5bfda9a2d83f01072d1174a1cfe37ee643843c5d63439",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeGesture.swift",
+      "sha256": "e1d51d5f057bc8b33505afe03ecaa93245e6bac8033893cbcf4b63e6028b952e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeHapticFeedback.swift",
+      "sha256": "9d2c6ac1a66460a47eb48e4b7249f07e68a8ea826ee8ff8a2c9ffca1c3a75b1f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeHostDialogs.swift",
+      "sha256": "631eb3e3e843cf22daf198529df19dc93ca75ef497b4941d3a78cf10e91a9438",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeHostEnvironment.swift",
+      "sha256": "05ce888d1884ffe72fc7d8859c59b00364574415a09be0f70580a7453baaf85f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeHostEnvironmentObserver.swift",
+      "sha256": "b9712468393e492cc0ef155a6bd521b1e6f566001c73d43a8705f664ecdbe126",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeHostPickers.swift",
+      "sha256": "0a0828fdc4e8e21244ec0ceb1521b3183ae34aa7974653cc554d3364faac7e63",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeHoverRegion.swift",
+      "sha256": "4006564580bb75fc2653282846a36624c8f0dcb80a6d2ec90226a636b561abac",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeImageView.swift",
+      "sha256": "612be2e7d0bdc4647bfac32ae35fc42f46cc3c3051f73645ac574a3365d8f017",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeKey.swift",
+      "sha256": "9c87ecba2d599bfebb492d4184667f6c2d3217401f865d1846bbf2eacbc0d0ab",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeKeyMapping.swift",
+      "sha256": "680b21ea4e4f28f41297f0ae9a29eeb1c8cdd5416611b4c1e3de8fc3e4cd0b77",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeKeyboardListener.swift",
+      "sha256": "4cfb8dec80cc05c4aa93892bcffaa690c09dc0b61b2a782e51d922884506ebad",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeKeyboardOcclusion.swift",
+      "sha256": "2274d06abb4398237dfa3d63619b5ff1a800e00b368c175c302ae5f25050e4ce",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeKeyboardPresses.swift",
+      "sha256": "00780d3159b8b33b63dd10e2022382685a60a4c75470cf481f64d4bbbcbcc085",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeKeyboardRoute.swift",
+      "sha256": "9a86a278cadbf7ed4b358300dcb924b42fc70ce3fe68bc109a7119a95bf4db41",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeMenu.swift",
+      "sha256": "c8f595d74e4d28febc3b4fbe2468ee392eb7f28e633d8552f6321a7bb91d3213",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeMessageComposer.swift",
+      "sha256": "864d8e082547f24815fe67103ea7799636b9758142cc69e0d08c468d3e441ec6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeNavigationSplit.swift",
+      "sha256": "41c8fe1443d14d59d15692e366d29f4eaaacf0971ec9b08c13fa7515813ac8b9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeNavigationStack.swift",
+      "sha256": "b2b491c759e56c4e6392c6068cdd4cac9697dbaeef2eb24f20a7001bb3032d7c",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeNodeGeometry.swift",
+      "sha256": "77c55ea1221bd74b317cd4ebcd9adb3924ed0167a3a681bf5c00e39766561c52",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeNotices.swift",
+      "sha256": "0e23add055c98e953ffc207b5714377d7243e091aced1cbbc1b13bba2e992f61",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativePicker.swift",
+      "sha256": "6895fa2b6d497a179643fe0c0e6a5a6de70b24dd60b8175255b9d13af8242fa9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativePointer.swift",
+      "sha256": "734307bc6b0cad132d206fa24288129092855c82c7d7f7b9f112c98f71dc426e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativePopover.swift",
+      "sha256": "9d92599520aa2198158898ca44f1a1238417fbb0463462ae6abc42e0f0fd9b0e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativePresentation.swift",
+      "sha256": "dd2ef56b99de38336ba4c48c8e6ea3649d45207e6ea64c5a42eae5ba1990b4e6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeProgressView.swift",
+      "sha256": "26b485c1fa068055a3771b196bf20fc05a244677aef27660af8c0078c33a9bbf",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeProjection.swift",
+      "sha256": "f5efcb23b9101acb2ba41ae79550981b65cbaff6eae8ceb8694142c7ffc461a7",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeRefresh.swift",
+      "sha256": "c8a5e4039d41f2b166d70d182ce8b49c0d90cf6fb5c974c78e076b43dbec8b34",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeRemoval.swift",
+      "sha256": "86b1ccedc5019f9886f7efbc329eee7334d3e47d055a23a34fe4c5938d05a81f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeRichTextView.swift",
+      "sha256": "9391b8771843925544f6e56cfdc478e71001de3a292ae6a4f561f1328ea75bb6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeRuntime.swift",
+      "sha256": "74556bea7c70f5ca03a72a3aa0632ba7a3e8f628f6af0bb77ea2a11a9839e5c6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeSafeArea.swift",
+      "sha256": "04f8d654afe92bcba1fc9a0d2a2f3a359a8a9f69b4512eb4be14beb6e4d715e1",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeScroll.swift",
+      "sha256": "b92ff1d94f943a9d1bd56f9c8b7e8b6b2bb6582519b4bb764a1cc18bb245c1d9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeScrollCommand.swift",
+      "sha256": "8ed14db6d715fad2ea9e7e7689baeb71cb7fae56750d72973ad0c71a4fce35bb",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeScrollSections.swift",
+      "sha256": "090193343217ee6b49cb07b7584fb87445863ac4a69d712e81d1406a0d0a027f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeScrollTargets.swift",
+      "sha256": "7759d98db401a2039dd1fd28e7667e8613c43ea946c2dc0396f98563c8f36163",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeSheet.swift",
+      "sha256": "cd81ad7fad1005af8616da52b3369cba6b2908fc9dbd4b1a9eb496a0514d85cc",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeSlider.swift",
+      "sha256": "58cc69cd9239c61aaeb8e06f3a47830dfd16b98e5f0009f12fbe5e0ece53cb23",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeSurface.swift",
+      "sha256": "356f2ceaa169ecda6fa14e31113cbfb46648b8fd8c2d4ed1899de0fdcee27b75",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeSymbolView.swift",
+      "sha256": "397b7f7e1ef30db678667f251583c9f1fe6e0d9a4c16a0feffaa2223f6a9e60f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeTable.swift",
+      "sha256": "eeddc2bfd281d2d89c0dad05713e230e67f60c17b2b1c2f22f5b9cd910a3d695",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeTabs.swift",
+      "sha256": "a3fcf4b1a670c51a7ec2c386ad822e9b76243bfc91be3964b0c34991856bb418",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeTextEditor.swift",
+      "sha256": "bee420cf188277aca7171e7518b96b8156c65a26d3e315e1ba8c33c7c4f0abd8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeTextEditorView.swift",
+      "sha256": "7d3255cf3b49af57cc33f43bf7a8dbdc2475f964b3984ac727ee06725276baf0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeTextField.swift",
+      "sha256": "a4de43291beb97de68814dac10c93c64dadc01e57af76e7285eb15886d11daf2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeTextView.swift",
+      "sha256": "6620ef95b19d7344ef99f6eb222d0e01e3b8535e487ce032f6fa2a23c7e1b915",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeToolbar.swift",
+      "sha256": "882d09dcbd79ca39d8efa5760da252e39d5080a41e1bb43564f43e52eb9975b0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeUIKitEnvironment.swift",
+      "sha256": "d7911b751d1697b2a3c294352c882399a9b2cc3e2fc337a93ef1fd65bebbb32a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeWeightedLayout.swift",
+      "sha256": "846dc730f36ef31184c747b937b7b8055747b5b57c85b8bc85f2d590083723b5",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NativeWindowHost.swift",
+      "sha256": "a1bd0366dd75e262a04ec5ab5b04f9e58d02c1daa909a3a08fac93df5dafb4d5",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/NodeStore.swift",
+      "sha256": "500a84781f4eb5a32f4cda98e2d0686c11fdcbf097cf55e469006a46dca4e04f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/PlatformSupport.swift",
+      "sha256": "1e5cb52023d4aee1e20391ade534db3dda55c5d9f11fadbd1915abe61c93dd65",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/PointerContactInput.swift",
+      "sha256": "b89a24b78807d0a61f3e6823207071245890dae18a51f3ee8f403c8af124d44f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/PresentationProbe.swift",
+      "sha256": "b97d41de74a86fbb6018555df54cb4673ac52825705cfa3f168d8119fe872731",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/PrivacyInfo.xcprivacy",
+      "sha256": "f5caee8611c435ce6fd4ed992c9a12a6fc0fd3f4c3333276d7ff183547cd7e8c",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/RenderCollection.swift",
+      "sha256": "94f20073629132f89bac4ffc647a6e5762947ff76569a9fba75c26623ca401b9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/RenderTree.swift",
+      "sha256": "b933e9ccda42063b5aab562859bb719a0c44174580cd36938c6127b6e5b5c5f9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/ScrollObservation.swift",
+      "sha256": "8ad053689d8ffaf0e5282d7afe8d3e081bf1533ee7d80e1b1361ec6b33f29b3d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/ScrollPositionRetention.swift",
+      "sha256": "36f9dedc60322f0bbcc07469a78e4fca990e4e3ff0bd85326c6a27ff144908da",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/Semantics.swift",
+      "sha256": "2d4586664294e2b8688199c1f2c268488004b9176393ee679fbdc6c0026c2623",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/SharedUIDefaults.swift",
+      "sha256": "eda149832e9587e5975869a05a172d9ca75fc158a9879bbfbe979e50584fdc44",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/SwiftUIEnvironment.swift",
+      "sha256": "c5b343a2f3d3c2841f17537c2f2914a9c72efab0f342c0809dc020c9b28354e4",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
+      "sha256": "79402843e04548f6f0473c2d14026967e1c31b99cfa08a0b2831d1fc4e01c3dc",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/SwipePan.swift",
+      "sha256": "f1d461bf7e645f896c9cd3d37ddb630747602e2558c5d7b4bd43f9293716eae6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/TextSession.swift",
+      "sha256": "cdcd63651dca230b3a0646e2842bf463b13902e321f3c25d242e2ddc890eafe4",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/UIDefaultValues.swift",
+      "sha256": "b0ff48c96724b1f7860943135678ef39aea052f39b0ab3f49b3499b21beb9e49",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/UIKitHoverCapture.swift",
+      "sha256": "027bf465b7bbd5193743f7d30b6d7815428b8685c2221372b9baf1cfb723b9c9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/UIKitHoverSource.swift",
+      "sha256": "e04ce70616f620f2d2006b5a2cf117e2fb68e7ab8484a2d46a0fa7d95e6675f8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/UIKitKeyboardSource.swift",
+      "sha256": "80e33d50a943feda8add683143a9aa9f87f7c5f1892649075d4c020b7bc9d375",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/ViewEnvironment.swift",
+      "sha256": "89355703f1f93f95de766c52ba797d8a8ea7564d5b93c55a60c6318ebc32e0e0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Sources/WireFrame.swift",
+      "sha256": "88f38574fe5082280006429f5189897658ce8ec4c5f76d2bce8d3b541da32c1d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/AccessibilitySupport.swift",
+      "sha256": "fd9b54dcf2f610dde884e20e23a1506ca4aabb84c0d16ba1ddd82af6c53bf14f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/AnimatedOpacityTests.swift",
+      "sha256": "43e4133e864b976e7b7ae5f6997479c08b850202386d517a71ddfdffd8d85c9e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/AppBarCompositionTests.swift",
+      "sha256": "1ae92fd03fd739f04396df885d082bff4e1c2e333e8a385b666a52e862c803db",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/AppKitHoverCaptureTests.swift",
+      "sha256": "cc9bbcedf3f09c2442b01d985fe5eb16958e4171cd531cab1abefb42961b0332",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/AppKitPointerDeviceTests.swift",
+      "sha256": "174b61e402f0a8cdaf2b91e275f9e30ea926f52231e14555d9c778d5d25c1576",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ApplicationBridgeTests.swift",
+      "sha256": "9a1eedf1f9cef7c8d1cb2e1bcb75c0945ca6a9bc64911221b0e46ddea37427cf",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ApplicationTransportTests.swift",
+      "sha256": "73b2ca2f80198ba11468f11504f80057f4a8a357628096a4f71f52b1418f2dd2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/BadgeTests.swift",
+      "sha256": "c44fd561c93808218139ed723b8d093ab3c7dfca3f11cbb26884c79f76a00c98",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/BonsaiSessionTests.swift",
+      "sha256": "00fddea10ab7f62e99e78ed916f9201f4556cbb50015e6ec45babadd84810664",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ButtonAutofocusTests.swift",
+      "sha256": "de07fb2b1b677c48bbe4f6339acdc43409abdf2392041e0ced82e84a468cf994",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ButtonScopeTests.swift",
+      "sha256": "bd00633472e1c84fbd90b8759f0ec9057a78b22b7525848a32cd62996eceb2b3",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CivilDateDomainTests.swift",
+      "sha256": "a06dce336683f95c25062e5a6093a289c23f9608ce8149a596cfc0a078821b6a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CivilPickerTests.swift",
+      "sha256": "e10253708d5c7860a39c16e5b54a0f6878a52ed5c5979fa7355e1fc63285c7c9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CivilSelectionTests.swift",
+      "sha256": "d55840b608dd496259744be0e7d86f3abf63835f53575010f4f9d51ad5bc0961",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ClockTests.swift",
+      "sha256": "134b9170dea8e80b7c59bbf21afc454e207d8767ae2066ea8149a83698e5d8db",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CollectionAnimationTests.swift",
+      "sha256": "70a5d096849c41284dcf8202dce3be0793ce1edb929970e3b4a58b84c25b4a37",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CollectionEventTests.swift",
+      "sha256": "aba84a5dcb87194c0c44a54e62e3a7132aa9a98ee7903c51a8ac4ba9f27a98d8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CollectionGeometryTests.swift",
+      "sha256": "7ebed46845edc83696356984df8c83701a9d4d6858a3b0bdd858f7c7b0f457f0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CollectionNodeTests.swift",
+      "sha256": "8156eab46c4bd4d8134558243f9a990cc20822b6ed64ceb8e9a2512cff5d896e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/CollectionViewportTests.swift",
+      "sha256": "4d84690a8d3a3ea421aaf5457eefb7a64a0d07b6fb8bccb3749d04d3266156c1",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ComposerTests.swift",
+      "sha256": "8e4359fc2f95ad99fad1b941fea3652ea1f4f910b5cc4d4d7ade1bcac1e2db71",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ContextualSelectionTests.swift",
+      "sha256": "332316ee232d3975095c430c7e380225989de97a4970946046166290d798ef55",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ControlSizeTests.swift",
+      "sha256": "fe0b1523aeb7c65322bc76d2ee3eb26203f36e23a448d99f0adc3aa6a0f7ac24",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/DisclosureTests.swift",
+      "sha256": "b4ed48d001ed8af2e03c1b9029779f701126baa368b5612c5e0fe4e6cbb461dc",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/DividerTests.swift",
+      "sha256": "79cddb4785afc33f1809be1fbd455dc30d2456ec4cc36ece4221d93e4440f4f9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/DropdownCompositionTests.swift",
+      "sha256": "8c8a0d584964587a0560b0dac0d6dd7cf7216cc4d47199d111fa3a0fa7dbae7e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/EventBatchTests.swift",
+      "sha256": "44f501a6b300db8478eaece0f566576c0233205642c2348c538cd1fe3be8ad71",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ExpandableComposerTests.swift",
+      "sha256": "4a3c96d0d27b289ffee39dc591fed17d7c9a2fb676c91353b5eea7cc49f61352",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FileCommandTests.swift",
+      "sha256": "763eb127ca79298815d215f55b7a3333db666fb574a046c1c2b72ade40aac650",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FileDialogTests.swift",
+      "sha256": "c59ecb0484614bd2ab27339bb3e130fad0f621e208afca974466af11f2700cc5",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FileExportTests.swift",
+      "sha256": "87763a980cdced4130f4d490ee230598873e2c80b734d1321c06708220eccb7d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FileImportTests.swift",
+      "sha256": "3d092d61945cb145bbc6926795d296c71c44a901a01cfb985da6ce1c1d9d9553",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FileResultTests.swift",
+      "sha256": "90248c9998cc5356a54b9b257ba2043340d4c9e43a0041e70aeb12e23aa9a3c7",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FlowLayoutTests.swift",
+      "sha256": "3bb34e20a3b0f52ad58cc4cb7d1556234e556cc6b821caa454f692c09cd4b3b6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift",
+      "sha256": "9de31013bb55c9ed054e637a1a84e775d4b6e63f2e7cf8e1d6fc94ab69b344a7",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FrameTests.swift",
+      "sha256": "89d358a4a604b257e971f3f33043fc784de26775180a4db97b9df5e6a7d5ad4d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/FullGalleryTests.swift",
+      "sha256": "541443a073fee064067f5ac4324e5692460a446eef84c90afd1c79253237b73f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/GestureEventTests.swift",
+      "sha256": "d004c0f467b97a36288dc4ae7113cac55f996c63b76922ab39fa77d7ad98a208",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/GroupBoxTests.swift",
+      "sha256": "10c2cb0e6fa28e87344a2c10961ebc246f92344797cacd22a3f6c9e3bc13fe4d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HapticServiceTests.swift",
+      "sha256": "67623fa2d5782e0c4d6ccf73d525b887141d90c0735060cde183aec2a978eb6c",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HelpTests.swift",
+      "sha256": "995111beb34c6c30fc82ba9d4829d7fe0dd4195c0be25939acd3701919310637",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HostCommandTests.swift",
+      "sha256": "b7a0622c577789e076c7b414826bf6c9918040b97930b7dee9c1f7eb8800cbf0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HostEnvironmentTests.swift",
+      "sha256": "2f0aa2b37c46b50c0bfaaf01e7437458ff55dfffb013d070951d7fa0f43746bf",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HostMenuServiceTests.swift",
+      "sha256": "7e88c3c7a47d2276bb92c43a1fe470c876bfde620fdaf8a9a7fb6e1303a82e80",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HostNavigationTests.swift",
+      "sha256": "6e632859afe753320c20d5725e625dccdcfcd36166a1b29d55c17c88b44ef8aa",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HostPickerServiceTests.swift",
+      "sha256": "e9e4e8349828d8457255e1863dc706f45233e83eb6abccdd4ef5957b81b0b539",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HostServicesTests.swift",
+      "sha256": "ada385742b738533bede1e4fe17510d6e5e8a26fe1ff6750bb6b4bb7d4f409dc",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HoverInputTests.swift",
+      "sha256": "f6869e41159cfca772a3665d41f35ca73a8c44bac14eb506df3889c4c6758cb6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HoverRegionTests.swift",
+      "sha256": "52580a2f3263b1f7ecea88008b6432e9123b2e4a2b4bf764270e0b2bb0da75e6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HoverRouterTests.swift",
+      "sha256": "0448fa75aa63ba404a2639addcdb8ad9c9a3e9874dc60f7301b58c022d8defb7",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HoverTransitionTests.swift",
+      "sha256": "6b5cf7c2201e799225e8de5a226c8345fe839ba362effea882c2b79421ad8dfc",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/HoverWindowSourcesTests.swift",
+      "sha256": "b50759273006fc7193fcefac66d3a2b65b216b06f25a357c10de8341b4ec28fd",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ImageLoadingTests.swift",
+      "sha256": "6072a5259067cc5d4c22adfb24b875992d79c5012b178f2cc6058f57c6955543",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ImageTests.swift",
+      "sha256": "ab30a557e832d663ebf30a06e29bdfcc9ef5783d7a87ef6cab4539b47fd77a5c",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/InitialScrollTests.swift",
+      "sha256": "50bc956b96976b582231e580429bc0599dc6c895c11a620634f5b2c46c068076",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/KeyboardEventTests.swift",
+      "sha256": "0561384b0c6ee0ea386941f5d08250f81f565a2cb15e0cea26074376836f4e5f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/KeyboardListenerTests.swift",
+      "sha256": "7302fcee37758477c5db2184e40e42e53c2f0529f0e002cf1272abd75e4fac7b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/KeyboardOcclusionTests.swift",
+      "sha256": "ca59e3e3dbce1aa6e428c9bf35eb6472459d6bd3c6b7462bfc8c047ec3ba72b4",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/KeyboardPressesTests.swift",
+      "sha256": "8c671c19f9b43812b15a9eaa2584b30b68cef7339a774ff280fc311ae3d75e62",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/KeyboardRouteTests.swift",
+      "sha256": "fa59e458d1ac2d239114588d0c138cc9fb1a38263866d8e3c67d483ff94a0616",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/LabelTests.swift",
+      "sha256": "ec2e8cd89e915ca7e98235f2bdd09e9d8d95912e78686ae3d6d2d2af5ee51208",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/MeasuredCollectionTests.swift",
+      "sha256": "8d3c563e4a65d18a9f80e63f0e723f60922f167ff3aadc7ba64da89909dc65df",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/MenuTests.swift",
+      "sha256": "9fd0f2081011f1cde2ad2ca68a86f3352ab1ef8fc694d9c57dfc9f82ad3bdda0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/MixedCollectionTests.swift",
+      "sha256": "02ad745e66927a78b6c5db38f25466efc3c576aa3337b97f9daf7872c8e9b000",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ModifierTests.swift",
+      "sha256": "92555b293d6a578538286a5e70d1e622e0374e25deda7db5038696a5dab27485",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/MorphingSurfaceTests.swift",
+      "sha256": "ffcffbc2353c16248225ca92c6e16d1084cf8ce05399ea8efcfe8c5dbc6454fb",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/MultipleSelectionTests.swift",
+      "sha256": "2bb8a12aac85f7a596352a3012089aa938c2a35b145b41426e313a0932f74dd8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeEventQueueTests.swift",
+      "sha256": "b96ff32e13ceb4437aa124914206628d80f41ff02370d97bef93d89f66dd7bee",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeKeyMappingTests.swift",
+      "sha256": "c573326b15eaee1ab3809ce9de494f0e79c102643b3e107fdf44adc9633a515a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeLayoutRequestsTests.swift",
+      "sha256": "d8e1d8cef4ccd42db76825b60aa99f653e0ef4af5d1013f7f47bdb1bc35b1bc8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeRuntimeTests.swift",
+      "sha256": "fc2d3cdba7556d3ac21bfb16d5896cd4417d2d1e6ee009849f054a560ee3753f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeTextEditorTests.swift",
+      "sha256": "ba9da9e053d4ca26817f6a4e8e7596e5a8305b2daa2de91f7cc617b12340b801",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeViewTests.swift",
+      "sha256": "8f9678d6a82e49889d186ee4d1b42e8e2bd255913133feb23c28706e8eaedd30",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NativeWindowHostTests.swift",
+      "sha256": "5004fe46fd875dc187540c99624357b383b6f91c49e2f8971bf03ffb833c8da2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NavigationSplitTests.swift",
+      "sha256": "614db73288060500752af925c0041689518c03656d2f819e4a7636c813fcbae2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NavigationStackTests.swift",
+      "sha256": "26e2699c051c88ad96ce85855169deeea6c5da3eea5fa40fff3a5722299e6b7b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NetworkTests.swift",
+      "sha256": "04357f01f7497b07d5b6ba273e620da0cd6ba42dc193ad23174b016c68dac086",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NodeCommandTests.swift",
+      "sha256": "c614e111d24ca67f65a439ff10c69dbe695cec5147bc4ae74834152b3ac1549b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NodeServiceTests.swift",
+      "sha256": "f1970a44932a313192f8860754303e843c557298e866a936d14f8eaf56b67a52",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NodeStoreTests.swift",
+      "sha256": "16a5a7b8ed4b4cef902343444e34fb489fb40c2443fea92bb5a6c2d57c88d820",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/NoticeServiceTests.swift",
+      "sha256": "e94a2bfbaa2798f75a98b378515cbc7e4bb5ae0c92a0bf336a3771cd037af37a",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/OverlayTests.swift",
+      "sha256": "b7b853b7ec7fe784d2090551945b24d51b1b4626c4805b12c442c7dae001e7fc",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift",
+      "sha256": "67392bafb7b1039e4b044243514fbf87ffd7d80bc8a767dfe25227d23c6e1aa8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PickerTests.swift",
+      "sha256": "96aa7453d03b2086b318326748a5894746b4244228b0ba132f376fb63b88b76d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PlatformInformationTests.swift",
+      "sha256": "7d27d5575668a0530f0a9c15a9e69fcbd5ac95e62c6356f953023e9c5783fa0d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PointerContactInputTests.swift",
+      "sha256": "9342081be746e9b5565220eb3a1a8e0b21939f1678e6eda6efe070b55e6dfcee",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PointerEventTests.swift",
+      "sha256": "208288befaa471f996408899ef24e10232eba1058c1c2dd4e24a7aee21b2b157",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PopoverTests.swift",
+      "sha256": "cfad62d6cf83151ffe39f9a072dd2e79735379f90d87c4ecc2a8690e2b587635",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/PresentationProbeTests.swift",
+      "sha256": "9c9870cf33292b81533bd78ae3b08255ef63eebeab1150fd878f27214f16e023",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ProgressTests.swift",
+      "sha256": "898b69169a611ff537398db466fe1ab05249fe2c76fccba73201f141ce643507",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ProjectionTests.swift",
+      "sha256": "62bd7f6016b1bd6a98aefb4436fc11b13371705e71eb78c31b59ea835291b2e2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/RefreshTests.swift",
+      "sha256": "f9318e968da6fcd7df47a9a6eaea61c8ae39082848d0d4708d863923eaeaeeff",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/RemovalTests.swift",
+      "sha256": "4d2255aee4c904a8a79717d79f7cde5f28e3f1d53f022bf464e646ca21bbdbb6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/RenderTreeTests.swift",
+      "sha256": "18aea4be105c7b8765af6a379d793607743d6102d969db0364d37ed7a88b46de",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/RenderedView.swift",
+      "sha256": "c6ac7cc1731783511a4dd4c2f0a76e358c09691428b35f00e25af61e13964695",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/RichTextTests.swift",
+      "sha256": "c2ecb75576aeab17233f17626057f51fb609a32f1f1f221d9054901ab4f62882",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SQLiteWorkerTests.swift",
+      "sha256": "862f1e05910ac7e37d415421a3ad55006cb4872a5c74e6a240ea92c50fc5e4d7",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SafeAreaTests.swift",
+      "sha256": "12218359a13ce46106d498802e58d19f8fd55d0348aaa9ae9e423cbc708b8008",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScopedThemeTests.swift",
+      "sha256": "a53bba634efff860fd12c09a85785bb9e767e60a9721ea78220a3bdc5e14d9c3",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollEventQueueTests.swift",
+      "sha256": "567a43c97de047575e409217090ec6e75fe1b813fa52b5815a1cc46e3cfd58e2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift",
+      "sha256": "c4df783b9bf18ddd23379f4d4dcd52332d11b649a88ac8bcc3c083369fd6faff",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollNodeTests.swift",
+      "sha256": "1803e695069612e90cc36c5c896837bfe0911d51f96eba205bd05b14f04a1e22",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollObservationTests.swift",
+      "sha256": "0b90f25eeef390ef644650d5985658593e632a08c40285cf927b2eec56126e22",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift",
+      "sha256": "d591f025870b2cde496689f97a866b9dac7e276b561e0f73ca03961f72d27111",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollServiceTests.swift",
+      "sha256": "203625c737f394f80d7be1346f2b99eeeb152f393bd3b61fcc1f1329827b23b6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ScrollTargetsTests.swift",
+      "sha256": "0adea26330d5aac70ca201794f8735a174e07e02a6166a3788e44faca416de29",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SelectionCatalogTests.swift",
+      "sha256": "707167e238bce0cdc331b8d776a711ff6b22dc73e7177003765a414ad149de34",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SemanticsNodeTests.swift",
+      "sha256": "5dbee644815209452406eae30ba8fef60000b0bdcf1bde4fdae9e8b3b4cdd40d",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SharedDefaultsTests.swift",
+      "sha256": "6f210712861df7ed88a4d2d2fed3edee1dd2bdc6cb55e5c6461ea242ab42f2da",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SheetTests.swift",
+      "sha256": "0e7ac45989aa15860012de7c86adb2a5bbd04e67c082bd7d825ca76b9e735e9b",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift",
+      "sha256": "8226fbcbb09d11358589a116d9988ffff41834cf4e19a25f101c61cc499192b2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SliderFixture.swift",
+      "sha256": "928a89873cfbb99d5507ae18a2002469bf4a12fb3c41a7500dfa70d561041d86",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SliderTests.swift",
+      "sha256": "24406b76fb2046638819374f966df43570f9667595ebd5fda24eba43903250e4",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/StackTests.swift",
+      "sha256": "10a1d90ce67dca7748ca5ec2b6550519cd20347df7d406f7d62e4b3111a42dd4",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SurfaceTests.swift",
+      "sha256": "eb925907e90f69e8a40830ff627af00c6d970a151ce4953fa50c4dc04f3902c1",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SwiftInputFixtureTests.swift",
+      "sha256": "3d61e49b6ab9ee694f9359ed43038b2e6a94cdf2c4d2de643b2277afc87415a1",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SwipeActionsFixture.swift",
+      "sha256": "9216dfb09d69cb759d6fa7d4a91cfdafbc6cce73ee21b0decf4b4e2c6b679fa6",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SwipeActionsTests.swift",
+      "sha256": "0d0cd541bd78a7d3911cee4ee41962b88d673365b5fb9c73c95e1dce6fe78ee9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/SymbolTests.swift",
+      "sha256": "c7c73f496bd8dc834618ddbdf0b9dad3eebdf6f4339e67e6b58e60f12e8196c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TableRuntimeTests.swift",
+      "sha256": "6e37afbd5f75c4a240c282c63aa33524bcfca3a0b17ff0f01260363321094eb1",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TabsTests.swift",
+      "sha256": "eb0f4cd3e1955d3282094ee12ef576c9b66f2ba0993a8aafaf95055065634112",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TagTests.swift",
+      "sha256": "9625d6fac0d42c5e7eded97654a1d051a2bd98cc7d7f43c6ec09f3f1229c2a5e",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TextEditorViewTests.swift",
+      "sha256": "71fae049afa07ad450911066562c375393d70e72af68b0694a23cb8ec647adf0",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TextEventTests.swift",
+      "sha256": "666ab5f35d9e06370e6ecd01500be46237b2ed158d0541e2212248299bafea79",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TextFieldTests.swift",
+      "sha256": "3a278e3ec691f8533c5f4782db99f280218c732c35c54f7bf876313c5afd9f78",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TextFieldWireTests.swift",
+      "sha256": "78b2a7cca7a82eddd5619bfb443b6971730ea6932aadeda79de4d9f8e66ec172",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TextSessionTests.swift",
+      "sha256": "98a0b0c51cd17fe7f751ae3c46a94e745ff5ec0bd22612454a80883fc0dc262f",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TextTests.swift",
+      "sha256": "3055005ddb006d1056568ec5bad4f333211c5c9da881fbc6823552dfe41cebb8",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TodoTests.swift",
+      "sha256": "47352d5fe9fc4fdb221b96fb22c1ebd73280857f5af88fd3dbf3940bf48f1102",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ToggleTests.swift",
+      "sha256": "a5f68f61f0b2799e1db7366e0ac88cdf0396900775c8e66389ecc4a9d2da8ed9",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ToolbarTests.swift",
+      "sha256": "5f752e9d7ed92dbeca7dbe6cb3f50ed5b19bfabfb347601024f1c3e85e3e15c5",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/TreeFixture.swift",
+      "sha256": "602ba4eab91510f07fc78a57dda10a7c87bbc58a80ab9b7b49258c51847a6719",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/URLHostServiceTests.swift",
+      "sha256": "e69ced2ef3efd7640c3797dcb2dbebfbb2facf358ff87aa172bd957b55e293ab",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/URLReceiverSupport.swift",
+      "sha256": "5f7b5cbf01d21ce0369c0d2de3cd9f9adee0d00994bba14ec7393a569b62d085",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/ViewEnvironmentTests.swift",
+      "sha256": "f14c891f5f25d677193d1b4a1aab5903365a489e146844da2ce4b44bc0d128a2",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/WeightedLayoutTests.swift",
+      "sha256": "cd4cb2a0e6104db8a46c5681aa2d0db808b72c86234e10396937f61a575cba14",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/WireFrameTests.swift",
+      "sha256": "6e1813deea75c5bcb02f8f1a3b91793ca90d7f2a3afdc344d5b4b513830b63ae",
+      "mode": "0o644"
+    },
+    {
+      "path": "swift/BonsaiSwiftUI/Tests/WorkflowTests.swift",
+      "sha256": "c7b127c29c57acd1bfa026eb94b850ac0d0abc84939b04d1dc2d36fde56d60ba",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/build_datascript_worker_probe.py",
+      "sha256": "fe310992b35051cd9867b5fff2cfddfdc13b8cdb2765b2dc7ee1bd1cad0b580b",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/build_swiftui_example.py",
+      "sha256": "99e470a2ac339a1b46ebf6626cdcf0fb6c3f8bd2d7a6b3b2e49334b5a5ae3591",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/check_viewport_types.sh",
+      "sha256": "6981ee8c195eb2cdbbfd5d1b77b3c0cf3db9640bd1daa316fc0b43e035770817",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ci/install_ios_signing.sh",
+      "sha256": "5563f44c97f485dba1312ccb1148bf3da902b3f5dd3161cd9a47b6d658a1c4c3",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ci/ios_device_preflight.sh",
+      "sha256": "0f0a73c31c581b34554da50ca38eaefc3cdb5d504a93888feb80982064364011",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ci/verify_ios_bundle.sh",
+      "sha256": "81fee948f173b83be1db560755b56857129029ff0d54762f783a2c3518b5e52b",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/eio_worker_spike/build_ios_complete_object.sh",
+      "sha256": "9ee0fa4ca6f6251a7dfa63b101affdee3f56b122efc0bbc2f3d882fd79611c45",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/eio_worker_spike/build_ios_device_probe.sh",
+      "sha256": "dce8c9b7d7afdcac744180a51373693d49f1c864e81e8c5bd44221adc673d769",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/eio_worker_spike/device_probe_host.m",
+      "sha256": "0589eaed97299e1af07da104fd3cd497f029c6b374b1ade705c79bca00c568f3",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/eio_worker_backend_spike.ml",
+      "sha256": "2c7204b05e4ae887b52499f61abb7393655633ca57d0b5f3b694ba8a1f4ab32a",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/eio_worker_backend_spike.mli",
+      "sha256": "6e9cf7c892c163ddaa79b34b561d46b363aa78ac6b49aaf00a624b6d0e93c65c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/eio_worker_device_probe.ml",
+      "sha256": "97bada37e192234b9e3e61ff87bed8bfe64af5fffbe34a82f69cf261856799d7",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/eio_worker_device_probe.mli",
+      "sha256": "a8f65547585b748098fa09c251b41a0106dc1ee3718a83090120b6f08c8c3e97",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/eio_worker_provider_spike.ml",
+      "sha256": "b7082cfb940a1d7e43cd2c45377c63f5f0dbe6f10889b1be021e2d19e2d9004a",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/probe_host.c",
+      "sha256": "aad0c79946fc535baeda93754f4646d6f06d950aa7d357a55f43e6cbf2f3b20f",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/eio_worker_spike/test_ios_complete_object.sh",
+      "sha256": "7a7eb0c35628fe034d0503bfe0a714552c2f0d3341d47b2c0b4016b8287fdf06",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/eio_worker_spike/test_ios_device_probe.sh",
+      "sha256": "2ca80bd6cca314fd1ec46a0689919425a093d9fbe9b19d0bf9066753a5b525c0",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/generate_gallery_images.py",
+      "sha256": "c518b90750507dc19b18e8a6d42499c8e26a0e9eac222a88724198a87dd019f5",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/generate_input_fixtures.py",
+      "sha256": "a46aa00084eb84d0c5246b8c3f2d570edc551dc1ac7f875ee46f4e671e6f01a5",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/generate_ui_defaults.py",
+      "sha256": "15ff7948d30b53bee2ec6aa48e3b659ca77c2d220d7e1176644009c7a8a90a31",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/build_installed_framework.sh",
+      "sha256": "703b82520e9d9c853b8910f98e7136b4966efe6c948ea244a500dd41da8e9796",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/build_probe.sh",
+      "sha256": "e545166c988a22461e5dd655813c237cb59b20ba70c4299d45c049563ce95bbe",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/build_runtime_closure.sh",
+      "sha256": "bc743ed15d60ad2628e32f106139c33e9d06a126d87168f4666e1ec957517cb3",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/build_runtime_package.sh",
+      "sha256": "bbf25b30819843049886d1a370b257c26519b8b1162559c479d20c6c3f5814bd",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/build_runtime_sdk.sh",
+      "sha256": "97a81f853e84c028d23586874dae2d374c858b3c6fe0d9b63658f208ecaf54b8",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/closure_capabilities.lock",
+      "sha256": "e3255ade576f35e1ff553e1ce0e14d817f00073c61f6dae5bb951c0a266fbb45",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/app.dune",
+      "sha256": "c912c723e227a42066b79465583b539e9ac884cc65bd5696e90c955afe71888a",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/bonsai_swiftui_ios_closure_fixture.opam",
+      "sha256": "72f083532ec7129c076f57a6d4e52b633da331c609e73bea97eb281ce0517972",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/datascript_fixture.ml",
+      "sha256": "df3450f1719fed5cbdf8dee9b16f12bfac23257ee667615583c847a2d34dff17",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/datascript_worker_native_embed.ml",
+      "sha256": "e513df770648a86ca13c7b8ae95e46b3582bdaee0a0d256dd9acb52b22d32539",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/datascript_worker_probe.ml",
+      "sha256": "cf98e4aa32a61d7a03282470cdcc806159d1eee63e43f321dd3975ebf461cd5d",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/dune-project.fixture",
+      "sha256": "51c937f4382e2da765e4fbe29419234b1d497bb7eef9d8dc9e0bbb42e4e7eb33",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/rrbvec_native_embed.ml",
+      "sha256": "65cc26d505d97b69057df3e46ba8685c1c39f78b15737d180d1ea1dad31a06ad",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/application-closure/rrbvec_probe.ml",
+      "sha256": "9993335c070caf2112933b095a5b7e0d27bee9f0fd769fe1d58d1665fd195c42",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/datascript-worker-host/swift/App.swift",
+      "sha256": "9c174bbb153f58bd8ccf3cff7db4d33b4b95cd7ae00aed7bb10f63be9f0cba37",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/fixtures/datascript-worker-host/swift/Probe.swift",
+      "sha256": "6b1e028e6d9c1986cfec9dcaeb4b32752b8626fb0aadaa4c98274b713f123124",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/generate_package_universe.sh",
+      "sha256": "b9f1a57193ab063724c46a933f717dbb7a28ed127e4e51a97c3ae270a7cf7ba2",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/package-universe.lock",
+      "sha256": "c29d2aa6aa6002a5d9957fae51a899c67a233348f93e3799525e3b376cfdba2f",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui/bonsai_swiftui.0.1.0~dev/opam",
+      "sha256": "736cec843064c41de60cad48d9de083769c2200c5caec0772fba1cffe0a42361",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui/bonsai_swiftui.0.1.0~dev/url",
+      "sha256": "4090cd32ec4114dfcfecb7a0b7e16b7790652213b41720cf61280e9b81dbd786",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/build-runtime-closure.sh",
+      "sha256": "bc743ed15d60ad2628e32f106139c33e9d06a126d87168f4666e1ec957517cb3",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/build-runtime-package.sh",
+      "sha256": "bbf25b30819843049886d1a370b257c26519b8b1162559c479d20c6c3f5814bd",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/build-runtime-sdk.sh",
+      "sha256": "97a81f853e84c028d23586874dae2d374c858b3c6fe0d9b63658f208ecaf54b8",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/patches/base-host-generator.patch",
+      "sha256": "d66da45798d7fd09df4d5e1a2789428f2343670f212ddf36dabf1ffa2e9d5ada",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/patches/datascript-system-sqlite.patch",
+      "sha256": "25671b3a84772c8a6b6c9fae3c8c2e0efa1b7d88c9ca2edb274b2ce40de481a4",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/patches/eio-posix-darwin-protocol-zero.patch",
+      "sha256": "b6a158f56db6bc1c1e19ad2412625f2d7941a5004274e3a45fe58f6c89e5b963",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/patches/eio-posix-darwin-socktype-hints.patch",
+      "sha256": "8b5eb1ecc716afeac54f6ebc0792f14df5107dbdac5ebb81da3ea0a31e187e17",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/patches/jst-config-host-discover.patch",
+      "sha256": "ee279c4935234e295cb432e67d02cbab47f5655da7b335585678bef2a2eb62a9",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/patches/mirage-crypto-rng-apple-entropy.patch",
+      "sha256": "da840f6ac6b44892f7e3cdbf6b931d557caa44697d21292fbadd5f1f95c60994",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/pkgconfig/iphoneos/sqlite3.pc",
+      "sha256": "8b5b586f38ac603b9ac45c7193805a728934d489000dfb578b345733c41ed3ad",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/supported-closure.lock",
+      "sha256": "eae3fcc8ca4c556602e825c0f19d0f83b652cb36fd6e846b261e9ef10ce5a21e",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/toolchain.lock",
+      "sha256": "97f90f7d86d8b802ade6e2f0a5e8c107418d1847f9818ab7515545d5c434801c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/files/verify_macho.sh",
+      "sha256": "e6d2083e03ac5f883f236e35b7e9e539759e8cc36eb403dd76d5b8136f7f9076",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7/opam",
+      "sha256": "942bc2a0e14c2c9507b045b4ec12174e0d9b9bf9b0fa01ed54df15c6202b2a6f",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/files/build-installed-framework.sh",
+      "sha256": "ccf42b3cf247d6a6825dbd7ca33766fdea0a4bbda0d159785c5349ed61918ce0",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/files/manifest.sexp",
+      "sha256": "1700e65bcfb70bd78f702dd38b77de883979bd43cf01cebf9d34494f34df220d",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/files/package-lock.sexp",
+      "sha256": "c92c0e22699fffce3a47c776cd67973f78d139e68ccd274aa8fa280c7f1476cd",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/opam",
+      "sha256": "0af5aaf64a9f2f73e03eceb00d0fa9b95f8e4bb0c52cd5ecc4d0d6f653b3929c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/conf-ios/conf-ios.4/opam",
+      "sha256": "feb23eb47bf32bcd1e4ebde283324a7a0d345a7640809867e525150d8764dd4e",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/conf-pkg-config/conf-pkg-config.5/opam",
+      "sha256": "bfad3c54e0119dab51007cf44ac1ae6e6be2b09c3cb7f2255265106498b88965",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/datascript-ocaml-native/datascript-ocaml-native.dev/opam",
+      "sha256": "54ea478957dd623ed04bf31a9171b6ebca59ad187588b66532e0d83ea228e21a",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/datascript-ocaml-native/datascript-ocaml-native.dev/url",
+      "sha256": "5cb0b96e13d5027f8f14ee054f644d85bfedd901916d2b615206b44ce9639c04",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/datascript_ocaml/datascript_ocaml.dev/opam",
+      "sha256": "2efe63791bf8362db7f75d5480ff514096a4c30ac9b4bc76434246fdce23a6c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/datascript_ocaml/datascript_ocaml.dev/url",
+      "sha256": "5cb0b96e13d5027f8f14ee054f644d85bfedd901916d2b615206b44ce9639c04",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-edn-core/melange-edn-core.0.5.0/opam",
+      "sha256": "12b086a5b80d381fb0ac9b7f736387bdad811fc65a8eef9867a667353d99de47",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-edn-core/melange-edn-core.0.5.0/url",
+      "sha256": "2811bf979fe23ff187a9b0ba2ff89dcd95e79131ef7a0c6155aa881aa279aaa6",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-edn-native/melange-edn-native.0.5.0/opam",
+      "sha256": "b1a52d8bcef515f3d0f0b43197c534d7b46ee9375c843ccf2deea1c5c2107d17",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-edn-native/melange-edn-native.0.5.0/url",
+      "sha256": "2811bf979fe23ff187a9b0ba2ff89dcd95e79131ef7a0c6155aa881aa279aaa6",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-transit-core/melange-transit-core.0.1.2/opam",
+      "sha256": "63ba3b4cc673169dee03f6c6e2314c02f390530282b2722cb77ff4ac76587f58",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-transit-core/melange-transit-core.0.1.2/url",
+      "sha256": "c39844bb0bc97af532664d891832b396059f8428fb35f220319eda237e1ea08a",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-transit-native/melange-transit-native.0.1.2/opam",
+      "sha256": "932ff84ce33d6d6230dbff1ae04d3b89eaaf8b18ae41156662623193cbc2462d",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/melange-transit-native/melange-transit-native.0.1.2/url",
+      "sha256": "c39844bb0bc97af532664d891832b396059f8428fb35f220319eda237e1ea08a",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/Makefile.cross.in",
+      "sha256": "2609872f2b353ab45e54fe9ceb1cd74f74a2c0f88c1229af72069dab1f7ef1bd",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/build.sh",
+      "sha256": "fd0ac03468ebd342f110eb5c7fa6c4b7b1b3cb97301e6f48208371310e057432",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/install.sh",
+      "sha256": "cdeca51dc0e516d549d12a068c42e65f05abf14912a8355703cdd3b8ba6b4204",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/ios.conf.in",
+      "sha256": "5ab9da5f1a6f14dba9937000b2446691622f7890820c0e170eb51b6f42ae0ed5",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/m-ios.h",
+      "sha256": "e634e2cf30ec142d9c30e44ba33d7b8848e76adc470e3cd4c90b7b2dc7ffccce",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/ocamlmklib-failsafe.patch",
+      "sha256": "2e087a1cccc6514af07559a688ffc17c651a2bb5b2a67d115cc28051f2e89767",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/remove.sh",
+      "sha256": "c0dcc8329de1b88321e762dc37cdd232e835174736995480c5cf844b43195203",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/s-ios.h",
+      "sha256": "f4d69a0e2ce5627927969e5faf1c76a9c3c4feb209bdc59f5b92c6f3b5d0cb66",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/files/sys.patch",
+      "sha256": "ba08c6f87e8ab70e70241eaa442e466504c4c47c5b6cf5af3ff066a7112b1579",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/ocaml-ios64/ocaml-ios64.5.1.1/opam",
+      "sha256": "9954a2ac429ba4db711d97f9b2ff6f920cd9d4c3cef45b0c1a8cd718db54f3b9",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/persistent_sorted_set_ocaml/persistent_sorted_set_ocaml.dev/opam",
+      "sha256": "f9bf653f7ac2b6f589d538f1f7969e95bbf81c707881b2fa54a02ce5bfbee87b",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/persistent_sorted_set_ocaml/persistent_sorted_set_ocaml.dev/url",
+      "sha256": "13aa2169ff9b6b1f3d9838fac6cbfd80430cb6668804453f92ffc80a08bacdff",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/rrbvec/rrbvec.dev/opam",
+      "sha256": "1ed5c4b2a5db9bc336e367e11ce2ae190f45cbabad398419956e4c4c2d84b868",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/packages/rrbvec/rrbvec.dev/url",
+      "sha256": "732d25236dfbddcdafc5ea8575576abb10a46f6cc97bfc85c242a426e1b3cc7c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/repo",
+      "sha256": "46eea2d7d1c174afb9bf12f9b4ea79a5cff857d02721c0fa7fc1851a1dc59e82",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/repository.sexp",
+      "sha256": "407382a37ea8767c0c4cbb99387410ea10542502503a4fee749c3afbddbe1742",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/opam-repository/0.1.0/source-archives.lock",
+      "sha256": "78287f350b87af487e94a0c97d11626a90be5c5640695363cce64b17e5ba3015",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/prepare_cross_overlay.sh",
+      "sha256": "43dc51f0ea2018ec99d84e686e9b85a90f7b3048959671bfd0f772b79144133b",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/probe/Info.plist",
+      "sha256": "e1c8b4d1c23445e2bcdcffacaaf8c5e08d74439397160fc6d5ace704d36cbbc4",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/probe/minimal.ml",
+      "sha256": "aa9e4130838d21b3db0bc5bfdf8c3453cd10255196426e7e4507ec814bede77d",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/probe/probe_host.m",
+      "sha256": "417e10a2655dfb71655c69516ae9417d4d27cbf558d8d8bd07df134b17289594",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/regenerate_sdk_repository.sh",
+      "sha256": "ba5a2454edd5b6c22c720947762964f369c8c2fb3336b6b1b82dfd1c2e72ccaa",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/resolve_application_closure.sh",
+      "sha256": "8345a2f4c6c1f4970851c727b28bb456075e2ba0b83ba91e21683105729d867c",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/run_probe_on_device.sh",
+      "sha256": "785a02b1f437c48080813e200b121cd6aae6af608fe7e64bec2e15bebc51e1fb",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/sdk_repository.lock",
+      "sha256": "51b0918c2a48f89fd0dd43f1edd98ae865135da76c030a639f0e2e3e891c936e",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/setup_host_dependencies.sh",
+      "sha256": "cdecdcbcb0188b13e10215fb18222a0efafe6641a74a522747c6db2ed03405e3",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/setup_toolchain.sh",
+      "sha256": "15c18a2ad6f898f8827bdfadd7f5dea64b2cf19351d64f9372c4c2f4216b6169",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/stage_host_metadata.sh",
+      "sha256": "fc5f2dbcfe6f43e18269933021d63d3d0f05c7a90ab920d7d248df25de68836f",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/test_datascript_worker_device.sh",
+      "sha256": "bdc71baed8bc96400b157f27bfe9327b2abb6d854d2c8a6929422d03b7ea2aa2",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/toolchain.lock",
+      "sha256": "97f90f7d86d8b802ade6e2f0a5e8c107418d1847f9818ab7515545d5c434801c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/ios/update_framework_sdk.sh",
+      "sha256": "eca4748d4f2c4e01a639c459f9cadc9711c25497a7b46df870bbf73f6377dd56",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/verify_app_bundle.sh",
+      "sha256": "6d911b2b540d9e7b5fbe1c68550d724ceb0d46b164f6c74c0fd2d477a205626e",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/verify_complete_object.sh",
+      "sha256": "92d99a41939546932369c2cca85ce9afd9159d8a9b70c100f755bb94013cb2c3",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/verify_macho.sh",
+      "sha256": "e6d2083e03ac5f883f236e35b7e9e539759e8cc36eb403dd76d5b8136f7f9076",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/verify_runtime_closure.sh",
+      "sha256": "17158551ada6fe4c094c3bc43e7101658d690640f1f264a56418abaf06635265",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/ios/write_findlib_conf.sh",
+      "sha256": "ea170b2d217b6935ff1e784eaefbca70deced61109d728e49b1aa1329408b877",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/link_swiftui_runtime.py",
+      "sha256": "87bb73281705c85c8090813cc6284c78323e22c654abeaeb37bbcebe9d17c7ae",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/measure_swiftui_collection.py",
+      "sha256": "7367c6fa0865baf54efff11d44823f35bf8ba2157e2c6aacab964ffd245a7cca",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/measure_swiftui_collection.swift",
+      "sha256": "7c4b994b3691d18660026be065f0623a87e1af417435cb9738df13eccfde92fe",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/README.md",
+      "sha256": "e25f2603057fb1559abbe6d7f8a39d71adb060e5ca6657d7f728f56986be49ca",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/build_ios_device_probe.sh",
+      "sha256": "69fed135aa7c320b582f57b561d15f946539667eb9292a1dd511ffee54214c44",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/network_spike/device_probe_host.m",
+      "sha256": "c388dcd0376571ee25ea7ffb4767d4a5a572db0bf1a72093998b73a09aeedf01",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/dune",
+      "sha256": "9a0727ca8c66b55d8cf9024d20c0b4d9e999f2c98cbf66e3a88f0f7b50f1f50c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/localhost-cert.pem",
+      "sha256": "eec91ba360d3eff4d1019c71ffad93d51f0ea6e2c70cf0864211cdd285f964bb",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/localhost-key.pem",
+      "sha256": "cca17a34c98f0fd8e8db613be903ac95cc2005209099323b4db729b6e5b1872e",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/network_spike.ml",
+      "sha256": "20168a4e9cd45d0ab80865d20ca54c731fce664b1bc6c218e50e9a445e83e1a5",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/network_spike.mli",
+      "sha256": "451f8cdee6fbab4b3e75fb1b91224fd0b53bb369a1e40bdc5f6690726dae9d64",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/network_spike_cli.ml",
+      "sha256": "3ba0cf530d43ffa208364867cec95cb3a70bd9b88cd660ddc035049b20416c57",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/network_spike_device_probe.ml",
+      "sha256": "52af87fee4fd349484b267a643cdaed4c2d2bfd919930910fd5ff3a31993088c",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/network_spike_test.ml",
+      "sha256": "a169fe8bc0a5f3bad7fe2ffb4cfc8e5c3a255804e18fcd4a89d99c999db94518",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/network_spike/test_ios_device_probe.sh",
+      "sha256": "c05e04e1bacc9f0efefb5de43f9e3d7f38ea92e8a497fc726526ad8b93d115af",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/package_opam_release.py",
+      "sha256": "7987eae5c03d5a2829309980848a2b6077737eff1c76c6171174226e7096e856",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/probe_appkit_hover.swift",
+      "sha256": "9155c9ad79c82e31692b7a4d84d5b0b09c4b952fb6101f6a00aa80307b975df3",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/probe_foundation_civil_calendar.swift",
+      "sha256": "cb6eeed5619fffe1fd97bd514c65d1c901831f2bde9747ee57befa8fe7167367",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/probe_swiftui_button_focus.swift",
+      "sha256": "213882a92f60a7cbc550724a2657be69cb366a1bdad205f4fc92920303640d02",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/probe_swiftui_list.swift",
+      "sha256": "ea1a8fdf0cd203ca6aa5aa5537625fe7f889b8520f68d8aaeaa55d9fd3b73fc6",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/probe_swiftui_native_gesture.swift",
+      "sha256": "5610bacf689b5de075bf78a20dbd65a18f53dc3f57815bc1bacc809dad1a6ebe",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/probe_swiftui_table.swift",
+      "sha256": "4279f771ef3c6d8467f1b0370d763f9d2af7c89ac3bfd094489c86ee73dc6f43",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/run_swift_tests.py",
+      "sha256": "a2c70a7ebb1f2a086f46d5a26b34e5aad609863ba9c6515490ceea80bbce701b",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/swiftui_system_link_flags.py",
+      "sha256": "928269ccda1a75de20127643e7c3d0cd383ba2dca152a9bb21a2cd7931572e17",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/swiftui_xcode_host.py",
+      "sha256": "1b2e785782f666d220a5511c4d3b86626e3934044dd9e8ea8000839fb8535e4d",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_ci_contract.sh",
+      "sha256": "674db5c0b690ff7a3c95933b333a260ab98d483ecb830a01d5d4d9f4677fde19",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_datascript_worker_contract.sh",
+      "sha256": "de8a7b48872530e56d5c51f1910d2b6ddb3ac377bacd00331b731175eac99be9",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_ios_closure_artifacts.py",
+      "sha256": "c315119323cce558c794b700486b41586db38cb4b929f2d5c9bb4a53f65ddf1b",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_ios_closure_lock.sh",
+      "sha256": "1ebeb85e2bead6e4cf849c73c7ddce474a93ae8bac61ad30a18a7c3cae8b5412",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_ios_cross_compiler.py",
+      "sha256": "10d91cca596e95517f0c4f6f3f626b81873e96c42b3330647350155269280a3e",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_ios_deployment_target_contract.sh",
+      "sha256": "ed378dfefbd0d9bc2e1eb586375b8df2f2fa8a22f5452e79f4817da4f5488aeb",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_ios_device_preflight.py",
+      "sha256": "bc45e5949cb9c950d739344f6707dad94ba16a744fdbfc805dd44e6d40cad952",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_ios_process_isolation.py",
+      "sha256": "814d2fd6639f39d433a64d27052608f32f9ed726d4b8544a6a839ef79232a72f",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_ios_sdk_layering.sh",
+      "sha256": "2f81963ec7bc5a467e25ab33121fa34653eaa9191aa8dde38c3b8cd0cfece75c",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_ios_sdk_repository.py",
+      "sha256": "2b2d2b6d3dab41ec1852bc5e2901d54c5211faf0a08cf4545cf40a388c39bfc6",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_ios_virtual_library.py",
+      "sha256": "58841f60c7ce6fdb6ebd0765383da695d4a193d10f708ab7cba45c438881e193",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_native_fixture_commands.py",
+      "sha256": "ba52c75729df4a8e8d0766ec1b6930dc3d1f80e24f88ff5fb55acce488b7be13",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_native_runtime.sh",
+      "sha256": "b2c8ffcdcb70f63ae5226b4a05d16eec2025ed1640d7f8062ce4bfdcfaa0b236",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_network_ios_contract.sh",
+      "sha256": "2b243011a11abab0ae19f526a31ab6f00edda96327432bb2b94cf3e9229dce54",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_package_opam_release.py",
+      "sha256": "7190ea76122e0811769635bebad06fe148fde3aca7b5982a6a0b8ea7722c0ad4",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_rrbvec_sdk.sh",
+      "sha256": "6b5b95bbe567d5b5d564cd48e923cac8257a708a4cac212460be46a5dee0bd74",
+      "mode": "0o755"
+    },
+    {
+      "path": "tool/test_signed_ios_bundle.py",
+      "sha256": "2ca5ae4fa926ed4e1c5125ca229d79e9cc9ccc700920e517483d013765bff777",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swift_completion.py",
+      "sha256": "601bcb48625ee8a0785a094718cb3bba2b41f9f2502714109487e0c498884bb7",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swift_platforms.py",
+      "sha256": "68a3729f364ebb4c649a90bb40d9a16126bfbd6bf6e31481b9edd48fe7b97298",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_cli.py",
+      "sha256": "5bb79cf3665ca10acac10786d68c7276c8ebfc1beb5a2832b72728ad3e69ae36",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_doctor.py",
+      "sha256": "d15a4d4944fd454e404077e5a97f8bd0e4ac3c49e5e8b5c1373c738d22ead3b0",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_example_cli.py",
+      "sha256": "4b5b36dc1071562bdd20a0a837aec250c5b026c8bb902799501fa0e2238e9e7b",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_installed_cli.py",
+      "sha256": "630dc6da268c48671f6e290505a9b1d61f9dc2c799b6972fa21aca88062c67aa",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_ios_bundle.py",
+      "sha256": "8b9c71f73d121dd923fa3110595cfd31d63a269ffc60d94ba954567f51b2fbbd",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_ios_installed.py",
+      "sha256": "4d9579ba69acb811ea8489dd1f30025509ebe4733f290576e4f7ac9e151c9e48",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_opam_install.py",
+      "sha256": "ee0e345b272369f72dab0a40fa41e54654c9af3b97b3071dd19a8d35be0a4edd",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_table_api.py",
+      "sha256": "071a284c8c05cab5857bebfb8d5b7d2605bbf38cd5225977a24fea0a530a3928",
+      "mode": "0o644"
+    },
+    {
+      "path": "tool/test_swiftui_xcode_host.py",
+      "sha256": "ecb4cd9efcc6afe12dce63591a68558d9fd4edf642b038dc2f05b13443d6820c",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/README.md",
+      "sha256": "9c70b855ae3d3e1511fa016c80e7a7c4af6c0d2cbf06a603caf0a68d6c0af624",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/ocaml-ios64.5.1.1/files/build.sh",
+      "sha256": "fd0ac03468ebd342f110eb5c7fa6c4b7b1b3cb97301e6f48208371310e057432",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/ocaml-ios64.5.1.1/files/install.sh",
+      "sha256": "cdeca51dc0e516d549d12a068c42e65f05abf14912a8355703cdd3b8ba6b4204",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/ocaml-ios64.5.1.1/files/ocamlmklib-failsafe.patch",
+      "sha256": "2e087a1cccc6514af07559a688ffc17c651a2bb5b2a67d115cc28051f2e89767",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/ocaml-ios64.5.1.1/opam",
+      "sha256": "9954a2ac429ba4db711d97f9b2ff6f920cd9d4c3cef45b0c1a8cd718db54f3b9",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/runtime-closure.lock",
+      "sha256": "a48683d5f29106ba303943799f075018453aaf52d6ff6f3e952102cb313f0138",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/conf-ios/conf-ios.4/opam",
+      "sha256": "feb23eb47bf32bcd1e4ebde283324a7a0d345a7640809867e525150d8764dd4e",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/conf-pkg-config/conf-pkg-config.5/opam",
+      "sha256": "bfad3c54e0119dab51007cf44ac1ae6e6be2b09c3cb7f2255265106498b88965",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/datascript-ocaml-native/datascript-ocaml-native.dev/opam",
+      "sha256": "54ea478957dd623ed04bf31a9171b6ebca59ad187588b66532e0d83ea228e21a",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/datascript-ocaml-native/datascript-ocaml-native.dev/url",
+      "sha256": "5cb0b96e13d5027f8f14ee054f644d85bfedd901916d2b615206b44ce9639c04",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/datascript_ocaml/datascript_ocaml.dev/opam",
+      "sha256": "2efe63791bf8362db7f75d5480ff514096a4c30ac9b4bc76434246fdce23a6c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/datascript_ocaml/datascript_ocaml.dev/url",
+      "sha256": "5cb0b96e13d5027f8f14ee054f644d85bfedd901916d2b615206b44ce9639c04",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-edn-core/melange-edn-core.0.5.0/opam",
+      "sha256": "12b086a5b80d381fb0ac9b7f736387bdad811fc65a8eef9867a667353d99de47",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-edn-core/melange-edn-core.0.5.0/url",
+      "sha256": "2811bf979fe23ff187a9b0ba2ff89dcd95e79131ef7a0c6155aa881aa279aaa6",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-edn-native/melange-edn-native.0.5.0/opam",
+      "sha256": "b1a52d8bcef515f3d0f0b43197c534d7b46ee9375c843ccf2deea1c5c2107d17",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-edn-native/melange-edn-native.0.5.0/url",
+      "sha256": "2811bf979fe23ff187a9b0ba2ff89dcd95e79131ef7a0c6155aa881aa279aaa6",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-transit-core/melange-transit-core.0.1.2/opam",
+      "sha256": "63ba3b4cc673169dee03f6c6e2314c02f390530282b2722cb77ff4ac76587f58",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-transit-core/melange-transit-core.0.1.2/url",
+      "sha256": "c39844bb0bc97af532664d891832b396059f8428fb35f220319eda237e1ea08a",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-transit-native/melange-transit-native.0.1.2/opam",
+      "sha256": "932ff84ce33d6d6230dbff1ae04d3b89eaaf8b18ae41156662623193cbc2462d",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/melange-transit-native/melange-transit-native.0.1.2/url",
+      "sha256": "c39844bb0bc97af532664d891832b396059f8428fb35f220319eda237e1ea08a",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/persistent_sorted_set_ocaml/persistent_sorted_set_ocaml.dev/opam",
+      "sha256": "f9bf653f7ac2b6f589d538f1f7969e95bbf81c707881b2fa54a02ce5bfbee87b",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/persistent_sorted_set_ocaml/persistent_sorted_set_ocaml.dev/url",
+      "sha256": "13aa2169ff9b6b1f3d9838fac6cbfd80430cb6668804453f92ffc80a08bacdff",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/rrbvec/rrbvec.dev/opam",
+      "sha256": "1ed5c4b2a5db9bc336e367e11ce2ae190f45cbabad398419956e4c4c2d84b868",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/sdk-packages/rrbvec/rrbvec.dev/url",
+      "sha256": "732d25236dfbddcdafc5ea8575576abb10a46f6cc97bfc85c242a426e1b3cc7c",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/opam-ios/supported-closure.lock",
+      "sha256": "eae3fcc8ca4c556602e825c0f19d0f83b652cb36fd6e846b261e9ef10ce5a21e",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/README.md",
+      "sha256": "0ea6271c044234921a98bc44529111d1067f8485abdf48ab54490e801c9d9472",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/basement-macos.patch",
+      "sha256": "1c97bd1e3ad6eeefe30fce6a81a06ed4685fdef95efb53e67cd9389b6201327b",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/ios/base-host-generator.patch",
+      "sha256": "e919f3c5ec1e6a546a6e499ed262d309055fd0c856d7c216d3609b7d64ca47b5",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/ios/datascript-system-sqlite.patch",
+      "sha256": "25671b3a84772c8a6b6c9fae3c8c2e0efa1b7d88c9ca2edb274b2ce40de481a4",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/ios/eio-posix-darwin-protocol-zero.patch",
+      "sha256": "b6a158f56db6bc1c1e19ad2412625f2d7941a5004274e3a45fe58f6c89e5b963",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/ios/eio-posix-darwin-socktype-hints.patch",
+      "sha256": "8b5eb1ecc716afeac54f6ebc0792f14df5107dbdac5ebb81da3ea0a31e187e17",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/ios/jst-config-host-discover.patch",
+      "sha256": "d1d9fbbf8df8f8e315fad1a834352a5a80e948e62012a104d5362461f195df78",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/patches/ios/mirage-crypto-rng-apple-entropy.patch",
+      "sha256": "898002b98bddd3a6f212441a7bba32a45ad26f0cb40ab175b2fe0f762e4adea2",
+      "mode": "0o644"
+    },
+    {
+      "path": "vendor/pkgconfig/iphoneos/sqlite3.pc",
+      "sha256": "8b5b586f38ac603b9ac45c7193805a728934d489000dfb578b345733c41ed3ad",
+      "mode": "0o644"
+    }
+  ]
+}

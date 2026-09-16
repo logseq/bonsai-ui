@@ -1,0 +1,8 @@
+test_existing_output_is_preserved (__main__.OpamReleaseTests.test_existing_output_is_preserved) ... ok
+test_local_repository_has_verifiable_complete_sources (__main__.OpamReleaseTests.test_local_repository_has_verifiable_complete_sources) ... ok
+test_publisher_can_supply_the_download_url (__main__.OpamReleaseTests.test_publisher_can_supply_the_download_url) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.676s
+
+OK

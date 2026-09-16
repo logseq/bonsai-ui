@@ -10,7 +10,7 @@ been removed. Package and OCaml module renaming remains unfinished: current
 
 ```text
 OCaml Bonsai computation -> immutable View.t -> mounted identity/reconciliation
-    -> BSFR 5.0 binary frame -> bs_* ABI 3.0 -> NativeRuntime serial queue
+    -> BSFR 5.0 binary frame -> bs_* ABI 4.0 -> NativeRuntime serial queue
     -> BonsaiSession / validated FrameState -> SwiftUI view hierarchy
 ```
 

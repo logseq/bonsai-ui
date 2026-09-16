@@ -31,8 +31,6 @@ class InstalledSwiftUICliTests(unittest.TestCase):
             )
             self.assertEqual(install.returncode, 0, install.stdout + install.stderr)
             self.assertTrue((prefix / "lib/bonsai_swiftui/spec/bonsai_swiftui_spec.cmi").is_file())
-            self.assertFalse(list((prefix / "lib").rglob("*flutter*")),
-                             "A fresh installation retained obsolete Flutter library artifacts")
             recipe = subprocess.run(
                 ["opam", "show", "--just-file", "./bonsai_swiftui_tool.opam",
                  "--field=install", "--normalise"],

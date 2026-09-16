@@ -1,0 +1,47 @@
+Case-insensitive path and content audit: PASS
+Scope: host configuration implementation, its direct callers and tests, public host/install documentation, and repository-owned application configurations.
+Unchanged protocol fixtures, historical decisions/reports and unrelated device-contract tests are outside this feature audit.
+
+README.md
+bonsai_swiftui_tool/bin/main.ml
+bonsai_swiftui_tool/lib/artifact.ml
+bonsai_swiftui_tool/lib/assets.ml
+bonsai_swiftui_tool/lib/build_system.ml
+bonsai_swiftui_tool/lib/cache.ml
+bonsai_swiftui_tool/lib/clean.ml
+bonsai_swiftui_tool/lib/config.ml
+bonsai_swiftui_tool/lib/doctor.ml
+bonsai_swiftui_tool/lib/dune_closure.ml
+bonsai_swiftui_tool/lib/feature.ml
+bonsai_swiftui_tool/lib/host.ml
+bonsai_swiftui_tool/lib/lock.ml
+bonsai_swiftui_tool/lib/plan.ml
+bonsai_swiftui_tool/lib/process_runner.ml
+bonsai_swiftui_tool/lib/project.ml
+bonsai_swiftui_tool/lib/scaffold.ml
+bonsai_swiftui_tool/lib/sdk.ml
+bonsai_swiftui_tool/lib/toolchain.ml
+bonsai_swiftui_tool/test/native_plan_tests.ml
+bonsai_swiftui_tool/test/tool_tests.ml
+docs/opam-installation.md
+docs/swiftui-cli.md
+docs/swiftui-xcode-host.md
+examples/clock/bonsai-swiftui.sexp
+examples/counter/bonsai-swiftui.sexp
+examples/gallery/bonsai-swiftui.sexp
+examples/host_effects/bonsai-swiftui.sexp
+examples/host_navigation/bonsai-swiftui.sexp
+examples/mail/bonsai-swiftui.sexp
+examples/navigation/bonsai-swiftui.sexp
+examples/network/bonsai-swiftui.sexp
+examples/note/bonsai-swiftui.sexp
+examples/sqlite_worker/bonsai-swiftui.sexp
+examples/text_input/bonsai-swiftui.sexp
+examples/todo/bonsai-swiftui.sexp
+tool/build_datascript_worker_probe.py
+tool/build_swiftui_example.py
+tool/swiftui_xcode_host.py
+tool/test_swiftui_cli.py
+tool/test_swiftui_installed_cli.py
+tool/test_swiftui_ios_installed.py
+tool/test_swiftui_xcode_host.py

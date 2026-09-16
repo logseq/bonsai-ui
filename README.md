@@ -1,5 +1,8 @@
 # BonsaiSwiftUI
 
+Source repository: [logseq/bonsai-ui](https://github.com/logseq/bonsai-ui).
+Report issues in the [project issue tracker](https://github.com/logseq/bonsai-ui/issues).
+
 BonsaiSwiftUI renders OCaml/Bonsai applications with SwiftUI on macOS 26.0+
 Apple Silicon and physical iOS/iPadOS 18.0+ arm64 devices. Simulator, Intel Mac,
 Catalyst and non-Apple platforms are unsupported.
@@ -10,7 +13,6 @@ implemented. Complete widget/variant acceptance, full Mail visual acceptance,
 broader physical-iOS execution and SDK
 publication are unfinished. See the [agreed architecture](docs/agent-guide/proposed/architecture/2026-09-11-swiftui-only-apple-backend.md)
 and [implementation ledger](docs/swiftui-implementation.md) for the full scope.
-The Flutter/Dart source tree and host packages have been removed.
 The OCaml packages are `bonsai_swiftui`, `bonsai_swiftui_test` and
 `bonsai_swiftui_tool`; examples and application modules use the same namespace.
 The virtual spec library exposes `Bonsai_swiftui_spec`; its comment/reference
@@ -75,7 +77,9 @@ eval "$(opam env)"
 
 mkdir journal
 cd journal
-bonsai-swiftui init --name journal --bundle-identifier org.example.journal
+bonsai-swiftui init --name journal \
+  --macos-bundle-identifier org.example.journal \
+  --ios-bundle-identifier org.example.journal.ios
 bonsai-swiftui build macos --profile debug
 bonsai-swiftui run macos --profile debug
 ```
@@ -162,7 +166,6 @@ input fixture verification and generated-host checks. `make ci-macos` and
 builds are unsigned and target physical devices. These complete matrix targets
 have not been fully revalidated after package renaming. Window captures require
 an unlocked Mac; physical-device interaction remains a separate acceptance gate.
-The obsolete Dart/Flutter Make targets have been removed.
 
 `make ci-ios-device EXAMPLE=mail IOS_DEVICE_ID=... IOS_DEVELOPMENT_TEAM=...`
 preflights and launches the selected example on a physical device. This launch
@@ -172,3 +175,6 @@ and published from the final pushed source before distribution is complete.
 ## License
 
 MIT
+
+Application-owned platform identities, entitlement inputs and locked remote Swift
+packages use [schema 4](docs/swiftui-cli.md#application-identities-entitlements-and-swift-packages).

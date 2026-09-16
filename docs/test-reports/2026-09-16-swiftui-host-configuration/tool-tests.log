@@ -1,0 +1,56 @@
+Testing `bonsai_swiftui_tool'.
+This run has ID `9O3NQ3QP'.
+
+  [OK]          core          0   schema four host configuration.
+  [OK]          core          1   parse valid config.
+  [OK]          core          2   invalid configs.
+  [OK]          core          3   command plans.
+  [OK]          core          4   fixed iphoneos switch.
+  [OK]          core          5   sdk manifest contract.
+  [OK]          core          6   sdk accepts framework source drift.
+  [OK]          core          7   sdk accepts missing framework source identity.
+  [OK]          core          8   sdk validates only reachable application lo...
+  [OK]          core          9   sdk manifest fingerprint is canonical.
+  [OK]          core         10   sdk preflight is read only.
+  [OK]          core         11   sdk preflight reports missing switch.
+  [OK]          core         12   toolchain show and verify are read only.
+  [OK]          core         13   toolchain remove uses only fixed switch.
+  [OK]          core         14   toolchain install uses locked repository an...
+  [OK]          core         15   toolchain install rejects existing switch a...
+  [OK]          core         16   feature validation.
+  [OK]          core         17   cache keys.
+  [OK]          core         18   scaffold preserves user source.
+  [OK]          core         19   scaffold adopts existing layout without def...
+  [OK]          core         20   scaffold adoption rejects conflicting config.
+  [OK]          core         21   scaffold generates and preserves applicatio...
+  [OK]          core         22   scaffold preserves native dune.
+  [OK]          core         23   project root discovery.
+  [OK]          core         24   project lock serializes processes.
+  [OK]          core         25   clean removes only selected platform.
+  [OK]          core         26   clean all does not follow symlinks.
+  [OK]          core         27   native builds use project local dune worksp...
+  [OK]          core         28   iphoneos build requires committed applicati...
+  [OK]          core         29   unchanged native build preserves outputs.
+  [OK]          core         30   ios app bundle paths.
+  [OK]          core         31   ios device command plans.
+  [OK]          core         32   artifact layout.
+  [OK]          core         33   macos artifact staging contract.
+  [OK]          core         34   macos network artifact embeds static gmp.
+  [OK]          core         35   dune closure follows local app.
+  [OK]          core         36   dune closure follows arbitrary local library.
+  [OK]          core         37   dune closure excludes local component roots.
+  [OK]          core         38   dune closure follows transitive local chain.
+  [OK]          core         39   dune closure ignores unreachable stanzas.
+  [OK]          core         40   dune closure combines direct and indirect e...
+  [OK]          core         41   dune closure keeps ppx only stanzas host only.
+  [OK]          core         42   dune closure accepts omitted dependency fre...
+  [OK]          core         43   dune closure ignores omitted leaf and keeps...
+  [OK]          core         44   dune closure accepts real dune omitted loca...
+  [OK]          core         45   dune closure accepts selected ios context.
+  [OK]          core         46   dune closure rejects invalid semantic output.
+  [OK]          core         47   dune closure output is deterministic.
+  [OK]          core         48   native framework discovery.
+  [OK]          core         49   invalid native framework override.
+
+Full test results in `~/gh-repos/bonsai-ui/_build/_tests/bonsai_swiftui_tool'.
+Test Successful in 11.639s. 50 tests run.

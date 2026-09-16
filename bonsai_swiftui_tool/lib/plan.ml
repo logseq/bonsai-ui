@@ -87,7 +87,15 @@ let ios_app_bundle ~project_root ~config ~profile =
   app_bundle ~project_root ~config ~platform:Ios_platform ~profile
 ;;
 
-let apple_build ~project_root ~config ~platform ~profile ~no_codesign ~development_team =
+let apple_build
+      ~project_root
+      ~config
+      ~platform
+      ~profile
+      ~no_codesign
+      ~development_team
+      ~signing_identity
+  =
   let host = apple_host ~project_root config in
   let product = product_name config in
   let platform_name, destination =
@@ -108,9 +116,19 @@ let apple_build ~project_root ~config ~platform ~profile ~no_codesign ~developme
       ; "-derivedDataPath"
       ; Filename.concat host "DerivedData"
       ]
+      @ (if config.Config.swift_packages = []
+         then []
+         else
+           [ "-disableAutomaticPackageResolution"
+           ; "-onlyUsePackageVersionsFromResolvedFile"
+           ; "-skipPackageUpdates"
+           ])
       @ (match development_team with
          | None -> []
          | Some team -> [ "DEVELOPMENT_TEAM=" ^ team ])
+      @ (match signing_identity with
+         | None -> []
+         | Some identity -> [ "CODE_SIGN_IDENTITY=" ^ identity ])
       @ (if no_codesign then [ "CODE_SIGNING_ALLOWED=NO" ] else [])
       @ [ "build" ]
   ; working_directory = project_root

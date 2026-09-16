@@ -31,6 +31,7 @@ for symbol in \
   _bs_protocol_version_minor \
   _bs_runtime_create \
   _bs_runtime_pump \
+  _bs_runtime_shutdown_pump \
   _bs_runtime_presentation_succeeded \
   _bs_runtime_presentation_rejected \
   _bs_runtime_get_last_error \

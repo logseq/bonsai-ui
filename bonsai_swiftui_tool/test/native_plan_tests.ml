@@ -8,11 +8,21 @@ let get_ok = function
 let config native_target : Config.t =
   { name = "native_plan"
   ; apple_root = "apple"
-  ; bundle_identifier = "org.example.native-plan"
+  ; swift_packages = []
   ; native_target
   ; features = [ Config.Feature.Core ]
-  ; macos = { minimum_version = "26.0"; architectures = [ "arm64" ] }
-  ; ios = { minimum_version = "18.0"; architectures = [ "arm64" ] }
+  ; macos =
+      { bundle_identifier = "org.example.native-plan"
+      ; entitlements = []
+      ; minimum_version = "26.0"
+      ; architectures = [ "arm64" ]
+      }
+  ; ios =
+      { bundle_identifier = "org.example.native-plan.ios"
+      ; entitlements = []
+      ; minimum_version = "18.0"
+      ; architectures = [ "arm64" ]
+      }
   }
 ;;
 

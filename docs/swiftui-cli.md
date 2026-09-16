@@ -2,9 +2,7 @@
 
 The executable is `bonsai-swiftui`. It initializes application-owned OCaml and
 Swift sources, generates a native Xcode host, builds complete objects and Apps,
-and launches macOS or physical-iOS Apps. The old executable name, Dart adapter,
-Flutter create/pub-get flow, Native Assets profile injection and Flutter
-argument forwarding are removed. Source packages and modules now use
+and launches macOS or physical-iOS Apps. Source packages and modules use
 `bonsai_swiftui`, `bonsai_swiftui_test` and `bonsai_swiftui_tool`. The virtual
 spec module is `Bonsai_swiftui_spec`, with public package `bonsai_swiftui.spec`.
 Install the OCaml library and CLI through opam; application users do not need
@@ -14,18 +12,17 @@ Local SDK installation is verified; public SDK publication is still required.
 
 ## Configuration and ownership
 
-The only project configuration is `bonsai-swiftui.sexp`, using schema 3:
+The only project configuration is `bonsai-swiftui.sexp`, using schema 4:
 
 ```lisp
-(lang 3)
+(lang 4)
 (app
  (name journal)
  (apple_root apple)
- (bundle_identifier org.example.journal)
  (native_target app/native_embed.exe.o)
  (features)
- (macos (minimum_version 26.0) (architectures arm64))
- (ios (minimum_version 18.0) (architectures arm64)))
+ (macos (bundle_identifier org.example.journal) (minimum_version 26.0) (architectures arm64))
+ (ios (bundle_identifier org.example.journal.ios) (minimum_version 18.0) (architectures arm64)))
 ```
 
 Core is implicit; `network` and `sqlite` are explicit features. Old schemas and
@@ -49,7 +46,9 @@ application sources and unrelated files alone.
 ## Build and execution
 
 ```sh
-bonsai-swiftui init --name journal --bundle-identifier org.example.journal
+bonsai-swiftui init --name journal \
+  --macos-bundle-identifier org.example.journal \
+  --ios-bundle-identifier org.example.journal.ios
 bonsai-swiftui build macos --profile debug
 bonsai-swiftui run macos --profile debug
 bonsai-swiftui sync-host --check
@@ -95,16 +94,14 @@ bonsai-swiftui run ios --profile release \
 The object must register the entrypoint used by the application's Swift source.
 Relative object paths are interpreted from the invocation directory. The
 physical device ID is mandatory before an iOS run can start building. Builds
-may use `--no-codesign`; runs always require signing. No Simulator fallback or
-Flutter command is used. Automatic installed-SDK discovery requires the iOS 18
+may use `--no-codesign`; runs always require signing. Only physical-iOS execution is supported. Automatic installed-SDK discovery requires the iOS 18
 floor. A local SDK installation now passes an independent App build without an
 explicit object; public SDK publication remains pending.
 
 `exec -- COMMAND ARGUMENT...` prepares verified macOS native artifacts, stages
 the host object and preserves the command's arguments, working directory,
 failure status and interrupts. It provides `BONSAI_SWIFTUI_NATIVE_OBJECT` and
-`BONSAI_SWIFTUI_CONFIGURATION` without rewriting a project configuration or
-pubspec. `--native-object` can also select its input explicitly.
+`BONSAI_SWIFTUI_CONFIGURATION` without rewriting a project configuration . `--native-object` can also select its input explicitly.
 
 ## Cleanup and prerequisites
 
@@ -131,7 +128,7 @@ wrong-platform object rejection, cleanup boundaries, argument fidelity,
 failure status and interrupt forwarding. Its independent application builds
 from the generated OCaml program in Debug/Profile/Release. A native SwiftUI
 window then presses Increment and verifies `Count: 0` becomes `Count: 1`
-through the real OCaml runtime. No Flutter process or Swift-only model is used.
+through the real OCaml runtime. The application exercises the OCaml runtime.
 
 The first run reproduced the absent native initialization and invalid-config
 write ordering (`/tmp/swiftui-cli-apple-red-final.log`). Ownership/process tests
@@ -144,7 +141,7 @@ Xcode output and missing parent validation, then both passed
 `/tmp/swiftui-cli-apple-clean-green.log`).
 
 The old pubspec/adapter/profile-injection tests are replaced by these real
-native workflows. Fifty existing non-Flutter CLI/library tests retain the SDK,
+native workflows. Existing CLI/library tests retain the SDK,
 closure, configuration, artifact, locking and source-ownership contracts, plus
 three direct-native-build integration tests. Full widget coverage, Gallery,
 complete screenshots, package renaming and SDK publication are still open.
@@ -258,3 +255,136 @@ clean-machine dependency provisioning or iOS SDK publication.
 This real opam gate passed on 2026-09-16 in 200.170 seconds, including all three
 macOS profiles and the native counter interaction. See the
 [release evidence](opam-installation.md#acceptance-evidence).
+
+## Application identities, entitlements and Swift packages
+
+Schema 4 requires independent `macos.bundle_identifier` and
+`ios.bundle_identifier` values. Schema 3 and the old initialization identity
+option are rejected; update application configuration explicitly. Fresh init
+accepts `--macos-bundle-identifier` and `--ios-bundle-identifier`, each defaulting
+to the name-derived identifier when omitted. `init --adopt` consumes existing
+configuration and rejects those initialization options.
+
+This generation-only Journal example uses the approved `com.logseq.journal`
+identity on both platforms. Executable acceptance uses synthetic identities.
+The feature list and native target must be selected from the application's
+validated native dependency closure.
+
+```lisp
+(lang 4)
+(app
+ (name journal)
+ (apple_root apple)
+ (native_target app/native_embed.exe.o)
+ (features)
+ (macos
+  (bundle_identifier com.logseq.journal)
+  (minimum_version 26.0)
+  (architectures arm64)
+  (entitlements
+   (debug config/entitlements/macos-debug-profile.entitlements)
+   (profile config/entitlements/macos-debug-profile.entitlements)
+   (release config/entitlements/macos-release.entitlements)))
+ (ios
+  (bundle_identifier com.logseq.journal)
+  (minimum_version 18.0)
+  (architectures arm64))
+ (swift_packages
+  (package
+   (id swift-collections)
+   (url https://github.com/apple/swift-collections.git)
+   (requirement (exact 1.1.4))
+   (products
+    (product (name OrderedCollections) (platforms macos ios))))))
+```
+
+Keep the complete application-owned input files outside `apple_root` and outside
+`resources/`, which is bundled into the App. The Debug/Profile file is:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>keychain-access-groups</key>
+  <array><string>$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)</string></array>
+  <key>com.apple.security.cs.allow-jit</key><true/>
+  <key>com.apple.security.network.server</key><true/>
+</dict></plist>
+```
+
+The Release file is:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>keychain-access-groups</key>
+  <array><string>$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)</string></array>
+</dict></plist>
+```
+
+An omitted entitlement block adds nothing. A present block requires all three
+profiles, including explicit paths when two profiles reuse a file. XML and
+binary dictionaries retain their types and literal build-setting substitutions;
+duplicate XML keys, malformed inputs, unsafe paths and symlink escapes are
+rejected before writes. Framework requirements are a separate empty dictionary.
+Unequal typed values on a shared key are errors. Generated effective files live
+under `Entitlements/<platform>/<configuration>.entitlements`. Test hosts and
+runners do not inherit application entitlement inputs or package products.
+
+Package declarations accept HTTPS Git URLs and either `(exact X.Y.Z)` or
+`(revision FULL_40_CHARACTER_COMMIT_HASH)`. IDs and URLs must be unique; products
+must name nonempty explicit platform selections. Branches, ranges, abbreviated
+revisions, reserved framework products and product collisions on one target are
+rejected. Shared Swift sources must use conditional compilation for products
+selected on only one platform.
+
+```swift
+import OrderedCollections
+let values: OrderedSet<Int> = [3, 1, 3, 2]
+precondition(Array(values) == [3, 1, 2])
+```
+
+Resolve before building applications with remote packages:
+
+```sh
+bonsai-swiftui resolve-packages
+# Commit bonsai-swiftui.sexp, entitlement inputs, and swift-packages/Package.resolved.
+bonsai-swiftui sync-host --check
+bonsai-swiftui build macos --profile debug
+bonsai-swiftui build macos --profile profile
+bonsai-swiftui build macos --profile release
+bonsai-swiftui build ios --profile release --no-codesign
+```
+
+`resolve-packages` resolves both platform schemes in a disposable Xcode host,
+compiles isolated SwiftUI probes with the selected products on both platforms,
+and publishes the application-owned
+`swift-packages/Package.resolved` and generated host only after success. Builds
+require matching direct pins and preserve all resolved transitive pins with
+Xcode's automatic updates disabled. Missing or stale locks request an explicit
+resolution. A lock is projected into the generated project's workspace.
+`sync-host` and `sync-host --check` remain offline; they do not certify remote
+availability or exported products. Generation before the first lock is allowed.
+Check mode never resolves packages or writes consumer files. Adoption preserves
+existing sources, metadata, entitlement inputs and lock bytes and mtimes.
+
+The package example proves application package integration. Authentication
+provider choice, versions/products and session continuity remain a separate
+migration task. The iOS identity replacement can change provisioning,
+installation/upgrade behavior and expanded Keychain groups. Ad-hoc or unsigned
+builds do not establish production Keychain access. Caller-provided signing
+credentials, provisioning and device access are required to verify those gates;
+no team prefix is substituted in source entitlements, and no reauthentication
+workaround establishes session continuity.
+
+For signing with a caller-selected certificate, pass `--signing-identity` on
+`build` or `run`, along with `--development-team` when required. The macOS default
+remains ad-hoc signing. For example, supply your own values:
+
+```sh
+bonsai-swiftui build macos --profile release \
+  --development-team "$APPLE_DEVELOPMENT_TEAM" \
+  --signing-identity "$APPLE_SIGNING_IDENTITY"
+codesign -d --entitlements :- apple/DerivedData/Build/Products/Release/BonsaiJournal.app
+```

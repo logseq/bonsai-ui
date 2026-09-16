@@ -87,7 +87,7 @@ fi
 # runtime boundary here; verify_complete_object.sh checks the complete ABI
 # before the linker removes unused functions from the application.
 defined_symbols=$(nm -gU "$binary_path" | awk '{ print $3 }')
-for symbol in _bs_runtime_create _bs_runtime_pump _bs_runtime_destroy; do
+for symbol in _bs_runtime_create _bs_runtime_pump _bs_runtime_shutdown_pump _bs_runtime_destroy; do
   printf '%s\n' "$defined_symbols" | grep -Fx "$symbol" >/dev/null ||
     fail "application does not define $symbol"
 done

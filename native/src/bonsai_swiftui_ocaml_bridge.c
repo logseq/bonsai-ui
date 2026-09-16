@@ -16,6 +16,7 @@ static char bs_ocaml_initialization_error[256] = {0};
 
 static const value *bs_create_callback = NULL;
 static const value *bs_pump_callback = NULL;
+static const value *bs_shutdown_pump_callback = NULL;
 static const value *bs_presentation_succeeded_callback = NULL;
 static const value *bs_presentation_rejected_callback = NULL;
 static const value *bs_destroy_callback = NULL;
@@ -52,12 +53,14 @@ static void bs_ocaml_initialize_once(void) {
   }
   bs_create_callback = caml_named_value("bonsai_swiftui.create");
   bs_pump_callback = caml_named_value("bonsai_swiftui.pump");
+  bs_shutdown_pump_callback = caml_named_value("bonsai_swiftui.shutdown_pump");
   bs_presentation_succeeded_callback =
       caml_named_value("bonsai_swiftui.presentation_succeeded");
   bs_presentation_rejected_callback =
       caml_named_value("bonsai_swiftui.presentation_rejected");
   bs_destroy_callback = caml_named_value("bonsai_swiftui.destroy");
   if (bs_create_callback == NULL || bs_pump_callback == NULL ||
+      bs_shutdown_pump_callback == NULL ||
       bs_presentation_succeeded_callback == NULL ||
       bs_presentation_rejected_callback == NULL ||
       bs_destroy_callback == NULL) {
@@ -254,6 +257,7 @@ bs_status bs_ocaml_bridge_create(const uint8_t *config,
 
 typedef enum bs_callback_kind {
   BS_CALLBACK_PUMP,
+  BS_CALLBACK_SHUTDOWN_PUMP,
   BS_CALLBACK_PRESENTATION_SUCCEEDED,
   BS_CALLBACK_PRESENTATION_REJECTED
 } bs_callback_kind;
@@ -289,7 +293,7 @@ static bs_status bs_call_output_callback_locked(
   revision_value = caml_copy_int64((int64_t)revision);
   input_value = caml_alloc_initialized_string(input_length, input_bytes);
   arguments[0] = handle_value;
-  if (kind == BS_CALLBACK_PUMP) {
+  if (kind == BS_CALLBACK_PUMP || kind == BS_CALLBACK_SHUTDOWN_PUMP) {
     arguments[1] = monotonic_value;
     arguments[2] = input_value;
     argument_count = 3;
@@ -331,7 +335,7 @@ static bs_status bs_call_output_callback_locked(
                response->presentation_id == 0) {
       bs_response_failure(response, "OCaml pump returned no presentation token");
       status = BS_STATUS_FATAL_ERROR;
-    } else if (kind != BS_CALLBACK_PUMP &&
+    } else if (kind != BS_CALLBACK_PUMP && kind != BS_CALLBACK_SHUTDOWN_PUMP &&
                (response->presentation_id != 0 || response->revision != 0 ||
                 response->length != 0)) {
       bs_response_failure(response,
@@ -380,6 +384,23 @@ bs_status bs_ocaml_bridge_pump(uint64_t handle,
                                bs_ocaml_response *response) {
   return bs_call_output_callback(bs_pump_callback,
                                  BS_CALLBACK_PUMP,
+                                 handle,
+                                 monotonic_now_ns,
+                                 input,
+                                 input_length,
+                                 0,
+                                 0,
+                                 0,
+                                 response);
+}
+
+bs_status bs_ocaml_bridge_shutdown_pump(uint64_t handle,
+                               int64_t monotonic_now_ns,
+                               const uint8_t *input,
+                               size_t input_length,
+                               bs_ocaml_response *response) {
+  return bs_call_output_callback(bs_shutdown_pump_callback,
+                                 BS_CALLBACK_SHUTDOWN_PUMP,
                                  handle,
                                  monotonic_now_ns,
                                  input,

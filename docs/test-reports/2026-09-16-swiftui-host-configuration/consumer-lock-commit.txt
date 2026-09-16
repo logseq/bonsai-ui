@@ -1,0 +1,12 @@
+commit c4c312e08e51ccfc58f912439966a3b9b661893f
+Author:     Bonsai Acceptance <acceptance@example.invalid>
+AuthorDate: Wed Sep 16 16:05:42 2026 +0800
+Commit:     Bonsai Acceptance <acceptance@example.invalid>
+CommitDate: Wed Sep 16 16:05:42 2026 +0800
+
+    feat(acceptance): lock remote Swift package graph
+
+ bonsai-swiftui.sexp             | 21 +++++++++++++++++++++
+ swift-packages/Package.resolved | 33 +++++++++++++++++++++++++++++++++
+ swift/App.swift                 | 20 ++++++++++++++++++++
+ 3 files changed, 74 insertions(+)

@@ -35,7 +35,8 @@ def main():
     project = generate_project(
         framework_root=ROOT, application_root=ROOT / "examples" / example,
         host_directory=host, product_name=name,
-        bundle_identifier=f"org.bonsai-swiftui.example.{example.replace('_', '-')}",
+        bundle_identifiers={platform: f"org.bonsai-swiftui.example.{example.replace('_', '-')}"
+                            for platform in ("macos", "ios")},
         development_team=args.development_team,
     )
     if args.generate_only:

@@ -1,9 +1,8 @@
-(lang 3)
+(lang 4)
 (app
  (name gallery)
  (apple_root apple)
- (bundle_identifier org.bonsai-swiftui.example.gallery)
  (native_target ocaml/native_embed.exe.o)
  (features)
- (macos (minimum_version 26.0) (architectures arm64))
- (ios (minimum_version 18.0) (architectures arm64)))
+ (macos (bundle_identifier org.bonsai-swiftui.example.gallery) (minimum_version 26.0) (architectures arm64))
+ (ios (bundle_identifier org.bonsai-swiftui.example.gallery) (minimum_version 18.0) (architectures arm64)))

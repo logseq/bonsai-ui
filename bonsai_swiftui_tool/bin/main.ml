@@ -22,10 +22,23 @@ let parse_features value =
   parse [ Config.Feature.Core ] names
 ;;
 
-let init name bundle_identifier features macos_minimum ios_minimum adopt =
+let init
+      name
+      macos_bundle_identifier
+      ios_bundle_identifier
+      features
+      macos_minimum
+      ios_minimum
+      adopt
+  =
   let project_root = Sys.getcwd () in
   let path = Filename.concat project_root "bonsai-swiftui.sexp" in
-  if adopt && (Option.is_some name || Option.is_some bundle_identifier || features <> "")
+  if
+    adopt
+    && (Option.is_some name
+        || Option.is_some macos_bundle_identifier
+        || Option.is_some ios_bundle_identifier
+        || features <> "")
   then
     Error "--adopt uses the existing configuration; do not supply new application options"
   else if (not adopt) && Sys.file_exists path
@@ -43,28 +56,39 @@ let init name bundle_identifier features macos_minimum ios_minimum adopt =
           | Some name -> Ok name
           | None -> Error "--name is required"
         in
-        let bundle_identifier =
-          Option.value
-            bundle_identifier
-            ~default:
-              ("org.bonsai-swiftui."
-               ^ String.map
-                   (function
-                     | '_' -> '-'
-                     | c -> c)
-                   name)
+        let default_identifier =
+          "org.bonsai-swiftui."
+          ^ String.map
+              (function
+                | '_' -> '-'
+                | c -> c)
+              name
+        in
+        let macos_bundle_identifier =
+          Option.value macos_bundle_identifier ~default:default_identifier
+        in
+        let ios_bundle_identifier =
+          Option.value ios_bundle_identifier ~default:default_identifier
         in
         let* features = parse_features features in
         Ok
           (Scaffold.configuration_text
              ~name
-             ~bundle_identifier
+             ~macos_bundle_identifier
+             ~ios_bundle_identifier
              ~features
              ~macos_minimum_version:macos_minimum
              ~ios_minimum_version:ios_minimum)
     in
     let* config = Config.parse_string text in
     let* framework_root = Assets.find_framework_root () in
+    let* () =
+      Host.sync
+        ~framework_root
+        ~project_root
+        ~config
+        ~mode:(if adopt then Host.Validate else Host.Inputs)
+    in
     let* () =
       if adopt
       then Scaffold.adopt_workspace ~project_root ~config_text:text ~config
@@ -96,6 +120,7 @@ let doctor target =
 let build_native target profile =
   let* project_root, config = load_project () in
   let* framework_root = Assets.find_framework_root () in
+  let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Inputs in
   let* artifact =
     Build_system.build_native ~framework_root ~project_root ~config ~target ~profile
   in
@@ -108,7 +133,7 @@ let absolute_object =
     if Filename.is_relative path then Filename.concat (Sys.getcwd ()) path else path)
 ;;
 
-let build platform profile no_codesign development_team native_object =
+let build platform profile no_codesign development_team signing_identity native_object =
   let native_object = absolute_object native_object in
   let* project_root, config = load_project () in
   let* framework_root = Assets.find_framework_root () in
@@ -121,13 +146,14 @@ let build platform profile no_codesign development_team native_object =
       ~profile
       ~no_codesign
       ~development_team
+      ~signing_identity
       ~native_object
   in
   Printf.printf "application: %s\n%!" bundle;
   Ok ()
 ;;
 
-let run platform profile device development_team native_object arguments =
+let run platform profile device development_team signing_identity native_object arguments =
   if platform = Plan.Ios_platform && Option.is_none device
   then Error "Running on iOS requires --device <physical-device-id>"
   else (
@@ -142,6 +168,7 @@ let run platform profile device development_team native_object arguments =
       ~profile
       ~device
       ~development_team
+      ~signing_identity
       ~native_object
       ~arguments)
 ;;
@@ -174,6 +201,12 @@ let sync_host check =
     ~project_root
     ~config
     ~mode:(if check then Host.Check else Host.Write)
+;;
+
+let resolve_packages () =
+  let* project_root, config = load_project () in
+  let* framework_root = Assets.find_framework_root () in
+  Host.sync ~framework_root ~project_root ~config ~mode:Host.Resolve
 ;;
 
 let clean platform all_project_builds =
@@ -273,13 +306,27 @@ let development_team =
     & info
         [ "development-team" ]
         ~docv:"TEAM"
-        ~doc:"Apple development team for physical-device signing.")
+        ~doc:"Apple development team for application signing.")
+;;
+
+let signing_identity =
+  Arg.(
+    value
+    & opt (some string) None
+    & info
+        [ "signing-identity" ]
+        ~docv:"IDENTITY"
+        ~doc:
+          "Explicit code signing certificate identity supplied by the application owner.")
 ;;
 
 let init_command =
   let name = Arg.(value & opt (some string) None & info [ "name" ] ~docv:"NAME") in
-  let bundle =
-    Arg.(value & opt (some string) None & info [ "bundle-identifier" ] ~docv:"ID")
+  let macos_bundle =
+    Arg.(value & opt (some string) None & info [ "macos-bundle-identifier" ] ~docv:"ID")
+  in
+  let ios_bundle =
+    Arg.(value & opt (some string) None & info [ "ios-bundle-identifier" ] ~docv:"ID")
   in
   let features = Arg.(value & opt string "" & info [ "features" ] ~docv:"FEATURES") in
   let macos =
@@ -298,7 +345,7 @@ let init_command =
   in
   Cmd.v
     (Cmd.info "init" ~doc:"Initialize an OCaml and SwiftUI application.")
-    Term.(const init $ name $ bundle $ features $ macos $ ios $ adopt)
+    Term.(const init $ name $ macos_bundle $ ios_bundle $ features $ macos $ ios $ adopt)
 ;;
 
 let doctor_command =
@@ -331,7 +378,13 @@ let build_command =
   Cmd.v
     (Cmd.info "build" ~doc:"Build the complete SwiftUI application with Xcode.")
     Term.(
-      const build $ platform $ profile $ no_codesign $ development_team $ native_object)
+      const build
+      $ platform
+      $ profile
+      $ no_codesign
+      $ development_team
+      $ signing_identity
+      $ native_object)
 ;;
 
 let run_command =
@@ -349,6 +402,7 @@ let run_command =
       $ profile
       $ device
       $ development_team
+      $ signing_identity
       $ native_object
       $ arguments)
 ;;
@@ -383,6 +437,14 @@ let sync_host_command =
          "Generate or check the Xcode host; application Swift sources remain owned by \
           the application.")
     Term.(const sync_host $ check)
+;;
+
+let resolve_packages_command =
+  Cmd.v
+    (Cmd.info
+       "resolve-packages"
+       ~doc:"Resolve and lock application Swift packages in staging.")
+    Term.(const resolve_packages $ const ())
 ;;
 
 let clean_command =
@@ -442,6 +504,7 @@ let command =
     ; build_command
     ; run_command
     ; exec_command
+    ; resolve_packages_command
     ; sync_host_command
     ; clean_command
     ; toolchain_command

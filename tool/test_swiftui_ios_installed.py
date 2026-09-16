@@ -38,7 +38,7 @@ class InstalledIOSSDKTests(unittest.TestCase):
                 return result
 
             cli("toolchain", "verify", "iphoneos")
-            cli("init", "--name", "sdk_check", "--bundle-identifier", "org.example.sdkcheck")
+            cli("init", "--name", "sdk_check", "--macos-bundle-identifier", "org.example.sdkcheck", "--ios-bundle-identifier", "org.example.sdkcheck.ios")
             cli("build", "ios", "--profile", "release", "--no-codesign")
             bundles = list((project / "apple/DerivedData/Build/Products/Release-iphoneos").glob("*.app"))
             self.assertEqual(len(bundles), 1)

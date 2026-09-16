@@ -1,0 +1,6 @@
+test_installed_application_builds_and_runs_real_ocaml (__main__.InstalledSwiftUICliTests.test_installed_application_builds_and_runs_real_ocaml) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 94.222s
+
+OK

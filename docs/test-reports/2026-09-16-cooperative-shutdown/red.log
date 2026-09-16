@@ -1,0 +1,19 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.10s)
+Test Suite 'Selected tests' started at 2026-09-16 17:41:13.863.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-16 17:41:13.864.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-16 17:41:13.864.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-16 17:41:13.864.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test shutdownHiddenRegression() started.
+✘ Test shutdownHiddenRegression() recorded an issue at ShutdownTests.swift:40:5: Expectation failed: (fixture.ordinary → 0) > 0
+↳ Hidden shutdown never reached its native request
+✘ Test shutdownHiddenRegression() failed after 0.449 seconds with 1 issue.
+✘ Suite NativeRuntimeTests failed after 0.449 seconds with 1 issue.
+✘ Test run with 1 test in 1 suite failed after 0.450 seconds with 1 issue.

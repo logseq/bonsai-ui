@@ -1,0 +1,6 @@
+docs/agent-guide/implemented/process/2026-09-16-repository-location.md
+docs/agent-guide/proposed/feature/2026-09-16-swiftui-cli-application-host-configuration.md
+tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/files/build-installed-framework.sh
+tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/files/manifest.sexp
+tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/files/package-lock.sexp
+tool/ios/opam-repository/0.1.0/packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.41/opam

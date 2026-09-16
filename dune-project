@@ -4,7 +4,7 @@
 (implicit_transitive_deps false)
 (license MIT)
 (source
- (github rcmerci/bonsai_flutter))
+ (github logseq/bonsai-ui))
 
 (package
  (name bonsai_swiftui)

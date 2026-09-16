@@ -7,9 +7,9 @@ target dependency closure independently from the Bonsai SwiftUI framework.
 maintainer: "bonsai_swiftui contributors"
 authors: ["bonsai_swiftui contributors"]
 license: "MIT"
-homepage: "https://github.com/RCmerci/bonsai_flutter"
-bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"
-dev-repo: "git+https://github.com/RCmerci/bonsai_flutter.git"
+homepage: "https://github.com/logseq/bonsai-ui"
+bug-reports: "https://github.com/logseq/bonsai-ui/issues"
+dev-repo: "git+https://github.com/logseq/bonsai-ui.git"
 extra-source "runtime-gmp-sys-ios-a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898.archive" {
   src: "https://gmplib.org/download/gmp/gmp-6.3.0.tar.xz"
   checksum: ["sha256=a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898"]

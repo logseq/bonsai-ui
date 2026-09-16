@@ -1,0 +1,9 @@
+Testing `SwiftUI native build'.
+This run has ID `55O2XH08'.
+
+  [OK]          native          0   direct object, profiles, incremental source.
+  [OK]          native          1   actual Counter staging without aliases.
+  [OK]          native          2   direct target validation.
+
+Full test results in `~/gh-repos/bonsai-ui/_build/_tests/SwiftUI native build'.
+Test Successful in 3.450s. 3 tests run.

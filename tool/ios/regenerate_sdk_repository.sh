@@ -100,7 +100,7 @@ else
   git -C "$repository_root" show "$BONSAI_SWIFTUI_SOURCE_REVISION:bonsai_swiftui.opam" \
     > "$temporary_directory/framework.opam" 2>/dev/null ||
     fail "locked source lacks bonsai_swiftui.opam: $BONSAI_SWIFTUI_SOURCE_REVISION"
-  framework_source_url="https://github.com/RCmerci/bonsai_flutter/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz"
+  framework_source_url="https://github.com/logseq/bonsai-ui/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz"
 fi
 
 default_checkout="$cache_root/opam-repository"

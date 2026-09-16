@@ -3,7 +3,7 @@
 The active renderer protocol is **BSFR 5.0**. It is little-endian,
 length-delimited and generated from [schema.sexp](../protocol/schema.sexp).
 Swift and OCaml require an exact version match. There is no old-magic or
-old-version decoder. Native ABI 3.0 is a separate contract.
+old-version decoder. Native ABI 4.0 is a separate contract.
 
 ## Frame header
 

@@ -7,8 +7,6 @@ let application_key ~config ~target ~profile =
       "\000"
       [ "bonsai-swiftui-application-cache-v1"
       ; config.name
-      ; config.apple_root
-      ; config.bundle_identifier
       ; config.native_target
       ; features
       ; Plan.target_name target

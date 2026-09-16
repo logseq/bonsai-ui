@@ -9,7 +9,7 @@ framework_root=$(CDPATH= cd -- "$script_directory/../.." && pwd)
 . "$script_directory/toolchain.lock"
 BONSAI_SWIFTUI_SOURCE_REVISION=${SDK_SOURCE_REVISION:-$BONSAI_SWIFTUI_SOURCE_REVISION}
 BONSAI_SWIFTUI_SOURCE_SHA256=${SDK_SOURCE_SHA256:-$BONSAI_SWIFTUI_SOURCE_SHA256}
-expected_framework_source_url=${SDK_SOURCE_URL:-https://github.com/RCmerci/bonsai_flutter/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz}
+expected_framework_source_url=${SDK_SOURCE_URL:-https://github.com/logseq/bonsai-ui/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz}
 
 if [ "$#" -ne 6 ]; then
   echo "usage: $0 SOLUTION_JSON OPAM_REPO_CACHE OUTPUT_REPOSITORY FRAMEWORK_OPAM RUNTIME_OPAM SUPPORTED_CLOSURE_LOCK" >&2
@@ -268,9 +268,9 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
     'maintainer: "bonsai_swiftui contributors"' \
     'authors: ["bonsai_swiftui contributors"]' \
     'license: "MIT"' \
-    'homepage: "https://github.com/RCmerci/bonsai_flutter"' \
-    'bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"' \
-    'dev-repo: "git+https://github.com/RCmerci/bonsai_flutter.git"' \
+    'homepage: "https://github.com/logseq/bonsai-ui"' \
+    'bug-reports: "https://github.com/logseq/bonsai-ui/issues"' \
+    'dev-repo: "git+https://github.com/logseq/bonsai-ui.git"' \
     'extra-source "bonsai_swiftui.tar.gz" {' \
     "  src: \"$framework_source_url\"" \
     "  checksum: [\"sha256=$framework_source_checksum\"]" \
@@ -311,9 +311,9 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
     'maintainer: "bonsai_swiftui contributors"' \
     'authors: ["bonsai_swiftui contributors"]' \
     'license: "MIT"' \
-    'homepage: "https://github.com/RCmerci/bonsai_flutter"' \
-    'bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"' \
-    'dev-repo: "git+https://github.com/RCmerci/bonsai_flutter.git"'
+    'homepage: "https://github.com/logseq/bonsai-ui"' \
+    'bug-reports: "https://github.com/logseq/bonsai-ui/issues"' \
+    'dev-repo: "git+https://github.com/logseq/bonsai-ui.git"'
   awk -F '|' '
     $1 !~ /^#/ && ($3 == "target-build" || $3 == "target-package") {
       printf "extra-source \"runtime-%s-%s.archive\" {\n", $1, $7

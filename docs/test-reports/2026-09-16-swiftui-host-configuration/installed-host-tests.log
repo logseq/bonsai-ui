@@ -1,0 +1,20 @@
+test_remote_package_resolution_and_locked_builds (__main__.InstalledHostAcceptance.test_remote_package_resolution_and_locked_builds) ... Installed consumer: /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai SwiftUI CLI au5p7kmy
+Resolved remote pins: [{"identity": "swift-algorithms", "kind": "remoteSourceControl", "location": "https://github.com/apple/swift-algorithms.git", "state": {"revision": "f6919dfc309e7f1b56224378b11e28bab5bccc42", "version": "1.2.0"}}, {"identity": "swift-collections", "kind": "remoteSourceControl", "location": "https://github.com/apple/swift-collections.git", "state": {"revision": "671108c96644956dddcd89dd59c203dcdb36cec7", "version": "1.1.4"}}, {"identity": "swift-numerics", "kind": "remoteSourceControl", "location": "https://github.com/apple/swift-numerics.git", "state": {"revision": "0c0290ff6b24942dadb83a929ffaaa1481df04a2", "version": "1.1.1"}}]
+PASS: locked debug build and package execution
+PASS: locked profile build and package execution
+PASS: locked release build and package execution
+PASS: locked unsigned physical-iOS package build
+ok
+test_platform_entitlements_drift_and_adoption (__main__.InstalledHostAcceptance.test_platform_entitlements_drift_and_adoption) ... Installed consumer: /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai SwiftUI CLI po9zhjgz
+ok
+test_invalid_file_inputs_preserve_existing_and_absent_hosts (__main__.InstalledHostAcceptance.test_invalid_file_inputs_preserve_existing_and_absent_hosts) ... Installed consumer: /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai SwiftUI CLI kwwhm1lw
+ok
+test_schema_four_init_flags_and_derived_identifier_limits (__main__.InstalledHostAcceptance.test_schema_four_init_flags_and_derived_identifier_limits) ... Installed consumer: /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai SwiftUI CLI 9wscecvj
+ok
+test_documented_journal_configuration_generates_without_signing (__main__.InstalledHostAcceptance.test_documented_journal_configuration_generates_without_signing) ... Installed consumer: /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai SwiftUI CLI jaq5d0o5
+ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 353.163s
+
+OK

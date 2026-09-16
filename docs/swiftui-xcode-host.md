@@ -122,7 +122,7 @@ still unfinished.
 
 Resources use Xcode's resource build phase; folder references retain nested paths
 and same-named files in separate directories. All targets consume the repository's
-local Swift package without Flutter, Dart, CocoaPods or downloaded packages.
+local framework Swift package. Applications can also select pinned remote packages.
 
 ## Tests
 
@@ -237,3 +237,16 @@ tests in 389.647 seconds (`/tmp/swiftui-mail-ui-host-regression.log`). The actua
 UI runner and UI bundle contain no OCaml runtime symbols; the targeted App
 does. Runtime XCTest on iPhone 13 passes again, while UI case execution awaits
 the device's observed XCTest passcode prompt.
+
+## Application host configuration
+
+The CLI passes validated schema-4 platform identities, per-profile entitlement
+paths and explicit remote package products to the shared generator. See the
+[complete application configuration](swiftui-cli.md#application-identities-entitlements-and-swift-packages)
+for input files, ownership, package resolution and signing limits.
+
+Generated test identities use each platform's application identifier followed by
+`.test-host`, `.tests` or `.ui-tests`. Application-only entitlements and remote
+products do not propagate into test targets. Generated profile entitlement files
+replace the previous single file per platform; synchronization removes only
+those obsolete generated filenames and leaves unrelated host files intact.

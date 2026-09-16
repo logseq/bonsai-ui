@@ -27,6 +27,12 @@ bs_status bs_ocaml_bridge_pump(uint64_t handle,
                                size_t input_length,
                                bs_ocaml_response *response);
 
+bs_status bs_ocaml_bridge_shutdown_pump(uint64_t handle,
+                               int64_t monotonic_now_ns,
+                               const uint8_t *input,
+                               size_t input_length,
+                               bs_ocaml_response *response);
+
 bs_status bs_ocaml_bridge_presentation_succeeded(
     uint64_t handle,
     uint64_t presentation_id,

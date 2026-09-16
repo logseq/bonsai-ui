@@ -104,7 +104,7 @@ module Application_platform : sig
     val operations : t -> Bonsai_swiftui_protocol.Wire_frame.operation list
   end
 
-  val prepare_operations : t -> Prepared_operations.t
+  val prepare_operations : ?maximum_count:int -> t -> Prepared_operations.t
   val commit_operations : t -> Prepared_operations.t -> (unit, string) result
 
   module Private : sig
@@ -123,6 +123,7 @@ module Application_platform : sig
 
     val resolve_validated : t -> Validated_input.t -> (unit, string) result
     val shutdown : t -> error -> unit
+    val begin_shutdown : t -> unit
     val pending_count : t -> int
   end
 end

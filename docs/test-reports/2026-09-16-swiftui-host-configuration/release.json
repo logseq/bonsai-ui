@@ -1,0 +1,36 @@
+{
+  "head": "09bd1571f7f1e76327b9402274d31119b7df7ecc",
+  "source_archive": "/Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16-host-configuration-source-01/bonsai-swiftui-0.1.0~dev.tar.gz",
+  "source_sha256": "2eaa76457fa3638e68b772c26411052416e8d4871e45ae6c83ea3db7864aad88",
+  "source_reproducible": true,
+  "final_archive": "/Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16-host-configuration-final-01/bonsai-swiftui-0.1.0~dev.tar.gz",
+  "final_sha256": "dbce93fc108e052328dc0b94576930a3c1caceb1d60b84b05e19382f9f1161fc",
+  "host_switch": "bonsai-ui",
+  "host_packages": {
+    "bonsai_swiftui": {
+      "version": "0.1.0~dev",
+      "sha256": "dbce93fc108e052328dc0b94576930a3c1caceb1d60b84b05e19382f9f1161fc",
+      "record": "/Users/rcmerci/.opam/bonsai-ui/.opam-switch/packages/bonsai_swiftui.0.1.0~dev/opam"
+    },
+    "bonsai_swiftui_tool": {
+      "version": "0.1.0~dev",
+      "sha256": "dbce93fc108e052328dc0b94576930a3c1caceb1d60b84b05e19382f9f1161fc",
+      "record": "/Users/rcmerci/.opam/bonsai-ui/.opam-switch/packages/bonsai_swiftui_tool.0.1.0~dev/opam"
+    },
+    "bonsai_swiftui_test": {
+      "version": "0.1.0~dev",
+      "sha256": "dbce93fc108e052328dc0b94576930a3c1caceb1d60b84b05e19382f9f1161fc",
+      "record": "/Users/rcmerci/.opam/bonsai-ui/.opam-switch/packages/bonsai_swiftui_test.0.1.0~dev/opam"
+    }
+  },
+  "ios_switch": "bonsai-swiftui-ios",
+  "framework_sdk": "0.1.0~dev.42",
+  "runtime_sdk": "0.1.0~dev.7",
+  "toolchain_fingerprint": "f29473c53f30c1c1c76e0eb330a57616ba4d5b6440294c6e1ad97266f5b27918",
+  "ocaml": "5.1.1",
+  "xcode": "26.1.1 (17B100)",
+  "swift": "6.2.1",
+  "python": "3.13.3",
+  "opam": "2.3.0",
+  "dune": "3.23.1"
+}

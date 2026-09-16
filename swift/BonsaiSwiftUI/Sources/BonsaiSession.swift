@@ -53,12 +53,12 @@ final class BonsaiSession {
   }
 
   private func updateAnimationActivity() {
-    windowHost.dialogs.setActive(isVisible && isActive)
-    windowHost.notices.setActive(isVisible && isActive && !windowHost.dialogs.blocksBackgroundInput)
+    windowHost.dialogs.setActive(isInteractive)
+    windowHost.notices.setActive(isInteractive && !windowHost.dialogs.blocksBackgroundInput)
     for node in tree.animationNodes {
-      node.collectionController?.viewport.setAnimationsActive(isVisible && isActive)
-      node.morphingSurfaceController?.setAnimationsActive(isVisible && isActive)
-      node.progressAnimationsActive = isVisible && isActive
+      node.collectionController?.viewport.setAnimationsActive(isInteractive)
+      node.morphingSurfaceController?.setAnimationsActive(isInteractive)
+      node.progressAnimationsActive = isInteractive
     }
     invalidatePresentation()
     dispatchCommittedHostCommands()
@@ -71,7 +71,7 @@ final class BonsaiSession {
       guard let instance = node.nativeView else { continue }
       let mounted = displayed.tree.nodes[node.id.node]
       instance.setPresented(
-        isVisible && isActive && displayedRevision > 0
+        isInteractive && displayedRevision > 0
           && displayed.tree.epoch == node.id.epoch && mounted?.properties == node.properties
           && mounted?.bindings == node.bindings
           && mounted?.children == node.children.map { $0.id.node }
@@ -86,22 +86,22 @@ final class BonsaiSession {
         removal.setPresentation(
           presented: displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
             && mounted?.properties == node.properties && mounted?.bindings == node.bindings,
-          active: isVisible && isActive && isInActiveContent(node, controlsOwnInput: false))
+          active: isInteractive && isInActiveContent(node, controlsOwnInput: false))
       }
       if let refresh = node.refreshController {
         let mounted = displayed.tree.nodes[node.id.node]
-        let active = isVisible && isActive && isInActiveContent(node, controlsOwnInput: false)
+        let active = isInteractive && isInActiveContent(node, controlsOwnInput: false)
         refresh.setPresentation(
           presented: displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
             && mounted?.properties == node.properties && mounted?.bindings == node.bindings,
           active: active)
       }
       node.scrollCommand?.setActive(
-        isVisible && isActive && isInActiveContent(node, controlsOwnInput: false))
+        isInteractive && isInActiveContent(node, controlsOwnInput: false))
       guard let observer = node.scrollObserver else { continue }
       let mounted = displayed.tree.nodes[node.id.node]
       observer.setPresented(
-        isVisible && isActive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
+        isInteractive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
           && mounted?.properties == node.properties && mounted?.bindings == node.bindings
           && node.bindings[EventTagId.scrollNotification] != nil
           && isInActiveContent(node, controlsOwnInput: false))
@@ -112,17 +112,17 @@ final class BonsaiSession {
     for node in tree.focusAndGestureNodes {
       let mounted = displayed.tree.nodes[node.id.node]
       node.keyboardController?.focus.setPresented(
-        isVisible && isActive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
+        isInteractive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
           && mounted?.properties == node.properties && mounted?.bindings == node.bindings
           && mounted?.children == node.children.map { $0.id.node }
           && isInActiveContent(node, controlsOwnInput: false))
       node.focusController?.setPresented(
-        isVisible && isActive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
+        isInteractive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
           && mounted?.properties == node.properties && mounted?.bindings == node.bindings
           && mounted?.children == node.children.map { $0.id.node }
           && isInActiveContent(node, controlsOwnInput: false))
       node.gestureController?.setPresented(
-        isVisible && isActive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
+        isInteractive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
           && mounted?.properties == node.properties && mounted?.bindings == node.bindings
           && mounted?.children == node.children.map { $0.id.node }
           && isInActiveContent(node, controlsOwnInput: false))
@@ -133,10 +133,10 @@ final class BonsaiSession {
     if !isVisible || !isActive { tree.discardHoverInput() }
     for node in tree.hoverNodes {
       node.hoverController?.setCollecting(
-        isVisible && isActive && isInActiveContent(node, controlsOwnInput: false))
+        isInteractive && isInActiveContent(node, controlsOwnInput: false))
     }
     tree.hoverRouter.setPresented(
-      isVisible && isActive && ticket == nil && pending == nil
+      isInteractive && ticket == nil && pending == nil
         && displayedRevision > 0 && tree.revision == displayedRevision)
   }
 
@@ -145,7 +145,7 @@ final class BonsaiSession {
       guard let controller = node.opacityController else { continue }
       let mounted = displayed.tree.nodes[node.id.node]
       controller.setPresentationActive(
-        isVisible && isActive && displayedRevision > 0
+        isInteractive && displayedRevision > 0
           && displayed.tree.epoch == node.id.epoch && mounted?.properties == node.properties
           && mounted?.bindings == node.bindings && isInActiveContent(node, controlsOwnInput: false))
     }
@@ -163,7 +163,7 @@ final class BonsaiSession {
           && mounted.children == node.children.map { $0.id.node }
       }
       controller.setPresentationActive(
-        isVisible && isActive && displayedRevision > 0
+        isInteractive && displayedRevision > 0
           && displayed.tree.epoch == node.id.epoch && matching
           && isInActiveContent(node, ignoringModalBlocking: true))
     }
@@ -171,12 +171,12 @@ final class BonsaiSession {
 
   private func updateFieldFocus() {
     for node in tree.fieldNodes {
-      let contentActive = isVisible && isActive && isInActiveContent(node)
+      let contentActive = isInteractive && isInActiveContent(node)
       node.textController?.setContentActive(contentActive)
       guard let controller = node.fieldController else { continue }
       controller.setContentActive(contentActive)
       let active =
-        isVisible && isActive && displayedRevision > 0
+        isInteractive && displayedRevision > 0
         && displayed.tree.epoch == node.id.epoch
         && displayed.tree.nodes[node.id.node]?.properties == node.properties
         && contentActive
@@ -188,6 +188,9 @@ final class BonsaiSession {
   @ObservationIgnored private var opening: Task<NativeRuntime, any Error>?
   @ObservationIgnored private var sessionID = UUID()
   var lifetimeIdentity: UUID { sessionID }
+  @ObservationIgnored private var shutdownOperation: BonsaiApplicationShutdown?
+  @ObservationIgnored private var closingTask: Task<Void, Never>?
+  private var isInteractive: Bool { isVisible && isActive && shutdownOperation == nil }
   @ObservationIgnored private var closing = false
   @ObservationIgnored private var busy = false
   @ObservationIgnored private var pending: NativeOutput?
@@ -249,7 +252,8 @@ final class BonsaiSession {
       service: hostService ?? NativeHostService(windowHost: windowHost))
     tree.onInput = { [weak self] node, payload in self?.input(node, payload: payload) ?? false }
     tree.onInteractionPermission = { [weak self] node in
-      guard let self, self.isVisible, self.isActive, self.displayedRevision > 0,
+      guard let self, self.shutdownOperation == nil, self.isVisible, self.isActive,
+        self.displayedRevision > 0,
         self.displayed.tree.epoch == node.id.epoch, self.tree.nodes[node.id.node] === node,
         let mounted = self.displayed.tree.nodes[node.id.node],
         mounted.properties == node.properties,
@@ -259,7 +263,7 @@ final class BonsaiSession {
     }
     windowHost.allowsFeedback = { [weak self] in
       guard let self else { return false }
-      return self.runtime != nil && !self.closing && self.isActive && self.isVisible
+      return self.runtime != nil && !self.closing && self.isInteractive
         && self.displayedRevision > 0
     }
     windowHost.hasModalContent = { [weak self] in
@@ -279,7 +283,7 @@ final class BonsaiSession {
     tree.onPresentationChange = { [weak self] in self?.invalidatePresentation() }
     tree.onInputFailure = { [weak self] error in self?.inputFailure = error }
     windowHost.resolveNode = { [weak self] id, controlsOwnInput in
-      guard let self, isVisible, isActive, displayedRevision > 0,
+      guard let self, shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
         let node = tree.nodes[id], displayed.tree.epoch == node.id.epoch,
         let mounted = displayed.tree.nodes[id], mounted.properties == node.properties,
         mounted.bindings == node.bindings, mounted.children == node.children.map({ $0.id.node }),
@@ -312,6 +316,7 @@ final class BonsaiSession {
   }
 
   @discardableResult func refresh() async throws -> Bool {
+    guard shutdownOperation == nil else { return false }
     reconcilePresentation()
     if let inputFailure { throw inputFailure }
     guard let runtime, isVisible, isActive, !busy, pending == nil else { return false }
@@ -426,7 +431,7 @@ final class BonsaiSession {
     }
     events.removePrefix(batchEvents.count)
     let output = try await runtime.pump(monotonicNanoseconds: now, events: batch)
-    guard sessionID == identity else { return false }
+    guard shutdownOperation == nil, sessionID == identity else { return false }
     defer {
       for (controller, request) in swipeRequests { controller.resolve(request) }
       for node in navigationRequests { node.navigationController?.resolve() }
@@ -479,7 +484,7 @@ final class BonsaiSession {
   }
 
   @discardableResult func presented(_ observed: PresentationTicket) async throws -> Bool {
-    guard let runtime, let output = pending, ticket == observed,
+    guard shutdownOperation == nil, let runtime, let output = pending, ticket == observed,
       isVisible, isActive, !busy
     else { return false }
     let identity = sessionID
@@ -495,14 +500,14 @@ final class BonsaiSession {
     pending = nil
     ticket = nil
     invalidatePresentation()
-    if isVisible && isActive { for text in announcements { announce(text) } }
+    if isInteractive { for text in announcements { announce(text) } }
     dispatchCommittedHostCommands()
     dispatchCommittedApplicationRequests()
     return true
   }
 
   @discardableResult func activate(_ node: RenderNodeState) -> Bool {
-    guard isVisible, isActive, displayed.tree.epoch == node.id.epoch,
+    guard shutdownOperation == nil, isVisible, isActive, displayed.tree.epoch == node.id.epoch,
       tree.nodes[node.id.node] === node,
       let mounted = displayed.tree.nodes[node.id.node],
       let handler = mounted.bindings[EventTagId.press]
@@ -539,6 +544,7 @@ final class BonsaiSession {
   }
 
   private func input(_ node: RenderNodeState, payload: NativeEventPayload) -> Bool {
+    guard shutdownOperation == nil else { return false }
     if case .key = payload {
       guard inputFailure == nil, isVisible, isActive, displayedRevision > 0,
         displayed.tree.epoch == node.id.epoch, tree.nodes[node.id.node] === node,
@@ -553,7 +559,8 @@ final class BonsaiSession {
       return accepted
     }
     if case .focusChanged = payload, let controller = node.focusController {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, controller.isCollecting,
         let mounted = displayed.tree.nodes[node.id.node], mounted.properties == node.properties,
         mounted.bindings == node.bindings, mounted.children == node.children.map({ $0.id.node }),
@@ -565,7 +572,8 @@ final class BonsaiSession {
       return accepted
     }
     if case .nativeView(let event) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let instance = node.nativeView,
         instance.id == event.instance, instance.accepts(event.generation),
         instance.prepared.envelope.kind == event.kind,
@@ -577,7 +585,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if payload.isGenericGesture {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, node.gestureController?.isCollecting == true,
         let mounted = displayed.tree.nodes[node.id.node], case .gesture = mounted.properties,
         mounted.bindings == node.bindings, mounted.children == node.children.map({ $0.id.node }),
@@ -613,7 +622,7 @@ final class BonsaiSession {
     }
     if case .press = payload { return activate(node) }
     if case .animationCompleted(let id) = payload {
-      guard isVisible, isActive, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         mounted.properties == node.properties, node.opacityController?.canComplete(id) == true,
         let handler = mounted.bindings[payload.tag], node.bindings[payload.tag] == handler
@@ -621,7 +630,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if let selection = payload.sliderSelection {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .slider(let previous) = mounted.properties,
         case .slider(let current) = node.properties,
@@ -632,7 +642,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if let selection = payload.civilSelection {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .civilPicker(let previous) = mounted.properties,
         case .civilPicker(let current) = node.properties,
@@ -642,7 +653,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if payload.tag == EventTagId.removalRequested || payload.tag == EventTagId.removalCompleted {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, isInActiveContent(node, controlsOwnInput: false),
         let mounted = displayed.tree.nodes[node.id.node],
         case .removal(let previous) = mounted.properties,
@@ -662,7 +674,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .refreshRequest(let token) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, isInActiveContent(node, controlsOwnInput: false),
         let mounted = displayed.tree.nodes[node.id.node],
         case .refresh(let previous) = mounted.properties,
@@ -673,7 +686,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .scrollPosition(let id) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .scrollTargets(let previous) = mounted.properties,
         case .scrollTargets(let current) = node.properties,
@@ -684,7 +698,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if [EventTagId.tableSortRequested, EventTagId.tableRowSelected].contains(payload.tag) {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .table(let previous) = mounted.properties, case .table(let current) = node.properties,
         previous.sameConfiguration(as: current), current.admits(payload),
@@ -694,7 +709,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .menuAction(let id) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .menu(let previous) = mounted.properties, case .menu(let current) = node.properties,
         previous.sameConfiguration(as: current), current.admits(id),
@@ -704,7 +720,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .pickerSelection(let selected) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .picker(let previous) = mounted.properties,
         case .picker(let current) = node.properties,
@@ -727,7 +744,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .valueChanged = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .booleanControl(let previous) = mounted.properties,
         case .booleanControl(let current) = node.properties,
@@ -741,7 +759,8 @@ final class BonsaiSession {
     // awaits presentation. Fence semantic ownership, not the echoed selection/
     // column values, and retain the actual displayed revision on the queued event.
     if case .tabSelection(let requested) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .tabs = mounted.properties, case .tabs = node.properties,
         mounted.children == node.children.map({ $0.id.node }),
@@ -757,7 +776,8 @@ final class BonsaiSession {
       return found && enqueue(node, handler: handler, payload: payload)
     }
     if case .navigationSplit(let requested) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .navigationSplit(let previous) = mounted.properties,
         case .navigationSplit(let current) = node.properties,
@@ -773,7 +793,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .navigationPath(let keys) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
         case .navigationStack = mounted.properties, case .navigationStack = node.properties,
         mounted.children == node.children.map({ $0.id.node }),
@@ -794,7 +815,8 @@ final class BonsaiSession {
       return enqueue(node, handler: handler, payload: payload)
     }
     if case .semanticsAction(let id) = payload {
-      guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+      guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, !node.accessibilityHidden,
         !displayed.tree.accessibilityHiddenNodes.contains(node.id.node),
         let mounted = displayed.tree.nodes[node.id.node],
@@ -806,7 +828,8 @@ final class BonsaiSession {
       else { return false }
       return enqueue(node, handler: handler, payload: payload)
     }
-    guard isVisible, isActive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+    guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
+      displayed.tree.epoch == node.id.epoch,
       tree.nodes[node.id.node] === node,
       let mounted = displayed.tree.nodes[node.id.node],
       let displayedEditor = mounted.properties.textEditing,
@@ -1023,30 +1046,42 @@ final class BonsaiSession {
   }
 
   private func dispatchCommittedApplicationRequests() {
-    guard isVisible, isActive, runtime != nil, displayedRevision > 0 else { return }
+    guard shutdownOperation == nil, isVisible, isActive, runtime != nil, displayedRevision > 0
+    else { return }
     let identity = sessionID
     applicationConnection.connect(
       send: { [weak self] bytes in
-        guard let self, self.sessionID == identity, self.runtime != nil else {
+        guard let self, self.sessionID == identity, self.runtime != nil,
+          self.shutdownOperation == nil
+        else {
           throw BonsaiApplicationEvents.SendError.closed
         }
         guard self.enqueueApplication(.applicationEvent(bytes)) else {
           throw BonsaiApplicationEvents.SendError.backpressure
         }
       },
+      shutdown: { [weak self] configuration in
+        guard let self, self.sessionID == identity, self.runtime != nil else {
+          throw BonsaiApplicationEvents.SendError.closed
+        }
+        return try self.beginShutdown(configuration)
+      },
       deliver: { [weak self] payload in
         guard let self, self.sessionID == identity, self.runtime != nil,
-          self.isVisible, self.isActive
+          self.isInteractive || self.shutdownOperation != nil
         else { return false }
         return self.enqueueApplication(payload)
       })
+    guard shutdownOperation == nil else { return }
     let requests = deferredApplicationRequests
     deferredApplicationRequests.removeAll()
     applicationConnection.dispatch(requests)
   }
 
   private func dispatchCommittedHostCommands() {
-    guard isVisible, isActive, runtime != nil, !deferredHostCommands.isEmpty else { return }
+    guard shutdownOperation == nil, isVisible, isActive, runtime != nil,
+      !deferredHostCommands.isEmpty
+    else { return }
     let commands = deferredHostCommands
     deferredHostCommands.removeAll()
     let identity = sessionID
@@ -1071,10 +1106,18 @@ final class BonsaiSession {
   }
 
   func close() async {
+    if let closingTask {
+      await closingTask.value
+      return
+    }
+    guard runtime != nil || opening != nil else { return }
+    let operation = shutdownOperation
+    operation?.stop(.closed)
     let oldOpening = opening
     let oldRuntime = runtime
     let identity = UUID()
     sessionID = identity
+    shutdownOperation = nil
     hostEffects.reset()
     applicationConnection.reset()
     deferredApplicationRequests.removeAll()
@@ -1099,8 +1142,134 @@ final class BonsaiSession {
     tree.discardHoverInput()
     tree.hoverRouter.reset()
     tree.commit(NodeStore())
-    if let oldOpening, let owned = try? await oldOpening.value { await owned.close() }
-    await oldRuntime?.close()
-    if sessionID == identity { closing = false }
+    let task = Task {
+      if let oldOpening, let owned = try? await oldOpening.value { await owned.close() }
+      await oldRuntime?.close()
+    }
+    closingTask = task
+    await task.value
+    operation?.resolve()
+    if sessionID == identity {
+      closingTask = nil
+      closing = false
+    }
+  }
+}
+
+extension BonsaiSession {
+  private func beginShutdown(_ configuration: BonsaiApplicationShutdown.Configuration) throws
+    -> BonsaiApplicationShutdown
+  {
+    if let shutdownOperation { return shutdownOperation }
+    guard configuration.event.count <= ProtocolLimits.maxApplicationPayloadBytes else {
+      throw BonsaiApplicationEvents.SendError.payloadTooLarge
+    }
+    guard configuration.timeout > .zero, configuration.timeout <= .seconds(60) else {
+      throw BonsaiApplicationShutdown.StartError.invalidTimeout
+    }
+    let operation = BonsaiApplicationShutdown(configuration)
+    shutdownOperation = operation
+    let identity = sessionID
+    operation.sendEvent = { [weak self, weak operation] bytes in
+      guard let self, let operation, self.sessionID == identity,
+        self.shutdownOperation === operation, operation.stopReason == nil
+      else { throw BonsaiApplicationEvents.SendError.closed }
+      guard self.enqueueApplication(.applicationEvent(bytes)) else {
+        throw BonsaiApplicationEvents.SendError.backpressure
+      }
+    }
+    updateAnimationActivity()
+    Task { [self] in await runShutdown(operation, identity: identity) }
+    return operation
+  }
+
+  private func runShutdown(_ operation: BonsaiApplicationShutdown, identity: UUID) async {
+    do {
+      // A native transaction already in flight owns its input and acknowledgment.
+      while busy && sessionID == identity && operation.stopReason == nil {
+        if ContinuousClock.now >= operation.deadline {
+          operation.stop(.timedOut)
+          break
+        }
+        try await Task.sleep(for: .milliseconds(2))
+      }
+      guard sessionID == identity, let runtime else { return }
+      var retained = NativeEventQueue()
+      for event in events.events
+      where event.payload.isApplicationReply || event.payload.isApplicationEvent {
+        guard retained.append(event) else { throw WireError.limitExceeded }
+      }
+      events = retained
+      pending = nil
+      ticket = nil
+      hostEffects.reset()
+      deferredHostCommands.removeAll()
+      while sessionID == identity && operation.stopReason == nil {
+        if ContinuousClock.now >= operation.deadline {
+          operation.stop(.timedOut)
+          break
+        }
+        if let initial = operation.initialEvent, enqueueApplication(.applicationEvent(initial)) {
+          operation.initialEvent = nil
+        }
+        applicationConnection.drain()
+        if let reply = operation.reply, enqueueApplication(reply.payload) {
+          if reply.finish { operation.finalSequence = sequence }
+          operation.reply = nil
+        }
+        // A serial provider bounds its retained response to one payload. Its task
+        // may suspend; the loop still observes cancellation and the deadline.
+        if operation.provider == nil {
+          if !deferredApplicationRequests.isEmpty && operation.finalSequence == nil
+            && operation.reply == nil && events.events.isEmpty
+          {
+            operation.dispatch(deferredApplicationRequests.removeFirst())
+          } else {
+            let batchEvents = events.pumpEvents.map { event in
+              NativeEvent(
+                sequence: event.sequence, displayedRevision: displayedRevision,
+                nodeID: 0, handlerID: 0, payload: event.payload)
+            }
+            let batch =
+              batchEvents.isEmpty
+              ? Data()
+              : try EventBatch.encode(
+                epoch: displayed.tree.epoch, events: batchEvents)
+            let output = try await runtime.shutdownPump(monotonicNanoseconds: now, events: batch)
+            guard sessionID == identity else { return }
+            if ContinuousClock.now >= operation.deadline { operation.stop(.timedOut) }
+            if operation.stopReason != nil { break }
+            events.removePrefix(batchEvents.count)
+            if let final = operation.finalSequence,
+              batchEvents.contains(where: { $0.sequence == final })
+            {
+              operation.stop(
+                output.status == 0 ? .completed : .failed("Final shutdown reply was rejected"))
+              break
+            }
+            if output.status == 0 {
+              var reader = WireReader(output.bytes)
+              guard try reader.data(4) == Data("BSSD".utf8) else { throw WireError.invalidMagic }
+              let count = try reader.integer(UInt32.self)
+              guard count <= 1 else { throw WireError.limitExceeded }
+              let request = count == 1 ? try ApplicationRequest.decode(&reader) : nil
+              guard reader.remaining == 0 else { throw WireError.invalidLength }
+              if let request { deferredApplicationRequests.append(request) }
+            }
+          }
+        }
+        try await Task.sleep(for: .milliseconds(2))
+      }
+    } catch {
+      operation.stop(.failed(String(describing: error)))
+    }
+    if sessionID == identity { await close() }
+  }
+}
+
+extension NativeEventPayload {
+  fileprivate var isApplicationEvent: Bool {
+    if case .applicationEvent = self { return true }
+    return false
   }
 }

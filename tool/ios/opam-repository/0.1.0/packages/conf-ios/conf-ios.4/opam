@@ -7,8 +7,8 @@ The active Xcode installation supplies only the SDK path and SDK version.
 maintainer: "bonsai_swiftui contributors"
 authors: ["bonsai_swiftui contributors"]
 license: "MIT"
-homepage: "https://github.com/RCmerci/bonsai_flutter"
-bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"
+homepage: "https://github.com/logseq/bonsai-ui"
+bug-reports: "https://github.com/logseq/bonsai-ui/issues"
 depends: ["ocaml" {= "5.1.1"}]
 build: [
   [

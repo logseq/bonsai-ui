@@ -1,0 +1,17 @@
+test_entitlement_symlink_escapes_and_typed_merge_conflicts (__main__.HostConfigurationTests.test_entitlement_symlink_escapes_and_typed_merge_conflicts) ... ok
+test_lock_projection_validation_and_obsolete_file_cleanup (__main__.HostConfigurationTests.test_lock_projection_validation_and_obsolete_file_cleanup) ... ok
+test_package_products_and_independent_test_entitlements (__main__.HostConfigurationTests.test_package_products_and_independent_test_entitlements) ... ok
+test_generated_project_is_portable_between_checkouts (__main__.XcodeHostTests.test_generated_project_is_portable_between_checkouts) ... ok
+test_generation_and_apple_destination_settings (__main__.XcodeHostTests.test_generation_and_apple_destination_settings) ... ok
+test_ios_runtime_tests_build_with_an_isolated_application_host (__main__.XcodeHostTests.test_ios_runtime_tests_build_with_an_isolated_application_host) ... ok
+test_ios_ui_tests_build_separate_from_the_application_runtime (__main__.XcodeHostTests.test_ios_ui_tests_build_separate_from_the_application_runtime) ... ok
+test_macos_object_cannot_be_used_for_device_ios (__main__.XcodeHostTests.test_macos_object_cannot_be_used_for_device_ios) ... ok
+test_mail_build_and_xcode_runtime_test (__main__.XcodeHostTests.test_mail_build_and_xcode_runtime_test) ... ok
+test_optimized_mail_builds_and_runs_without_intel_artifacts (__main__.XcodeHostTests.test_optimized_mail_builds_and_runs_without_intel_artifacts) ... ok
+test_resources_preserve_nested_paths_in_built_bundle (__main__.XcodeHostTests.test_resources_preserve_nested_paths_in_built_bundle) ... ok
+test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 729.420s
+
+OK

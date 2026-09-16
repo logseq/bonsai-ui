@@ -1,0 +1,17 @@
+test_clean_does_not_follow_an_external_host_parent (tool.test_swiftui_cli.SwiftUICliTests.test_clean_does_not_follow_an_external_host_parent) ... ok
+test_clean_native_and_xcode_outputs_preserves_sources_and_other_platform (tool.test_swiftui_cli.SwiftUICliTests.test_clean_native_and_xcode_outputs_preserves_sources_and_other_platform) ... ok
+test_exec_failure_and_interrupt_keep_project_sources (tool.test_swiftui_cli.SwiftUICliTests.test_exec_failure_and_interrupt_keep_project_sources) ... ok
+test_explicit_signing_identity_is_exposed (tool.test_swiftui_cli.SwiftUICliTests.test_explicit_signing_identity_is_exposed) ... ok
+test_external_application_builds_and_runs_real_ocaml (tool.test_swiftui_cli.SwiftUICliTests.test_external_application_builds_and_runs_real_ocaml) ... ok
+test_framework_is_available_under_its_swiftui_package_names (tool.test_swiftui_cli.SwiftUICliTests.test_framework_is_available_under_its_swiftui_package_names) ... ok
+test_invalid_configuration_is_rejected_before_creation (tool.test_swiftui_cli.SwiftUICliTests.test_invalid_configuration_is_rejected_before_creation) ... ok
+test_invalid_file_inputs_preserve_existing_and_absent_hosts (tool.test_swiftui_cli.SwiftUICliTests.test_invalid_file_inputs_preserve_existing_and_absent_hosts) ... ok
+test_native_initialization_and_generated_host_ownership (tool.test_swiftui_cli.SwiftUICliTests.test_native_initialization_and_generated_host_ownership) ... ok
+test_platform_entitlements_drift_and_adoption (tool.test_swiftui_cli.SwiftUICliTests.test_platform_entitlements_drift_and_adoption) ... ok
+test_prebuilt_object_validation_and_read_only_sync_check (tool.test_swiftui_cli.SwiftUICliTests.test_prebuilt_object_validation_and_read_only_sync_check) ... ok
+test_schema_four_init_flags_and_derived_identifier_limits (tool.test_swiftui_cli.SwiftUICliTests.test_schema_four_init_flags_and_derived_identifier_limits) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 194.176s
+
+OK

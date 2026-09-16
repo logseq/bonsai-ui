@@ -310,6 +310,28 @@ let pump handle monotonic_now_ns input =
     output ~status:Fatal_error ~error_code:9 ~error:(exception_message exception_) ()
 ;;
 
+let shutdown_pump handle monotonic_now_ns input =
+  try
+    match find_runtime handle with
+    | Result.Error output -> output
+    | Result.Ok driver ->
+      let events =
+        if Bytes.length input = 0
+        then Result.Ok None
+        else Result.map Option.some (Protocol.Event_batch_codec.decode input)
+      in
+      (match events with
+       | Result.Error error ->
+         output ~status:Recoverable_error ~error_code:1 ~error:error.message ()
+       | Result.Ok events ->
+         (match Driver.shutdown_pump driver ~monotonic_now_ns ?events () with
+          | Result.Error error -> driver_error error
+          | Result.Ok (bytes, revision) -> output ~bytes ~revision ()))
+  with
+  | exception_ ->
+    output ~status:Fatal_error ~error_code:9 ~error:(exception_message exception_) ()
+;;
+
 let presentation_succeeded handle presentation_id revision monotonic_now_ns =
   try
     match find_runtime handle with
@@ -451,6 +473,21 @@ let callback_pump handle monotonic_now_ns input =
   , result.error )
 ;;
 
+let callback_shutdown_pump handle monotonic_now_ns input =
+  let result =
+    shutdown_pump
+      (ID.Runtime.Handle.of_int64 handle)
+      monotonic_now_ns
+      (Bytes.of_string input)
+  in
+  ( status_code result.status
+  , Bytes.to_string result.bytes
+  , ID.Runtime.Presentation_id.to_int64 result.presentation_id
+  , ID.Runtime.Renderer_revision.to_int64 result.revision
+  , ID.Ffi.Error_code.to_int result.error_code
+  , result.error )
+;;
+
 let callback_presentation_succeeded handle presentation_id revision monotonic_now_ns =
   let result =
     presentation_succeeded
@@ -488,6 +525,7 @@ let callback_destroy handle = destroy (ID.Runtime.Handle.of_int64 handle)
 let () =
   Callback.register "bonsai_swiftui.create" callback_create;
   Callback.register "bonsai_swiftui.pump" callback_pump;
+  Callback.register "bonsai_swiftui.shutdown_pump" callback_shutdown_pump;
   Callback.register
     "bonsai_swiftui.presentation_succeeded"
     callback_presentation_succeeded;

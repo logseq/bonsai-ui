@@ -166,9 +166,15 @@ let application_controls handlers graph =
     Bonsai.Cont.map set_notification ~f:(fun set_notification ->
       Bonsai.Effect.of_thunk (fun () ->
         Platform.on_event platform (fun bytes ->
-          match decode 2 bytes with
-          | Some zone -> set_notification (fun _ -> "Application time zone: " ^ zone)
-          | None -> Bonsai.Effect.Ignore)))
+          if Bytes.equal bytes (Bytes.of_string "\001\012")
+          then
+            Bonsai.Effect.bind
+              (Platform.request platform (Bytes.of_string "\001\013"))
+              ~f:(fun _ -> Bonsai.Effect.Ignore)
+          else (
+            match decode 2 bytes with
+            | Some zone -> set_notification (fun _ -> "Application time zone: " ^ zone)
+            | None -> Bonsai.Effect.Ignore))))
   in
   Bonsai.Cont.Edge.lifecycle ~on_activate graph;
   let request =

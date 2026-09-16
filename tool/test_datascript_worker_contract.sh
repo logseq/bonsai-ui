@@ -201,18 +201,18 @@ reject_file \
   "$transit_repository/melange-transit-native/melange-transit-native.0.1.1"
 
 sdk_repository_lock=$(cat tool/ios/sdk_repository.lock 2>/dev/null)
-require_text "$sdk_repository_lock" "SDK_ABI_VERSION='3'" \
+require_text "$sdk_repository_lock" "SDK_ABI_VERSION='4'" \
   "ppx_deriving_yojson SDK ABI version"
 require_text "$sdk_repository_lock" "SDK_BUILD_RECIPE_REVISION='5'" \
   "ppx_deriving_yojson SDK build recipe revision"
 require_text "$sdk_repository_lock" "SDK_RUNTIME_PACKAGE_VERSION='0.1.0~dev.7'" \
   "DataScript runtime SDK version"
-require_text "$sdk_repository_lock" "SDK_PACKAGE_VERSION='0.1.0~dev.40'" \
+require_text "$sdk_repository_lock" "SDK_PACKAGE_VERSION='0.1.0~dev.42'" \
   "DataScript framework SDK version"
 
 sdk_packages=tool/ios/opam-repository/0.1.0/packages
 runtime_sdk="$sdk_packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7"
-framework_sdk="$sdk_packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.40"
+framework_sdk="$sdk_packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.42"
 require_file "$runtime_sdk/opam"
 require_file "$runtime_sdk/files/supported-closure.lock"
 require_file "$framework_sdk/opam"

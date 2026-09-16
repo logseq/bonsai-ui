@@ -1,0 +1,7 @@
+test_external_app_builds_without_source_or_prebuilt_object (__main__.InstalledIOSSDKTests.test_external_app_builds_without_source_or_prebuilt_object) ... ok
+test_zarith_links_using_installed_archives (__main__.InstalledIOSSDKTests.test_zarith_links_using_installed_archives) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 38.164s
+
+OK

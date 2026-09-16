@@ -1,0 +1,7 @@
+swift-driver version: 1.127.14.1 ok python3      3.13.3
+ok opam         2.3.0
+ok dune         3.23.1
+ok xcodebuild   Xcode 26.1.1
+ok xcrun        /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk
+ok xcrun        Apple Swift version 6.2.1 (swiftlang-6.2.1.4.8 clang-1700.4.4.1)
+verified iPhoneOS toolchain: f29473c53f30c1c1c76e0eb330a57616ba4d5b6440294c6e1ad97266f5b27918

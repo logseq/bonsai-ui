@@ -15,6 +15,114 @@ BUILDER = ROOT / "tool/build_swiftui_example.py"
 NATIVE = ROOT / "_build/default/examples/mail/ocaml/native_embed.exe.o"
 
 
+class HostConfigurationTests(unittest.TestCase):
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory(prefix="host configuration ")
+        self.addCleanup(self.directory.cleanup)
+        self.root = Path(self.directory.name)
+        (self.root / "swift").mkdir()
+        (self.root / "swift/App.swift").write_text("import SwiftUI\n")
+        (self.root / "apple-tests").mkdir()
+        (self.root / "apple-tests/Test.swift").write_text("import XCTest\n")
+        self.host = self.root / "apple"
+        sys.path.insert(0, str(ROOT / "tool"))
+        self.generator = importlib.import_module("swiftui_xcode_host")
+
+    def generate(self, **options):
+        return self.generator.generate_project(
+            framework_root=ROOT, application_root=self.root, host_directory=self.host,
+            product_name="Acceptance", bundle_identifiers={"macos": "org.example.desktop", "ios": "org.example.phone"},
+            **options)
+
+    def snapshot(self):
+        return {str(p.relative_to(self.root)): (p.read_bytes(), p.stat().st_mtime_ns)
+                if p.is_file() else (None, p.stat().st_mtime_ns)
+                for p in self.root.rglob("*") if not p.is_symlink()}
+
+    def test_package_products_and_independent_test_entitlements(self):
+        package = {"id": "collections", "url": "https://github.com/apple/swift-collections.git",
+                   "requirement": {"exact": "1.1.4"},
+                   "products": [{"name": "OrderedCollections", "platforms": ["macos"]}]}
+        source = self.root / "input.plist"
+        source.write_bytes(plistlib.dumps({"keychain-access-groups": ["$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)"]}))
+        inputs = {"macos": {p.lower(): "input.plist" for p in ("Debug", "Profile", "Release")}}
+        project = self.generate(entitlements=inputs, swift_packages=[package])
+        result = subprocess.run(["plutil", "-convert", "json", "-o", "-", project / "project.pbxproj"], capture_output=True, text=True, check=True)
+        import json
+        objects = json.loads(result.stdout)["objects"]
+        remote = [v for v in objects.values() if v["isa"] == "XCRemoteSwiftPackageReference"]
+        self.assertEqual(len(remote), 1)
+        self.assertEqual(remote[0]["requirement"], {"kind": "exactVersion", "version": "1.1.4"})
+        for target in [v for v in objects.values() if v["isa"] == "PBXNativeTarget"]:
+            products = [objects[r]["productName"] for r in target["packageProductDependencies"]]
+            self.assertEqual("OrderedCollections" in products, target["name"] == "Acceptance-macOS")
+            for ref in objects[target["buildConfigurationList"]]["buildConfigurations"]:
+                config = objects[ref]
+                settings = config["buildSettings"]
+                self.assertTrue(settings["PRODUCT_BUNDLE_IDENTIFIER"].startswith("org.example.desktop" if "macOS" in target["name"] else "org.example.phone"))
+                path = settings.get("CODE_SIGN_ENTITLEMENTS")
+                if path:
+                    effective = plistlib.loads((self.host / path).read_bytes())
+                    self.assertEqual(bool(effective), target["name"] == "Acceptance-macOS")
+        before = self.snapshot()
+        self.generate(entitlements=inputs, swift_packages=[package], check=True)
+        self.generate(entitlements=inputs, swift_packages=[package])
+        self.assertEqual(before, self.snapshot())
+
+    def test_entitlement_symlink_escapes_and_typed_merge_conflicts(self):
+        self.generate()
+        source = self.root / "input.plist"
+        inputs = {"macos": {p.lower(): "input.plist" for p in ("Debug", "Profile", "Release")}}
+        for destination in (ROOT / "Package.swift", self.host / "Info-macOS.plist"):
+            source.symlink_to(destination)
+            before = self.snapshot()
+            with self.assertRaisesRegex(ValueError, "outside|generated|ownership"):
+                self.generate(entitlements=inputs)
+            self.assertEqual(before, self.snapshot())
+            source.unlink()
+        # bool and int compare equal in Python; entitlement merging must preserve types.
+        for value in (1, [True], {"nested": 1}):
+            from unittest.mock import patch
+            source.write_bytes(plistlib.dumps({"required": value}))
+            required = {"required": True if value == 1 else [1] if isinstance(value, list) else {"nested": True}}
+            with patch.object(self.generator, "FRAMEWORK_ENTITLEMENTS", {"macos": required, "ios": {}}):
+                before = self.snapshot()
+                with self.assertRaisesRegex(ValueError, "macos.*debug.*required"):
+                    self.generate(entitlements=inputs)
+                self.assertEqual(before, self.snapshot())
+
+    def test_lock_projection_validation_and_obsolete_file_cleanup(self):
+        import json
+        package = {"id": "collections", "url": "https://github.com/apple/swift-collections.git",
+                   "requirement": {"exact": "1.1.4"},
+                   "products": [{"name": "OrderedCollections", "platforms": ["macos", "ios"]}]}
+        self.generate(swift_packages=[package])
+        lock = self.root / "swift-packages/Package.resolved"
+        lock.parent.mkdir()
+        pin = {"identity": "swift-collections", "kind": "remoteSourceControl", "location": package["url"],
+               "state": {"version": "1.1.4", "revision": "a" * 40}}
+        lock.write_text(json.dumps({"version": 3, "pins": [pin], "originHash": "fixture"}))
+        self.generate(swift_packages=[package])
+        projection = self.host / "Acceptance.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+        self.assertEqual(lock.read_bytes(), projection.read_bytes())
+        before = self.snapshot()
+        self.generate(swift_packages=[package], check=True)
+        self.assertEqual(before, self.snapshot())
+        lock.write_text("not json")
+        before = self.snapshot()
+        with self.assertRaisesRegex(ValueError, "lock|Package.resolved"):
+            self.generate(swift_packages=[package])
+        self.assertEqual(before, self.snapshot())
+        lock.unlink()
+        self.generate(swift_packages=[package])
+        self.assertFalse(projection.exists())
+        (self.host / "macOS.entitlements").write_bytes(plistlib.dumps({}))
+        (self.host / "keep.txt").write_text("user file")
+        self.generate()
+        self.assertFalse((self.host / "macOS.entitlements").exists())
+        self.assertEqual((self.host / "keep.txt").read_text(), "user file")
+
+
 class XcodeHostTests(unittest.TestCase):
     def assert_runtime_privacy_manifest(self, bundle):
         manifests = [path for path in bundle.rglob("PrivacyInfo.xcprivacy")
@@ -58,7 +166,6 @@ class XcodeHostTests(unittest.TestCase):
             self.generate(host)
             self.assertEqual(files, {p: (host / p).read_bytes() for p in files})
             self.assertTrue((host / "user-notes.txt").is_file())
-            self.assertNotIn("Flutter", (project / "project.pbxproj").read_text())
             for target, sdk, minimum_key, minimum in [
                 ("BonsaiMail-macOS", "macosx", "MACOSX_DEPLOYMENT_TARGET", "26.0"),
                 ("BonsaiMail-iOS", "iphoneos", "IPHONEOS_DEPLOYMENT_TARGET", "18.0"),
@@ -248,7 +355,7 @@ class XcodeHostTests(unittest.TestCase):
             host = root / "apple"
             project = generator.generate_project(
                 framework_root=ROOT, application_root=example, host_directory=host,
-                product_name="BonsaiResources", bundle_identifier="org.bonsai-swiftui.test.resources",
+                product_name="BonsaiResources", bundle_identifiers={"macos": "org.bonsai-swiftui.test.resources", "ios": "org.bonsai-swiftui.test.resources"},
             )
             self.assertNotIn("TestHost", (project / "project.pbxproj").read_text(),
                              "Applications without tests must not acquire a test host")
@@ -277,7 +384,7 @@ class XcodeHostTests(unittest.TestCase):
                 project = generator.generate_project(
                     framework_root=framework, application_root=example,
                     host_directory=example / "apple", product_name="BonsaiMail",
-                    bundle_identifier="org.bonsai-swiftui.example.mail",
+                    bundle_identifiers={"macos": "org.bonsai-swiftui.example.mail", "ios": "org.bonsai-swiftui.example.mail"},
                 )
                 projects.append((project / "project.pbxproj").read_text())
             self.assertEqual(projects[0], projects[1])

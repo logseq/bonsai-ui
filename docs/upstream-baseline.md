@@ -43,7 +43,7 @@ Runtime scheduling uses the public `Bonsai_driver` and `Bonsai.Time_source`
 surfaces. Before-display callbacks drain to a fixed point during logical frame
 flush; after-display work waits for the matching native presentation token.
 
-The native package exposes `bs_*` ABI 3.0 and exact BSFR 5.0 framing. Swift
+The native package exposes `bs_*` ABI 4.0 and exact BSFR 5.0 framing. Swift
 validates and presents updates; OCaml retains the canonical application state.
 Input fixtures are produced by the production Swift encoder and decoded and
 re-encoded by OCaml. See [input fixtures](swiftui-input-fixtures.md).
