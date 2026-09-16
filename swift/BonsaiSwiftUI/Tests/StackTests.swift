@@ -57,7 +57,7 @@ extension TreeFixture {
         for (index, alignment) in horizontal.enumerated() {
           let actual = try stackView(
             kind: NodeKindId.column, spacing: spacing, alignment: UInt8(index))
-          let expected = VStack(alignment: alignment, spacing: spacing.map { CGFloat($0) }) {
+          let expected = VStack(alignment: alignment, spacing: CGFloat(spacing ?? 16)) {
             stackText
             stackSymbol
           }
@@ -88,8 +88,8 @@ extension TreeFixture {
         let actual = NativeNodeView(node: try #require(tree.root), activate: { _ in }).frame(
           width: 150, height: 60)
         let expected = HStack(spacing: 4) {
-          Text("Primary content").clipped().layoutPriority(priority)
-          Text("Secondary content").clipped().offset(x: -7, y: 9)
+          Text("Primary content").font(.system(size: 17)).clipped().layoutPriority(priority)
+          Text("Secondary content").font(.system(size: 17)).clipped().offset(x: -7, y: 9)
         }.frame(width: 150, height: 60)
         #expect(try raster(actual, direction).matches(raster(expected, direction)))
       }
@@ -144,7 +144,7 @@ extension TreeFixture {
   }
 }
 
-@MainActor private var stackText: some View { Text("Two\nlines").clipped() }
+@MainActor private var stackText: some View { Text("Two\nlines").font(.system(size: 17)).clipped() }
 @MainActor private var stackSymbol: some View {
   Image(systemName: "star.fill").font(.system(size: 30)).symbolRenderingMode(.monochrome)
     .foregroundStyle(Color(.sRGB, red: 1, green: 0, blue: 0))
@@ -240,11 +240,12 @@ extension NativeRuntimeTests {
 @MainActor private func stackReference(updated: Bool) -> some View {
   VStack(alignment: updated ? .trailing : .leading, spacing: updated ? 16 : 4) {
     HStack(alignment: updated ? .lastTextBaseline : .top, spacing: updated ? 20 : 4) {
-      Text("Primary content").clipped().layoutPriority(updated ? 1 : 0)
-      Text("Secondary content").clipped().offset(x: updated ? -7 : 0, y: updated ? 9 : 0)
+      Text("Primary content").font(.system(size: 17)).clipped().layoutPriority(updated ? 1 : 0)
+      Text("Secondary content").font(.system(size: 17)).clipped().offset(
+        x: updated ? -7 : 0, y: updated ? 9 : 0)
     }.frame(width: 150, height: 60)
     ZStack(alignment: updated ? .bottomTrailing : .topLeading) {
-      Text("Two\nlines").clipped()
+      Text("Two\nlines").font(.system(size: 17)).clipped()
       stackSymbol
     }
   }

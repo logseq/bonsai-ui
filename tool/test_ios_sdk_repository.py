@@ -6,6 +6,8 @@ import re
 import shutil
 import subprocess
 import tempfile
+import tarfile
+import io
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -108,6 +110,51 @@ class SdkRepositoryTests(unittest.TestCase):
         self.assertTrue(obsolete.exists(), "--check must not mutate output")
         self.assertEqual(self.generate().returncode, 0)
         self.assertEqual(self.tree(), baseline)
+
+    def test_local_archive_metadata_and_digest_are_authoritative(self):
+        archive = self.root / "local source.tar.gz"
+        metadata = self.locked_opam.replace("native SwiftUI backend", "archived SwiftUI backend")
+        with tarfile.open(archive, "w:gz") as tar:
+            contents = metadata.encode()
+            entry = tarfile.TarInfo("snapshot/bonsai_swiftui.opam")
+            entry.size = len(contents)
+            tar.addfile(entry, io.BytesIO(contents))
+        output = self.root / "local repository"
+        result = run("sh", str(self.ios / "regenerate_sdk_repository.sh"),
+                     "--source-archive", str(archive), "--output", str(output), cwd=self.root)
+        self.assertEqual(result.returncode, 0, result.stdout)
+        framework = output / "packages/bonsai_swiftui/bonsai_swiftui.0.1.0~dev"
+        self.assertEqual((framework / "opam").read_text(), metadata)
+        digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+        self.assertIn(digest, (framework / "url").read_text())
+        self.assertIn(archive.resolve().as_uri(), (framework / "url").read_text())
+        sdk = next((output / "packages/bonsai_swiftui_ios_sdk").glob("*/files"))
+        manifest = (sdk / "manifest.sexp").read_text()
+        self.assertIn("archive-sha256-" + digest, manifest)
+        self.assertNotIn(self.revision, manifest)
+        check = run("sh", str(self.ios / "regenerate_sdk_repository.sh"), "--check",
+                    "--source-archive", str(archive), "--output", str(output), cwd=self.root)
+        self.assertEqual(check.returncode, 0, check.stdout)
+
+    def test_invalid_source_archive_preserves_repository(self):
+        output = self.root / "local repository"
+        output.mkdir()
+        sentinel = output / "keep"
+        sentinel.write_text("original")
+        archive = self.root / "invalid.tar.gz"
+        for member in ("snapshot/other.opam", "../bonsai_swiftui.opam"):
+            with self.subTest(member=member):
+                with tarfile.open(archive, "w:gz") as tar:
+                    contents = self.locked_opam.encode()
+                    entry = tarfile.TarInfo(member)
+                    entry.size = len(contents)
+                    tar.addfile(entry, io.BytesIO(contents))
+                result = run("sh", str(self.ios / "regenerate_sdk_repository.sh"),
+                             "--source-archive", str(archive), "--output", str(output), cwd=self.root)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("source archive", result.stdout)
+                self.assertEqual(sentinel.read_text(), "original")
+                self.assertEqual(list(output.iterdir()), [sentinel])
 
     def test_missing_locked_swiftui_metadata_preserves_existing_output(self):
         self.output.mkdir(parents=True)

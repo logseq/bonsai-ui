@@ -143,6 +143,9 @@ type text_style =
   ; font_weight : text_font_weight option
   ; line_spacing : float option
   ; color : int32 option
+  ; role : int
+  ; foreground : int option
+  ; italic : bool option
   }
 
 type text_span =
@@ -150,7 +153,7 @@ type text_span =
   ; font_size : float option
   ; font_weight : text_font_weight option
   ; color : int32 option
-  ; italic : bool
+  ; italic : bool option
   ; underline : bool
   ; strikethrough : bool
   }
@@ -165,6 +168,7 @@ type theme =
   ; tint : int32 option
   ; font_family : string option
   ; control_size : int
+  ; defaults : bytes
   }
 
 type text_props =

@@ -170,6 +170,9 @@ let test_styled_text_constructor_and_validation () =
              ; font_weight = Some Semi_bold
              ; line_spacing = Some line_spacing
              ; color = Some encoded_color
+             ; role = 8
+             ; foreground = None
+             ; italic = None
              }
        ; text_align = End
        ; line_limit = Some line_limit
@@ -438,7 +441,7 @@ let test_rich_text_spans () =
              ; font_size = Some 20.
              ; font_weight = Some Bold
              ; color = Some color
-             ; italic = true
+             ; italic = Some true
              ; underline = true
              ; strikethrough = true
              }
@@ -814,4 +817,58 @@ let () =
   check
     (not (Ui.View.Private.node_equal_widgets default focus))
     "button autofocus did not participate in property identity"
+;;
+
+let () =
+  let color = Ui.Style.Color.rgb ~red:10 ~green:20 ~blue:30 in
+  List.iter
+    (fun create ->
+       match create () with
+       | _ -> failwith "invalid shared defaults accepted"
+       | exception Invalid_argument _ -> ())
+    [ (fun () -> Ui.Theme.Defaults.create ~symbol_size:0. ())
+    ; (fun () -> Ui.Theme.Defaults.create ~column_spacing:(-1.) ())
+    ; (fun () -> Ui.Theme.Defaults.create ~card_corner:Float.nan ())
+    ; (fun () -> Ui.Theme.Defaults.create ~text_sizes:[ Body, Float.infinity ] ())
+    ; (fun () -> Ui.Theme.Defaults.create ~colors:[ Primary, color; Primary, color ] ())
+    ; (fun () -> Ui.Theme.Defaults.create ~text_sizes:[ Body, 18.; Body, 20. ] ())
+    ; (fun () ->
+        Ui.Theme.Defaults.create ~surface_opacities:[ Translucent_sheet, 1.1 ] ())
+    ; (fun () -> Ui.Theme.Defaults.create ~surface_tint_alphas:[ Plain, -0.1 ] ())
+    ; (fun () -> Ui.Theme.Defaults.create ~shadow_alpha:Float.nan ())
+    ; (fun () -> Ui.Theme.Defaults.create ~material_alpha:1.1 ())
+    ; (fun () -> Ui.Theme.Defaults.create ~text_italics:[ Hint, true; Hint, false ] ())
+    ; (fun () ->
+        Ui.Theme.Defaults.create ~surface_shapes:[ Plain, Rounded; Plain, Capsule ] ())
+    ];
+  ignore (Ui.Theme.Defaults.create ~column_spacing:0. ~border_width:0. ());
+  let data =
+    Ui.Theme.create ~defaults:(Ui.Theme.Defaults.create ~symbol_size:23. ()) ()
+  in
+  let same =
+    Ui.Theme.create ~defaults:(Ui.Theme.Defaults.create ~symbol_size:23. ()) ()
+  in
+  let different =
+    Ui.Theme.create ~defaults:(Ui.Theme.Defaults.create ~symbol_size:29. ()) ()
+  in
+  check (Ui.Theme.Private.equal data same) "equal sparse overrides changed theme identity";
+  check
+    (not (Ui.Theme.Private.equal data different))
+    "changed defaults lost reactive identity"
+;;
+
+let () =
+  check
+    (not
+       (Ui.View.Private.node_equal_widgets
+          (Ui.View.symbol ~name:"star" ())
+          (Ui.View.symbol ~name:"star" ~rendering:Monochrome ())))
+    "omitted symbol rendering must remain distinguishable from explicit Monochrome";
+  let text style = Ui.View.text ~style "Themed text" in
+  check
+    (not
+       (Ui.View.Private.node_equal_widgets
+          (text (Ui.Style.Text_style.create ()))
+          (text (Ui.Style.Text_style.create ~role:Body ~italic:false ()))))
+    "omitted typography must remain distinguishable from explicit Body/nonitalic"
 ;;

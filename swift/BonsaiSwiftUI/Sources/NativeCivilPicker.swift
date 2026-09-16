@@ -221,7 +221,7 @@ struct NativeCivilPicker: View {
                 Text(String($0)).tag($0)
               }
             }
-          }.pickerStyle(.menu)
+          }.pickerStyle(.menu).modifier(NativeInteractiveBounds())
         }.disabled(!enabled)
       }
     case .time(_, let format, let label, let enabled):
@@ -229,6 +229,7 @@ struct NativeCivilPicker: View {
         label, selection: controller.timeBinding(emit: node.emit),
         displayedComponents: .hourAndMinute
       )
+      .modifier(NativeInteractiveBounds())
       .environment(\.timeZone, TimeZone(secondsFromGMT: 0)!)
       .environment(\.locale, format.applying(to: locale))
       .disabled(!enabled)

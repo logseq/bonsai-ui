@@ -205,6 +205,7 @@ struct NativeSlider: View {
       value: controller.binding(0, emit: node.emit), in: properties.minimum...properties.maximum,
       onEditingChanged: { controller.editingChanged($0, emit: node.emit) }
     ) { Text(verbatim: properties.label) }
+    .modifier(NativeInteractiveBounds())
     .accessibilityRepresentation { accessibleSlider(0) }
   }
   @ViewBuilder var body: some View {

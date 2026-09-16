@@ -63,7 +63,7 @@ inactive deferral, hidden windows, and stale callbacks across restart.
 Malformed commands and response-size boundaries have additional decoder checks.
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- dune build @all @runtest @fmt @install
+opam exec --switch=bonsai-ui -- dune build @all @runtest @fmt @install
 swift test --scratch-path _build/swift --no-parallel --filter 'hostMenus|HostMenuWireTests'
 python3 native/test/test_host_effects_window.py
 python3 tool/test_swift_platforms.py

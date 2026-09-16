@@ -38,7 +38,7 @@ See [application bodies](docs/swiftui-application-body.md),
 [navigation](docs/swiftui-navigation-stack.md) and
 [host services](docs/swiftui-host-services.md).
 
-## Development prerequisites
+## Framework development prerequisites
 
 The current source build uses OCaml 5.1.1, Dune 3.17+, Jane Street v0.17 packages
 and ppxlib 0.35.0. Native verification has used Xcode 26.1.1 and Swift 6.2.1 on
@@ -50,44 +50,59 @@ From a configured host opam switch containing the repository dependencies:
 opam exec --switch="$HOST_SWITCH" -- dune build @all @runtest @fmt @install
 ```
 
-`HOST_SWITCH` is the name or path of that switch. The replacement iOS compiler
-and dependency closure have been built in an isolated worktree-local switch;
-publication and installation of the new SDK remain unfinished. See the
+`HOST_SWITCH` is the name or path of that switch; the current local development
+switch is `bonsai-ui`. In an already-open shell, refresh its environment with
+`eval "$(opam env --switch=bonsai-ui --set-switch)"` after the rename.
+The replacement iOS compiler
+and dependency closure are also installed in the global `bonsai-swiftui-ios`
+switch and verified by an independent App build. Public SDK publication remains
+unfinished. See the
 [iOS toolchain evidence](docs/swiftui-ios-toolchain.md). An old iOS 15 SDK does
 not satisfy the iOS 18 object checks.
 
-## Native application CLI
+## Install and use from another repository
 
-The public executable is `bonsai-swiftui`; a development build is available at
-`_build/default/bonsai_swiftui_tool/bin/main.exe`. To use that executable for an
-external application, expose this checkout and its built OCaml libraries from
-the repository root:
+Applications consume the opam packages `bonsai_swiftui` (OCaml libraries) and
+`bonsai_swiftui_tool` (the `bonsai-swiftui` CLI and native resources). They do not
+need a framework checkout, `BONSAI_SWIFTUI_SOURCE_ROOT`, or a custom `OCAMLPATH`.
+Opam downloads and compiles the release sources as part of installation.
 
-```sh
-export BONSAI_SWIFTUI_SOURCE_ROOT="$PWD"
-export OCAMLPATH="$PWD/_build/install/default/lib${OCAMLPATH:+:$OCAMLPATH}"
-export BONSAI_SWIFTUI_CLI="$PWD/_build/default/bonsai_swiftui_tool/bin/main.exe"
-```
-
-With the same configured opam environment, create an empty application directory
-and run:
+With an OCaml 5.1.1 switch and the release's opam repository configured:
 
 ```sh
-"$BONSAI_SWIFTUI_CLI" init --name journal --bundle-identifier org.example.journal
-"$BONSAI_SWIFTUI_CLI" build macos --profile debug
-"$BONSAI_SWIFTUI_CLI" run macos --profile debug
-"$BONSAI_SWIFTUI_CLI" sync-host --check
+opam install bonsai_swiftui bonsai_swiftui_tool
+eval "$(opam env)"
+
+mkdir journal
+cd journal
+bonsai-swiftui init --name journal --bundle-identifier org.example.journal
+bonsai-swiftui build macos --profile debug
+bonsai-swiftui run macos --profile debug
 ```
 
-The starter uses a real OCaml counter and a Swift `BonsaiApplicationView`.
-Configuration lives in `bonsai-swiftui.sexp`. Debug uses Dune `dev`; Profile and
-Release use Dune `release`, with separate native and Xcode outputs. Existing
-application sources remain unchanged by host synchronization and adoption.
+Install `bonsai_swiftui_test` when the application needs headless UI tests.
+The starter owns its OCaml and Swift sources; the CLI manages the generated
+Xcode host. Swift/C resources are installed under the opam prefix, and the CLI
+finds them automatically.
 
-See the [CLI guide](docs/swiftui-cli.md) for configuration, source ownership,
-explicit iOS complete-object builds, signing, device launch, `exec` and cleanup.
-The CLI has no Flutter initialization, Dart adapter or pubspec injection path.
-Installed package and SDK publication is still separate work.
+The packages are not yet published to a public opam repository. A maintainer can
+produce a consumable archive and local opam repository with
+`python3 tool/package_opam_release.py _build/opam-release`. See
+[opam installation and release packaging](docs/opam-installation.md) for adding
+that repository and publishing artifacts. For physical iOS, install the matching
+SDK once, then build from the application directory:
+
+```sh
+bonsai-swiftui toolchain install iphoneos
+bonsai-swiftui build ios --profile release --no-codesign
+```
+
+The local SDK installation and independent App build are verified. Public SDK
+publication and physical-device execution remain separate.
+
+See the [CLI guide](docs/swiftui-cli.md) for configuration, ownership, signing,
+device launch and cleanup. Framework contributors using an uninstalled checkout
+can use the [source development environment](docs/opam-installation.md#framework-development).
 
 ## Examples and Mail
 

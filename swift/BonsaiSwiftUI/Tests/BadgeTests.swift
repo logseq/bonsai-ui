@@ -51,7 +51,7 @@ extension TreeFixture {
       } else {
         decoration = AnyView(Circle().fill(.red).frame(width: 8, height: 8))
       }
-      let reference = Text("Inbox").overlay(
+      let reference = Text("Inbox").font(.system(size: 17)).overlay(
         alignment: [.topLeading, .top, .topTrailing][Int(alignment)]
       ) {
         decoration.alignmentGuide(.top) { $0.height / 2 }
@@ -72,7 +72,7 @@ extension TreeFixture {
     tree.commit(original)
     #expect(
       try raster(NativeNodeView(node: #require(tree.root), activate: { _ in })).matches(
-        raster(Text("Inbox"))))
+        raster(Text("Inbox").font(.system(size: 17)))))
     let change = TreeFixture.badge(count: 42, update: true)
     var invalid = [
       TreeFixture.badge(count: UInt64.max, update: true),

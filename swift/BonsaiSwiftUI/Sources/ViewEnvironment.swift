@@ -4,7 +4,8 @@ struct ViewEnvironment: Equatable, Sendable {
   var mode: Int = 0
   var tint: UInt32?
   var fontFamily: String?
-  var controlSize: Int = 2
+  var controlSize: Int = 5
+  var defaults = SharedUIDefaults()
 
   static func decode(_ reader: inout WireReader) throws -> ViewEnvironment {
     let mode = try reader.choice(2)
@@ -15,8 +16,10 @@ struct ViewEnvironment: Equatable, Sendable {
         !font.contains("\0")
       else { throw TreeError.invalidProperties }
     }
-    let size = try reader.choice(4)
-    return ViewEnvironment(mode: mode, tint: tint, fontFamily: font, controlSize: size)
+    let size = try reader.choice(5)
+    return ViewEnvironment(
+      mode: mode, tint: tint, fontFamily: font, controlSize: size,
+      defaults: try SharedUIDefaults.decode(&reader))
   }
 }
 

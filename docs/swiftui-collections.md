@@ -257,7 +257,7 @@ continues without another OCaml frame, then settles on session inactivity/hiding
 Mail keeps a vertical catalog; its call sites and tests use the new extent names.
 
 - `swift test --scratch-path _build/swift --filter Collection`
-- `opam exec --switch=bonsai-flutter-v017-exact -- dune build @all @runtest @fmt`
+- `opam exec --switch=bonsai-ui -- dune build @all @runtest @fmt`
 
 This completes the horizontal fixed/sparse window path at the tested macOS
 runtime and source-level iOS boundary. Self-sizing,

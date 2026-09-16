@@ -214,7 +214,7 @@ python3 tool/build_swiftui_example.py note
 ```
 
 For physical acceptance, first build a verified iOS 18 arm64 Note complete
-object with the repository toolchain. The installed SDK must match Protocol 6.
+object with the repository toolchain. The installed SDK must match Protocol 8.
 The source-checkout build can provide the object explicitly:
 
 ```sh
@@ -245,3 +245,15 @@ python3 native/test/compare_note_reference.py \
 The comparison script requires the original 2000 × 1391 reference and the
 1170 × 2532 captures used by its explicit crop coordinates. It does not accept
 an incomplete acceptance run.
+
+
+## Shared defaults update
+
+Note now uses the shared Theme/Style configuration and Surface recipes. See
+[Shared UI defaults acceptance](shared-ui-defaults-acceptance.md) for the current
+validation, physical/macOS comparisons and the measured reduction in local
+configuration. The earlier validation sections above describe their respective
+source snapshots; the current wire protocol is 8 and the Surface schema is 3.
+
+The subsequent [Theme-owned defaults update](theme-owned-defaults-acceptance.md)
+moves baseline declarations to OCaml and retains scoped inheritance.

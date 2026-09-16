@@ -28,16 +28,27 @@ import SwiftUI
 
 struct NativeTextView: View {
   let text: RenderText
+  @Environment(\.bonsaiDefaults) private var defaults
+  @Environment(\.legibilityWeight) private var legibilityWeight
   @Environment(\.font) private var inheritedFont
   @Environment(\.lineSpacing) private var inheritedSpacing
   @Environment(\.bonsaiFontFamily) private var fontFamily
   @ScaledMetric(relativeTo: .body) private var fontScale: Double = 1
 
+  private var role: Int {
+    let selected = text.style?.role ?? 8
+    return selected == 8 ? defaults.defaultTextRole() : selected
+  }
   private var styled: some View {
     Text(verbatim: text.value)
       .font(
         NativeTextFont.resolve(
-          size: text.style?.fontSize, weight: text.style?.weight,
+          size: text.style?.fontSize
+            ?? (inheritedFont == nil || role != 0
+              ? defaults.textSize(role) : nil),
+          weight: legibilityWeight == .bold
+            ? 3 : (text.style?.weight ?? defaults.textWeight(role)),
+          italic: text.style?.italic ?? defaults.textItalic(role),
           family: fontFamily, inherited: inheritedFont, scale: fontScale)
       )
       .multilineTextAlignment(
@@ -49,6 +60,14 @@ struct NativeTextView: View {
   }
 
   @ViewBuilder var body: some View {
-    if let argb = text.style?.argb { styled.foregroundStyle(Color(argb: argb)) } else { styled }
+    if let argb = text.style?.argb {
+      styled.foregroundStyle(Color(argb: argb))
+    } else if let role = text.style?.foreground {
+      styled.foregroundStyle(defaults.color(role))
+    } else if let foreground = defaults.textForeground(role) {
+      styled.foregroundStyle(defaults.color(foreground))
+    } else {
+      styled
+    }
   }
 }

@@ -54,7 +54,7 @@ separately cover session input, resize, anchor retention and boundedness.
 From the Git worktree, with the configured OCaml switch:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- dune build native/test/libruntime_fixture.dylib
+opam exec --switch=bonsai-ui -- dune build native/test/libruntime_fixture.dylib
 python3 tool/measure_swiftui_collection.py
 ```
 

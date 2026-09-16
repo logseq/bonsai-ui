@@ -69,7 +69,7 @@ module Progress_style = struct
 end
 
 module Symbol_rendering = struct
-  type t =
+  type t = Theme.Symbol_rendering.t =
     | Monochrome
     | Hierarchical
     | Multicolor
@@ -299,7 +299,7 @@ module Private_types = struct
         { name : string
         ; size : float option
         ; color : int32 option
-        ; rendering : Symbol_rendering.t
+        ; rendering : Symbol_rendering.t option
         }
         -> [ `Symbol ] node
     | Removal :
@@ -1144,7 +1144,7 @@ let optional_dimension label = function
     Some value
 ;;
 
-let symbol ?key ?size ?color ?(rendering = Symbol_rendering.Monochrome) ~name () =
+let symbol ?key ?size ?color ?rendering ~name () =
   if
     String.length name = 0
     || not

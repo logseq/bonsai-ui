@@ -95,7 +95,7 @@ extension TreeFixture {
     let before = try NodeStore().staging(TreeFixture.frame(initial)).tree
     var invalid = [
       TreeFixture.richText(3, spans: [SpanFixture(value: "x", weight: 4)], update: true),
-      TreeFixture.richText(3, spans: [SpanFixture(value: "x", italic: 2)], update: true),
+      TreeFixture.richText(3, spans: [SpanFixture(value: "x", italic: 3)], update: true),
       TreeFixture.richText(3, spans: [SpanFixture(value: "x", underline: 2)], update: true),
       TreeFixture.richText(3, spans: [SpanFixture(value: "x", strike: 2)], update: true),
       TreeFixture.children(3, [2]),
@@ -178,7 +178,7 @@ extension NativeRuntimeTests {
         expected += suffix
         #expect(
           try raster(NativeNodeView(node: label, activate: { _ in })).matches(
-            raster(Text(expected))))
+            raster(Text(expected).font(.system(size: 17)))))
         for (id, node) in nodes { #expect(model.nodes[id] === node) }
       }
       await runtime.close()

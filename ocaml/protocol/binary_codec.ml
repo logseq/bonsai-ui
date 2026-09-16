@@ -128,7 +128,7 @@ let check_symbol_properties ~name ~size ~rendering =
        if (not (Float.is_finite size)) || Float.compare size 0. <= 0
        then fail Invalid_props "symbol size must be finite and positive")
     size;
-  if rendering < 0 || rendering > 2
+  if rendering < 0 || rendering > 3
   then fail Invalid_props "invalid symbol rendering mode"
 ;;
 
@@ -268,7 +268,21 @@ let write_text_style writer = function
        Writer.u8 writer 1;
        Writer.u8 writer (text_font_weight_id weight));
     write_optional_f64 writer style.line_spacing;
-    write_optional_argb32 writer style.color
+    write_optional_argb32 writer style.color;
+    if style.role < 0 || style.role > 8 then fail Invalid_props "invalid text role";
+    Writer.u8 writer style.role;
+    (match style.foreground with
+     | None -> Writer.u8 writer 0
+     | Some role ->
+       if role < 0 || role > 8 then fail Invalid_props "invalid foreground role";
+       Writer.u8 writer 1;
+       Writer.u8 writer role);
+    Writer.u8
+      writer
+      (match style.italic with
+       | None -> 2
+       | Some true -> 1
+       | Some false -> 0)
 ;;
 
 let write_text_span writer (span : Wire_frame.text_span) =
@@ -285,7 +299,12 @@ let write_text_span writer (span : Wire_frame.text_span) =
      Writer.u8 writer 1;
      Writer.u8 writer (text_font_weight_id weight));
   write_optional_argb32 writer span.color;
-  write_bool writer span.italic;
+  Writer.u8
+    writer
+    (match span.italic with
+     | None -> 2
+     | Some true -> 1
+     | Some false -> 0);
   write_bool writer span.underline;
   write_bool writer span.strikethrough
 ;;
@@ -295,9 +314,69 @@ let require_theme_font_name label value =
   then fail Invalid_props "%s must be non-empty and contain no NUL" label
 ;;
 
+let validate_ui_defaults bytes =
+  let position = ref 0 in
+  let take n =
+    if !position + n > Bytes.length bytes then fail Invalid_props "truncated UI defaults";
+    let offset = !position in
+    position := !position + n;
+    offset
+  in
+  let byte () = Char.code (Bytes.get bytes (take 1)) in
+  let choice limit =
+    let value = byte () in
+    if value > limit then fail Invalid_props "invalid UI defaults choice";
+    value
+  in
+  let optional f = if choice 1 = 1 then f () in
+  let number positive () =
+    let value = Int64.float_of_bits (Bytes.get_int64_le bytes (take 8)) in
+    if (not (Float.is_finite value)) || if positive then value <= 0. else value < 0.
+    then fail Invalid_props "invalid UI defaults metric"
+  in
+  for i = 0 to 13 do
+    optional (number (i = 0 || i = 2))
+  done;
+  for _ = 0 to 8 do
+    optional (fun () -> ignore (take 4))
+  done;
+  for _ = 0 to 7 do
+    optional (number true);
+    optional (fun () -> ignore (choice 3))
+  done;
+  optional (fun () -> ignore (choice 8));
+  let finite () =
+    let value = Int64.float_of_bits (Bytes.get_int64_le bytes (take 8)) in
+    if not (Float.is_finite value) then fail Invalid_props "nonfinite theme value";
+    value
+  in
+  let opacity () =
+    let value = finite () in
+    if value < 0. || value > 1. then fail Invalid_props "invalid theme opacity"
+  in
+  optional (fun () -> ignore (finite ()));
+  optional opacity;
+  optional opacity;
+  optional (fun () -> ignore (choice 2));
+  optional (fun () -> ignore (choice 7));
+  for _ = 0 to 7 do
+    optional (fun () -> ignore (choice 8));
+    optional (fun () -> ignore (choice 1))
+  done;
+  for _ = 0 to 6 do
+    optional (fun () -> ignore (choice 3));
+    optional (fun () -> ignore (choice 1));
+    optional (fun () -> ignore (choice 8));
+    optional opacity;
+    optional opacity
+  done;
+  if !position <> Bytes.length bytes then fail Invalid_props "trailing UI defaults bytes"
+;;
+
 let write_theme writer (theme : Wire_frame.theme) =
+  validate_ui_defaults theme.defaults;
   Option.iter (require_theme_font_name "theme font family") theme.font_family;
-  if theme.control_size < 0 || theme.control_size > 4
+  if theme.control_size < 0 || theme.control_size > 5
   then fail Invalid_props "invalid control size %d" theme.control_size;
   Writer.u8
     writer
@@ -307,7 +386,9 @@ let write_theme writer (theme : Wire_frame.theme) =
      | Dark -> 2);
   write_optional_argb32 writer theme.tint;
   write_optional_string writer theme.font_family;
-  Writer.u8 writer theme.control_size
+  Writer.u8 writer theme.control_size;
+  Writer.u16 writer (Bytes.length theme.defaults);
+  Writer.bytes writer theme.defaults
 ;;
 
 let write_optional_u32 writer label = function
@@ -2962,7 +3043,26 @@ let read_text_style reader =
          if spacing < 0. then fail Invalid_props "text line spacing must be non-negative")
       line_spacing;
     let color = read_optional_argb32 reader in
-    Some Wire_frame.{ font_size; font_weight; line_spacing; color }
+    let role = Reader.u8 reader in
+    if role > 8 then fail Invalid_props "invalid text role";
+    let foreground =
+      match Reader.u8 reader with
+      | 0 -> None
+      | 1 ->
+        let value = Reader.u8 reader in
+        if value > 8 then fail Invalid_props "invalid foreground role";
+        Some value
+      | _ -> fail Invalid_props "invalid foreground role flag"
+    in
+    let italic =
+      match Reader.u8 reader with
+      | 0 -> Some false
+      | 1 -> Some true
+      | 2 -> None
+      | _ -> fail Invalid_props "invalid italic flag"
+    in
+    Some
+      Wire_frame.{ font_size; font_weight; line_spacing; color; role; foreground; italic }
   | value -> fail Invalid_props "invalid optional text style tag %d" value
 ;;
 
@@ -2983,7 +3083,13 @@ let read_text_span reader : Wire_frame.text_span =
     | value -> fail Invalid_props "invalid optional text span weight tag %d" value
   in
   let color = read_optional_argb32 reader in
-  let italic = read_bool reader in
+  let italic =
+    match Reader.u8 reader with
+    | 0 -> Some false
+    | 1 -> Some true
+    | 2 -> None
+    | _ -> fail Invalid_props "invalid span italic flag"
+  in
   let underline = read_bool reader in
   let strikethrough = read_bool reader in
   { value; font_size; font_weight; color; italic; underline; strikethrough }
@@ -3001,8 +3107,11 @@ let read_theme reader : Wire_frame.theme =
   let font_family = read_optional_string reader in
   Option.iter (require_theme_font_name "theme font family") font_family;
   let control_size = Reader.u8 reader in
-  if control_size > 4 then fail Invalid_props "invalid control size %d" control_size;
-  { mode; tint; font_family; control_size }
+  if control_size > 5 then fail Invalid_props "invalid control size %d" control_size;
+  let count = Reader.u16 reader in
+  let defaults = Reader.bytes reader count in
+  validate_ui_defaults defaults;
+  { mode; tint; font_family; control_size; defaults }
 ;;
 
 let read_text_align reader =

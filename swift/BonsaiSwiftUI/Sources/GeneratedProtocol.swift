@@ -1,7 +1,7 @@
 // Generated from protocol/schema.sexp. Do not edit.
 
 public enum ProtocolVersion {
-  public static let protocolMajor = 6
+  public static let protocolMajor = 8
   public static let protocolMinor = 0
 }
 

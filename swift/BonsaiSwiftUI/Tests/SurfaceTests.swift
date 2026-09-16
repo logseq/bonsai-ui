@@ -17,6 +17,7 @@ private func surfacePayload(
   writer.integer(UInt32(0x3300_0000))
   writer.integer(UInt32(0x66ff_ffff))
   for color in colors { writer.integer(color) }
+  writer.integer(UInt16(511))
   return writer.bytes
 }
 
@@ -28,7 +29,7 @@ struct SurfaceTests {
       let colors: [UInt32] = (mode == 1 || mode == 2) ? [0xffff_0000, 0xff00_00ff] : [0x44ff_eecc]
       let prepared = try registry.prepare(
         RenderNativeView(
-          kind: 8, version: 2, capabilities: [],
+          kind: 8, version: 3, capabilities: [],
           payload: surfacePayload(mode: mode, colors: colors, presentation: true)))
       try prepared.definition.validateChildren(prepared.properties, 1)
       for count in [0, 2] {
@@ -43,7 +44,7 @@ struct SurfaceTests {
     let registry = BonsaiNativeViews().includingStandardViews()
     let valid = surfacePayload()
     _ = try registry.prepare(
-      RenderNativeView(kind: 8, version: 2, capabilities: [], payload: valid))
+      RenderNativeView(kind: 8, version: 3, capabilities: [], payload: valid))
     let invalid = [
       surfacePayload(opacity: -0.1), surfacePayload(opacity: 1.01),
       surfacePayload(opacity: .nan), surfacePayload(opacity: .infinity),
@@ -54,7 +55,7 @@ struct SurfaceTests {
     for payload in invalid {
       #expect(throws: (any Error).self) {
         _ = try registry.prepare(
-          RenderNativeView(kind: 8, version: 2, capabilities: [], payload: payload))
+          RenderNativeView(kind: 8, version: 3, capabilities: [], payload: payload))
       }
     }
   }
@@ -68,7 +69,7 @@ struct SurfaceTests {
         $0.integer(UInt64(1))
         $0.integer(UInt16(NodeKindId.nativeWidget))
         $0.integer(UInt32(8))
-        $0.integer(UInt16(2))
+        $0.integer(UInt16(3))
         $0.integer(UInt64(0))
         $0.integer(UInt32(payload.count))
         $0.bytes.append(payload)
@@ -138,7 +139,7 @@ struct SurfaceTests {
     var registry = BonsaiNativeViews()
     #expect(throws: BonsaiNativeViewError.self) {
       try registry.register(
-        kind: 8, version: 2, decode: { _ in () },
+        kind: 8, version: 3, decode: { _ in () },
         encodeEvent: { (_: Bool) in BonsaiNativeEvent(id: 1) },
         makeResource: { () }, dispose: { _ in }, content: { _ in Text("Override") })
     }

@@ -7,7 +7,10 @@ Flutter create/pub-get flow, Native Assets profile injection and Flutter
 argument forwarding are removed. Source packages and modules now use
 `bonsai_swiftui`, `bonsai_swiftui_test` and `bonsai_swiftui_tool`. The virtual
 spec module is `Bonsai_swiftui_spec`, with public package `bonsai_swiftui.spec`.
-SDK regeneration/publication is still required.
+Install the OCaml library and CLI through opam; application users do not need
+a framework checkout or source-path environment variables. See
+[opam installation](opam-installation.md) for repository setup and release status.
+Local SDK installation is verified; public SDK publication is still required.
 
 ## Configuration and ownership
 
@@ -71,6 +74,13 @@ Profiles retain separate native build/staging paths. Xcode products are under
 `BONSAI_SWIFTUI_APPLE_SDK_ROOT` variable rather than changing the compiler's
 ambient `SDKROOT`, which can also affect host tools during cross compilation.
 
+With the installed SDK, the CLI builds the iOS complete object automatically:
+
+```sh
+bonsai-swiftui toolchain verify iphoneos
+bonsai-swiftui build ios --profile release --no-codesign
+```
+
 An explicitly selected complete object can enter the same verified pipeline:
 
 ```sh
@@ -86,9 +96,9 @@ The object must register the entrypoint used by the application's Swift source.
 Relative object paths are interpreted from the invocation directory. The
 physical device ID is mandatory before an iOS run can start building. Builds
 may use `--no-codesign`; runs always require signing. No Simulator fallback or
-Flutter command is used. Automatic installed-SDK discovery now requires the
-iOS 18 floor, but publication/install validation of the replacement SDK remains
-unfinished; the verified iOS CLI route uses an explicit iOS 18 object.
+Flutter command is used. Automatic installed-SDK discovery requires the iOS 18
+floor. A local SDK installation now passes an independent App build without an
+explicit object; public SDK publication remains pending.
 
 `exec -- COMMAND ARGUMENT...` prepares verified macOS native artifacts, stages
 the host object and preserves the command's arguments, working directory,
@@ -229,3 +239,22 @@ Count: 1. Child-command argument and exit-status handling also pass. The Xcode
 project selects the installed Swift package. This checkpoint passed in 85.552
 seconds; no production code or asset recipe needed changing. It verifies the
 installation boundary, not opam dependency resolution or iOS SDK publication.
+
+
+## Real opam installation acceptance
+
+`python3 tool/test_swiftui_opam_install.py` creates release artifacts and uses
+opam to install `bonsai_swiftui`, `bonsai_swiftui_test`, and
+`bonsai_swiftui_tool` in an isolated copy of the active dependency switch.
+It removes the release archive and package build directories before building
+and running the independent application. No framework source-root or OCAMLPATH
+override is supplied. The application must build in Debug, Profile and Release,
+pass signing checks, and update Count: 0 to Count: 1 through OCaml.
+
+This complements the installed-layout test above with actual opam package
+build/install behavior. It reuses third-party dependencies; it does not establish
+clean-machine dependency provisioning or iOS SDK publication.
+
+This real opam gate passed on 2026-09-16 in 200.170 seconds, including all three
+macOS profiles and the native counter interaction. See the
+[release evidence](opam-installation.md#acceptance-evidence).

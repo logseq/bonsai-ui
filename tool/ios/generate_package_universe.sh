@@ -7,6 +7,9 @@ framework_root=$(CDPATH= cd -- "$script_directory/../.." && pwd)
 # shellcheck source=tool/ios/sdk_repository.lock
 . "$script_directory/sdk_repository.lock"
 . "$script_directory/toolchain.lock"
+BONSAI_SWIFTUI_SOURCE_REVISION=${SDK_SOURCE_REVISION:-$BONSAI_SWIFTUI_SOURCE_REVISION}
+BONSAI_SWIFTUI_SOURCE_SHA256=${SDK_SOURCE_SHA256:-$BONSAI_SWIFTUI_SOURCE_SHA256}
+expected_framework_source_url=${SDK_SOURCE_URL:-https://github.com/RCmerci/bonsai_flutter/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz}
 
 if [ "$#" -ne 6 ]; then
   echo "usage: $0 SOLUTION_JSON OPAM_REPO_CACHE OUTPUT_REPOSITORY FRAMEWORK_OPAM RUNTIME_OPAM SUPPORTED_CLOSURE_LOCK" >&2
@@ -245,7 +248,7 @@ test "$framework_source_checksum_algorithm" = sha256 || {
   exit 1
 }
 test "$framework_source_url" = \
-  "https://github.com/RCmerci/bonsai_flutter/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz" || {
+  "$expected_framework_source_url" || {
   echo "Bonsai SwiftUI source revision differs from sdk_repository.lock" >&2
   exit 1
 }
@@ -282,6 +285,7 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
   printf '%s\n' \
     ']' \
     'depends: [' \
+    "  \"bonsai_swiftui\" {= \"$BONSAI_SWIFTUI_VERSION\"}" \
     "  \"bonsai_swiftui_ios_runtime_sdk\" {= \"$SDK_RUNTIME_PACKAGE_VERSION\"}" \
     ']' \
     'build: [' \

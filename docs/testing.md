@@ -10,18 +10,24 @@ acceptance. See the [implementation ledger](swiftui-implementation.md) and the
 ## Local commands
 
 Use the project's OCaml switch and run commands from the worktree root. The
-current development switch is `bonsai-flutter-v017-exact`. That local switch
-name is infrastructure history; packages and the CLI use `bonsai_swiftui` and
-`bonsai-swiftui`.
+current development switch is `bonsai-ui` (OCaml 5.1.1). Refresh an already-open
+shell after the switch rename so tools resolve from the current prefix:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- dune build @all @runtest @fmt
-opam exec --switch=bonsai-flutter-v017-exact -- dune exec protocol/generator/generate.exe -- --check
-opam exec --switch=bonsai-flutter-v017-exact -- dune exec protocol/generator/generate_fixtures.exe -- --check
-opam exec --switch=bonsai-flutter-v017-exact -- sh tool/check_viewport_types.sh
+eval "$(opam env --switch=bonsai-ui --set-switch)"
+```
+
+The separate `bonsai-swiftui-ios` switch contains the physical-iOS SDK; the CLI
+selects it automatically for iOS builds.
+
+```sh
+opam exec --switch=bonsai-ui -- dune build @all @runtest @fmt
+opam exec --switch=bonsai-ui -- dune exec protocol/generator/generate.exe -- --check
+opam exec --switch=bonsai-ui -- dune exec protocol/generator/generate_fixtures.exe -- --check
+opam exec --switch=bonsai-ui -- sh tool/check_viewport_types.sh
 python3 tool/run_swift_tests.py
 python3 tool/test_swift_platforms.py
-spec-dev-tool check --all
+opam exec --switch=bonsai-ui -- spec-dev-tool check --all
 git diff --check
 ```
 
@@ -148,7 +154,7 @@ describes these profile fields and their diagnostic limitations.
 Build the current macOS Mail application against its OCaml complete object:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- python3 tool/build_swiftui_example.py mail
+opam exec --switch=bonsai-ui -- python3 tool/build_swiftui_example.py mail
 codesign --verify --deep --strict examples/mail/apple/DerivedData/Build/Products/Debug/BonsaiMail.app
 ```
 

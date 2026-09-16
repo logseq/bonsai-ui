@@ -71,7 +71,7 @@ Existing menu and civil widget tests remain applicable to their shared code.
 Reproduce from the worktree:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- dune build @all @runtest @fmt @install
+opam exec --switch=bonsai-ui -- dune build @all @runtest @fmt @install
 python3 tool/run_swift_tests.py
 python3 native/test/test_host_effects_window.py
 python3 tool/test_swift_platforms.py

@@ -145,6 +145,7 @@ private struct WeightedStackLayout<Direction: WeightedAxis>: Layout {
 }
 
 struct NativeWeightedStack: View {
+  @Environment(\.bonsaiDefaults) private var defaults
   let node: RenderNodeState
   let properties: RenderWeightedStack
   let vertical: Bool
@@ -173,7 +174,7 @@ struct NativeWeightedStack: View {
   var body: some View {
     if vertical {
       WeightedStackLayout<WeightedVertical>(
-        spacing: properties.spacing, alignment: properties.alignment
+        spacing: properties.spacing ?? defaults.metric(1), alignment: properties.alignment
       ) { children }
     } else {
       WeightedStackLayout<WeightedHorizontal>(

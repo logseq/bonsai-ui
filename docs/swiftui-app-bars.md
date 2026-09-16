@@ -90,7 +90,7 @@ It also verifies that enabled root toolbar commands are absent on the detail pag
 
 - `swift test --scratch-path _build/swift --filter actualAppBars`
 - `python3 native/test/test_navigation_window.py NavigationWindowTests.test_native_app_bars_reach_actual_gallery`
-- `opam exec --switch=bonsai-flutter-v017-exact -- sh tool/check_viewport_types.sh`
+- `opam exec --switch=bonsai-ui -- sh tool/check_viewport_types.sh`
 
 Scrolling/collapsing headers now use [native sections](swiftui-scroll-sections.md),
 and PreferredSize is removed. AppBar search now uses [native search composition](swiftui-search.md).

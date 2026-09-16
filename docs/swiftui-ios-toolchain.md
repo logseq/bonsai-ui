@@ -141,6 +141,31 @@ The published SDK recipe and source identities are a separate deliverable. They
 must be generated from the exact pushed framework commit and published separately
 after that source push. Existing generated SDK metadata is not rewritten to
 claim that an uncommitted worktree is a published SwiftUI SDK.
+
+## Installed local SDK acceptance
+
+On 2026-09-16, the replacement SDK was installed in the global
+`bonsai-swiftui-ios` opam switch. The framework package is `0.1.0~dev.40`,
+the runtime package is `0.1.0~dev.7`, and the SDK build recipe is 5.
+The SDK declares the matching host UI library needed by Dune's host context;
+the target Zarith package includes GMP without transient build-directory paths.
+
+All four compiler/runtime artifact tests pass with
+`IOS_CROSS_TEST_OPAMROOT="$HOME/.opam"` and
+`IOS_CROSS_TEST_SWITCH=bonsai-swiftui-ios`. The installed CLI's
+`toolchain verify iphoneos` also passes. Both tests in
+`tool/test_swiftui_ios_installed.py` pass: independent unsigned Release App
+building with no source override or prebuilt object, and installed Zarith linking.
+
+This installation uses an explicitly checksum-identified local source archive;
+it does not identify an uncommitted worktree as a published commit. Public release
+publication and device execution remain separate. See the
+[installation evidence](opam-installation.md#installed-ios-sdk-acceptance).
+
+The broader `tool/test_datascript_worker_contract.sh` also passes with the global
+SDK selected through those environment variables. It verifies worker behavior,
+process isolation, physical-iOS object metadata and an unsigned Worker App build.
+
 ## Native physical-device preflight
 
 `tool/ci/ios_device_preflight.sh <UUID-or-UDID> [--require-signing]`

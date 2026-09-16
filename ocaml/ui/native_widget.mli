@@ -22,6 +22,18 @@ end
     native material. Reduced Transparency uses the tint's opaque RGB color.
     Surfaces introduce no animation. Standard native kind 8, version 1. *)
 module Surface : sig
+  type recipe =
+    | Plain
+    | Material_action_group
+    | Content_card
+    | Inset_section
+    | Translucent_sheet
+    | Search
+
+  type shape =
+    | Rounded
+    | Capsule
+
   type fill =
     | Solid of Style.Color.t
     | Linear of Style.Color.t list
@@ -42,7 +54,10 @@ module Surface : sig
     -> shadow
 
   (** Radius and border width must be finite and non-negative. Border width
-      defaults to zero. [presentation_background] also applies the fill and radius
+      defaults to zero for raw surfaces. A recipe supplies omitted paint properties;
+      explicit properties take precedence. [content_inset] selects the shared page
+      inset; Material_action_group supplies its own compact insets and row spacing.
+      Capsule derives its radius from the actual height. [presentation_background] also applies the fill and radius
       to the containing native sheet (default false). Place it at the sheet content
       root. [opacity] in [0, 1] affects only the painted background, not its child.
       Material becomes opaque when Reduce Transparency is enabled.
@@ -55,7 +70,10 @@ module Surface : sig
     -> ?border_width:float
     -> ?opacity:float
     -> ?presentation_background:bool
-    -> fill:fill
+    -> ?fill:fill
+    -> ?recipe:recipe
+    -> ?shape:shape
+    -> ?content_inset:bool
     -> View.t
     -> View.t
 end

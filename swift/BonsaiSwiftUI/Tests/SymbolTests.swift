@@ -29,7 +29,7 @@ extension TreeFixture {
 
 @MainActor
 struct SymbolTests {
-  @Test func symbolsRenderLikeNativeImagesInEachModeAndInheritFontAndColor() throws {
+  @Test func symbolsRenderLikeNativeImagesWithDefaultSizeAndInheritedColor() throws {
     for (mode, nativeMode) in [
       (UInt8(0), SymbolRenderingMode.monochrome), (1, .hierarchical), (2, .multicolor),
     ] {
@@ -47,7 +47,7 @@ struct SymbolTests {
             .font(.system(size: 27)).foregroundStyle(Color.blue))
         let expected = try symbolImage(
           Image(systemName: "person.crop.circle.badge.checkmark")
-            .font(.system(size: explicit ? 40 : 27))
+            .font(.system(size: explicit ? 40 : 19))
             .symbolRenderingMode(nativeMode)
             .foregroundStyle(explicit ? Color(.sRGB, red: 1, green: 0, blue: 0) : Color.blue))
         #expect(
@@ -69,7 +69,7 @@ struct SymbolTests {
       TreeFixture.symbol(3, name: "star\0fill", update: true),
       TreeFixture.symbol(3, name: "star fill", update: true),
       TreeFixture.symbol(3, name: "bonsai.this.symbol.does.not.exist", update: true),
-      TreeFixture.symbol(3, rendering: 3, update: true),
+      TreeFixture.symbol(3, rendering: 4, update: true),
       TreeFixture.children(3, [2]),
     ]
     for size in [0, -1, Double.nan, .infinity, -.infinity] {
@@ -110,7 +110,7 @@ extension NativeRuntimeTests {
         return nil
       }
       #expect(symbols.count == 10)
-      #expect(Set(symbols.map(\.rendering)) == [0, 1, 2])
+      #expect(Set(symbols.map(\.rendering)) == [0, 1, 2, 3])
       #expect(symbols.contains { $0.size == nil && $0.color == nil })
       let model = RenderTree()
       model.commit(state.tree)

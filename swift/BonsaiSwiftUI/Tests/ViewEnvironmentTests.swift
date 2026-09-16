@@ -20,6 +20,8 @@ extension TreeFixture {
         $0.bytes.append(contentsOf: font.utf8)
       }
       $0.integer(controlSize)
+      $0.integer(UInt16(96))
+      $0.bytes.append(Data(repeating: 0, count: 96))
     }
   }
 }
@@ -66,7 +68,7 @@ struct ViewEnvironmentTests {
     let state = try FrameState().staging(frame)
     let snapshot = state
     for operation in [
-      TreeFixture.environment(mode: 3), TreeFixture.environment(controlSize: 5),
+      TreeFixture.environment(mode: 3), TreeFixture.environment(controlSize: 6),
       TreeFixture.environment(font: "  "), TreeFixture.environment(font: "a\0b"),
       WireOperation(opcode: OperationId.hostRequest, body: Data()),
       WireOperation(opcode: OperationId.runtimeNotification, body: Data()),
@@ -107,7 +109,7 @@ extension NativeRuntimeTests {
       let state = try FrameState().staging(WireFrame.decode(initial.bytes))
       #expect(state.application?.title == "Counter")
       #expect(state.application?.environment.tint == 0xff67_50a4)
-      #expect(state.application?.environment.controlSize == 2)
+      #expect(state.application?.environment.controlSize == 5)
       let model = RenderTree()
       model.commit(state.tree)
       let root = try #require(model.root)

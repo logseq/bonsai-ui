@@ -59,6 +59,7 @@ let counter_theme_operation =
         ; tint = Some 0xff6750a4l
         ; font_family = Some "Inter"
         ; control_size = 2
+        ; defaults = Bytes.make 96 '\000'
         }
     }
 ;;

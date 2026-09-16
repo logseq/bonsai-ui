@@ -5,7 +5,7 @@
  endif
 -MKLIB=$(OCAMLRUN) $(ROOTDIR)/tools/ocamlmklib
 +MKLIB=$(OCAMLRUN) $(ROOTDIR)/tools/ocamlmklib -failsafe
-
+ 
  # Variables that must be defined by individual libraries:
  # LIBNAME
 --- a/otherlibs/systhreads/Makefile

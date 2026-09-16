@@ -345,7 +345,7 @@ let valid_sdk_manifest =
  (target_components_digest component-digest)
  (required_frameworks Foundation Security)
  (required_system_libraries sqlite3)
- (build_recipe_revision 4)
+ (build_recipe_revision 5)
  (packages
   (base v0.17.0)
   (bonsai_swiftui 0.1.0~dev)
@@ -407,8 +407,8 @@ let test_sdk_manifest_contract () =
   Sdk.Manifest.validate
     (valid_sdk_manifest
      |> replace_once
-          ~pattern:"(build_recipe_revision 4)"
-          ~replacement:"(build_recipe_revision 3)"
+          ~pattern:"(build_recipe_revision 5)"
+          ~replacement:"(build_recipe_revision 4)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"3"

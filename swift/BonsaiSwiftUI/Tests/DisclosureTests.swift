@@ -41,9 +41,9 @@ extension TreeFixture {
       ).tree)
     let actual = NativeNodeView(node: try #require(tree.root), activate: { _ in })
     let reference = DisclosureGroup(isExpanded: .constant(expanded)) {
-      Text("Body")
+      NativeTextView(text: "Body")
     } label: {
-      Text("Details")
+      NativeTextView(text: "Details")
     }
     #expect(try raster(actual).matches(raster(reference)))
   }

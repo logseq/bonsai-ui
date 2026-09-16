@@ -170,7 +170,7 @@ struct NativeMenu: View {
     Menu {
       items(properties.entries, enabled: properties.enabled)
     } label: {
-      label(0)
+      label(0).modifier(NativeInteractiveBounds(icon: node.children.first?.containsSymbol == true))
     }.disabled(!properties.enabled)
   }
   var body: some View {

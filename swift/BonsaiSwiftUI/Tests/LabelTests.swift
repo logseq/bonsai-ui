@@ -36,9 +36,10 @@ extension TreeFixture {
       try NodeStore().staging(TreeFixture.frame(TreeFixture.labelTree(button: button))).tree)
     let actual = NativeNodeView(node: try #require(tree.root), activate: { _ in })
     let label = Label {
-      Text("Inbox")
+      NativeTextView(text: "Inbox")
     } icon: {
-      Image(systemName: "envelope").accessibilityHidden(true)
+      Image(systemName: "envelope").font(.system(size: 19)).symbolRenderingMode(.monochrome)
+        .accessibilityHidden(true)
     }
     let reference =
       button
@@ -114,11 +115,12 @@ extension NativeRuntimeTests {
         Label {
           VStack(alignment: .leading, spacing: 3) {
             Text("Mailboxes").font(.system(size: 11))
-            Text(headline)
+            NativeTextView(text: RenderText(headline))
             Text(headline == "Inbox" ? "Unread messages" : "Saved messages").font(.system(size: 12))
           }
         } icon: {
           Image(systemName: headline == "Inbox" ? "envelope" : "archivebox")
+            .font(.system(size: 19))
             .symbolRenderingMode(.monochrome).accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

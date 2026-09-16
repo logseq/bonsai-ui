@@ -47,13 +47,13 @@ extension TreeFixture {
               ])
             ).tree)
           let children = Group {
-            Text("Two\nlines").clipped()
+            Text("Two\nlines").font(.system(size: 17)).clipped()
             Image(systemName: "star.fill").font(.system(size: 30)).symbolRenderingMode(.monochrome)
               .foregroundStyle(Color(.sRGB, red: 1, green: 0, blue: 0))
           }
           let expected = Group {
             if vertical {
-              VStack(alignment: horizontalAlignments[alignment]) { children }
+              VStack(alignment: horizontalAlignments[alignment], spacing: 16) { children }
             } else {
               HStack(alignment: verticalAlignments[alignment]) { children }
             }
@@ -137,7 +137,9 @@ extension TreeFixture {
         spacing: nil)
       #expect(
         try raster(content).matches(
-          raster(referenceBlocks(vertical: vertical, lengths: [20, 40, 30], spacing: nil))))
+          raster(
+            referenceBlocks(
+              vertical: vertical, lengths: [20, 40, 30], spacing: vertical ? 16 : nil))))
     }
   }
 

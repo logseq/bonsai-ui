@@ -124,9 +124,17 @@ struct RenderTextStyle: Equatable, Sendable {
   let weight: Int?
   let lineSpacing: Double?
   let argb: UInt32?
+  var role: Int = 8
+  var foreground: Int?
+  var italic: Bool?
 }
 
 extension WireReader {
+  mutating func optionalItalic() throws -> Bool? {
+    let value = try choice(2)
+    return value == 2 ? nil : value == 1
+  }
+
   mutating func identity() throws -> UInt64 {
     let value = try integer(UInt64.self)
     guard value > 0, value <= UInt64(Int64.max) else { throw TreeError.invalidIdentity }
@@ -186,7 +194,9 @@ extension WireReader {
       let weight = try flag() ? choice(3) : nil
       let spacing = try nonnegativeOptionalDouble()
       let argb = try flag() ? integer(UInt32.self) : nil
-      text.style = RenderTextStyle(fontSize: size, weight: weight, lineSpacing: spacing, argb: argb)
+      text.style = RenderTextStyle(
+        fontSize: size, weight: weight, lineSpacing: spacing, argb: argb,
+        role: try choice(8), foreground: try flag() ? choice(8) : nil, italic: try optionalItalic())
     }
     text.alignment = try choice(2)
     if try flag() {

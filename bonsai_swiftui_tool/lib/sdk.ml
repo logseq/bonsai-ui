@@ -6,7 +6,7 @@ let ( let* ) result f =
 
 let supported_bonsai_swiftui_version = "0.1.0~dev"
 let supported_abi_version = "3"
-let supported_build_recipe_revision = "4"
+let supported_build_recipe_revision = "5"
 let supported_minimum_deployment_target = "18.0"
 
 module Manifest = struct

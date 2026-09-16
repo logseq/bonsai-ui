@@ -583,6 +583,8 @@ final class RenderTree {
 }
 
 struct NativeNodeView: View {
+  @Environment(\.bonsaiRowSpacing) private var rowSpacing
+  @Environment(\.bonsaiDefaults) private var defaults
   let node: RenderNodeState
   let activate: @MainActor (RenderNodeState) -> Void
 
@@ -787,14 +789,16 @@ struct NativeNodeView: View {
       return AnyView(NativeFlowLayout(properties: properties) { children })
     case .row(let spacing, let alignment):
       return AnyView(
-        HStack(alignment: nativeVerticalAlignment(alignment), spacing: spacing.map { CGFloat($0) })
-        {
+        HStack(
+          alignment: nativeVerticalAlignment(alignment),
+          spacing: (spacing ?? rowSpacing).map { CGFloat($0) }
+        ) {
           children
         })
     case .column(let spacing, let alignment):
       return AnyView(
         VStack(
-          alignment: nativeHorizontalAlignment(alignment), spacing: spacing.map { CGFloat($0) }
+          alignment: nativeHorizontalAlignment(alignment), spacing: spacing ?? defaults.metric(1)
         ) {
           children
         })
@@ -889,7 +893,7 @@ struct NativeNodeView: View {
       let button = Button(role: role == 1 ? .cancel : role == 2 ? .destructive : nil) {
         activate(node)
       } label: {
-        child
+        child.modifier(NativeInteractiveBounds(icon: node.children.first?.containsSymbol == true))
       }
       let styled: AnyView
       switch style {
@@ -905,5 +909,12 @@ struct NativeNodeView: View {
           )
         ).disabled(!enabled))
     }
+  }
+}
+
+extension RenderNodeState {
+  var containsSymbol: Bool {
+    if case .symbol = properties { return true }
+    return children.contains { $0.containsSymbol }
   }
 }

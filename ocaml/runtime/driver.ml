@@ -313,11 +313,13 @@ let wire_theme (view : Ui.Theme.Private.view) : Protocol.Wire_frame.theme =
   ; font_family = view.font_family
   ; control_size =
       (match view.control_size with
-       | Ui.Theme.Control_size.Mini -> 0
-       | Small -> 1
-       | Regular -> 2
-       | Large -> 3
-       | Extra_large -> 4)
+       | None -> 5
+       | Some Ui.Theme.Control_size.Mini -> 0
+       | Some Small -> 1
+       | Some Regular -> 2
+       | Some Large -> 3
+       | Some Extra_large -> 4)
+  ; defaults = Bytes.copy view.defaults
   }
 ;;
 
@@ -361,6 +363,9 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
              ; font_weight
              ; line_spacing = style.line_spacing
              ; color = style.color
+             ; role = style.role
+             ; foreground = style.foreground
+             ; italic = style.italic
              })
         style
     in
@@ -405,9 +410,10 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
   | Symbol { name; size; color; rendering } ->
     let rendering =
       match rendering with
-      | Ui.View.Symbol_rendering.Monochrome -> 0
-      | Hierarchical -> 1
-      | Multicolor -> 2
+      | None -> 3
+      | Some Ui.View.Symbol_rendering.Monochrome -> 0
+      | Some Hierarchical -> 1
+      | Some Multicolor -> 2
     in
     Ok (Symbol_props { name; size; color; rendering })
   | Removal

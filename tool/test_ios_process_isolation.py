@@ -10,15 +10,17 @@ ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = {"_fork", "_execv", "_execve", "_execvp", "_posix_spawn", "_posix_spawnp",
              "_popen", "_system"}
 TARGET = "native/test/datascript_worker/datascript_worker_native_embed.exe.o"
+OPAM_ROOT = os.environ.get("IOS_CROSS_TEST_OPAMROOT", str(ROOT / "_build/ios/opam-root"))
+SWITCH = os.environ.get("IOS_CROSS_TEST_SWITCH", str(ROOT / "_build/ios/switches/iphoneos"))
 
 
 class ProcessIsolationTests(unittest.TestCase):
     def test_physical_ios_complete_object_has_no_process_imports(self):
-        env = dict(os.environ, OPAMROOT=str(ROOT / "_build/ios/opam-root"), VER="18.0",
+        env = dict(os.environ, OPAMROOT=OPAM_ROOT, VER="18.0",
                    SDK=subprocess.check_output(["xcrun", "--sdk", "iphoneos", "--show-sdk-version"], text=True).strip())
         env.pop("OCAMLPATH", None)
         subprocess.run([
-            "opam", "exec", f"--switch={ROOT / '_build/ios/switches/iphoneos'}", "--",
+            "opam", "exec", f"--switch={SWITCH}", "--",
             "dune", "build", f"--build-dir={ROOT / '_build/ios/swiftui-framework'}",
             "--profile=release", "-j4", "-xios", TARGET,
         ], env=env, cwd=ROOT, check=True)

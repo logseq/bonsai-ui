@@ -1008,6 +1008,18 @@ module Expandable_message_composer = struct
 end
 
 module Surface = struct
+  type recipe =
+    | Plain
+    | Material_action_group
+    | Content_card
+    | Inset_section
+    | Translucent_sheet
+    | Search
+
+  type shape =
+    | Rounded
+    | Capsule
+
   type fill =
     | Solid of Style.Color.t
     | Linear of Style.Color.t list
@@ -1045,15 +1057,40 @@ module Surface = struct
 
   let create
         ?key
-        ?(corner_radius = 0.)
-        ?(shadow = no_shadow)
-        ?(border_color = transparent)
-        ?(border_width = 0.)
-        ?(opacity = 1.)
+        ?corner_radius
+        ?shadow
+        ?border_color
+        ?border_width
+        ?opacity
         ?(presentation_background = false)
-        ~fill
+        ?fill
+        ?recipe
+        ?shape
+        ?(content_inset = false)
         child
     =
+    let specified =
+      [ Option.is_some corner_radius
+      ; Option.is_some shadow
+      ; Option.is_some shadow
+      ; Option.is_some shadow
+      ; Option.is_some border_width
+      ; Option.is_some opacity
+      ; Option.is_some shadow
+      ; Option.is_some border_color
+      ; Option.is_some fill
+      ]
+    in
+    let mask =
+      List.mapi (fun i present -> if present then 1 lsl i else 0) specified
+      |> List.fold_left ( lor ) 0
+    in
+    let corner_radius = Option.value corner_radius ~default:0. in
+    let shadow = Option.value shadow ~default:no_shadow in
+    let border_color = Option.value border_color ~default:transparent in
+    let border_width = Option.value border_width ~default:0. in
+    let opacity = Option.value opacity ~default:1. in
+    let fill = Option.value fill ~default:(Solid transparent) in
     if (not (Float.is_finite opacity)) || opacity < 0. || opacity > 1.
     then invalid_arg "Surface: opacity must be finite and in [0, 1]";
     nonnegative "corner radius" corner_radius;
@@ -1070,10 +1107,30 @@ module Surface = struct
     let count = List.length colors in
     if count > 16 || count < if mode = 1 || mode = 2 then 2 else 1
     then invalid_arg "Surface: gradients require 2..16 colors";
-    let payload = Bytes.make (60 + (4 * count)) '\000' in
+    let payload = Bytes.make (62 + (4 * count)) '\000' in
     Bytes.set payload 0 (Char.chr mode);
     Bytes.set payload 1 (Char.chr count);
-    Bytes.set payload 2 (if presentation_background then '\001' else '\000');
+    Bytes.set
+      payload
+      2
+      (Char.chr
+         ((if presentation_background then 1 else 0)
+          lor (if content_inset then 2 else 0)
+          lor (if shape = Some Capsule then 4 else 0)
+          lor if Option.is_some shape then 8 else 0));
+    Bytes.set
+      payload
+      3
+      (Char.chr
+         (match recipe with
+          | None -> 0
+          | Some Plain -> 1
+          | Some Material_action_group -> 2
+          | Some Content_card -> 3
+          | Some Inset_section -> 4
+          | Some Translucent_sheet -> 5
+          | Some Search -> 6));
+    Bytes.set_uint16_le payload (60 + (4 * count)) mask;
     List.iteri
       (fun i v -> Bytes.set_int64_le payload (4 + (8 * i)) (Int64.bits_of_float v))
       [ corner_radius; shadow.radius; shadow.x; shadow.y; border_width; opacity ];
@@ -1084,7 +1141,7 @@ module Surface = struct
     View.Private.native_widget
       ?key
       ~kind_id:(ID.Native_widget.Kind_id.of_int 8)
-      ~version:2
+      ~version:3
       ~capabilities:0L
       ~payload
       ~on_event:no_event

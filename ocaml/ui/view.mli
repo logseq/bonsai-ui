@@ -104,14 +104,15 @@ val text
 val rich_text : ?key:Key.t -> Style.Text_span.t list -> t
 
 module Symbol_rendering : sig
-  type t =
+  type t = Theme.Symbol_rendering.t =
     | Monochrome
     | Hierarchical
     | Multicolor
 end
 
 (** An SF Symbols system image. [size] is an optional positive point size;
-    otherwise the symbol inherits its surrounding font. Color inherits the
+    otherwise it uses the nearest shared symbol size (19 points by default).
+    Rendering inherits Theme (Monochrome at the library baseline). Color inherits the
     surrounding foreground style when omitted. Names must exist on the target
     OS; the renderer rejects unavailable symbols. Use a semantics wrapper to
     label meaningful images; symbol content itself is decorative. *)
@@ -324,8 +325,9 @@ val row
   -> t list
   -> t
 
-(** Native VStack with leading, center, or trailing alignment. Spacing follows
-    the same contract as [row]. *)
+(** Native VStack with leading, center, or trailing alignment. Omitted spacing
+    uses the nearest shared column spacing (16 points by default). Explicit finite
+    spacing, including zero and negative values, is preserved. *)
 val column
   :  ?key:Key.t
   -> ?spacing:float
@@ -761,6 +763,8 @@ val semantics
   -> t
   -> t
 
+(** Apply sparse shared defaults to a retained subtree. Unspecified properties
+    inherit; explicit child properties take precedence. *)
 val theme : ?key:Key.t -> data:Theme.t -> t -> t
 
 module Date_picker : sig
@@ -1334,7 +1338,7 @@ module Private : sig
         { name : string
         ; size : float option
         ; color : int32 option
-        ; rendering : Symbol_rendering.t
+        ; rendering : Symbol_rendering.t option
         }
         -> [ `Symbol ] node
     | Removal :

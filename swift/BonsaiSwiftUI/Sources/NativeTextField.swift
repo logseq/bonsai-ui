@@ -340,12 +340,14 @@ struct RenderTextField: Equatable, Sendable {
     let controller: NativeTextFieldController
     @Environment(\.isEnabled) private var enabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
+    @Environment(\.bonsaiDefaults) private var defaults
+    @Environment(\.controlSize) private var controlSize
     func makeNSView(context: Context) -> NSTextField { controller.field }
     func updateNSView(_ view: NSTextField, context: Context) {
       controller.setHostEnabled(enabled)
-      let body = NSFont.preferredFont(forTextStyle: .body)
-      view.font = fontFamily.flatMap { NSFont(name: $0, size: body.pointSize) } ?? body
-      view.textColor = .textColor
+      view.font = defaults.bodyFont(
+        family: fontFamily, legibility: context.environment.legibilityWeight)
+      view.textColor = NSColor(defaults.color(defaults.defaultForeground()))
     }
     func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSTextField, context: Context)
       -> CGSize?
@@ -647,17 +649,24 @@ struct RenderTextField: Equatable, Sendable {
     let controller: NativeTextFieldController
     @Environment(\.isEnabled) private var enabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
+    @Environment(\.bonsaiDefaults) private var defaults
+    @Environment(\.controlSize) private var controlSize
     func makeUIView(context: Context) -> UITextField { controller.field }
     func updateUIView(_ view: UITextField, context: Context) {
       controller.setHostEnabled(enabled)
-      let body = UIFont.preferredFont(forTextStyle: .body)
-      view.font = fontFamily.flatMap { UIFont(name: $0, size: body.pointSize) } ?? body
-      view.textColor = .label
+      view.font = defaults.bodyFont(
+        family: fontFamily, legibility: context.environment.legibilityWeight)
+      view.adjustsFontForContentSizeCategory = true
+      view.textColor = UIColor(defaults.color(defaults.defaultForeground()))
     }
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextField, context: Context)
       -> CGSize?
     {
-      CGSize(width: proposal.width ?? 240, height: max(36, uiView.intrinsicContentSize.height))
+      CGSize(
+        width: proposal.width ?? 240,
+        height: max(
+          controlSize == .mini || controlSize == .small ? 0 : defaults.metric(2),
+          uiView.intrinsicContentSize.height))
     }
   }
 #endif

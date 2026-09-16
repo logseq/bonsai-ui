@@ -42,6 +42,7 @@ struct RenderTextEditor: Equatable, Sendable {
     var maximumLines: Int? = nil
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
+    @Environment(\.bonsaiDefaults) private var defaults
 
     func makeNSView(context: Context) -> NSScrollView {
       let scroll = NSScrollView()
@@ -54,9 +55,9 @@ struct RenderTextEditor: Equatable, Sendable {
     }
     func updateNSView(_ scroll: NSScrollView, context: Context) {
       controller.setHostEnabled(isEnabled)
-      let body = NSFont.preferredFont(forTextStyle: .body)
-      controller.view.font = fontFamily.flatMap { NSFont(name: $0, size: body.pointSize) } ?? body
-      controller.view.textColor = .textColor
+      controller.view.font = defaults.bodyFont(
+        family: fontFamily, legibility: context.environment.legibilityWeight)
+      controller.view.textColor = NSColor(defaults.color(defaults.defaultForeground()))
     }
     func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSScrollView, context: Context)
       -> CGSize?
@@ -87,13 +88,15 @@ struct RenderTextEditor: Equatable, Sendable {
     var maximumLines: Int? = nil
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
+    @Environment(\.bonsaiDefaults) private var defaults
 
     func makeUIView(context: Context) -> NativeEditingTextView { controller.view }
     func updateUIView(_ view: NativeEditingTextView, context: Context) {
       controller.setHostEnabled(isEnabled)
-      let body = UIFont.preferredFont(forTextStyle: .body)
-      view.font = fontFamily.flatMap { UIFont(name: $0, size: body.pointSize) } ?? body
-      view.textColor = .label
+      view.font = defaults.bodyFont(
+        family: fontFamily, legibility: context.environment.legibilityWeight)
+      view.adjustsFontForContentSizeCategory = true
+      view.textColor = UIColor(defaults.color(defaults.defaultForeground()))
     }
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: NativeEditingTextView, context: Context)
       -> CGSize?

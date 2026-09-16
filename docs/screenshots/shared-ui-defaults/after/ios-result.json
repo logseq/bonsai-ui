@@ -1,0 +1,39 @@
+{
+  "boldText" : true,
+  "capture" : "Active physical-device UIWindow.drawHierarchy; actual Note OCaml entrypoint",
+  "captureLegibility" : "regular",
+  "checks" : [
+    "Initial Cornell and 44-point button targets",
+    "Sheet material responds to the real document backdrop",
+    "Native search, empty state, clear and reading selection",
+    "Native scrolling exposes final content above anchored controls",
+    "Back, close and independent disclosure actions",
+    "Actual UIKit title\/body input and Done preserve edits",
+    "Theme, both insertions and named mock results",
+    "Fresh seed, 320-point width and larger text reflow"
+  ],
+  "darkerSystemColors" : false,
+  "error" : "",
+  "metrics" : {
+    "bottomControlsY" : 707,
+    "documentEndY" : 650.99999999999989,
+    "doneBottomY" : 60,
+    "editorBottomY" : 492,
+    "focusedSheetBackdropResponseRGB" : 0,
+    "focusedSheetFraction" : 0.97999999999999998,
+    "keyboardTopY" : 508,
+    "narrowLargeTextHeight" : 1396.6666666666665,
+    "narrowNormalHeight" : 938.33333333333326,
+    "scale" : 3,
+    "sheetAfterKeyboardRestorationRGBError" : 0,
+    "sheetBackdropResponseRGB" : 15,
+    "viewportHeight" : 844,
+    "viewportWidth" : 390
+  },
+  "reduceMotion" : false,
+  "reduceTransparency" : false,
+  "revision" : 33,
+  "status" : "passed",
+  "systemVersion" : "26.6.1",
+  "windowContrast" : 0
+}

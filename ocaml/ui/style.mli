@@ -41,17 +41,55 @@ module Text_truncation : sig
     | Middle
 end
 
+module Text_role : sig
+  type t =
+    | Body
+    | Page_title
+    | Sheet_title
+    | Editor_title
+    | Empty_title
+    | Caption
+    | Hint
+    | Section_label
+
+  module Private : sig
+    val to_int : t -> int
+  end
+end
+
+module Color_role : sig
+  type t =
+    | Primary
+    | Secondary
+    | Page
+    | Card
+    | Inset
+    | Search
+    | Border
+    | Shadow
+    | Material_tint
+
+  module Private : sig
+    val to_int : t -> int
+  end
+end
+
 module Text_style : sig
   type t
 
   (** Optional font size is positive and finite. Line spacing is a finite,
       non-negative point distance between lines, not a line-height multiplier.
-      Omitted font, color and spacing attributes inherit the native environment. *)
+      Explicit attributes override the selected semantic role. Omitted role and italic
+      inherit Theme. The library baseline selects Body; Hint and Section_label use
+      secondary foreground. Line spacing inherits unless supplied. Native Dynamic Type and legibility settings remain active. *)
   val create
     :  ?font_size:float
     -> ?font_weight:Font_weight.t
     -> ?line_spacing:float
     -> ?color:Color.t
+    -> ?role:Text_role.t
+    -> ?foreground:Color_role.t
+    -> ?italic:bool
     -> unit
     -> t
 
@@ -61,6 +99,9 @@ module Text_style : sig
       ; font_weight : Font_weight.t option
       ; line_spacing : float option
       ; color : int32 option
+      ; role : int
+      ; foreground : int option
+      ; italic : bool option
       }
 
     val view : t -> view
@@ -68,7 +109,7 @@ module Text_style : sig
 end
 
 (** A styled run in a single native attributed-text paragraph. Omitted font and
-    color attributes inherit the surrounding environment. Decoration flags add
+    color and italic attributes inherit the surrounding Theme/environment. Decoration flags add
     emphasis to this run. The optional point size must be finite and positive. *)
 module Text_span : sig
   type t
@@ -89,7 +130,7 @@ module Text_span : sig
       ; font_size : float option
       ; font_weight : Font_weight.t option
       ; color : int32 option
-      ; italic : bool
+      ; italic : bool option
       ; underline : bool
       ; strikethrough : bool
       }

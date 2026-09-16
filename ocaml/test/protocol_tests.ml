@@ -61,6 +61,7 @@ let counter_theme_operation =
         ; tint = Some 0xff6750a4l
         ; font_family = Some "Inter"
         ; control_size = 2
+        ; defaults = Bytes.make 96 '\000'
         }
     }
 ;;
@@ -138,7 +139,7 @@ let test_retired_scroll_header_nodes_are_rejected () =
        | Error error ->
          fail "retired scroll header failed for wrong reason: %s" error.message
        | Ok _ -> fail "retired scroll header node was accepted")
-    [ {|42 53 46 52 06 00 00 00 30 00 03 00
+    [ {|42 53 46 52 08 00 00 00 30 00 03 00
 07 00 00 00 00 00 00 00 01 00 00 00
 00 00 00 00 02 00 00 00 00 00 00 00
 77 00 00 00 00 00 00 00 00 00 00 00
@@ -152,7 +153,7 @@ ff 01 ef cd ab ff 02 00 00 00 01 01
 00 00 00 00 c0 4f 40 01 01 01 00 00
 00 00 00 a0 47 40 01 01 01 00 00 00
 00 00 00 11 40 00 0a 00 00 00 00|}
-    ; {|4253465206000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
+    ; {|4253465208000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
     ]
 ;;
 
@@ -160,7 +161,7 @@ let test_retired_navigation_bar_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-4253465206000000300003005a00000000000000010000000000000002000000
+4253465208000000300003005a00000000000000010000000000000002000000
 000000007b00000000000000000000000100000000036c000000010000000000
 00007300ff0f00000000000000000000020004000000486f6d65010107000000
 000110000000486f6d652064657374696e6174696f6e0800000053657474696e
@@ -178,7 +179,7 @@ let test_retired_route_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-42 53 46 52 06 00 00 00 30 00 03 00
+42 53 46 52 08 00 00 00 30 00 03 00
 49 00 00 00 00 00 00 00 04 00 00 00
 00 00 00 00 05 00 00 00 00 00 00 00
 a8 00 00 00 00 00 00 00 00 00 00 00
@@ -212,7 +213,12 @@ let test_application_theme_round_trip () =
             List.iter
               (fun (tint, font_family) ->
                  let theme : Wire_frame.theme =
-                   { mode; tint; font_family; control_size }
+                   { mode
+                   ; tint
+                   ; font_family
+                   ; control_size
+                   ; defaults = Bytes.make 96 '\000'
+                   }
                  in
                  let frame =
                    { counter_frame with
@@ -282,6 +288,9 @@ let test_styled_text_props_round_trip () =
               { font_size = Some 16.
               ; font_weight = Some Semi_bold
               ; line_spacing
+              ; role = 0
+              ; foreground = None
+              ; italic = Some false
               ; color = Some 0xff183758l
               }
         ; text_align = End
@@ -371,7 +380,7 @@ let test_rich_text_round_trip () =
     ; font_size = Some 22.
     ; font_weight = Some Semi_bold
     ; color = Some 0x80010203l
-    ; italic = true
+    ; italic = Some true
     ; underline = true
     ; strikethrough = true
     }
@@ -402,7 +411,7 @@ let test_rich_text_round_trip () =
         ; font_size = None
         ; font_weight = None
         ; color = None
-        ; italic = false
+        ; italic = Some false
         ; underline = false
         ; strikethrough = false
         }
@@ -526,6 +535,7 @@ let test_layout_native_and_semantics_props_round_trip () =
                     ; tint = Some 0xff6750a4l
                     ; font_family = None
                     ; control_size = 3
+                    ; defaults = Bytes.make 96 '\000'
                     }
               ; event_bindings = []
               }
@@ -2162,7 +2172,7 @@ let () =
   match
     Binary_codec.decode
       (bytes_of_hex
-         "4253465206000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
+         "4253465208000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
   with
   | Error { code = Binary_codec.Unknown_node_kind; _ } -> ()
   | Error error -> fail "retired fill failed for wrong reason: %s" error.message

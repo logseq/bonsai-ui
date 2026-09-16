@@ -7,6 +7,11 @@ not a reduced completion definition.
 Implementation units below are chronological checkpoints; later entries
 supersede earlier unresolved-status notes for the same capability.
 
+Historical commands retain the switch name used when each checkpoint ran.
+The host switch was renamed from `bonsai-flutter-v017-exact` to `bonsai-ui` on
+2026-09-16. Use `--switch=bonsai-ui` when reproducing those commands today;
+see [current testing commands](testing.md#local-commands).
+
 ## Latest complete Swift regression
 
 `python3 tool/run_swift_tests.py` passes 482 tests in 106 suites on macOS

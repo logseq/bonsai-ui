@@ -25,7 +25,7 @@ bigstringaf|0.10.0|https://github.com/inhabitedtype/bigstringaf/archive/0.10.0.t
 bin_prot|v0.17.0-1|https://github.com/janestreet/bin_prot/archive/refs/tags/v0.17.0.tar.gz|sha256|0e6c61aff150d19a0f89cb3e354ab36189e4bc23e28ab8bce03b6c6b6004f237
 bin_prot|v0.17.0-1|https://github.com/ocaml/opam-source-archives/raw/refs/heads/main/patches/bin_prot/remove-outdated-mirage-xen-cross-compilation-rules.patch|sha256|0c6fdc1a9377ae678895f237bae191ac458e507550063de143f1ee70a39ba318
 bonsai|v0.17.0|https://github.com/janestreet/bonsai/archive/refs/tags/v0.17.0.tar.gz|sha256|c78c4476ee6b856846e2d0941e5965009d5e1b853e564b2b1bee61202f0b1ebb
-bonsai_flutter|0.1.0~dev|https://github.com/RCmerci/bonsai_flutter/archive/308e1b8f5ee41cca23808e875a0c3e2df1a33860.tar.gz|sha256|b57cf03feb661e66e20e7e561c6830f12372b58edd2386fcb33c7adbe40bf106
+bonsai_swiftui|0.1.0~dev|file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16/bonsai-swiftui-0.1.0~dev.tar.gz|sha256|0f525256fa3985476c5e682e05f0ceddc45f5dc7c800be9c22de8102cadb1f05
 bos|0.3.0|https://erratique.ch/software/bos/releases/bos-0.3.0.tbz|sha512|77416442448462fb316b9b64ec213038153e82c6de030d511838a15bb13b80700598c1bcfae1c90ef766d4f42c9bf5dcf231eeff23709558246d7946962858cc
 ca-certs-nss|3.126|https://github.com/mirage/ca-certs-nss/releases/download/v3.126/ca-certs-nss-3.126.tbz|sha256|682a23c2c547c2af85084d75bb9844c5d9a7b8fddf90fa02ea4958eddce30204
 camlp-streams|5.0.1|https://github.com/ocaml/camlp-streams/archive/v5.0.1.tar.gz|sha512|2efa8dd4a636217c8d49bac1e4e7e5558fc2f45cfea66514140a59fd99dd08d61fb9f1e17804997ff648b71b13820a5d4a1eb70fed9d848aa2abd6e41f853c86
@@ -133,7 +133,7 @@ ocaml-compiler-libs|v0.12.4|https://github.com/janestreet/ocaml-compiler-libs/re
 ocaml-config|3|https://raw.githubusercontent.com/ocaml/ocaml/363fb9f5a2fb87dbd5f8cc579af87dd04e14343b/tools/opam/ocaml-config.install|sha256|6e4fd93f4cce6bad0ed3c08afd0248dbe7d7817109281de6294e5b5ef5597051
 ocaml-config|3|https://raw.githubusercontent.com/ocaml/ocaml/66f33f6e08857f3c3cb53fc1759fbad6860c59bd/tools/opam/gen_ocaml_config.ml.in|sha256|a9ad8d84a08961159653a978db92d10f694510182b206cacb96d5c9f63b5121e
 ocaml-embed-file|v0.17.0|https://github.com/janestreet/ocaml-embed-file/archive/refs/tags/v0.17.0.tar.gz|sha256|5df250e22a80bb21295555d6748b6cc925e886824eceb2e5c170235629ea7c46
-ocaml-ios64|5.1.1|https://github.com/ocaml/ocaml/archive/5.1.1.tar.gz|sha256|57f7b382b3d71198413ede405d95ef3506f1cdc480cda1dca1e26b37cb090e17
+ocaml-ios64|5.1.1|https://github.com/ocaml/ocaml/releases/download/5.1.1/ocaml-5.1.1.tar.gz|sha256|57f7b382b3d71198413ede405d95ef3506f1cdc480cda1dca1e26b37cb090e17
 ocaml-syntax-shims|1.0.0|https://github.com/ocaml-ppx/ocaml-syntax-shims/releases/download/1.0.0/ocaml-syntax-shims-1.0.0.tbz|sha256|89b2e193e90a0c168b6ec5ddf6fef09033681bdcb64e11913c97440a2722e8c8
 ocaml_intrinsics_kernel|v0.17.2|https://github.com/janestreet/ocaml_intrinsics_kernel/archive/refs/tags/v0.17.2.tar.gz|sha512|21397340656d9fbe8dc079d5772bb4ca3e9c8c9c235fe2bddbbabe75fff7d38afc95f10d16f71ad0ab67f9e6fcb4ce08bece8b56cb2b37904c7210c45aa44bb5
 ocamlbuild|0.16.1|https://github.com/ocaml/ocamlbuild/archive/refs/tags/0.16.1.tar.gz|sha512|e918b9a0081f271e507c7a4f4d5d5a7cdf818ca51c52acec1bac85ddad5f6cad078cb3c568252fbcf5401c2d75323ed8f50fdd881bda1c9632840320408393ae

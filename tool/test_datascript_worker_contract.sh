@@ -148,7 +148,7 @@ require_text \
   "DataScript SQLite system-library guard"
 require_text \
   "$toolchain_lock" \
-  "IOS_RUNTIME_RECIPE_REVISION='6'" \
+  "IOS_RUNTIME_RECIPE_REVISION='7'" \
   "DataScript SQLite runtime recipe revision"
 
 if test -f "$datascript_sqlite_patch"; then
@@ -203,24 +203,24 @@ reject_file \
 sdk_repository_lock=$(cat tool/ios/sdk_repository.lock 2>/dev/null)
 require_text "$sdk_repository_lock" "SDK_ABI_VERSION='3'" \
   "ppx_deriving_yojson SDK ABI version"
-require_text "$sdk_repository_lock" "SDK_BUILD_RECIPE_REVISION='4'" \
+require_text "$sdk_repository_lock" "SDK_BUILD_RECIPE_REVISION='5'" \
   "ppx_deriving_yojson SDK build recipe revision"
-require_text "$sdk_repository_lock" "SDK_RUNTIME_PACKAGE_VERSION='0.1.0~dev.6'" \
+require_text "$sdk_repository_lock" "SDK_RUNTIME_PACKAGE_VERSION='0.1.0~dev.7'" \
   "DataScript runtime SDK version"
-require_text "$sdk_repository_lock" "SDK_PACKAGE_VERSION='0.1.0~dev.38'" \
+require_text "$sdk_repository_lock" "SDK_PACKAGE_VERSION='0.1.0~dev.40'" \
   "DataScript framework SDK version"
 
 sdk_packages=tool/ios/opam-repository/0.1.0/packages
-runtime_sdk="$sdk_packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.6"
-framework_sdk="$sdk_packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.38"
+runtime_sdk="$sdk_packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.7"
+framework_sdk="$sdk_packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.40"
 require_file "$runtime_sdk/opam"
 require_file "$runtime_sdk/files/supported-closure.lock"
 require_file "$framework_sdk/opam"
 require_file "$framework_sdk/files/manifest.sexp"
 reject_file \
-  "$sdk_packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.5"
+  "$sdk_packages/bonsai_swiftui_ios_runtime_sdk/bonsai_swiftui_ios_runtime_sdk.0.1.0~dev.6"
 reject_file \
-  "$sdk_packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.37"
+  "$sdk_packages/bonsai_swiftui_ios_sdk/bonsai_swiftui_ios_sdk.0.1.0~dev.38"
 package_universe=$(cat tool/ios/opam-repository/0.1.0/package-universe.lock 2>/dev/null)
 require_text "$package_universe" 'ppx_deriving|6.0.3|default|' \
   "ppx_deriving immutable package metadata"

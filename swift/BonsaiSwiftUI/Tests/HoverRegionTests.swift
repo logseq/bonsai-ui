@@ -98,7 +98,7 @@ extension TreeFixture {
     let tree = RenderTree()
     tree.commit(store)
     let actual = try raster(NativeNodeView(node: #require(tree.root), activate: { _ in }))
-    let expected = try raster(Text("Hover target"))
+    let expected = try raster(Text("Hover target").font(.system(size: 17)))
     // ImageRenderer paints a placeholder for embedded NSViews; only geometry is comparable here.
     #expect(actual.width == expected.width && actual.height == expected.height)
     let update = TreeFixture.hoverRegion(blocks: 0, update: true)

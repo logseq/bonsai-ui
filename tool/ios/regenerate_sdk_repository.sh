@@ -16,13 +16,22 @@ fail() {
   exit 1
 }
 
-mode=${1:---write}
-case "$mode" in
-  --check | --write) ;;
-  *) fail "usage: $0 [--check|--write]" ;;
-esac
+mode=--write
+source_archive=
+while test "$#" -gt 0; do
+  case "$1" in
+    --check | --write) mode=$1; shift ;;
+    --source-archive)
+      test "$#" -ge 2 || fail "--source-archive requires a path"
+      source_archive=$2; shift 2 ;;
+    --output)
+      test "$#" -ge 2 || fail "--output requires a path"
+      output_repository=$2; shift 2 ;;
+    *) fail "usage: $0 [--check|--write] [--source-archive PATH] [--output PATH]" ;;
+  esac
+done
 
-for command in awk cp diff find git jq mkdir mktemp sed shasum sort; do
+for command in awk cp diff find git jq mkdir mktemp opam python3 sed shasum sort; do
   command -v "$command" >/dev/null 2>&1 || fail "required command is unavailable: $command"
 done
 
@@ -57,13 +66,42 @@ ensure_checkout() {
     fail "repository checkout did not resolve locked commit: $checkout"
 }
 
-# Package metadata must describe the archive revision, not HEAD or a dirty checkout.
-test "$(printf '%s' "$BONSAI_SWIFTUI_SOURCE_REVISION" | tr -d '0-9a-f' | wc -c | tr -d ' ')" = 0 &&
-  test "${#BONSAI_SWIFTUI_SOURCE_REVISION}" -eq 40 ||
-  fail "framework source revision must be a full commit ID"
-git -C "$repository_root" show "$BONSAI_SWIFTUI_SOURCE_REVISION:bonsai_swiftui.opam" \
-  > "$temporary_directory/framework.opam" 2>/dev/null ||
-  fail "locked source lacks bonsai_swiftui.opam: $BONSAI_SWIFTUI_SOURCE_REVISION"
+# Package metadata and identity must describe the selected immutable input.
+if test -n "$source_archive"; then
+  python3 - "$source_archive" "$temporary_directory/framework.opam" <<'PY_SOURCE'
+from pathlib import Path, PurePosixPath
+import sys
+import tarfile
+try:
+    with tarfile.open(sys.argv[1]) as archive:
+        members = archive.getmembers()
+        for member in members:
+            path = PurePosixPath(member.name)
+            if path.is_absolute() or ".." in path.parts or not (member.isfile() or member.isdir()):
+                raise ValueError("unsafe archive member: " + member.name)
+        candidates = [m for m in members if m.isfile()
+                      and len(PurePosixPath(m.name).parts) == 2
+                      and PurePosixPath(m.name).name == "bonsai_swiftui.opam"]
+        if len(candidates) != 1:
+            raise ValueError("expected one top-level bonsai_swiftui.opam")
+        Path(sys.argv[2]).write_bytes(archive.extractfile(candidates[0]).read())
+except (OSError, ValueError, tarfile.TarError) as error:
+    raise SystemExit("Invalid framework source archive: " + str(error))
+PY_SOURCE
+  archive_version=$(opam show --just-file "$temporary_directory/framework.opam" --field=version)
+  test "$archive_version" = "$BONSAI_SWIFTUI_VERSION" || fail "source archive package version differs from SDK version"
+  BONSAI_SWIFTUI_SOURCE_SHA256=$(shasum -a 256 "$source_archive" | awk '{print $1}')
+  BONSAI_SWIFTUI_SOURCE_REVISION="archive-sha256-$BONSAI_SWIFTUI_SOURCE_SHA256"
+  framework_source_url=$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "$source_archive")
+else
+  test "$(printf '%s' "$BONSAI_SWIFTUI_SOURCE_REVISION" | tr -d '0-9a-f' | wc -c | tr -d ' ')" = 0 &&
+    test "${#BONSAI_SWIFTUI_SOURCE_REVISION}" -eq 40 ||
+    fail "framework source revision must be a full commit ID"
+  git -C "$repository_root" show "$BONSAI_SWIFTUI_SOURCE_REVISION:bonsai_swiftui.opam" \
+    > "$temporary_directory/framework.opam" 2>/dev/null ||
+    fail "locked source lacks bonsai_swiftui.opam: $BONSAI_SWIFTUI_SOURCE_REVISION"
+  framework_source_url="https://github.com/RCmerci/bonsai_flutter/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz"
+fi
 
 default_checkout="$cache_root/opam-repository"
 cross_checkout="$cache_root/opam-cross-ios"
@@ -95,7 +133,7 @@ framework_url="$framework_source_package/url"
 {
   printf '%s\n' \
     'src:' \
-    "  \"https://github.com/RCmerci/bonsai_flutter/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz\"" \
+    "  \"$framework_source_url\"" \
     'checksum:' \
     "  \"sha256=$BONSAI_SWIFTUI_SOURCE_SHA256\""
 } > "$framework_url"
@@ -140,6 +178,9 @@ jq -Rn \
 
 framework_package_directory="$framework_packages/bonsai_swiftui_ios_sdk.$SDK_PACKAGE_VERSION"
 runtime_package_directory="$runtime_packages/bonsai_swiftui_ios_runtime_sdk.$SDK_RUNTIME_PACKAGE_VERSION"
+SDK_SOURCE_REVISION="$BONSAI_SWIFTUI_SOURCE_REVISION" \
+SDK_SOURCE_SHA256="$BONSAI_SWIFTUI_SOURCE_SHA256" \
+SDK_SOURCE_URL="$framework_source_url" \
 "$script_directory/generate_package_universe.sh" \
   "$solution_json" \
   "$repository_cache" \

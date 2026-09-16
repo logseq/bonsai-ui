@@ -141,7 +141,7 @@ rule out layout defects; the complete window capture is still required.
 Run from this worktree:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- dune build @all
+opam exec --switch=bonsai-ui -- dune build @all
 BONSAI_MAIL_CAPTURE_DIRECTORY=/tmp/mail-content-export \
   python3 native/test/test_mail_window.py
 ```

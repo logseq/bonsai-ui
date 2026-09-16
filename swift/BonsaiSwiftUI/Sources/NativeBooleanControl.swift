@@ -91,7 +91,8 @@ struct NativeBooleanControl: View {
   let activate: @MainActor (RenderNodeState) -> Void
   private var toggle: some View {
     Toggle(isOn: controller.binding(emit: node.emit)) {
-      NativeNodeView(node: node.children[0], activate: activate).allowsHitTesting(false)
+      NativeNodeView(node: node.children[0], activate: activate)
+        .modifier(NativeInteractiveBounds()).allowsHitTesting(false)
     }.accessibilityElement(children: .combine).disabled(!properties.enabled)
   }
   @ViewBuilder var body: some View {
@@ -103,7 +104,8 @@ struct NativeBooleanControl: View {
           .accessibilityHidden(!controller.value)
       } label: {
         NativeNodeView(node: node.children[0], activate: activate)
-          .allowsHitTesting(false).accessibilityElement(children: .combine)
+          .modifier(NativeInteractiveBounds()).allowsHitTesting(false).accessibilityElement(
+            children: .combine)
       }.disabled(!properties.enabled)
     case .toggle(let style):
       switch style {
@@ -123,15 +125,17 @@ struct NativeBooleanControl: View {
 
 #if os(iOS)
   private struct ChecklistToggleStyle: ToggleStyle {
+    @Environment(\.bonsaiDefaults) private var defaults
     func makeBody(configuration: Configuration) -> some View {
       Button {
         configuration.isOn.toggle()
       } label: {
         HStack {
           Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
+            .font(.system(size: defaults.metric(0)))
           configuration.label
         }
-        .frame(minHeight: 44)
+        .modifier(NativeInteractiveBounds())
         .contentShape(Rectangle())
       }
       .buttonStyle(.plain)

@@ -84,7 +84,7 @@ layout and event behavior, not runtime screenshots or physical elastic gestures.
 
 - `swift test --scratch-path _build/swift --filter ScrollSectionsTests`
 - `swift test --scratch-path _build/swift --filter actualSections`
-- `opam exec --switch=bonsai-flutter-v017-exact -- dune build @all @runtest @fmt`
+- `opam exec --switch=bonsai-ui -- dune build @all @runtest @fmt`
 
 The OCaml public API test covers stable header slots, duplicate keys, invalid
 spacing and hero placement/heights. The protocol regression embeds valid retired

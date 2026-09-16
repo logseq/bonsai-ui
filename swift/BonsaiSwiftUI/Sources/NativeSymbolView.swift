@@ -16,7 +16,7 @@ struct RenderSymbol: Equatable, Sendable {
     else { throw TreeError.invalidProperties }
     let size = try reader.positiveOptionalDouble()
     let color = try reader.flag() ? reader.integer(UInt32.self) : nil
-    let rendering = try reader.choice(2)
+    let rendering = try reader.choice(3)
     #if os(macOS)
       let available = NSImage(systemSymbolName: name, accessibilityDescription: nil) != nil
     #else
@@ -29,9 +29,10 @@ struct RenderSymbol: Equatable, Sendable {
 
 struct NativeSymbolView: View {
   let symbol: RenderSymbol
+  @Environment(\.bonsaiDefaults) private var defaults
 
   private var mode: SymbolRenderingMode {
-    switch symbol.rendering {
+    switch symbol.rendering == 3 ? defaults.defaultSymbolRendering() : symbol.rendering {
     case 1: .hierarchical
     case 2: .multicolor
     default: .monochrome
@@ -40,11 +41,7 @@ struct NativeSymbolView: View {
 
   @ViewBuilder private var image: some View {
     let image = Image(systemName: symbol.name).symbolRenderingMode(mode)
-    if let size = symbol.size {
-      image.font(.system(size: size))
-    } else {
-      image
-    }
+    image.font(.system(size: symbol.size ?? defaults.metric(0)))
   }
 
   @ViewBuilder var body: some View {

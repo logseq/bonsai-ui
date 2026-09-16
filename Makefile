@@ -22,9 +22,11 @@ fmt:
 	dune build @fmt
 
 protocol-generate:
+	python3 tool/generate_ui_defaults.py
 	dune exec protocol/generator/generate.exe --
 
 protocol-check:
+	python3 tool/generate_ui_defaults.py --check
 	dune exec protocol/generator/generate.exe -- --check
 
 protocol-fixtures-generate:

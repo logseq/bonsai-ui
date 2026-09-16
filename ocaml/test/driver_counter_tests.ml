@@ -1237,6 +1237,23 @@ let test_application_platform_shutdown_resolves_pending () =
 ;;
 
 let test_application_theme_is_atomic_and_diffed_independently () =
+  let theme_defaults size =
+    Ui.Theme.Defaults.create
+      ~symbol_size:size
+      ~shadow_x:(-2.)
+      ~shadow_alpha:0.3
+      ~material_alpha:0.25
+      ~symbol_rendering:Hierarchical
+      ~text_role:Caption
+      ~text_foregrounds:[ Hint, Primary ]
+      ~text_italics:[ Hint, true ]
+      ~surface_materials:[ Material_action_group, Regular ]
+      ~surface_shapes:[ Material_action_group, Rounded ]
+      ~surface_backgrounds:[ Material_action_group, Card ]
+      ~surface_opacities:[ Translucent_sheet, 0.75 ]
+      ~surface_tint_alphas:[ Translucent_sheet, 0.5 ]
+      ()
+  in
   let component handlers graph =
     let dark, set_dark = Bonsai_v017.state ~equal:Bool.equal false graph in
     let toggle =
@@ -1246,7 +1263,11 @@ let test_application_theme_is_atomic_and_diffed_independently () =
     Bonsai.Cont.map2 dark toggle ~f:(fun dark toggle ->
       let mode = if dark then Ui.Theme.Dark else Ui.Theme.Light in
       Driver.View.create
-        ~theme:(Ui.Theme.create ~mode ())
+        ~theme:
+          (Ui.Theme.create
+             ~mode
+             ~defaults:(theme_defaults (if dark then 31. else 21.))
+             ())
         ~body:
           (Ui.View.Body.static
              (Ui.View.button ~on_press:toggle ~child:(Ui.View.text "Theme body") ())))
@@ -1300,7 +1321,15 @@ let test_application_theme_is_atomic_and_diffed_independently () =
          | _ -> true)
        (decode_frame update.bytes).operations
    with
-   | [ Protocol.Wire_frame.Set_application_theme { theme = { mode = Dark; _ }; _ } ] -> ()
+   | [ Protocol.Wire_frame.Set_application_theme
+         { theme = { mode = Dark; defaults; _ }; _ }
+     ] ->
+     let expected =
+       Ui.Theme.Private.view (Ui.Theme.create ~defaults:(theme_defaults 31.) ())
+     in
+     require
+       (Bytes.equal defaults expected.defaults)
+       "theme defaults did not reach the wire"
    | _ -> fail "theme-only state change emitted widget operations or omitted theme update");
   ok (present driver ~revision:update.revision);
   (match ok (pump driver ()) with

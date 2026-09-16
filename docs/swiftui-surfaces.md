@@ -24,7 +24,8 @@ Surface.create
 - `Ultra_thin_material`, `Thin_material` and `Regular_material` composite their ARGB tint over native
   SwiftUI material. With Reduce Transparency enabled, the same RGB tint becomes
   opaque. This accessibility behavior does not depend on application state.
-- `opacity` defaults to 1 and accepts a finite value in [0, 1]. It affects the
+- Omitted `opacity` inherits the Theme recipe (baseline 1, or 0.4 for
+  Translucent_sheet). Explicit values must be finite and in [0, 1]. It affects the
   painted background only, preserving child text and controls at full opacity.
   Material opacity is forced to 1 under Reduce Transparency. To make a panel more
   transparent, use Ultra thin, reduce the tint alpha, and lower background opacity.
@@ -45,7 +46,7 @@ Surface.create
 
 ## Native envelope
 
-Standard native-widget kind **8**, schema version **2**, capabilities **0**.
+Standard native-widget kind **8**, schema version **3**, capabilities **0**.
 Applications cannot replace this reserved registration. The normal native-widget
 bridge carries its payload and retained child; there is no Note-specific protocol
 or renderer branch.
@@ -53,9 +54,20 @@ or renderer branch.
 All numbers are little endian. The payload contains:
 
 1. Fill byte: solid 0, linear 1, angular 2, thin material 3, regular material 4, ultra thin material 5.
-2. Color-count byte, presentation-background Boolean byte, reserved zero byte.
+2. Color-count byte; flags byte (bit 0 presentation background, bit 1 content
+   inset, bit 2 capsule, bit 3 explicit shape); recipe byte (0 raw, 1 Plain,
+   2 Material_action_group, 3 Content_card, 4 Inset_section, 5 Translucent_sheet,
+   6 Search).
 3. Six Float64 values: corner radius, shadow radius, shadow X, shadow Y, border width, opacity.
 4. UInt32 ARGB shadow and border colors, followed by the fill colors.
+5. UInt16 override mask: bits 0–5 select the six numeric properties in order,
+   bit 6 shadow color, bit 7 border color, bit 8 fill. Omitted recipe properties
+   resolve through the nearest Theme. A raw surface uses the Unstyled Theme role
+   for omitted properties; explicitly masked payload values always win.
+
+See [Shared UI defaults](theme.md) for recipes, named metrics and precedence.
+Action-group padding and the optional content inset participate in layout;
+ordinary raw paint has no implicit padding. Version 2 payloads are rejected.
 
 The Swift decoder rejects invalid flags, modes, counts, nonfinite dimensions,
 negative radii, invalid opacity, trailing bytes and truncated payloads before publishing a tree.

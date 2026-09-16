@@ -148,7 +148,7 @@ struct NativePicker: View {
       #if os(macOS)
         popup
       #else
-        picker.pickerStyle(.menu)
+        picker.pickerStyle(.menu).modifier(NativeInteractiveBounds())
       #endif
     case 2:
       #if os(macOS)
@@ -161,20 +161,20 @@ struct NativePicker: View {
           .frame(height: 28).disabled(!properties.enabled)
         }
       #else
-        picker.pickerStyle(.segmented)
+        picker.pickerStyle(.segmented).modifier(NativeInteractiveBounds())
       #endif
     case 3:
       #if os(macOS)
         NativeInlinePicker(
           node: node, properties: properties, controller: controller, activate: activate)
       #else
-        picker.pickerStyle(.inline)
+        picker.pickerStyle(.inline).modifier(NativeInteractiveBounds())
       #endif
     default:
       #if os(macOS)
         popup
       #else
-        picker.pickerStyle(.automatic)
+        picker.pickerStyle(.automatic).modifier(NativeInteractiveBounds())
       #endif
     }
   }

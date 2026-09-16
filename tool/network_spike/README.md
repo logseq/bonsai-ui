@@ -44,7 +44,7 @@ The following exact packages resolve without changing the pinned Bonsai family:
 Verify the solver result with:
 
 ```sh
-opam install --dry-run --switch=bonsai-flutter-v017-exact \
+opam install --dry-run --switch=bonsai-ui \
   tls-eio.2.1.2 tls.2.1.2 ca-certs-nss.3.126 \
   httpun.0.2.0 httpun-eio.0.2.0 httpun-ws.0.2.0 gluten-eio.0.5.2
 ```
@@ -54,14 +54,14 @@ opam install --dry-run --switch=bonsai-flutter-v017-exact \
 Run the deterministic loopback suite:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- \
+opam exec --switch=bonsai-ui -- \
   dune runtest tool/network_spike --force
 ```
 
 Run the explicit public-network smoke test separately:
 
 ```sh
-opam exec --switch=bonsai-flutter-v017-exact -- \
+opam exec --switch=bonsai-ui -- \
   dune exec tool/network_spike/network_spike_cli.exe
 ```
 

@@ -56,12 +56,67 @@ module Text_truncation = struct
     | Middle
 end
 
+module Text_role = struct
+  type t =
+    | Body
+    | Page_title
+    | Sheet_title
+    | Editor_title
+    | Empty_title
+    | Caption
+    | Hint
+    | Section_label
+
+  module Private = struct
+    let to_int = function
+      | Body -> 0
+      | Page_title -> 1
+      | Sheet_title -> 2
+      | Editor_title -> 3
+      | Empty_title -> 4
+      | Caption -> 5
+      | Hint -> 6
+      | Section_label -> 7
+    ;;
+  end
+end
+
+module Color_role = struct
+  type t =
+    | Primary
+    | Secondary
+    | Page
+    | Card
+    | Inset
+    | Search
+    | Border
+    | Shadow
+    | Material_tint
+
+  module Private = struct
+    let to_int = function
+      | Primary -> 0
+      | Secondary -> 1
+      | Page -> 2
+      | Card -> 3
+      | Inset -> 4
+      | Search -> 5
+      | Border -> 6
+      | Shadow -> 7
+      | Material_tint -> 8
+    ;;
+  end
+end
+
 module Text_style = struct
   type t =
     { font_size : float option
     ; font_weight : Font_weight.t option
     ; line_spacing : float option
     ; color : Color.t option
+    ; role : int
+    ; foreground : int option
+    ; italic : bool option
     }
 
   let positive_finite label = function
@@ -84,11 +139,14 @@ module Text_style = struct
       Some value
   ;;
 
-  let create ?font_size ?font_weight ?line_spacing ?color () =
+  let create ?font_size ?font_weight ?line_spacing ?color ?role ?foreground ?italic () =
     { font_size = positive_finite "font_size" font_size
     ; font_weight
     ; line_spacing = nonnegative_finite "line_spacing" line_spacing
     ; color
+    ; role = Option.fold ~none:8 ~some:Text_role.Private.to_int role
+    ; foreground = Option.map Color_role.Private.to_int foreground
+    ; italic
     }
   ;;
 
@@ -98,6 +156,9 @@ module Text_style = struct
       ; font_weight : Font_weight.t option
       ; line_spacing : float option
       ; color : int32 option
+      ; role : int
+      ; foreground : int option
+      ; italic : bool option
       }
 
     let view (t : t) : view =
@@ -105,6 +166,9 @@ module Text_style = struct
       ; font_weight = t.font_weight
       ; line_spacing = t.line_spacing
       ; color = Option.map Color.Private.to_argb32 t.color
+      ; role = t.role
+      ; foreground = t.foreground
+      ; italic = t.italic
       }
     ;;
   end
@@ -116,7 +180,7 @@ module Text_span = struct
     ; font_size : float option
     ; font_weight : Font_weight.t option
     ; color : Color.t option
-    ; italic : bool
+    ; italic : bool option
     ; underline : bool
     ; strikethrough : bool
     }
@@ -125,7 +189,7 @@ module Text_span = struct
         ?font_size
         ?font_weight
         ?color
-        ?(italic = false)
+        ?italic
         ?(underline = false)
         ?(strikethrough = false)
         value
@@ -144,7 +208,7 @@ module Text_span = struct
       ; font_size : float option
       ; font_weight : Font_weight.t option
       ; color : int32 option
-      ; italic : bool
+      ; italic : bool option
       ; underline : bool
       ; strikethrough : bool
       }

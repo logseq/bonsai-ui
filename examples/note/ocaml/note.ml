@@ -268,32 +268,12 @@ let full =
     ~alignment:Ui.Layout.Alignment.Center_start
 ;;
 
-let label
-      ?(size = 17.)
-      ?(bold = false)
-      ?(weight = Ui.Style.Font_weight.Normal)
-      ?(color = ink)
-      value
-  =
-  V.text
-    ~style:
-      (Ui.Style.Text_style.create
-         ~font_size:size
-         ~font_weight:(if bold then Bold else weight)
-         ~color
-         ~line_spacing:4.
-         ())
-    value
-;;
-
-let column ?(spacing = 16.) children = V.column ~alignment:Leading ~spacing children
 let gap n = V.spacer ~min_length:0. () |> V.frame ~height:n
 
 let semantic name child =
   V.semantics ~properties:(Ui.Semantics.create ~label:name ()) child
 ;;
 
-let symbol ?(size = 19.) name = V.symbol ~name ~size ~color:ink ()
 let handler hs name = List.assoc name hs
 
 let button hs id name child =
@@ -301,21 +281,20 @@ let button hs id name child =
     ~key:(key id)
     ~style:Plain
     ~on_press:(handler hs id)
-    ~child:(child |> V.frame ~min_width:44. ~min_height:44. |> semantic name)
+    ~child:(child |> semantic name)
     ()
   |> tid id
 ;;
 
-let icon_button hs id name icon = button hs id name (symbol icon)
+let icon_button hs id name icon = button hs id name (V.symbol ~name:icon ())
 
 let menu hs id name binding icon items =
   V.Menu.create
     ~key:(key id)
     ~on_select:(handler hs binding)
-    ~label:(icon |> V.frame ~min_width:44. ~min_height:44. |> semantic name)
-    (List.map (fun (id, text) -> V.Menu.action ~id ~label:(label text) ()) items)
+    ~label:(icon |> semantic name)
+    (List.map (fun (id, text) -> V.Menu.action ~id ~label:(V.text text) ()) items)
   |> tid id
-  |> V.frame ~min_width:44. ~min_height:44.
 ;;
 
 let palette = function
@@ -331,15 +310,26 @@ let palette = function
     , [ rgb 0xd6c4e0; rgb 0xf2ccdf; rgb 0xe4c4da; rgb 0xbccddb ] )
 ;;
 
-let glass theme child =
-  let _, _, tint, _ = palette theme in
-  S.create
-    ~corner_radius:30.
-    ~fill:(S.Thin_material tint)
-    ~border_color:(alpha 110 0xffffff)
-    ~border_width:0.7
-    ~shadow:(S.shadow ~color:(alpha 40 0x563520) ~radius:14. ~y:6. ())
-    child
+let shared_theme theme =
+  let page, block, tint, _ = palette theme in
+  Ui.Theme.create
+    ~mode:Light
+    ~tint:ink
+    ~defaults:
+      (Ui.Theme.Defaults.create
+         ~colors:
+           [ Primary, ink
+           ; Secondary, muted
+           ; Page, page
+           ; Card, page
+           ; Inset, block
+           ; Search, alpha 75 0xbfc0c6
+           ; Border, alpha 110 0xffffff
+           ; Shadow, alpha 40 0x563520
+           ; Material_tint, tint
+           ]
+         ())
+    ()
 ;;
 
 let input
@@ -401,28 +391,18 @@ let input
   else Fun.id
 ;;
 
-let italic_hint size value =
-  V.rich_text
-    [ Ui.Style.Text_span.create
-        ~font_size:size
-        ~font_weight:Normal
-        ~color:muted
-        ~italic:true
-        value
-    ]
-;;
-
 let divider () = V.divider ()
 
 let dots () =
-  label ~color:(rgb 0xb5a88f) "·  ·  ·"
+  V.text ~style:(Ui.Style.Text_style.create ~color:(rgb 0xb5a88f) ()) "·  ·  ·"
   |> V.frame ~max_width:Fill ~alignment:Center
   |> inset ~v:3.
 ;;
 
 let disclosure hs state id name text =
   let expanded = List.mem id state.expanded in
-  column
+  V.column
+    ~alignment:Leading
     ~spacing:6.
     ([ V.button
          ~key:(key ("disclosure-" ^ id))
@@ -431,40 +411,50 @@ let disclosure hs state id name text =
          ~child:
            (V.row
               ~spacing:12.
-              [ symbol ~size:10. (if expanded then "chevron.down" else "chevron.right")
-              ; label name
+              [ V.symbol
+                  ~name:(if expanded then "chevron.down" else "chevron.right")
+                  ~size:10.
+                  ()
+              ; V.text name
               ]
             |> full
-            |> V.frame ~min_height:44.
             |> semantic (name ^ if expanded then ", expanded" else ", collapsed"))
          ()
        |> tid ("disclosure-" ^ id)
      ]
      @
      if expanded
-     then [ label ~size:16. text |> tid ("details-" ^ id) |> inset ~h:20. ]
+     then
+       [ V.text ~style:(Ui.Style.Text_style.create ~font_size:16. ()) text
+         |> tid ("details-" ^ id)
+         |> inset ~h:20.
+       ]
      else [])
 ;;
 
 let cornell hs state =
-  let _, block, _, _ = palette state.theme in
-  let section child =
-    child |> pad 14. |> full |> V.background ~corner_radius:8. ~color:block
-  in
-  column
+  let section child = child |> pad 14. |> full |> S.create ~recipe:Inset_section in
+  V.column
+    ~alignment:Leading
     ~spacing:14.
-    [ label ~size:23. ~bold:true "Lesson Title" |> section
+    [ V.text
+        ~style:(Ui.Style.Text_style.create ~font_size:23. ~font_weight:Bold ())
+        "Lesson Title"
+      |> section
     ; V.column
         ~alignment:Trailing
         ~spacing:2.
-        [ label ~size:13. ~color:muted "Date:"
-        ; italic_hint 13. "Use “/today” to insert date"
+        [ V.text ~style:(Ui.Style.Text_style.create ~role:Hint ()) "Date:"
+        ; V.text
+            ~style:(Ui.Style.Text_style.create ~role:Hint ~italic:true ())
+            "Use “/today” to insert date"
         ]
       |> V.frame ~max_width:Fill ~alignment:Center_end
       |> inset ~h:8. ~v:2.
-    ; column
+    ; V.column
+        ~alignment:Leading
         ~spacing:4.
-        [ label ~size:17. "Main notes"
+        [ V.text "Main notes"
         ; disclosure
             hs
             state
@@ -480,62 +470,80 @@ let cornell hs state =
         ]
       |> section
     ; dots ()
-    ; column
-        ~spacing:16.
-        [ label ~size:17. "Key words / Concepts"
-        ; italic_hint
-            13.
+    ; V.column
+        ~alignment:Leading
+        [ V.text "Key words / Concepts"
+        ; V.text
+            ~style:(Ui.Style.Text_style.create ~role:Hint ~italic:true ())
             "Use “Assistant” with the prompt “Suggest Key words, Important Terms, and \
              Definitions based on Main notes & Key thoughts”"
-        ; label "•    ...\n•    ...\n•    ..."
+        ; V.text "•    ...\n•    ...\n•    ..."
         ]
       |> section
     ; dots ()
-    ; column [ label ~size:19. "Summary"; label (contents state.body) ] |> section
+    ; V.column
+        ~alignment:Leading
+        [ V.text ~style:(Ui.Style.Text_style.create ~font_size:19. ()) "Summary"
+        ; V.text (contents state.body)
+        ]
+      |> section
     ]
 ;;
 
 let cover ?(height = 206.) () =
   V.image ~sizing:Fill ~source:(Ui.Style.Image_source.resource "typewriter.png") ()
   |> V.frame ~max_width:Fill ~height
-  |> V.clip ~corner_radius:8.
+  |> V.clip ~corner_radius:Ui.Theme.Defaults.Values.small_corner
 ;;
 
 let document hs state =
-  let page, _, _, _ = palette state.theme in
   let title_view =
     if state.fixture = Cornell
     then
       V.row
         ~spacing:4.
-        [ label ~size:22. ~bold:true (contents state.title) |> full
-        ; label ~size:12. ~bold:true "◯₆" |> semantic "Decorative count ornament"
+        [ V.text
+            ~style:(Ui.Style.Text_style.create ~role:Editor_title ())
+            (contents state.title)
+          |> full
+        ; V.text
+            ~style:(Ui.Style.Text_style.create ~font_size:12. ~font_weight:Bold ())
+            "◯₆"
+          |> semantic "Decorative count ornament"
         ]
-    else label ~size:24. ~bold:true (contents state.title) |> full
+    else
+      V.text
+        ~style:(Ui.Style.Text_style.create ~role:Page_title ())
+        (contents state.title)
+      |> full
   in
   let content =
     (if state.fixture = Reading then [ cover () ] else [])
     @ [ title_view; divider () ]
     @ (if state.fixture = Cornell
        then [ cornell hs state ]
-       else [ label ~size:17. (contents state.body) ])
+       else
+         [ V.text
+             ~style:(Ui.Style.Text_style.create ~line_spacing:4. ())
+             (contents state.body)
+         ])
     @ List.map
         (fun b ->
            (if b.checklist
-            then V.row [ symbol ~size:16. "square"; label "Review this note" ]
-            else label "A new paragraph to explore.")
+            then V.row [ V.symbol ~name:"square" ~size:16. (); V.text "Review this note" ]
+            else V.text "A new paragraph to explore.")
            |> tid ("inserted-" ^ string_of_int b.id))
         state.blocks
-    @ [ gap 12.; label ~size:12. ~color:muted "End of document" |> tid "document-end" ]
+    @ [ gap 12.
+      ; V.text
+          ~style:(Ui.Style.Text_style.create ~role:Section_label ())
+          "End of document"
+        |> tid "document-end"
+      ]
   in
-  column ~spacing:18. content
-  |> pad 18.
+  V.column ~alignment:Leading ~spacing:18. content
   |> full
-  |> S.create
-       ~corner_radius:20.
-       ~fill:(Solid page)
-       ~border_color:(alpha 50 0xffffff)
-       ~border_width:0.7
+  |> S.create ~recipe:Content_card ~content_inset:true ~border_color:(alpha 50 0xffffff)
   |> tid "document-card"
   |> inset ~h:16.
 ;;
@@ -558,10 +566,12 @@ let ring () =
        ~overlay:
          (V.spacer ~min_length:0. ()
           |> V.frame ~width:16. ~height:16.
-          |> V.background ~corner_radius:8. ~color:(rgb 0xf3eadf))
+          |> V.background
+               ~corner_radius:Ui.Theme.Defaults.Values.small_corner
+               ~color:(rgb 0xf3eadf))
 ;;
 
-let bottom hs state =
+let bottom hs =
   V.row
     ~spacing:0.
     [ V.row
@@ -571,62 +581,59 @@ let bottom hs state =
             "tools-menu"
             "Document tools"
             "tools"
-            (symbol "text.magnifyingglass")
+            (V.symbol ~name:"text.magnifyingglass" ())
             [ 1L, "Word count"; 2L, "Reading focus" ]
         ; menu
             hs
             "format-menu"
             "Text and page style"
             "format"
-            (symbol "paintbrush.pointed")
+            (V.symbol ~name:"paintbrush.pointed" ())
             [ 1L, "Text style"; 2L, "Page layout" ]
         ; icon_button hs "edit" "Edit note" "pencil"
         ]
-      |> inset ~h:7. ~v:2.
-      |> glass state.theme
+      |> S.create ~recipe:Material_action_group
     ; V.spacer ~min_length:10. ()
     ; V.row
-        ~spacing:2.
         [ menu
             hs
             "theme-menu"
             "Document theme"
             "theme"
-            (symbol ~size:26. "circle")
+            (V.symbol ~name:"circle" ~size:26. ())
             [ 1L, "Warm paper"; 2L, "Cool paper" ]
+          |> V.frame ~min_width:26. ~min_height:26.
           |> V.overlay ~overlay:(ring ())
         ; menu
             hs
             "insert-menu"
             "Insert block"
             "insert"
-            (V.symbol ~name:"plus.circle.fill" ~size:27. ~color:ink ())
+            (V.symbol ~name:"plus.circle.fill" ())
             [ 1L, "Paragraph"; 2L, "Checklist" ]
         ]
-      |> inset ~h:5. ~v:2.
-      |> glass state.theme
+      |> S.create ~recipe:Material_action_group
     ]
   |> inset ~h:26. ~v:10.
   |> tid "bottom-controls"
 ;;
 
-let top hs state =
+let top hs =
   V.row
-    [ icon_button hs "back" "Templates" "chevron.left" |> glass state.theme
+    [ icon_button hs "back" "Templates" "chevron.left"
+      |> S.create ~recipe:Material_action_group
     ; V.spacer ()
     ; V.row
-        ~spacing:2.
         [ icon_button hs "share" "Share preview" "square.and.arrow.up"
         ; menu
             hs
             "more-menu"
             "More document actions"
             "more"
-            (symbol "ellipsis.circle")
+            (V.symbol ~name:"ellipsis.circle" ())
             [ 1L, "Templates"; 2L, "About this document" ]
         ]
-      |> inset ~h:4.
-      |> glass state.theme
+      |> S.create ~recipe:Material_action_group
     ]
   |> inset ~h:22. ~v:10.
 ;;
@@ -636,9 +643,13 @@ let editor hs state =
     ~spacing:0.
     [ V.Weighted.fixed
         (V.row
-           [ label ~size:22. ~bold:true "Edit note"
+           [ V.text ~style:(Ui.Style.Text_style.create ~role:Editor_title ()) "Edit note"
            ; V.spacer ()
-           ; button hs "done-editing" "Done" (label ~bold:true "Done")
+           ; button
+               hs
+               "done-editing"
+               "Done"
+               (V.text ~style:(Ui.Style.Text_style.create ~font_weight:Bold ()) "Done")
            ]
          |> pad 16.)
     ; V.Weighted.fixed
@@ -651,7 +662,9 @@ let editor hs state =
            ~binding:"title"
          |> pad 16.)
     ; V.Weighted.fixed
-        (label ~size:13. ~color:muted "Plain text • Changes stay in this session"
+        (V.text
+           ~style:(Ui.Style.Text_style.create ~role:Hint ())
+           "Plain text • Changes stay in this session"
          |> inset ~h:16.)
     ; V.Weighted.share
         (input
@@ -678,15 +691,20 @@ let preview_tile fixture =
     | Video -> 0xe4e1d6
   in
   let mini =
-    column
+    V.column
+      ~alignment:Leading
       ~spacing:7.
       ((if fixture = Reading then [ cover ~height:58. () ] else [ gap 10. ])
-       @ [ label ~size:10. ~bold:true (title fixture); divider () ]
+       @ [ V.text
+             ~style:(Ui.Style.Text_style.create ~font_size:10. ~font_weight:Bold ())
+             (title fixture)
+         ; divider ()
+         ]
        @
        match fixture with
        | Video ->
          List.map
-           (label ~size:8.)
+           (V.text ~style:(Ui.Style.Text_style.create ~font_size:8. ()))
            [ "▾  Title Ideas"
            ; "▾  Research Links"
            ; "▾  Sponsor Information"
@@ -696,7 +714,7 @@ let preview_tile fixture =
            ]
        | Cornell ->
          List.map
-           (label ~size:8.)
+           (V.text ~style:(Ui.Style.Text_style.create ~font_size:8. ()))
            [ "Lesson Title"
            ; ""
            ; "Main notes"
@@ -707,7 +725,7 @@ let preview_tile fixture =
            ]
        | _ ->
          List.map
-           (label ~size:7. ~color:muted)
+           (V.text ~style:(Ui.Style.Text_style.create ~font_size:7. ~color:muted ()))
            [ "A place for your ideas"
            ; "_____________________"
            ; "_________________"
@@ -716,8 +734,10 @@ let preview_tile fixture =
            ])
     |> pad 12.
     |> V.frame ~max_width:Fill ~height:172. ~alignment:Top_start
-    |> V.clip ~corner_radius:8.
-    |> V.background ~corner_radius:8. ~color:(rgb 0xf6f2e6)
+    |> V.clip ~corner_radius:Ui.Theme.Defaults.Values.small_corner
+    |> V.background
+         ~corner_radius:Ui.Theme.Defaults.Values.small_corner
+         ~color:(rgb 0xf6f2e6)
   in
   mini |> pad 7. |> V.background ~corner_radius:13. ~color:(rgb accent)
 ;;
@@ -728,12 +748,12 @@ let tile hs f =
     ~style:Plain
     ~on_press:(handler hs ("select-" ^ slug f))
     ~child:
-      (column
+      (V.column
+         ~alignment:Leading
          ~spacing:7.
          [ preview_tile f
-         ; label
-             ~size:14.
-             ~color:muted
+         ; V.text
+             ~style:(Ui.Style.Text_style.create ~role:Caption ~color:muted ())
              (if f = Reading then "Reading · Robert Pirosh" else title f)
          ]
        |> semantic ("Use " ^ title f))
@@ -757,7 +777,7 @@ let grid hs items =
           [ V.Weighted.share (tile hs a); V.Weighted.share (V.spacer ()) ]
       ]
   in
-  column ~spacing:18. (rows items)
+  V.column ~alignment:Leading ~spacing:18. (rows items)
 ;;
 
 let catalog hs state =
@@ -777,47 +797,60 @@ let catalog hs state =
     then (
       match List.filter matches fixtures with
       | [] ->
-        column
-          [ label ~size:20. ~bold:true "No templates found"
-          ; label ~color:muted "Try another title or clear your search."
+        V.column
+          ~alignment:Leading
+          [ V.text
+              ~style:(Ui.Style.Text_style.create ~role:Empty_title ())
+              "No templates found"
+          ; V.text
+              ~style:(Ui.Style.Text_style.create ~color:muted ())
+              "Try another title or clear your search."
           ]
         |> inset ~v:32.
       | found -> grid hs found)
     else
-      column
+      V.column
+        ~alignment:Leading
         ~spacing:12.
-        [ label ~size:12. ~color:muted "MY TEMPLATES"
+        [ V.text ~style:(Ui.Style.Text_style.create ~role:Section_label ()) "MY TEMPLATES"
         ; grid hs [ Video ]
         ; divider ()
-        ; label ~size:12. ~color:muted "COLLECT EVERYTHING"
+        ; V.text
+            ~style:(Ui.Style.Text_style.create ~role:Section_label ())
+            "COLLECT EVERYTHING"
         ; grid hs [ Movies; Recipes ]
         ; divider ()
-        ; label ~size:12. ~color:muted "CRAFT FOR SELF-IMPROVEMENT"
+        ; V.text
+            ~style:(Ui.Style.Text_style.create ~role:Section_label ())
+            "CRAFT FOR SELF-IMPROVEMENT"
         ; grid hs [ Cornell; Reading; Journal ]
         ]
   in
   V.Body.Vertical.create
     [ V.Body.Vertical.fixed
-        (column
+        (V.column
+           ~alignment:Leading
            ~spacing:12.
            [ V.row
-               [ label ~size:19. ~weight:Medium ~color:(rgb 0x242426) "Templates"
+               [ V.text
+                   ~style:
+                     (Ui.Style.Text_style.create
+                        ~role:Sheet_title
+                        ~color:(rgb 0x242426)
+                        ())
+                   "Templates"
                ; V.spacer ()
                ; button
                    hs
                    "close-templates"
                    "Close templates"
-                   (V.symbol
-                      ~name:"xmark.circle.fill"
-                      ~size:22.
-                      ~color:(alpha 90 0x929299)
-                      ())
+                   (V.symbol ~name:"xmark.circle.fill" ~color:(alpha 90 0x929299) ())
                ]
              |> inset ~h:6.
            ; divider ()
            ; V.row
                ~spacing:10.
-               ([ V.symbol ~name:"magnifyingglass" ~size:17. ~color:(rgb 0x929299) ()
+               ([ V.symbol ~name:"magnifyingglass" ~color:(rgb 0x929299) ()
                 ; input
                     ~appearance:Plain
                     hs
@@ -835,15 +868,10 @@ let catalog hs state =
                       hs
                       "clear-search"
                       "Clear search"
-                      (V.symbol
-                         ~name:"xmark.circle.fill"
-                         ~size:17.
-                         ~color:(rgb 0x929299)
-                         ())
+                      (V.symbol ~name:"xmark.circle.fill" ~color:(rgb 0x929299) ())
                   ])
-             |> V.frame ~min_height:44.
              |> inset ~h:12.
-             |> V.background ~corner_radius:10. ~color:(alpha 75 0xbfc0c6)
+             |> S.create ~recipe:Search
            ]
          |> inset ~h:20. ~v:14.)
     ; V.Body.Vertical.fill (content |> inset ~h:18. ~v:10. |> V.Scroll.vertical)
@@ -852,25 +880,27 @@ let catalog hs state =
   |> V.frame ~ideal_width:440. ~max_width:(Points 560.)
   |> S.create
        ~presentation_background:true
-       ~corner_radius:28.
+       ~recipe:Translucent_sheet
        ~border_color:(alpha 180 0xffffff)
-       ~border_width:0.6
-       ~opacity:0.4
        ~fill:(Ultra_thin_material (alpha 0 0xe9e9ee))
 ;;
 
 let preview hs state =
-  column
+  V.column
+    ~alignment:Leading
     [ V.row
-        [ label ~size:22. ~bold:true (Option.value state.preview ~default:"")
+        [ V.text
+            ~style:(Ui.Style.Text_style.create ~role:Editor_title ())
+            (Option.value state.preview ~default:"")
         ; V.spacer ()
         ; icon_button hs "close-preview" "Close preview" "xmark.circle.fill"
         ]
-    ; label ~bold:true (contents state.title)
-    ; label "This is a local demo preview. Nothing is sent or saved."
-    ; label
-        ~size:15.
-        ~color:muted
+    ; V.text
+        ~style:(Ui.Style.Text_style.create ~font_weight:Bold ())
+        (contents state.title)
+    ; V.text "This is a local demo preview. Nothing is sent or saved."
+    ; V.text
+        ~style:(Ui.Style.Text_style.create ~font_size:15. ~color:muted ())
         (match state.preview with
          | Some "Word count preview" ->
            Printf.sprintf
@@ -900,15 +930,15 @@ let render hs state =
     then editor hs state
     else
       V.Body.Vertical.create
-        [ V.Body.Vertical.fixed (top hs state)
+        [ V.Body.Vertical.fixed (top hs)
         ; V.Body.Vertical.fixed (gap 18.)
         ; V.Body.Vertical.fill
-            (column ~spacing:0. [ document hs state; gap 96. ]
+            (V.column ~alignment:Leading ~spacing:0. [ document hs state; gap 96. ]
              |> V.Scroll.vertical
                   ~key:(key ("document-scroll-" ^ string_of_int state.generation))
                   ~shows_indicators:false)
         ]
-      |> V.Body.overlay ~alignment:Bottom_center ~overlay:(bottom hs state)
+      |> V.Body.overlay ~alignment:Bottom_center ~overlay:(bottom hs)
       |> V.Body.Private.to_widget
   in
   V.stack [ background |> tid "document-background"; content ]
@@ -929,7 +959,7 @@ let render hs state =
        ~presented:(Option.is_some state.preview)
        ~on_presented_changed:(handler hs "preview-dismiss")
        ~content:(preview hs state)
-  |> V.theme ~data:(Ui.Theme.create ~mode:Light ~tint:ink ())
+  |> V.theme ~data:(shared_theme state.theme)
 ;;
 
 let component handlers graph =
@@ -977,7 +1007,5 @@ let component handlers graph =
 let app =
   App.create ~name:"Bonsai Note" (fun h g ->
     Bonsai.Cont.map (component h g) ~f:(fun v ->
-      App.View.create
-        ~theme:(Ui.Theme.create ~mode:Light ~tint:ink ())
-        ~body:(V.Body.static v)))
+      App.View.create ~theme:(shared_theme Warm) ~body:(V.Body.static v)))
 ;;

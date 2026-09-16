@@ -22,6 +22,7 @@ extension TreeFixture {
       if let spacing { $0.integer(spacing.bitPattern) }
       $0.integer(UInt8(color == nil ? 0 : 1))
       if let color { $0.integer(color) }
+      $0.bytes.append(contentsOf: [0, 0, 0])  // Body role, inherited foreground, no italic.
       $0.integer(alignment)
       $0.integer(UInt8(lineLimit == nil ? 0 : 1))
       if let lineLimit { $0.integer(lineLimit) }
@@ -38,7 +39,9 @@ extension TreeFixture {
         for lineLimit: UInt32? in [nil, 1, 2] {
           let actual = try textView(
             TreeFixture.nativeText(value: value, lineLimit: lineLimit, truncation: UInt8(index)))
-          let expected = Text(verbatim: value).lineLimit(lineLimit.map(Int.init)).truncationMode(
+          let expected = Text(verbatim: value).font(.system(size: 17)).lineLimit(
+            lineLimit.map(Int.init)
+          ).truncationMode(
             mode)
           #expect(
             try raster(actual.frame(width: 120), direction).matches(

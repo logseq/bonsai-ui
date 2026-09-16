@@ -63,9 +63,9 @@ import Testing
     ).tree
     model.commit(next)
     #expect(model.nodes[2] === divider)
-    let expected = VStack {
+    let expected = VStack(spacing: 16) {
       Divider().padding(EdgeInsets(top: 2, leading: 16, bottom: 3, trailing: 0))
-      Text("Native")
+      Text("Native").font(.system(size: 17))
     }
     for direction in [LayoutDirection.leftToRight, .rightToLeft] {
       #expect(

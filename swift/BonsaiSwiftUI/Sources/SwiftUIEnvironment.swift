@@ -16,30 +16,37 @@ struct SwiftUIEnvironmentModifier: ViewModifier {
   @Environment(\.colorScheme) private var inheritedScheme
   @Environment(\.bonsaiFontFamily) private var inheritedFont
 
+  @Environment(\.controlSize) private var inheritedControlSize
+  @Environment(\.bonsaiDefaults) private var inheritedDefaults
+  @Environment(\.bonsaiTint) private var inheritedTint
+
   private var controlSize: ControlSize {
     switch values.controlSize {
     case 0: .mini
     case 1: .small
     case 3: .large
     case 4: .extraLarge
-    default: .regular
+    case 2: .regular
+    default: inheritedControlSize
     }
   }
 
-  @ViewBuilder func body(content: Content) -> some View {
-    let configured =
+  func body(content: Content) -> some View {
+    let defaults = values.defaults.inheriting(inheritedDefaults)
+    let tint = values.tint.map { Color(argb: $0) } ?? inheritedTint
+    return
       content
       .environment(
         \.colorScheme, values.mode == 1 ? .light : values.mode == 2 ? .dark : inheritedScheme
       )
       .environment(\.bonsaiFontFamily, values.fontFamily ?? inheritedFont)
+      .environment(\.bonsaiDefaults, defaults)
+      .environment(\.bonsaiTint, tint)
+      .foregroundStyle(defaults.color(defaults.defaultForeground()))
+      .tint(tint)
       .controlSize(controlSize)
-    if let tint = values.tint {
-      configured.tint(Color(argb: tint))
-    } else {
-      configured
-    }
   }
+
 }
 
 extension Color {

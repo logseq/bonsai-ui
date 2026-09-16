@@ -46,6 +46,10 @@ private enum GestureRole {
   private var mounted = false
   private var disposed = false
   private(set) var generation: UInt64 = 1
+  var isActionable: Bool {
+    bindings[EventTagId.tap] != nil || bindings[EventTagId.doubleTap] != nil
+      || bindings[EventTagId.longPress] != nil
+  }
   var isCollecting: Bool { presented && mounted && !disposed }
 
   init(bindings: [Int: UInt64], emit: @escaping (NativeEventPayload) -> Bool) {
@@ -117,13 +121,15 @@ struct NativeGestureContent<Content: View>: View {
   let controller: NativeGestureController
   let content: Content
   var body: some View {
-    content.contentShape(Rectangle())
-      .gesture(NativeGesture(controller: controller, role: .tap))
-      .gesture(NativeGesture(controller: controller, role: .doubleTap))
-      .gesture(NativeGesture(controller: controller, role: .longPress))
-      .gesture(NativeGesture(controller: controller, role: .pointer))
-      .onAppear { controller.setMounted(true) }
-      .onDisappear { controller.setMounted(false) }
+    content.modifier(NativeInteractiveBounds(enabled: controller.isActionable)).contentShape(
+      Rectangle()
+    )
+    .gesture(NativeGesture(controller: controller, role: .tap))
+    .gesture(NativeGesture(controller: controller, role: .doubleTap))
+    .gesture(NativeGesture(controller: controller, role: .longPress))
+    .gesture(NativeGesture(controller: controller, role: .pointer))
+    .onAppear { controller.setMounted(true) }
+    .onDisappear { controller.setMounted(false) }
   }
 }
 

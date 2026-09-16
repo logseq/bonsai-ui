@@ -38,7 +38,7 @@ Run with an explicitly selected, paired and ready physical iOS 18+ device:
 IOS_DEVICE_ID='<CoreDevice UUID or UDID>' \
 IOS_DEVELOPMENT_TEAM='<Team ID>' \
 IOS_BUNDLE_IDENTIFIER='org.example.datascript-worker-probe' \
-  opam exec --switch=bonsai-flutter-v017-exact -- \
+  opam exec --switch=bonsai-ui -- \
   tool/ios/test_datascript_worker_device.sh
 ```
 

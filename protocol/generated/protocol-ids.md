@@ -2,7 +2,7 @@
 
 # Protocol IDs
 
-Protocol version: `6.0`
+Protocol version: `8.0`
 
 ## Frame kind
 
