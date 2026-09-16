@@ -29,6 +29,8 @@ import Foundation
     case backpressure
   }
 
+  var shutdown:
+    (@MainActor (BonsaiApplicationShutdown.Configuration) throws -> BonsaiApplicationShutdown)?
   private var receive: (@MainActor (Data) throws -> Void)?
 
   init(receive: @escaping @MainActor (Data) throws -> Void) { self.receive = receive }
@@ -43,7 +45,22 @@ import Foundation
     try receive(payload)
   }
 
-  func close() { receive = nil }
+  /// Starts a bounded exchange without requiring an active or presented window.
+  /// Only requests explicitly selected by `accepting` enter `request`.
+  public func beginShutdown(
+    event: Data, timeout: Duration,
+    accepting: @escaping @MainActor (Data) -> Bool,
+    request: @escaping @MainActor (Data) async throws -> BonsaiApplicationShutdown.Response
+  ) throws -> BonsaiApplicationShutdown {
+    guard let shutdown else { throw SendError.closed }
+    return try shutdown(
+      .init(event: event, timeout: timeout, accepting: accepting, request: request))
+  }
+
+  func close() {
+    receive = nil
+    shutdown = nil
+  }
 }
 
 @MainActor final class ApplicationBridgeConnection {
@@ -58,10 +75,14 @@ import Foundation
 
   func connect(
     send: @escaping @MainActor (Data) throws -> Void,
+    shutdown:
+      @escaping @MainActor (BonsaiApplicationShutdown.Configuration) throws ->
+      BonsaiApplicationShutdown,
     deliver: @escaping @MainActor (NativeEventPayload) -> Bool
   ) {
     guard sender == nil else { return }
     let sender = BonsaiApplicationEvents(receive: send)
+    sender.shutdown = shutdown
     self.sender = sender
     self.deliver = deliver
     bridge?.connected(sender)

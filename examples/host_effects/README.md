@@ -110,3 +110,15 @@ window dimensions, keyboard bottom inset and physical safe-area values. The
 physical-iOS UI scenario in `apple-ui-tests/ios/EnvironmentUITests.swift` verifies
 software-keyboard show/hide, stable viewport dimensions and restart. It requires
 a connected iOS device and has not yet been executed for this checkpoint.
+
+
+## Hidden-window Quit
+
+The macOS application delegate starts a terminal cooperative shutdown through its
+connected application sender. The example sends `[1, 12]`; OCaml returns an
+application request `[1, 13]`, and Swift supplies the matching final reply. The
+delegate releases `terminateLater` only after OCaml accepts the reply and the
+runtime closes. Hiding or minimizing the window does not require reactivation.
+The four-second deadline also closes the runtime on timeout; cancelling this
+exchange cannot resume the same runtime. iOS does not install a macOS Quit
+handler or acquire background execution time.

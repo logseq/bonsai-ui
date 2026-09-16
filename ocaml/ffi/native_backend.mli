@@ -28,6 +28,7 @@ type output =
 val embed : name:Bonsai_swiftui_spec.Id.Application.entrypoint_name -> App.t -> unit
 
 val create : bytes -> create_result
+val shutdown_pump : Bonsai_swiftui_spec.Id.Runtime.handle -> int64 -> bytes -> output
 val pump : Bonsai_swiftui_spec.Id.Runtime.handle -> int64 -> bytes -> output
 
 val presentation_succeeded

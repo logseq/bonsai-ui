@@ -144,6 +144,7 @@ type t =
   ; mutable force_full_snapshot_next : bool
   ; mutable terminal_error : error option
   ; mutable is_shutdown : bool
+  ; mutable draining : bool
   ; mutable last_lifecycle_ns : int64
   ; mutable full_snapshot_count : int
   ; mutable resync_count : int
@@ -208,6 +209,7 @@ let create
   ; force_full_snapshot_next = false
   ; terminal_error = None
   ; is_shutdown = false
+  ; draining = false
   ; last_lifecycle_ns = 0L
   ; full_snapshot_count = 0
   ; resync_count = 0
@@ -1853,6 +1855,7 @@ let pump t ~monotonic_now_ns ?events () =
   Option.iter (trace_inbound_event_batch t) events;
   match active_error t with
   | Some error -> Error error
+  | None when t.draining -> Error (Invalid_state "runtime is draining")
   | None ->
     (match t.pending_presentation with
      | Some _ -> Error (Invalid_state "a presentation is already pending")
@@ -1928,6 +1931,84 @@ let pump t ~monotonic_now_ns ?events () =
            | exception_ ->
              let error = Invalid_state (exception_message exception_) in
              Error (terminal t error))))
+;;
+
+(* Terminal transport work never commits a renderer revision or lifecycles. *)
+let shutdown_pump t ~monotonic_now_ns ?events () =
+  match active_error t with
+  | Some error -> Error error
+  | None ->
+    (match logical_time t monotonic_now_ns with
+     | Error _ as error -> error
+     | Ok logical_time ->
+       let validated =
+         match events with
+         | None -> Ok None
+         | Some (batch : Protocol.Inbound_event.batch) ->
+           if
+             List.exists
+               (fun (event : Protocol.Inbound_event.t) ->
+                  not (is_application_platform_tag event.event_tag))
+               batch.events
+           then
+             Error (Application_platform_error "shutdown accepts only application input")
+           else Result.map Option.some (validate_input t batch)
+       in
+       (match validated with
+        | Error _ as error -> error
+        | Ok validated ->
+          (try
+             if not t.draining
+             then (
+               t.draining <- true;
+               t.pending_presentation <- None;
+               Host_effect.Application_platform.Private.begin_shutdown
+                 t.application_platform;
+               Host_effect.Private.shutdown t.host_effects);
+             Bonsai_runtime_adapter.advance_clock t.bonsai ~to_:logical_time;
+             t.last_monotonic_ns <- monotonic_now_ns;
+             Option.iter
+               (fun input ->
+                  match execute_validated_input t input with
+                  | Ok () -> ()
+                  | Error error -> failwith (error_to_string error))
+               validated;
+             t.before_flush ~schedule:(fun scheduled ->
+               Queue.add scheduled t.pending_effects.pending_effects);
+             drain_effects t;
+             Bonsai_runtime_adapter.flush t.bonsai;
+             flush_before_display t;
+             (* One request per native turn bounds Swift's serial shutdown provider.
+              Uncommitted application operations from a pending frame stay queued. *)
+             let prepared =
+               Host_effect.Application_platform.prepare_operations
+                 ~maximum_count:1
+                 t.application_platform
+             in
+             let operations =
+               Host_effect.Application_platform.Prepared_operations.operations prepared
+             in
+             let buffer = Buffer.create 64 in
+             Buffer.add_string buffer "BSSD";
+             Buffer.add_int32_le buffer (Int32.of_int (List.length operations));
+             List.iter
+               (function
+                 | Protocol.Wire_frame.Application_request { request_id; payload } ->
+                   Buffer.add_int64_le buffer request_id;
+                   Buffer.add_int32_le buffer (Int32.of_int (Bytes.length payload));
+                   Buffer.add_bytes buffer payload
+                 | _ -> failwith "unexpected shutdown transport operation")
+               operations;
+             match
+               Host_effect.Application_platform.commit_operations
+                 t.application_platform
+                 prepared
+             with
+             | Error message -> Error (terminal t (Invalid_state message))
+             | Ok () -> Ok (Bytes.of_string (Buffer.contents buffer), t.displayed_revision)
+           with
+           | exception_ ->
+             Error (terminal t (Invalid_state (exception_message exception_))))))
 ;;
 
 let exact_pending t ~presentation_id ~renderer_revision =

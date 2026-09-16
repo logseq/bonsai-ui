@@ -114,6 +114,16 @@ val pump
   -> unit
   -> (pump_result, error) result
 
+(** Terminal application-only transport, including worker completions. Does not
+    acknowledge presentation, reconcile views, or trigger after-display work.
+    Returns BSSD bytes containing at most one application request. *)
+val shutdown_pump
+  :  t
+  -> monotonic_now_ns:int64
+  -> ?events:Bonsai_swiftui_protocol.Inbound_event.batch
+  -> unit
+  -> (bytes * Bonsai_swiftui_spec.Id.Runtime.renderer_revision, error) result
+
 val presentation_succeeded
   :  t
   -> presentation_id:Bonsai_swiftui_spec.Id.Runtime.presentation_id

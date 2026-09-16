@@ -77,3 +77,18 @@ rejection/recovery, hidden/resumed work, stale events and repeated closure.
 Notification tests additionally cover immediate view removal/restart with
 retained native buttons. Physical iOS, IME/modal interaction and performance
 acceptance remain distinct from these targeted runtime tests.
+
+### Cooperative application closure
+
+`BonsaiApplicationEvents.beginShutdown` enters a terminal application-only
+transport mode. It has its own finite scheduling lifetime and can drain the
+existing worker while hidden, inactive, minimized or awaiting presentation.
+An existing token is retired without presentation success; displayed state and
+Bonsai presentation lifecycles do not advance. Only application transport is
+committed. Built-in host operations are cancelled and UI effects are not run.
+
+The operation always ends in serialized native closure, including timeout and
+cancellation. Concurrent close callers join the same teardown task, so a second
+close cannot enable a replacement runtime while the first is still releasing
+resources. See [the public shutdown contract](application-platform.md#cooperative-terminal-shutdown)
+for admission, request selection, duplicate Quit behavior and iOS limitations.

@@ -1,0 +1,17 @@
+  // The RED build runs the same worker exchange through the previously available
+  // public send operation. It demonstrates the missing transport prerequisite.
+  #if SHUTDOWN_BASELINE
+    @Test @MainActor func shutdownHiddenRegression() async throws {
+      let fixture = ShutdownFixture()
+      try await fixture.start()
+      fixture.session.isVisible = false
+      try #require(fixture.sender).send(Data([12]))
+      let deadline = ContinuousClock.now + .milliseconds(400)
+      while ContinuousClock.now < deadline {
+        _ = try await fixture.session.refresh()
+        try await Task.sleep(for: .milliseconds(2))
+      }
+      #expect(fixture.ordinary > 0, "Hidden shutdown never reached its native request")
+      await fixture.clean()
+    }
+  #else

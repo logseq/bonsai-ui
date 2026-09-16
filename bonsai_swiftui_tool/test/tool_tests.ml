@@ -333,7 +333,7 @@ let valid_sdk_manifest =
   a51276a09eb1cdf9c87f07ac4c7558ed7c6b2d69
   sha256
   8ab6845bdda0b53c450a14c7c1382c652e5af0093c38ddad8e867db4c6a36f91)
- (abi_version 3)
+ (abi_version 4)
  (ocaml_version 5.1.1)
  (dune_version_range 3.17 4.0)
  (cross_compiler ocaml-ios64 5.1.1)
@@ -369,14 +369,14 @@ let test_sdk_manifest_contract () =
   in
   valid_sdk_manifest |> validate_supported |> get_ok;
   valid_sdk_manifest
-  |> replace_once ~pattern:"(abi_version 3)" ~replacement:"(abi_version 2)"
+  |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 2)"
   |> validate_supported
   |> check_error_contains "SDK manifest is incompatible";
   let manifest = parse_sdk_manifest valid_sdk_manifest in
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> get_ok;
   Sdk.Manifest.validate_packages
@@ -394,13 +394,13 @@ let test_sdk_manifest_contract () =
      |> replace_once ~pattern:"(platform iphoneos)" ~replacement:"(platform macos)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains "expected Apple platform iphoneos";
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.2.0"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains
        "The iPhoneOS switch SDK manifest is incompatible with bonsai-swiftui 0.2.0";
@@ -411,7 +411,7 @@ let test_sdk_manifest_contract () =
           ~replacement:"(build_recipe_revision 4)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains
        "Run: bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
@@ -419,15 +419,15 @@ let test_sdk_manifest_contract () =
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"14.0"
   |> check_error_contains "minimum deployment target 14.0 is unsupported";
   Sdk.Manifest.validate
     (valid_sdk_manifest
-     |> replace_once ~pattern:"(abi_version 3)" ~replacement:"(abi_version 1)"
+     |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 1)"
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> check_error_contains
        "Run: bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
@@ -454,7 +454,7 @@ let test_sdk_accepts_framework_source_drift () =
   Sdk.Manifest.validate
     stale_manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
-    ~abi_version:"3"
+    ~abi_version:"4"
     ~minimum_deployment_target:"18.0"
   |> get_ok
 ;;
@@ -469,7 +469,7 @@ let test_sdk_accepts_missing_framework_source_identity () =
            \  sha256\n\
            \  8ab6845bdda0b53c450a14c7c1382c652e5af0093c38ddad8e867db4c6a36f91)\n"
          ~replacement:""
-    |> replace_once ~pattern:"(abi_version 3)" ~replacement:"(abi_version 1)"
+    |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 1)"
     |> parse_sdk_manifest
   in
   Sdk.Manifest.validate
@@ -617,7 +617,7 @@ fi
          Sdk.preflight
            ~project_root
            ~bonsai_swiftui_version:"0.1.0~dev"
-           ~abi_version:"3"
+           ~abi_version:"4"
            ~minimum_deployment_target:"18.0"
            ~required_packages:[ "base", "v0.17.0" ]
          |> get_ok
@@ -661,7 +661,7 @@ let test_sdk_preflight_reports_missing_switch () =
        Sdk.preflight
          ~project_root:(Filename.concat root "project")
          ~bonsai_swiftui_version:"0.1.0~dev"
-         ~abi_version:"3"
+         ~abi_version:"4"
          ~minimum_deployment_target:"18.0"
          ~required_packages:[]
        |> check_error_contains

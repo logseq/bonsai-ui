@@ -150,6 +150,7 @@ module Application_platform = struct
   type pending =
     { callback : (unit, (bytes, error) result) Effect.Private.Callback.t
     ; cancellation : Cancellation.t option
+    ; payload_bytes : int
     }
 
   type queued_operation =
@@ -165,6 +166,9 @@ module Application_platform = struct
     ; mutable next_request_id : int64
     ; mutable next_operation_id : int64
     ; mutable shutdown_error : error option
+    ; mutable draining : bool
+    ; mutable pending_bytes : int
+    ; mutable queued_bytes : int
     }
 
   let respond t callback response =
@@ -176,6 +180,10 @@ module Application_platform = struct
     then failwith "application operation ID space exhausted";
     let id = t.next_operation_id in
     t.next_operation_id <- Int64.succ id;
+    (match operation with
+     | Protocol.Wire_frame.Application_request { payload; _ } ->
+       t.queued_bytes <- t.queued_bytes + Bytes.length payload
+     | _ -> assert false);
     Queue.add { id; operation } t.operations
   ;;
 
@@ -184,6 +192,7 @@ module Application_platform = struct
     | None -> ()
     | Some pending ->
       Hashtbl.remove t.pending request_id;
+      t.pending_bytes <- t.pending_bytes - pending.payload_bytes;
       Option.iter
         (fun (cancellation : Cancellation.t) -> cancellation.cancel_active <- None)
         pending.cancellation;
@@ -197,6 +206,13 @@ module Application_platform = struct
       | Some error -> respond t callback (Error error)
       | None when Bytes.length payload > maximum_payload_bytes ->
         respond t callback (Error Payload_too_large)
+      | None
+        when t.draining
+             && (Hashtbl.length t.pending >= 256
+                 || Queue.length t.operations >= 256
+                 || t.queued_bytes + Bytes.length payload > 16 * 1024 * 1024
+                 || t.pending_bytes + Bytes.length payload > 16 * 1024 * 1024) ->
+        respond t callback (Error Unavailable)
       | None ->
         (match cancellation with
          | Some (cancellation : Cancellation.t) when cancellation.cancelled ->
@@ -207,7 +223,9 @@ module Application_platform = struct
            else (
              let request_id = t.next_request_id in
              t.next_request_id <- Int64.succ request_id;
-             Hashtbl.add t.pending request_id { callback; cancellation };
+             let payload_bytes = Bytes.length payload in
+             Hashtbl.add t.pending request_id { callback; cancellation; payload_bytes };
+             t.pending_bytes <- t.pending_bytes + payload_bytes;
              Option.iter
                (fun (cancellation : Cancellation.t) ->
                   cancellation.cancel_active
@@ -234,9 +252,21 @@ module Application_platform = struct
     let operations t = List.map (fun entry -> entry.operation) t.entries
   end
 
-  let prepare_operations t =
-    Prepared_operations.
-      { owner = t; entries = Queue.to_seq t.operations |> List.of_seq; committed = false }
+  let prepare_operations ?(maximum_count = max_int) t =
+    let count = ref 0 in
+    let entries =
+      Queue.fold
+        (fun result entry ->
+           if !count >= maximum_count
+           then result
+           else (
+             incr count;
+             entry :: result))
+        []
+        t.operations
+      |> List.rev
+    in
+    Prepared_operations.{ owner = t; entries; committed = false }
   ;;
 
   let commit_operations t (prepared : Prepared_operations.t) =
@@ -258,7 +288,13 @@ module Application_platform = struct
       match validate_prefix prepared.entries current with
       | Error _ as error -> error
       | Ok () ->
-        List.iter (fun _ -> ignore (Queue.take t.operations)) prepared.entries;
+        List.iter
+          (fun _ ->
+             match (Queue.take t.operations).operation with
+             | Protocol.Wire_frame.Application_request { payload; _ } ->
+               t.queued_bytes <- t.queued_bytes - Bytes.length payload
+             | _ -> assert false)
+          prepared.entries;
         prepared.committed <- true;
         Ok ())
   ;;
@@ -272,6 +308,9 @@ module Application_platform = struct
       ; next_request_id = 1L
       ; next_operation_id = 1L
       ; shutdown_error = None
+      ; draining = false
+      ; pending_bytes = 0
+      ; queued_bytes = 0
       }
     ;;
 
@@ -317,6 +356,7 @@ module Application_platform = struct
               ; apply =
                   (fun () ->
                     Hashtbl.remove t.pending response_request_id;
+                    t.pending_bytes <- t.pending_bytes - pending.payload_bytes;
                     Option.iter
                       (fun (cancellation : Cancellation.t) ->
                          cancellation.cancel_active <- None)
@@ -374,10 +414,13 @@ module Application_platform = struct
              respond t pending.callback (Error error))
           t.pending;
         Hashtbl.clear t.pending;
+        t.pending_bytes <- 0;
         Queue.clear t.operations;
+        t.queued_bytes <- 0;
         t.subscribers <- [])
     ;;
 
+    let begin_shutdown t = t.draining <- true
     let pending_count t = Hashtbl.length t.pending
   end
 end

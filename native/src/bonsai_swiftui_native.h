@@ -64,6 +64,12 @@ BS_EXPORT bs_status bs_runtime_pump(bs_runtime *runtime,
                                     size_t input_length,
                                     bs_output_buffer *output);
 
+BS_EXPORT bs_status bs_runtime_shutdown_pump(bs_runtime *runtime,
+                                    int64_t monotonic_now_ns,
+                                    const uint8_t *input,
+                                    size_t input_length,
+                                    bs_output_buffer *output);
+
 BS_EXPORT bs_status bs_runtime_presentation_succeeded(
     bs_runtime *runtime,
     uint64_t presentation_id,

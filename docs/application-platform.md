@@ -99,13 +99,13 @@ ASCII. OCaml validates these messages and owns the displayed state.
 
 ## Presentation, cancellation and shutdown
 
-Requests stage atomically with their frame and dispatch only after presentation
+Ordinary requests stage atomically with their frame and dispatch only after presentation
 acknowledgment while the host is visible and active. Each runtime has its own
 positive monotonically increasing application request IDs; these are independent
 of built-in host-service IDs. Repeated IDs, malformed lengths and truncated or
 oversized payloads reject the whole frame before any request can execute.
 
-A connected event sender may enqueue events while the host is inactive. Native
+A connected event sender may enqueue events while the host is inactive. Ordinary native
 pumping resumes when it becomes visible and active. Responses and events name
 the displayed revision current at the next pump, including when their producer
 completed while another frame awaited presentation.
@@ -138,3 +138,85 @@ observes its actual bundle identifier after the Swift/OCaml round trip, posts a
 local time-zone notification and observes the actual current time zone in the
 OCaml-rendered window. Physical iOS execution remains an acceptance gate even
 when the iOS sources typecheck or an App bundle builds successfully.
+
+## Cooperative terminal shutdown
+
+A connected sender exposes `beginShutdown`. It is an explicit, opt-in exception
+for application transport and the existing worker service. It does not activate,
+unhide or present a window. Ordinary input, environment updates, native UI,
+built-in host requests and the ordinary bridge provider remain gated.
+
+```swift
+// Retain the sender from BonsaiApplicationBridge.connected.
+let shutdown = try events.beginShutdown(
+  event: encodePrepareToTerminate(),
+  timeout: .seconds(4),
+  accepting: { request in isShutdownRequest(request) },
+  request: { bytes in
+    // Only application-owned, non-UI cleanup belongs in this handler.
+    if isTerminationReady(bytes) {
+      return .finish(encodeTerminationReadyReply())
+    }
+    return .reply(try await performShutdownRequest(bytes))
+  })
+let outcome = await shutdown.result
+// Release the application's native termination deferral here.
+```
+
+The framework does not interpret payloads. The synchronous `accepting` predicate
+selects permitted requests; other application requests resolve with `Shutdown`
+without entering either provider. Ordinary provider tasks already running at entry
+may finish; their replies remain fenced by the original connection. The shutdown provider is serial, with one
+active task and one retained reply, each payload limited to 1 MiB. An oversized
+provider reply resolves with `Payload_too_large` and cannot finish shutdown.
+New OCaml application requests during shutdown are bounded by 256 outstanding
+requests and 16 MiB of pending payloads; excess requests resolve with
+`Unavailable`. Requests already pending at entry keep their identities.
+
+`Response.reply` continues the exchange. `Response.finish` completes only after
+that response has been accepted and flushed by OCaml, and native teardown has
+finished. A rejected final reply reports failure. The shutdown path drains the
+existing worker's bounded completion hook and stabilizes Bonsai, but does not
+reconcile, publish or acknowledge a frame, advance displayed revisions, or run
+presentation-triggered activation/after-display work. It retires any pending
+presentation token explicitly; application requests from an unpresented frame
+remain available exactly once. Cleanup must use already-registered subscriptions
+and effect continuations, without depending on newly presented UI.
+
+The first call freezes ordinary event admission and starts an independent
+MainActor scheduling task. Previously admitted application events retain FIFO
+order. The initial shutdown event has one separately bounded 1-MiB reservation;
+it enters the shared 1024-event/16-MiB native queue once space is available, after
+previous events. This lets a full ordinary queue drain without losing its events
+or exceeding a native batch's limits. UI input and built-in host responses are
+excluded from shutdown batches. `shutdown.send(bytes)` admits additional ordered
+application events with the same payload and queue limits. It returns
+`backpressure` until the reserved initial event has been admitted, and whenever
+the queue is full. Replies retain their data and retry admission; individual
+reply batches isolate recoverable cancellation or duplicate-reply failures.
+
+Repeated `beginShutdown` calls on the same running connection return the same
+operation. The first event, predicate, handler and deadline win. Later calls do
+not enqueue another quit event or extend the deadline. Invalid initial payloads
+or timeouts leave the original connection unchanged. Timeouts must be positive
+and at most 60 seconds, measured with a monotonic clock.
+
+This operation is **terminal**. Success, timeout, `shutdown.cancel()`, cancellation
+of a task awaiting `result`, view removal and runtime failure all retire the
+runtime. Outcomes distinguish `completed`, `timedOut`, `cancelled`, `closed` and
+`failed`. It cannot cancel Quit and resume partially released application state.
+The sender, operation and pending callbacks are fenced by their original lifetime;
+late provider results cannot enter a replacement runtime. Disconnect runs once,
+and restart waits for serialized native teardown.
+
+A deadline stops admission and cancels providers cooperatively. It cannot preempt
+synchronous OCaml code, a blocked MainActor, or an uncooperative worker's teardown;
+`result` waits for actual resource release. On iOS, this API neither obtains
+background execution time nor promises a Quit callback. A suspended or killed
+process cannot execute the exchange. Use only execution time granted by iOS and
+record device execution separately from compilation.
+
+The [Host Effects delegate](../examples/host_effects/swift/App.swift) demonstrates
+`terminateLater` and releases native deferral after the exchange, without making
+the window visible. Its application codec uses event `[1, 12]` and ready
+request/reply `[1, 13]`. This example has no domain-specific graph cleanup.

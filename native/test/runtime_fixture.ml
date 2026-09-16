@@ -2646,3 +2646,108 @@ let () =
          "native-picker-service")
     (App.create ~name:"Native Picker Service" picker_service_component)
 ;;
+
+(* A transport fixture: no application-domain reducers or user resources. *)
+let shutdown_audit path message =
+  let channel = open_out_gen [ Open_wronly; Open_creat; Open_append ] 0o600 path in
+  output_string channel (message ^ "\n");
+  close_out channel
+;;
+
+let shutdown_fixture_path = ref ""
+
+let shutdown_service =
+  Worker.Service.create
+    ~push_topic_count:1
+    ~concurrency:Worker.Service.Serial
+    ~init:(fun _ path -> Ok path)
+    ~handle:(fun context path bytes ->
+      Eio.Time.Mono.sleep (Worker.Request_context.clock context) 0.02;
+      shutdown_audit path "worker-completed";
+      Ok bytes)
+    ~shutdown:(fun path -> shutdown_audit path "worker-closed")
+    ()
+;;
+
+let shutdown_component client handlers graph =
+  let audit_path = !shutdown_fixture_path in
+  let event_count = ref 0 in
+  let module Platform = Host_effect.Application_platform in
+  let platform = Driver.Handler.application_platform handlers in
+  let host = Driver.Handler.host_effects handlers in
+  let count, set_count = Bonsai_v017.state ~equal:Int.equal 0 graph in
+  let ignore_result action =
+    Bonsai.Effect.bind action ~f:(fun _ -> Bonsai.Effect.Ignore)
+  in
+  let activate =
+    Bonsai.Cont.map set_count ~f:(fun set_count ->
+      Bonsai.Effect.of_thunk (fun () ->
+        Worker.on_event client (function
+          | Worker.Response { outcome = Completed bytes; _ } ->
+            Bonsai.Effect.bind
+              (Platform.request platform (Bytes.cat (Bytes.of_string "\013") bytes))
+              ~f:(fun result ->
+                Bonsai.Effect.of_thunk (fun () ->
+                  match result with
+                  | Ok bytes when Bytes.equal bytes (Bytes.of_string "\099") ->
+                    shutdown_audit audit_path "final-reply-accepted"
+                  | _ -> shutdown_audit audit_path "request-failed"))
+          | _ -> Bonsai.Effect.Ignore);
+        Platform.on_event platform (fun bytes ->
+          incr event_count;
+          if Bytes.equal bytes (Bytes.of_string "\012")
+          then shutdown_audit audit_path (Printf.sprintf "shutdown-event:%d" !event_count);
+          if
+            Bytes.equal bytes (Bytes.of_string "\012")
+            || Bytes.equal bytes (Bytes.of_string "\011")
+          then
+            Bonsai.Effect.Many
+              [ set_count (fun value -> value + 1)
+              ; ignore_result (Host_effect.Clipboard.write host "must remain gated")
+              ; ignore_result (Platform.request platform (Bytes.of_string "ordinary"))
+              ; Bonsai.Effect.of_thunk (fun () ->
+                  match Worker.send client bytes with
+                  | Accepted _ -> ()
+                  | Full | Not_ready | Stopping ->
+                    failwith "fixture worker admission failed")
+              ]
+          else set_count (fun value -> value + 1))))
+  in
+  Bonsai.Cont.Edge.lifecycle
+    ~on_activate:activate
+    ~after_display:
+      (Bonsai.Cont.return
+         (Bonsai.Effect.of_thunk (fun () -> shutdown_audit audit_path "after-display")))
+    graph;
+  let input =
+    Driver.Handler.create
+      handlers
+      ~name:"shutdown-ui-input"
+      ~equal:( == )
+      (Bonsai.Cont.return ())
+      ~f:(fun () _ ->
+        Bonsai.Effect.of_thunk (fun () -> shutdown_audit audit_path "ui-input"))
+  in
+  Bonsai.Cont.map2 count input ~f:(fun count input ->
+    App.View.create
+      ~theme:(Ui.Theme.create ())
+      ~body:
+        (Ui.View.Body.static
+           (Ui.View.column
+              [ Ui.View.text (Printf.sprintf "Shutdown events: %d" count)
+              ; Ui.View.button ~on_press:input ~child:(Ui.View.text "UI input") ()
+              ])))
+;;
+
+let () =
+  Native_backend.embed
+    ~name:(Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-shutdown")
+    (App.create_with_worker
+       ~name:"Shutdown transport"
+       ~decode_config:(fun bytes ->
+         let path = Bytes.to_string bytes in
+         shutdown_fixture_path := path;
+         Ok path)
+       ~service:shutdown_service
+       shutdown_component)
+;;

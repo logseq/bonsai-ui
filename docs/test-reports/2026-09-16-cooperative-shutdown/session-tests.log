@@ -1,0 +1,700 @@
+Building for debugging...
+[0/4] Write sources
+[2/4] Write swift-version--58304C5D6DBC2206.txt
+[4/7] Compiling BonsaiSwiftUI BonsaiSession.swift
+[5/7] Emitting module BonsaiSwiftUI
+[6/7] Compiling BonsaiSwiftUI BonsaiApplicationShutdown.swift
+[7/10] Compiling BonsaiSwiftUITests ShutdownTests.swift
+[8/106] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[9/112] Compiling BonsaiSwiftUITests TagTests.swift
+[10/112] Compiling BonsaiSwiftUITests TextEditorViewTests.swift
+[11/112] Compiling BonsaiSwiftUITests TextEventTests.swift
+[12/112] Compiling BonsaiSwiftUITests TextFieldWireTests.swift
+[13/112] Compiling BonsaiSwiftUITests TextTests.swift
+[14/112] Compiling BonsaiSwiftUITests TodoTests.swift
+[15/112] Compiling BonsaiSwiftUITests FileDialogTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[16/112] Compiling BonsaiSwiftUITests FileResultTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[17/112] Compiling BonsaiSwiftUITests FocusScopeTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[18/112] Compiling BonsaiSwiftUITests FrameTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[19/112] Compiling BonsaiSwiftUITests FullGalleryTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[20/112] Compiling BonsaiSwiftUITests GestureEventTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[21/112] Compiling BonsaiSwiftUITests GroupBoxTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[22/112] Compiling BonsaiSwiftUITests LabelTests.swift
+[23/112] Compiling BonsaiSwiftUITests MeasuredCollectionTests.swift
+[24/112] Compiling BonsaiSwiftUITests MenuTests.swift
+[25/112] Compiling BonsaiSwiftUITests MixedCollectionTests.swift
+[26/112] Compiling BonsaiSwiftUITests ModifierTests.swift
+[27/112] Compiling BonsaiSwiftUITests MorphingSurfaceTests.swift
+[28/112] Compiling BonsaiSwiftUITests ToggleTests.swift
+[29/112] Compiling BonsaiSwiftUITests ToolbarTests.swift
+[30/112] Compiling BonsaiSwiftUITests ViewEnvironmentTests.swift
+[31/112] Compiling BonsaiSwiftUITests WeightedLayoutTests.swift
+[32/112] Compiling BonsaiSwiftUITests WireFrameTests.swift
+[33/112] Compiling BonsaiSwiftUITests WorkflowTests.swift
+[34/112] Compiling BonsaiSwiftUITests SafeAreaTests.swift
+[35/112] Compiling BonsaiSwiftUITests ScopedThemeTests.swift
+[36/112] Compiling BonsaiSwiftUITests ScrollFillTests.swift
+[37/112] Compiling BonsaiSwiftUITests ScrollNodeTests.swift
+[38/112] Compiling BonsaiSwiftUITests ScrollObservationTests.swift
+[39/112] Compiling BonsaiSwiftUITests ScrollSectionsTests.swift
+[40/112] Compiling BonsaiSwiftUITests HapticServiceTests.swift
+[41/112] Compiling BonsaiSwiftUITests HelpTests.swift
+[42/112] Compiling BonsaiSwiftUITests HostCommandTests.swift
+[43/112] Compiling BonsaiSwiftUITests HostEnvironmentTests.swift
+[44/112] Compiling BonsaiSwiftUITests HostMenuServiceTests.swift
+[45/112] Compiling BonsaiSwiftUITests HostNavigationTests.swift
+[46/112] Compiling BonsaiSwiftUITests HostPickerServiceTests.swift
+[47/112] Compiling BonsaiSwiftUITests AnimatedOpacityTests.swift
+[48/112] Compiling BonsaiSwiftUITests AppBarCompositionTests.swift
+[49/112] Compiling BonsaiSwiftUITests AppKitHoverCaptureTests.swift
+[50/112] Compiling BonsaiSwiftUITests ApplicationBridgeTests.swift
+[51/112] Compiling BonsaiSwiftUITests ApplicationTransportTests.swift
+[52/112] Compiling BonsaiSwiftUITests BadgeTests.swift
+[53/112] Compiling BonsaiSwiftUITests BonsaiSessionTests.swift
+[54/112] Compiling BonsaiSwiftUITests ScrollServiceTests.swift
+[55/112] Compiling BonsaiSwiftUITests ScrollTargetsTests.swift
+[56/112] Compiling BonsaiSwiftUITests SelectionCatalogTests.swift
+[57/112] Compiling BonsaiSwiftUITests SemanticsNodeTests.swift
+[58/112] Compiling BonsaiSwiftUITests SheetTests.swift
+[59/112] Compiling BonsaiSwiftUITests SidebarCompositionTests.swift
+[60/112] Compiling BonsaiSwiftUITests ComposerTests.swift
+[61/112] Compiling BonsaiSwiftUITests ContextualSelectionTests.swift
+[62/112] Compiling BonsaiSwiftUITests DisclosureTests.swift
+[63/112] Compiling BonsaiSwiftUITests DividerTests.swift
+[64/112] Compiling BonsaiSwiftUITests DropdownCompositionTests.swift
+[65/112] Compiling BonsaiSwiftUITests EventBatchTests.swift
+[66/112] Compiling BonsaiSwiftUITests ExpandableComposerTests.swift
+[67/112] Compiling BonsaiSwiftUITests PageLayoutTests.swift
+[68/112] Compiling BonsaiSwiftUITests PickerTests.swift
+[69/112] Compiling BonsaiSwiftUITests PlatformInformationTests.swift
+[70/112] Compiling BonsaiSwiftUITests PointerContactInputTests.swift
+[71/112] Compiling BonsaiSwiftUITests PointerEventTests.swift
+[72/112] Compiling BonsaiSwiftUITests PopoverTests.swift
+[73/112] Compiling BonsaiSwiftUITests ProgressTests.swift
+[74/112] Compiling BonsaiSwiftUITests ProjectionTests.swift
+[75/112] Compiling BonsaiSwiftUITests RefreshTests.swift
+[76/112] Compiling BonsaiSwiftUITests RemovalTests.swift
+[77/112] Compiling BonsaiSwiftUITests RichTextTests.swift
+[78/112] Compiling BonsaiSwiftUITests SQLiteWorkerTests.swift
+[79/112] Compiling BonsaiSwiftUITests HostServicesTests.swift
+[80/112] Compiling BonsaiSwiftUITests HoverInputTests.swift
+[81/112] Compiling BonsaiSwiftUITests HoverRegionTests.swift
+[82/112] Compiling BonsaiSwiftUITests ImageLoadingTests.swift
+[83/112] Compiling BonsaiSwiftUITests InitialScrollTests.swift
+[84/112] Compiling BonsaiSwiftUITests KeyboardEventTests.swift
+[85/112] Compiling BonsaiSwiftUITests KeyboardListenerTests.swift
+[86/112] Compiling BonsaiSwiftUITests NavigationStackTests.swift
+[87/112] Compiling BonsaiSwiftUITests NetworkTests.swift
+[88/112] Compiling BonsaiSwiftUITests NodeServiceTests.swift
+[89/112] Compiling BonsaiSwiftUITests NodeStoreTests.swift
+[90/112] Compiling BonsaiSwiftUITests NoticeServiceTests.swift
+[91/112] Compiling BonsaiSwiftUITests OverlayTests.swift
+[92/112] Compiling BonsaiSwiftUITests SliderTests.swift
+[93/112] Compiling BonsaiSwiftUITests StackTests.swift
+[94/112] Compiling BonsaiSwiftUITests SwipeActionsTests.swift
+[95/112] Compiling BonsaiSwiftUITests SymbolTests.swift
+[96/112] Compiling BonsaiSwiftUITests TableRuntimeTests.swift
+[97/112] Compiling BonsaiSwiftUITests TabsTests.swift
+[98/112] Compiling BonsaiSwiftUITests MultipleSelectionTests.swift
+[99/112] Compiling BonsaiSwiftUITests NativeKeyMappingTests.swift
+[100/112] Compiling BonsaiSwiftUITests NativeRuntimeTests.swift
+[101/112] Compiling BonsaiSwiftUITests NativeViewTests.swift
+[102/112] Compiling BonsaiSwiftUITests NativeWindowHostTests.swift
+[103/112] Compiling BonsaiSwiftUITests NavigationSplitTests.swift
+[104/112] Compiling BonsaiSwiftUITests ButtonAutofocusTests.swift
+[105/112] Compiling BonsaiSwiftUITests ButtonScopeTests.swift
+[106/112] Compiling BonsaiSwiftUITests CivilPickerTests.swift
+[107/112] Compiling BonsaiSwiftUITests CivilSelectionTests.swift
+[108/112] Compiling BonsaiSwiftUITests ClockTests.swift
+[109/112] Compiling BonsaiSwiftUITests CollectionEventTests.swift
+[110/112] Compiling BonsaiSwiftUITests CollectionNodeTests.swift
+[110/112] Write Objects.LinkFileList
+[111/112] Linking BonsaiSwiftUIPackageTests
+Build complete! (10.46s)
+Test Suite 'Selected tests' started at 2026-09-16 17:51:54.840.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-16 17:51:54.841.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-16 17:51:54.841.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-16 17:51:54.841.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test actualOpacityWaitsForPresentationAndCompletesOnceThroughOcaml() started.
+✔ Test actualOpacityWaitsForPresentationAndCompletesOnceThroughOcaml() passed after 2.982 seconds.
+◇ Test actualAppBarsKeepPageCommandsWithinTheirNavigationScope() started.
+✔ Test actualAppBarsKeepPageCommandsWithinTheirNavigationScope() passed after 0.012 seconds.
+◇ Test appKitCapturedHoverReachesOcaml() started.
+✔ Test appKitCapturedHoverReachesOcaml() passed after 0.021 seconds.
+◇ Test applicationProviderWaitsForPresentationAndEchoesOpaqueBytes() started.
+✔ Test applicationProviderWaitsForPresentationAndEchoesOpaqueBytes() passed after 0.012 seconds.
+◇ Test applicationDelayedCancellationKeepsUiAndOtherRepliesAlive() started.
+✔ Test applicationDelayedCancellationKeepsUiAndOtherRepliesAlive() passed after 0.125 seconds.
+◇ Test applicationErrorsAreBoundedAndOversizedResponsesResolve() started.
+✔ Test applicationErrorsAreBoundedAndOversizedResponsesResolve() passed after 0.017 seconds.
+◇ Test applicationEventBackpressurePreservesQueuedInputAndPendingReply() started.
+✔ Test applicationEventBackpressurePreservesQueuedInputAndPendingReply() passed after 0.052 seconds.
+◇ Test applicationCloseCancelsTasksAndFencesOldSendersAcrossRestart() started.
+✔ Test applicationCloseCancelsTasksAndFencesOldSendersAcrossRestart() passed after 0.024 seconds.
+◇ Test applicationOwnsNotificationSubscriptionAndStopsItOnClose() started.
+✔ Test applicationOwnsNotificationSubscriptionAndStopsItOnClose() passed after 0.004 seconds.
+◇ Test applicationRequestConcurrencyIsBoundedAndExcessRequestsResolve() started.
+✔ Test applicationRequestConcurrencyIsBoundedAndExcessRequestsResolve() passed after 1.250 seconds.
+◇ Test applicationOpaqueRepliesEventsAndEveryErrorReachActualOcaml() started.
+✔ Test applicationOpaqueRepliesEventsAndEveryErrorReachActualOcaml() passed after 0.023 seconds.
+◇ Test cancelledApplicationReplyCannotDiscardQueuedUiOrOtherReplies() started.
+✔ Test cancelledApplicationReplyCannotDiscardQueuedUiOrOtherReplies() passed after 0.004 seconds.
+◇ Test applicationWithoutProviderResolvesUnavailableAfterPresentation() started.
+✔ Test applicationWithoutProviderResolvesUnavailableAfterPresentation() passed after 0.004 seconds.
+◇ Test actualBadgeUpdatesRetainContentAndDisabledOwnership() started.
+✔ Test actualBadgeUpdatesRetainContentAndDisabledOwnership() passed after 0.005 seconds.
+◇ Test presentationTicketsDoNotInvalidateApplicationContent() started.
+✔ Test presentationTicketsDoNotInvalidateApplicationContent() passed after 0.001 seconds.
+◇ Test unchangedPumpsDoNotReconcilePresentation() started.
+✔ Test unchangedPumpsDoNotReconcilePresentation() passed after 0.001 seconds.
+◇ Test hostWindowPresentsCounterAndClosesWhenRemoved() started.
+✔ Test hostWindowPresentsCounterAndClosesWhenRemoved() passed after 0.093 seconds.
+◇ Test sessionWaitsForPresentationAndDispatchesVisibleButton() started.
+✔ Test sessionWaitsForPresentationAndDispatchesVisibleButton() passed after 0.001 seconds.
+◇ Test hiddenSessionDefersPumpAndPresentationWithoutLosingEvents() started.
+✔ Test hiddenSessionDefersPumpAndPresentationWithoutLosingEvents() passed after 0.001 seconds.
+◇ Test buttonAutofocusRunsRealOCamlAndRetainsFocusAcrossHandlerReplacement() started.
+✔ Test buttonAutofocusRunsRealOCamlAndRetainsFocusAcrossHandlerReplacement() passed after 0.867 seconds.
+◇ Test actualGalleryButtonScopesPreserveActivationAndIdentity() started.
+✔ Test actualGalleryButtonScopesPreserveActivationAndIdentity() passed after 0.013 seconds.
+◇ Test civilControlsStageAndReturnToOcamlOwnedValues() started.
+✔ Test civilControlsStageAndReturnToOcamlOwnedValues() passed after 4.899 seconds.
+◇ Test actualGalleryCivilPickersReconcileAcceptanceRejectionAndBindingChanges() started.
+✔ Test actualGalleryCivilPickersReconcileAcceptanceRejectionAndBindingChanges() passed after 0.022 seconds.
+◇ Test nativeCivilFieldActionsReachTheActualOcamlModel() started.
+✔ Test nativeCivilFieldActionsReachTheActualOcamlModel() passed after 0.489 seconds.
+◇ Test civilDateAndTimeEventsReachTheActualOcamlHandlers() started.
+✔ Test civilDateAndTimeEventsReachTheActualOcamlHandlers() passed after 0.001 seconds.
+◇ Test actualClockTimersAndPresentationWaitsUseNativeFrames() started.
+✔ Test actualClockTimersAndPresentationWaitsUseNativeFrames() passed after 0.009 seconds.
+◇ Test nativeRangesBoundActualMailMaterializationAndPreserveDelayedPaging() started.
+✔ Test nativeRangesBoundActualMailMaterializationAndPreserveDelayedPaging() passed after 0.017 seconds.
+◇ Test scrollingPublishesOnlyTheWindowWithoutRepeatingTheCatalog() started.
+✔ Test scrollingPublishesOnlyTheWindowWithoutRepeatingTheCatalog() passed after 0.001 seconds.
+◇ Test actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames(horizontal:rightToLeft:) started.
+✔ Test actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames(horizontal:rightToLeft:) with 4 test cases passed after 3.004 seconds.
+◇ Test publicCollectionMountsAndSamplesWindowRequestsAfterPresentation(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to publicCollectionMountsAndSamplesWindowRequestsAfterPresentation(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to publicCollectionMountsAndSamplesWindowRequestsAfterPresentation(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to publicCollectionMountsAndSamplesWindowRequestsAfterPresentation(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to publicCollectionMountsAndSamplesWindowRequestsAfterPresentation(horizontal:rightToLeft:) started.
+✔ Test publicCollectionMountsAndSamplesWindowRequestsAfterPresentation(horizontal:rightToLeft:) with 4 test cases passed after 2.256 seconds.
+◇ Test actualComposerOwnsDraftAndRoutesExactRawActions() started.
+✔ Test actualComposerOwnsDraftAndRoutesExactRawActions() passed after 1.650 seconds.
+◇ Test composerRetainsMarkedTextAndRejectsUnadmittedEdits() started.
+✔ Test composerRetainsMarkedTextAndRejectsUnadmittedEdits() passed after 0.785 seconds.
+◇ Test composerChildValidationPrecedesResourceCreationAndCoversCachedProps() started.
+✔ Test composerChildValidationPrecedesResourceCreationAndCoversCachedProps() passed after 0.003 seconds.
+◇ Test composerRejectsMalformedPayloadAndReservedRegistration() started.
+✔ Test composerRejectsMalformedPayloadAndReservedRegistration() passed after 0.006 seconds.
+◇ Test composerObservesDistinctUtf8SpellingsOfEquivalentText() started.
+✔ Test composerObservesDistinctUtf8SpellingsOfEquivalentText() passed after 0.276 seconds.
+◇ Test contextualSelectionUsesCurrentIdsForMembershipAndBatchCommands() started.
+✔ Test contextualSelectionUsesCurrentIdsForMembershipAndBatchCommands() passed after 0.012 seconds.
+◇ Test nativeDisclosureCollapseRevokesFocusBeforeTheNextPump() started.
+✔ Test nativeDisclosureCollapseRevokesFocusBeforeTheNextPump() passed after 0.001 seconds.
+◇ Test actualDisclosureOwnershipTracksExpansionAndPresentation() started.
+✔ Test actualDisclosureOwnershipTracksExpansionAndPresentation() passed after 0.005 seconds.
+◇ Test actualGalleryDividersUseNativeRowAndColumnSeparators() started.
+✔ Test actualGalleryDividersUseNativeRowAndColumnSeparators() passed after 0.023 seconds.
+◇ Test actualDropdownCombinesQueryStatesAndIndependentSelections(width:) started.
+◇ Test case passing 1 argument width → 360.0 to actualDropdownCombinesQueryStatesAndIndependentSelections(width:) started.
+◇ Test case passing 1 argument width → 620.0 to actualDropdownCombinesQueryStatesAndIndependentSelections(width:) started.
+✔ Test actualDropdownCombinesQueryStatesAndIndependentSelections(width:) with 2 test cases passed after 7.142 seconds.
+◇ Test swiftPressRunsActualOcamlCounterHandler() started.
+✔ Test swiftPressRunsActualOcamlCounterHandler() passed after 0.001 seconds.
+◇ Test expandableComposerRetainsDraftAndFencesBackgroundAcrossReopening() started.
+✔ Test expandableComposerRetainsDraftAndFencesBackgroundAcrossReopening() passed after 4.307 seconds.
+◇ Test expandableComposerDisableRemoveAndReplaceOwnResources() started.
+✔ Test expandableComposerDisableRemoveAndReplaceOwnResources() passed after 4.401 seconds.
+◇ Test expandableComposerValidatesPayloadChildrenAndReservedKind() started.
+✔ Test expandableComposerValidatesPayloadChildrenAndReservedKind() passed after 0.019 seconds.
+◇ Test nativeFileExportCompletionReturnsDestinationThroughActualOcaml() started.
+✔ Test nativeFileExportCompletionReturnsDestinationThroughActualOcaml() passed after 0.035 seconds.
+◇ Test nativeFileImportCompletionCopiesAllFilesThroughActualOcaml() started.
+✔ Test nativeFileImportCompletionCopiesAllFilesThroughActualOcaml() passed after 0.029 seconds.
+◇ Test fileDialogCancellationDoesNotReplaceAnotherRequestOrCrossRestart() started.
+✔ Test fileDialogCancellationDoesNotReplaceAnotherRequestOrCrossRestart() passed after 0.048 seconds.
+◇ Test fileSelectionPreservesAllResultsAndRejectsMalformedListsInActualOcaml() started.
+✔ Test fileSelectionPreservesAllResultsAndRejectsMalformedListsInActualOcaml() passed after 0.006 seconds.
+◇ Test nativeFieldEditorsReportNestedScopeTransitionsToOCaml() started.
+✔ Test nativeFieldEditorsReportNestedScopeTransitionsToOCaml() passed after 1.193 seconds.
+◇ Test actualOcamlSpacerPreservesFixedBlankSpace() started.
+✔ Test actualOcamlSpacerPreservesFixedBlankSpace() passed after 0.012 seconds.
+◇ Test actualGalleryFrameSectionRendersThroughNativeRuntime() started.
+✔ Test actualGalleryFrameSectionRendersThroughNativeRuntime() passed after 0.010 seconds.
+◇ Test realFrameChangesBetweenFixedAndFlexibleWithoutRemounting() started.
+✔ Test realFrameChangesBetweenFixedAndFlexibleWithoutRemounting() passed after 0.021 seconds.
+◇ Test actualCompleteGalleryStartsAndDispatches() started.
+✔ Test actualCompleteGalleryStartsAndDispatches() passed after 0.331 seconds.
+◇ Test actualGestureTreeStagesAndRejectsMalformedUpdatesAtomically() started.
+✔ Test actualGestureTreeStagesAndRejectsMalformedUpdatesAtomically() passed after 0.001 seconds.
+◇ Test gesturesReachActualOcamlWithAllCoordinatesKindsAndReplayFencing() started.
+✔ Test gesturesReachActualOcamlWithAllCoordinatesKindsAndReplayFencing() passed after 0.001 seconds.
+◇ Test actualGroupedCardsRetainContentAndIndependentActions() started.
+✔ Test actualGroupedCardsRetainContentAndIndependentActions() passed after 0.003 seconds.
+◇ Test nativeHapticsRecheckActivityAtExecutionTime() started.
+✔ Test nativeHapticsRecheckActivityAtExecutionTime() passed after 0.017 seconds.
+◇ Test hapticRequestsCompleteActualOcamlAndPreserveRepeatedEffects() started.
+✔ Test hapticRequestsCompleteActualOcamlAndPreserveRepeatedEffects() passed after 0.131 seconds.
+◇ Test hapticsWaitForPresentationActivationAndVisibility() started.
+✔ Test hapticsWaitForPresentationActivationAndVisibility() passed after 0.160 seconds.
+◇ Test hapticCancellationMissingWindowAndRestartResolveThroughOcaml() started.
+✔ Test hapticCancellationMissingWindowAndRestartResolveThroughOcaml() passed after 0.089 seconds.
+◇ Test actualHelpPreservesOCamlActionsAndNativeHints() started.
+✔ Test actualHelpPreservesOCamlActionsAndNativeHints() passed after 0.834 seconds.
+◇ Test actualHostEffectsExampleStages() started.
+✔ Test actualHostEffectsExampleStages() passed after 0.003 seconds.
+◇ Test nativeHostEnvironmentReachesOCamlAndTracksWindowAndSettings() started.
+✔ Test nativeHostEnvironmentReachesOCamlAndTracksWindowAndSettings() passed after 1.646 seconds.
+◇ Test nativeHostEnvironmentResumesWithLatestSampleAndResendsAfterRestart() started.
+✔ Test nativeHostEnvironmentResumesWithLatestSampleAndResendsAfterRestart() passed after 7.625 seconds.
+◇ Test nativeHostEnvironmentRejectsInvalidAndRetiredSources() started.
+✔ Test nativeHostEnvironmentRejectsInvalidAndRetiredSources() passed after 0.002 seconds.
+◇ Test hostMenusSelectActualOcamlAndBlockBackgroundAtBothWidths() started.
+✔ Test hostMenusSelectActualOcamlAndBlockBackgroundAtBothWidths() passed after 2.353 seconds.
+◇ Test hostMenusDismissScrollAndRetainDisabledChoices() started.
+✔ Test hostMenusDismissScrollAndRetainDisabledChoices() passed after 2.311 seconds.
+◇ Test hostMenusCancelBusyRequestsAndFenceRestartedCallbacks() started.
+✔ Test hostMenusCancelBusyRequestsAndFenceRestartedCallbacks() passed after 2.264 seconds.
+◇ Test hostMenusAndFileDialogsCannotOverlap() started.
+✔ Test hostMenusAndFileDialogsCannotOverlap() passed after 2.618 seconds.
+◇ Test hostMenusDeferInactiveRequestsAndCancelLostWindowContext() started.
+✔ Test hostMenusDeferInactiveRequestsAndCancelLostWindowContext() passed after 2.397 seconds.
+◇ Test actualHostNavigationRetainsClipboardAcrossSettingsAndFencesHiddenInput() started.
+✔ Test actualHostNavigationRetainsClipboardAcrossSettingsAndFencesHiddenInput() passed after 0.048 seconds.
+◇ Test hostPickersFixtureStarts() started.
+✔ Test hostPickersFixtureStarts() passed after 0.001 seconds.
+◇ Test hostPickersEditNativeControlsBeforeCommittingToOcaml() started.
+✔ Test hostPickersEditNativeControlsBeforeCommittingToOcaml() passed after 9.734 seconds.
+◇ Test hostPickersCancelBlockAndFenceRealSheets() started.
+✔ Test hostPickersCancelBlockAndFenceRealSheets() passed after 7.916 seconds.
+◇ Test actualHostEffectsRoundTripOnlyAfterPresentationAndResume() started.
+✔ Test actualHostEffectsRoundTripOnlyAfterPresentationAndResume() passed after 0.073 seconds.
+◇ Test delayedHostRepliesRebaseAcrossPresentationAndCannotCrossRestart() started.
+✔ Test delayedHostRepliesRebaseAcrossPresentationAndCannotCrossRestart() passed after 0.029 seconds.
+◇ Test mergedHoverAndMouseContactReachActualOcamlInOrder() started.
+✔ Test mergedHoverAndMouseContactReachActualOcamlInOrder() passed after 0.001 seconds.
+◇ Test actualGalleryHoverFencesPresentationAndRetainsContent() started.
+✔ Test actualGalleryHoverFencesPresentationAndRetainsContent() passed after 0.003 seconds.
+◇ Test actualImagePropertiesUpdateWithoutReloadingOrRemounting() started.
+✔ Test actualImagePropertiesUpdateWithoutReloadingOrRemounting() passed after 0.021 seconds.
+◇ Test actualGalleryImagesLoadAndRenderAtInitialFrame() started.
+✔ Test actualGalleryImagesLoadAndRenderAtInitialFrame() passed after 0.016 seconds.
+◇ Test actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (false, false) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (false, true) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (true, false) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (true, true) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (false, false) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (false, true) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (true, false) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (true, true) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (false, false) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (false, true) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (true, false) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (true, true) to actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) started.
+✔ Test actualInitialScrollPositionsAreExplicitAndDoNotReplay(kind:layout:) with 12 test cases passed after 92.308 seconds.
+◇ Test keyboardEventsReachActualOcamlWithEveryFieldAndPreserveRepeatsAndReplayFence() started.
+✔ Test keyboardEventsReachActualOcamlWithEveryFieldAndPreserveRepeatsAndReplayFence() passed after 0.001 seconds.
+◇ Test nativeKeyboardAutofocusWaitsForPresentationAndDoesNotStealFocus() started.
+✔ Test nativeKeyboardAutofocusWaitsForPresentationAndDoesNotStealFocus() passed after 0.603 seconds.
+◇ Test nativeKeyboardListenersBubbleToOCamlAndRespectNativeEditing(handled:) started.
+◇ Test case passing 1 argument handled → false to nativeKeyboardListenersBubbleToOCamlAndRespectNativeEditing(handled:) started.
+◇ Test case passing 1 argument handled → true to nativeKeyboardListenersBubbleToOCamlAndRespectNativeEditing(handled:) started.
+✔ Test nativeKeyboardListenersBubbleToOCamlAndRespectNativeEditing(handled:) with 2 test cases passed after 2.501 seconds.
+◇ Test actualLabelRowsKeepAccessoryActionsIndependentAndTitlesStable() started.
+✔ Test actualLabelRowsKeepAccessoryActionsIndependentAndTitlesStable() passed after 0.091 seconds.
+◇ Test actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows(horizontal:rightToLeft:) started.
+✔ Test actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows(horizontal:rightToLeft:) with 4 test cases passed after 2.924 seconds.
+◇ Test actualGalleryMenuActionsRespectHierarchyAndOcamlOwnership() started.
+✔ Test actualGalleryMenuActionsRespectHierarchyAndOcamlOwnership() passed after 0.014 seconds.
+◇ Test mixedWindowChangesDoNotRepublishCatalog() started.
+✔ Test mixedWindowChangesDoNotRepublishCatalog() passed after 0.007 seconds.
+◇ Test mixedCollectionKeepsOneViewportAndStableAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to mixedCollectionKeepsOneViewportAndStableAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to mixedCollectionKeepsOneViewportAndStableAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to mixedCollectionKeepsOneViewportAndStableAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to mixedCollectionKeepsOneViewportAndStableAnchor(horizontal:rightToLeft:) started.
+✔ Test mixedCollectionKeepsOneViewportAndStableAnchor(horizontal:rightToLeft:) with 4 test cases passed after 19.635 seconds.
+◇ Test realModifierUpdatesRetainNativeNodes() started.
+✔ Test realModifierUpdatesRetainNativeNodes() passed after 0.018 seconds.
+◇ Test actualGalleryModifiersRenderInBothLayoutDirections() started.
+✔ Test actualGalleryModifiersRenderInBothLayoutDirections() passed after 0.018 seconds.
+◇ Test actualGalleryMorphRejectsInactiveAndUnpresentedBranchInput() started.
+✔ Test actualGalleryMorphRejectsInactiveAndUnpresentedBranchInput() passed after 0.002 seconds.
+◇ Test actualMailCoordinatesSurfaceExtentsAndRemovesCollapsedDetails() started.
+✔ Test actualMailCoordinatesSurfaceExtentsAndRemovesCollapsedDetails() passed after 2.243 seconds.
+◇ Test actualGalleryMultipleSelectionCombinesIndependentIntents() started.
+✔ Test actualGalleryMultipleSelectionCombinesIndependentIntents() passed after 0.026 seconds.
+◇ Test nativeAppKitKeyPacketsReachTheActualOcamlHandler() started.
+✔ Test nativeAppKitKeyPacketsReachTheActualOcamlHandler() passed after 0.001 seconds.
+◇ Test counterFrameAndNoDiffToken() started.
+✔ Test counterFrameAndNoDiffToken() passed after 0.001 seconds.
+◇ Test pendingTokenAndStaleAcknowledgmentCannotAdvanceRuntime() started.
+✔ Test pendingTokenAndStaleAcknowledgmentCannotAdvanceRuntime() passed after 0.001 seconds.
+◇ Test rejectionRecoversWithFreshSnapshot() started.
+✔ Test rejectionRecoversWithFreshSnapshot() passed after 0.001 seconds.
+◇ Test invalidClockDoesNotConsumePendingToken() started.
+✔ Test invalidClockDoesNotConsumePendingToken() passed after 0.001 seconds.
+◇ Test closeIsIdempotentAndRuntimeCanRestart() started.
+✔ Test closeIsIdempotentAndRuntimeCanRestart() passed after 0.001 seconds.
+◇ Test invalidEntrypointsAndSecondOwnerFailWithoutDisplacingFirst() started.
+✔ Test invalidEntrypointsAndSecondOwnerFailWithoutDisplacingFirst() passed after 0.001 seconds.
+◇ Test concurrentPumpsAreSerializedBehindOneToken() started.
+✔ Test concurrentPumpsAreSerializedBehindOneToken() passed after 0.001 seconds.
+◇ Test actualOcamlNativeViewEnvelopeStages() started.
+✔ Test actualOcamlNativeViewEnvelopeStages() passed after 0.001 seconds.
+◇ Test registeredNativeViewRoutesEventsAndOwnsResources() started.
+✔ Test registeredNativeViewRoutesEventsAndOwnsResources() passed after 1.761 seconds.
+◇ Test nativeViewRejectsFramesAtomicallyAndBoundsQueue() started.
+✔ Test nativeViewRejectsFramesAtomicallyAndBoundsQueue() passed after 0.184 seconds.
+◇ Test nestedNativeViewsBecomePresentedInOneAcknowledgment() started.
+✔ Test nestedNativeViewsBecomePresentedInOneAcknowledgment() passed after 0.309 seconds.
+◇ Test actualWindowRequestsWaitForPresentationAndResume() started.
+✔ Test actualWindowRequestsWaitForPresentationAndResume() passed after 0.041 seconds.
+◇ Test actualGallerySplitAcceptsChangesAndRestoresDeclinedRequests() started.
+✔ Test actualGallerySplitAcceptsChangesAndRestoresDeclinedRequests() passed after 0.007 seconds.
+◇ Test columnEchoAwaitingPresentationDoesNotDropTheFinalNativeIntent() started.
+✔ Test columnEchoAwaitingPresentationDoesNotDropTheFinalNativeIntent() passed after 0.001 seconds.
+◇ Test actualTwoColumnGalleryPreservesSelectionAndRejectsMissingContent() started.
+✔ Test actualTwoColumnGalleryPreservesSelectionAndRejectsMissingContent() passed after 0.002 seconds.
+◇ Test actualNavigationExamplePushesAndAcceptsNativePathChanges() started.
+✔ Test actualNavigationExamplePushesAndAcceptsNativePathChanges() passed after 0.001 seconds.
+◇ Test actualPathRequestsPreservePrefixesAndRestoreRejectedNativePops() started.
+✔ Test actualPathRequestsPreservePrefixesAndRestoreRejectedNativePops() passed after 0.001 seconds.
+◇ Test actualNetworkWorkerApplicationStagesAndRestarts() started.
+✔ Test actualNetworkWorkerApplicationStagesAndRestarts() passed after 0.003 seconds.
+◇ Test hostFocusRequestsReachActualFieldsAndClearOnlyTheirWindow() started.
+✔ Test hostFocusRequestsReachActualFieldsAndClearOnlyTheirWindow() passed after 0.321 seconds.
+◇ Test nodeServicesWaitForPresentationAndRejectDetachedWindows() started.
+✔ Test nodeServicesWaitForPresentationAndRejectDetachedWindows() passed after 0.175 seconds.
+◇ Test hostMeasurementUsesSwiftUIPointsAndRejectsRemovedNodes() started.
+✔ Test hostMeasurementUsesSwiftUIPointsAndRejectsRemovedNodes() passed after 0.250 seconds.
+◇ Test realCounterStagesAndUpdatesThroughSwiftButton() started.
+✔ Test realCounterStagesAndUpdatesThroughSwiftButton() passed after 0.001 seconds.
+◇ Test nativeNoticeButtonsCompleteRealOcamlAndFitCompactWindows() started.
+✔ Test nativeNoticeButtonsCompleteRealOcamlAndFitCompactWindows() passed after 0.216 seconds.
+◇ Test nativeNoticesQueueAndPauseTheirDisplayedTimeout() started.
+✔ Test nativeNoticesQueueAndPauseTheirDisplayedTimeout() passed after 1.025 seconds.
+◇ Test nativeNoticesCancelQueuedAndVisibleRequestsAndFenceRetiredButtons() started.
+✔ Test nativeNoticesCancelQueuedAndVisibleRequestsAndFenceRetiredButtons() passed after 0.483 seconds.
+◇ Test nativeStartupNoticeWaitsForActivePresentation() started.
+✔ Test nativeStartupNoticeWaitsForActivePresentation() passed after 0.572 seconds.
+◇ Test actualOverlayAlignmentAndSignedInsetsUpdateWithoutRemounting() started.
+✔ Test actualOverlayAlignmentAndSignedInsetsUpdateWithoutRemounting() passed after 0.021 seconds.
+◇ Test actualGalleryOverlayCompositionsRenderInBothDirections() started.
+✔ Test actualGalleryOverlayCompositionsRenderInBothDirections() passed after 0.015 seconds.
+◇ Test actualPageLayoutPinsControlsAndRetainsItsScrollingBody() started.
+✔ Test actualPageLayoutPinsControlsAndRetainsItsScrollingBody() passed after 1.146 seconds.
+◇ Test actualGalleryPickerPreservesIdentityAndControlledSelection() started.
+✔ Test actualGalleryPickerPreservesIdentityAndControlledSelection() passed after 0.041 seconds.
+◇ Test actualSegmentedNavigationPreservesSignedIDsAndComposedLabels() started.
+✔ Test actualSegmentedNavigationPreservesSignedIDsAndComposedLabels() passed after 1.277 seconds.
+◇ Test actualPlatformInformationWaitsForPresentationAndCannotCrossRestart() started.
+✔ Test actualPlatformInformationWaitsForPresentationAndCannotCrossRestart() passed after 0.048 seconds.
+◇ Test batchedConcurrentPointerEdgesReachActualOcamlWithoutLosingContacts() started.
+✔ Test batchedConcurrentPointerEdgesReachActualOcamlWithoutLosingContacts() passed after 0.001 seconds.
+◇ Test pointerEventsReachActualOcamlHandlersWithEveryFieldAndKind() started.
+✔ Test pointerEventsReachActualOcamlHandlersWithEveryFieldAndKind() passed after 0.001 seconds.
+◇ Test actualPopoverFencesContentAndRestoresRejectedNativeDismissal() started.
+✔ Test actualPopoverFencesContentAndRestoresRejectedNativeDismissal() passed after 2.781 seconds.
+◇ Test actualGalleryProgressUpdatesValuesAndIndeterminateMode() started.
+✔ Test actualGalleryProgressUpdatesValuesAndIndeterminateMode() passed after 0.992 seconds.
+◇ Test actualGalleryProjectionUpdatesPreserveControlsAndActivation() started.
+✔ Test actualGalleryProjectionUpdatesPreserveControlsAndActivation() passed after 0.008 seconds.
+◇ Test actualRefreshWaitsForOcamlAndPreservesItsViewport(kind:) started.
+◇ Test case passing 1 argument kind → 0 to actualRefreshWaitsForOcamlAndPreservesItsViewport(kind:) started.
+◇ Test case passing 1 argument kind → 1 to actualRefreshWaitsForOcamlAndPreservesItsViewport(kind:) started.
+◇ Test case passing 1 argument kind → 2 to actualRefreshWaitsForOcamlAndPreservesItsViewport(kind:) started.
+◇ Test case passing 1 argument kind → 3 to actualRefreshWaitsForOcamlAndPreservesItsViewport(kind:) started.
+✔ Test actualRefreshWaitsForOcamlAndPreservesItsViewport(kind:) with 4 test cases passed after 18.954 seconds.
+◇ Test actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance(vertical:rtl:) started.
+◇ Test case passing 2 arguments vertical → false, rtl → false to actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance(vertical:rtl:) started.
+◇ Test case passing 2 arguments vertical → false, rtl → true to actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance(vertical:rtl:) started.
+◇ Test case passing 2 arguments vertical → true, rtl → false to actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance(vertical:rtl:) started.
+◇ Test case passing 2 arguments vertical → true, rtl → true to actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance(vertical:rtl:) started.
+✔ Test actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance(vertical:rtl:) with 4 test cases passed after 18.394 seconds.
+◇ Test actualOcamlRichTextUpdatesRetainIdentity() started.
+✔ Test actualOcamlRichTextUpdatesRetainIdentity() passed after 0.034 seconds.
+◇ Test actualGalleryRichTextRendersStyledRuns() started.
+✔ Test actualGalleryRichTextRendersStyledRuns() passed after 0.018 seconds.
+◇ Test actualSQLiteWorkerStartsAndReopensItsDatabase() started.
+✔ Test actualSQLiteWorkerStartsAndReopensItsDatabase() passed after 0.007 seconds.
+◇ Test actualGallerySafeAreasUseNativeTitlebarInsetsAndRetainChildren() started.
+✔ Test actualGallerySafeAreasUseNativeTitlebarInsetsAndRetainChildren() passed after 1.005 seconds.
+◇ Test scopedThemeGalleryRetainsActionsAndNativeInheritance() started.
+✔ Test scopedThemeGalleryRetainsActionsAndNativeInheritance() passed after 1.851 seconds.
+◇ Test actualScrollFillsRemainingSpaceWithoutCompressingLongContent(horizontal:rtl:) started.
+◇ Test case passing 2 arguments horizontal → false, rtl → false to actualScrollFillsRemainingSpaceWithoutCompressingLongContent(horizontal:rtl:) started.
+◇ Test case passing 2 arguments horizontal → false, rtl → true to actualScrollFillsRemainingSpaceWithoutCompressingLongContent(horizontal:rtl:) started.
+◇ Test case passing 2 arguments horizontal → true, rtl → false to actualScrollFillsRemainingSpaceWithoutCompressingLongContent(horizontal:rtl:) started.
+◇ Test case passing 2 arguments horizontal → true, rtl → true to actualScrollFillsRemainingSpaceWithoutCompressingLongContent(horizontal:rtl:) started.
+✔ Test actualScrollFillsRemainingSpaceWithoutCompressingLongContent(horizontal:rtl:) with 4 test cases passed after 11.283 seconds.
+◇ Test actualGalleryScrollsInBothAxesAndRetainsOffsetsThroughUpdates() started.
+✔ Test actualGalleryScrollsInBothAxesAndRetainsOffsetsThroughUpdates() passed after 0.491 seconds.
+◇ Test actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (false, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (false, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (true, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (true, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (false, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (false, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (true, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (true, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (false, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (false, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (true, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (true, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (false, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (false, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (true, false) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (true, true) to actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) started.
+✔ Test actualScrollObserversPreserveTravelAndNativeIdentity(kind:layout:) with 16 test cases passed after 50.693 seconds.
+◇ Test nestedScrollObserversKeepTheirSourcesAndReportBackpressure() started.
+✔ Test nestedScrollObserversKeepTheirSourcesAndReportBackpressure() passed after 1.108 seconds.
+◇ Test actualSectionsPinNativeControlsAndRetainTheirIdentity(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to actualSectionsPinNativeControlsAndRetainTheirIdentity(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to actualSectionsPinNativeControlsAndRetainTheirIdentity(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to actualSectionsPinNativeControlsAndRetainTheirIdentity(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to actualSectionsPinNativeControlsAndRetainTheirIdentity(horizontal:rightToLeft:) started.
+✔ Test actualSectionsPinNativeControlsAndRetainTheirIdentity(horizontal:rightToLeft:) with 4 test cases passed after 4.612 seconds.
+◇ Test hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (false, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (false, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (true, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 0, layout → (true, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (false, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (false, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (true, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 1, layout → (true, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (false, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (false, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (true, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 2, layout → (true, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (false, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (false, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (true, false) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+◇ Test case passing 2 arguments kind → 3, layout → (true, true) to hostScrollRequestsMoveActualOCamlContainers(kind:layout:) started.
+✔ Test hostScrollRequestsMoveActualOCamlContainers(kind:layout:) with 16 test cases passed after 21.495 seconds.
+◇ Test hostScrollDefersPresentationCancelsAndRejectsRetiredTargets() started.
+✔ Test hostScrollDefersPresentationCancelsAndRejectsRetiredTargets() passed after 1.933 seconds.
+◇ Test hostScrollShortContentCompletesWithoutTravel() started.
+✔ Test hostScrollShortContentCompletesWithoutTravel() passed after 0.316 seconds.
+◇ Test actualCarouselKeepsPositionSeparateFromActionsAndRejectsObsoleteInput() started.
+✔ Test actualCarouselKeepsPositionSeparateFromActionsAndRejectsObsoleteInput() passed after 0.016 seconds.
+◇ Test searchableChoicesPreserveCanonicalSelectionAcrossFilteringAndContentStates() started.
+✔ Test searchableChoicesPreserveCanonicalSelectionAcrossFilteringAndContentStates() passed after 1.763 seconds.
+◇ Test choiceLayoutsKeepModelStateAndRejectHiddenDisabledOrIgnoredRequests() started.
+✔ Test choiceLayoutsKeepModelStateAndRejectHiddenDisabledOrIgnoredRequests() passed after 2.701 seconds.
+◇ Test choiceSearchPreservesUnicodeSelectionAndMarkedTextThroughOcamlAcknowledgments() started.
+✔ Test choiceSearchPreservesUnicodeSelectionAndMarkedTextThroughOcamlAcknowledgments() passed after 0.975 seconds.
+◇ Test choicePickerAdaptersFollowAllFiveNativeControlSizes() started.
+✔ Test choicePickerAdaptersFollowAllFiveNativeControlSizes() passed after 2.647 seconds.
+◇ Test choiceEventsQueuedAfterFilteringCannotChangeHiddenCanonicalChoices() started.
+✔ Test choiceEventsQueuedAfterFilteringCannotChangeHiddenCanonicalChoices() passed after 0.850 seconds.
+◇ Test actualGalleryAccessibilityActionsReachOcamlAndAnnounceAfterPresentation() started.
+✔ Test actualGalleryAccessibilityActionsReachOcamlAndAnnounceAfterPresentation() passed after 0.494 seconds.
+◇ Test actualSheetsOwnModalInputAndRetainChoicesAcrossPresentations() started.
+✔ Test actualSheetsOwnModalInputAndRetainChoicesAcrossPresentations() passed after 27.522 seconds.
+◇ Test shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 0 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 1 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 2 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 3 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 4 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 5 to shutdownProgressWithoutPresentation(mode:) started.
+✔ Test shutdownProgressWithoutPresentation(mode:) with 6 test cases passed after 0.241 seconds.
+◇ Test shutdownDeadlineCancellationAndClose(mode:) started.
+◇ Test case passing 1 argument mode → 0 to shutdownDeadlineCancellationAndClose(mode:) started.
+◇ Test case passing 1 argument mode → 1 to shutdownDeadlineCancellationAndClose(mode:) started.
+◇ Test case passing 1 argument mode → 2 to shutdownDeadlineCancellationAndClose(mode:) started.
+✔ Test shutdownDeadlineCancellationAndClose(mode:) with 3 test cases passed after 0.056 seconds.
+◇ Test shutdownLateHandlerCannotEnterReplacement() started.
+✔ Test shutdownLateHandlerCannotEnterReplacement() passed after 0.036 seconds.
+◇ Test shutdownResponseSurvivesSaturatedLifecycleQueue() started.
+✔ Test shutdownResponseSurvivesSaturatedLifecycleQueue() passed after 0.043 seconds.
+◇ Test shutdownInvalidAdmissionDoesNotRetireConnection() started.
+✔ Test shutdownInvalidAdmissionDoesNotRetireConnection() passed after 0.003 seconds.
+◇ Test shutdownActualNativeWindow(mode:) started.
+◇ Test case passing 1 argument mode → "visible" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=visible hidden=false active=false minimized=false elapsed=0.033415042 seconds
+◇ Test case passing 1 argument mode → "hidden" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=hidden hidden=true active=false minimized=false elapsed=0.035208958 seconds
+◇ Test case passing 1 argument mode → "inactive" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=inactive hidden=false active=false minimized=false elapsed=0.033830875 seconds
+◇ Test case passing 1 argument mode → "minimized" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=minimized hidden=false active=false minimized=true elapsed=0.038562708 seconds
+✔ Test shutdownActualNativeWindow(mode:) with 4 test cases passed after 1.178 seconds.
+◇ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() started.
+✔ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() passed after 4.776 seconds.
+◇ Test actualGallerySlidersAcceptRejectAndDisableNativeChanges() started.
+✔ Test actualGallerySlidersAcceptRejectAndDisableNativeChanges() passed after 1.481 seconds.
+◇ Test actualOcamlStackUpdatesPreserveIdentityAndNativeLayout() started.
+✔ Test actualOcamlStackUpdatesPreserveIdentityAndNativeLayout() passed after 0.043 seconds.
+◇ Test actualGalleryStacksRenderThroughNativeRuntime() started.
+✔ Test actualGalleryStacksRenderThroughNativeRuntime() passed after 0.019 seconds.
+◇ Test actualMailCanStageItsCompleteTree() started.
+✔ Test actualMailCanStageItsCompleteTree() passed after 0.018 seconds.
+◇ Test actualGallerySwipeActionsResolveUnchangedResponsesAndKeepContentIdentity() started.
+✔ Test actualGallerySwipeActionsResolveUnchangedResponsesAndKeepContentIdentity() passed after 0.716 seconds.
+◇ Test actualGallerySymbolSectionRendersThroughNativeRuntime() started.
+✔ Test actualGallerySymbolSectionRendersThroughNativeRuntime() passed after 0.015 seconds.
+◇ Test realSymbolButtonUpdatesWithoutReplacingItsNativeNode() started.
+✔ Test realSymbolButtonUpdatesWithoutReplacingItsNativeNode() passed after 0.011 seconds.
+◇ Test tableFencesHiddenDetailsAndRetainsControlledSelection() started.
+✔ Test tableFencesHiddenDetailsAndRetainsControlledSelection() passed after 0.018 seconds.
+◇ Test actualGalleryTabsKeepStateAndRejectHiddenOrUnpresentedInput() started.
+✔ Test actualGalleryTabsKeepStateAndRejectHiddenOrUnpresentedInput() passed after 0.006 seconds.
+◇ Test tabEchoAwaitingPresentationRetainsTheFinalIntentAndFencesPageInput() started.
+✔ Test tabEchoAwaitingPresentationRetainsTheFinalIntentAndFencesPageInput() passed after 0.002 seconds.
+◇ Test actualTabMetadataChangesFenceUnpresentedSelection() started.
+✔ Test actualTabMetadataChangesFenceUnpresentedSelection() passed after 0.002 seconds.
+◇ Test actualGalleryTagActionsSelectionsAndRemovalRemainIndependent() started.
+✔ Test actualGalleryTagActionsSelectionsAndRemovalRemainIndependent() passed after 0.008 seconds.
+◇ Test actualTextExampleMountsInSwiftUIAndAcknowledgesQueuedNativeEdits() started.
+✔ Test actualTextExampleMountsInSwiftUIAndAcknowledgesQueuedNativeEdits() passed after 0.015 seconds.
+◇ Test nativeTextEditsReachTheActualOcamlExampleAndRejectStaleLocalVersions() started.
+✔ Test nativeTextEditsReachTheActualOcamlExampleAndRejectStaleLocalVersions() passed after 0.002 seconds.
+◇ Test actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) started.
+◇ Test case passing 1 argument entrypoint → "native-field" to actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) started.
+◇ Test case passing 1 argument entrypoint → "native-secure-field" to actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) started.
+✔ Test actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) with 2 test cases passed after 0.963 seconds.
+◇ Test actualFieldAutofocusRequiresDisplayedActiveApplication() started.
+✔ Test actualFieldAutofocusRequiresDisplayedActiveApplication() passed after 0.475 seconds.
+◇ Test actualTextPropertiesUpdateWithoutRemounting() started.
+✔ Test actualTextPropertiesUpdateWithoutRemounting() passed after 0.030 seconds.
+◇ Test actualGalleryNativeTextRenders() started.
+✔ Test actualGalleryNativeTextRenders() passed after 0.018 seconds.
+◇ Test actualTodoEditsReordersCompletesAddsAndDeletesWithoutLosingIdentity(width:) started.
+◇ Test case passing 1 argument width → 360 to actualTodoEditsReordersCompletesAddsAndDeletesWithoutLosingIdentity(width:) started.
+◇ Test case passing 1 argument width → 800 to actualTodoEditsReordersCompletesAddsAndDeletesWithoutLosingIdentity(width:) started.
+✔ Test actualTodoEditsReordersCompletesAddsAndDeletesWithoutLosingIdentity(width:) with 2 test cases passed after 3.235 seconds.
+◇ Test actualGalleryTogglesAcceptRejectDisableAndRetainNativeState() started.
+✔ Test actualGalleryTogglesAcceptRejectDisableAndRetainNativeState() passed after 1.351 seconds.
+◇ Test toggleEchoPreservesFinalIntentAndRejectsDisabledStaleBindings() started.
+✔ Test toggleEchoPreservesFinalIntentAndRejectsDisabledStaleBindings() passed after 0.007 seconds.
+◇ Test actualToolbarRetainsCommandsAndRejectsStaleInput() started.
+✔ Test actualToolbarRetainsCommandsAndRejectsStaleInput() passed after 0.008 seconds.
+◇ Test realCounterIncludesOnlyValidatedSwiftUIEnvironment() started.
+✔ Test realCounterIncludesOnlyValidatedSwiftUIEnvironment() passed after 0.004 seconds.
+◇ Test actualWeightedUpdatesAndReordersRetainChildren() started.
+✔ Test actualWeightedUpdatesAndReordersRetainChildren() passed after 0.019 seconds.
+◇ Test actualGalleryWeightedLayoutsRenderInBothDirections() started.
+✔ Test actualGalleryWeightedLayoutsRenderInBothDirections() passed after 0.020 seconds.
+◇ Test decodeRealOcamlFrameAndRejectCorruptTransport() started.
+✔ Test decodeRealOcamlFrameAndRejectCorruptTransport() passed after 0.006 seconds.
+◇ Test actualWorkflowSelectsStepsAndFencesInactiveContent() started.
+✔ Test actualWorkflowSelectsStepsAndFencesInactiveContent() passed after 0.009 seconds.
+✔ Suite NativeRuntimeTests passed after 392.986 seconds.
+✔ Test run with 189 tests in 1 suite passed after 392.987 seconds.
