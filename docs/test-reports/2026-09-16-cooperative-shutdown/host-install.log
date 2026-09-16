@@ -1,0 +1,19 @@
+[bonsai-cooperative-shutdown-20260916] Initialised
+[NOTE] Repository bonsai-cooperative-shutdown-20260916 has been added to the selections of switch bonsai-ui only.
+       Run `opam repository add bonsai-cooperative-shutdown-20260916 --all-switches|--set-default' to use it in all existing switches, or in newly created switches, respectively.
+
+The following actions will be performed:
+=== recompile 3 packages
+  ↻ bonsai_swiftui      0.1.0~dev
+  ↻ bonsai_swiftui_test 0.1.0~dev
+  ↻ bonsai_swiftui_tool 0.1.0~dev
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><>  🐫
+⬇ retrieved bonsai_swiftui.0.1.0~dev, bonsai_swiftui_test.0.1.0~dev, bonsai_swiftui_tool.0.1.0~dev  (file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16-cooperative-shutdown-final/bonsai-swiftui-0.1.0~dev.tar.gz)
+⊘ removed   bonsai_swiftui_tool.0.1.0~dev
+∗ installed bonsai_swiftui_tool.0.1.0~dev
+⊘ removed   bonsai_swiftui_test.0.1.0~dev
+⊘ removed   bonsai_swiftui.0.1.0~dev
+∗ installed bonsai_swiftui.0.1.0~dev
+∗ installed bonsai_swiftui_test.0.1.0~dev
+Done.

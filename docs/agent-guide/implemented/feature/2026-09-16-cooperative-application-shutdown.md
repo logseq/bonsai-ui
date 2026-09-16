@@ -125,6 +125,14 @@ commit/push that SDK update separately as required by repository instructions.
 Install matching framework/CLI packages and SDK, and record immutable archive
 hashes, source commit, SDK source identity, versions and installation evidence.
 
+## Decision
+
+Implemented the user-confirmed terminal operation as
+`BonsaiApplicationEvents.beginShutdown`, returning `BonsaiApplicationShutdown`.
+Its serial provider and independent application-only native pump preserve the
+presentation contract. Cancellation and deadlines always close the runtime.
+The actual native Quit example retains and releases AppKit termination deferral.
+
 ## Alternatives considered
 
 ### Globally allow hidden pumping
@@ -172,6 +180,12 @@ an opaque partially completed graph-close exchange is reversible. The user selec
   framework/CLI release evidence with the matching SDK identity. Do not claim
   Journal's complete graph-close path was tested by a transport fixture.
 
+## Consequences
+
+The shutdown connection cannot return to interactive use. Applications wait for
+its result before releasing native termination deferral. Existing presentation
+semantics remain unchanged outside the explicit shutdown operation.
+
 ## Risks
 
 - Terminal cancellation removes the option to cancel Quit and continue in the
@@ -192,8 +206,14 @@ an opaque partially completed graph-close exchange is reversible. The user selec
 None. On 2026-09-16 the user confirmed terminal shutdown, including timeout and
 explicit cancellation.
 
-## Consequences
+## Validation
 
-The shutdown connection cannot return to interactive use. Applications wait for
-its result before releasing native termination deferral. Existing presentation
-semantics remain unchanged outside the explicit shutdown operation.
+See the [verification and release report](../../../test-reports/2026-09-16-cooperative-shutdown/README.md).
+The real OCaml/native suite, final focused lifecycle tests, raw C ABI tests,
+independent installed macOS Quit fixture, physical-iOS compilation and installed
+iOS App linkage pass. SDK `.43` was generated from pushed source commit
+`d8be5273407e8137e1d1a073f732ef4e702509e3`, then committed/pushed separately as
+`2211f9b89d4e8e2985db4dc851b6731b2f659b3d`. The installed host release and SDK
+have identical framework sources, with complete archive identities in the report.
+The available iPhone 13 is unavailable for execution; no physical-device result
+or Journal domain-cleanup result is claimed.

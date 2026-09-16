@@ -1,0 +1,130 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/5] Compiling BonsaiSwiftUITests ShutdownTests.swift
+[4/6] Write Objects.LinkFileList
+[5/6] Linking BonsaiSwiftUIPackageTests
+Build complete! (4.37s)
+Test Suite 'Selected tests' started at 2026-09-16 17:59:41.401.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-16 17:59:41.402.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-16 17:59:41.402.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-16 17:59:41.402.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Suite ApplicationTransportTests started.
+◇ Suite PointerContactInputTests started.
+◇ Test applicationRequestsStageAtomicallyWithIndependentIDOwnership() started.
+◇ Test concurrentContactsKeepEveryEdgeAndTheirOwnCoordinatesAndGeneration() started.
+◇ Test applicationProviderWaitsForPresentationAndEchoesOpaqueBytes() started.
+✔ Test applicationRequestsStageAtomicallyWithIndependentIDOwnership() passed after 0.001 seconds.
+✔ Suite ApplicationTransportTests passed after 0.002 seconds.
+✔ Test concurrentContactsKeepEveryEdgeAndTheirOwnCoordinatesAndGeneration() passed after 0.004 seconds.
+✔ Suite PointerContactInputTests passed after 0.004 seconds.
+✔ Test applicationProviderWaitsForPresentationAndEchoesOpaqueBytes() passed after 0.065 seconds.
+◇ Test applicationDelayedCancellationKeepsUiAndOtherRepliesAlive() started.
+✔ Test applicationDelayedCancellationKeepsUiAndOtherRepliesAlive() passed after 0.119 seconds.
+◇ Test applicationErrorsAreBoundedAndOversizedResponsesResolve() started.
+✔ Test applicationErrorsAreBoundedAndOversizedResponsesResolve() passed after 0.015 seconds.
+◇ Test applicationEventBackpressurePreservesQueuedInputAndPendingReply() started.
+✔ Test applicationEventBackpressurePreservesQueuedInputAndPendingReply() passed after 0.054 seconds.
+◇ Test applicationCloseCancelsTasksAndFencesOldSendersAcrossRestart() started.
+✔ Test applicationCloseCancelsTasksAndFencesOldSendersAcrossRestart() passed after 0.016 seconds.
+◇ Test applicationOwnsNotificationSubscriptionAndStopsItOnClose() started.
+✔ Test applicationOwnsNotificationSubscriptionAndStopsItOnClose() passed after 0.004 seconds.
+◇ Test applicationRequestConcurrencyIsBoundedAndExcessRequestsResolve() started.
+✔ Test applicationRequestConcurrencyIsBoundedAndExcessRequestsResolve() passed after 1.205 seconds.
+◇ Test applicationOpaqueRepliesEventsAndEveryErrorReachActualOcaml() started.
+✔ Test applicationOpaqueRepliesEventsAndEveryErrorReachActualOcaml() passed after 0.023 seconds.
+◇ Test applicationWithoutProviderResolvesUnavailableAfterPresentation() started.
+✔ Test applicationWithoutProviderResolvesUnavailableAfterPresentation() passed after 0.002 seconds.
+◇ Test pendingTokenAndStaleAcknowledgmentCannotAdvanceRuntime() started.
+✔ Test pendingTokenAndStaleAcknowledgmentCannotAdvanceRuntime() passed after 0.001 seconds.
+◇ Test closeIsIdempotentAndRuntimeCanRestart() started.
+✔ Test closeIsIdempotentAndRuntimeCanRestart() passed after 0.001 seconds.
+◇ Test concurrentPumpsAreSerializedBehindOneToken() started.
+✔ Test concurrentPumpsAreSerializedBehindOneToken() passed after 0.001 seconds.
+◇ Test shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 0 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 1 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 2 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 3 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 4 to shutdownProgressWithoutPresentation(mode:) started.
+◇ Test case passing 1 argument mode → 5 to shutdownProgressWithoutPresentation(mode:) started.
+✔ Test shutdownProgressWithoutPresentation(mode:) with 6 test cases passed after 0.250 seconds.
+◇ Test shutdownDeadlineCancellationAndClose(mode:) started.
+◇ Test case passing 1 argument mode → 0 to shutdownDeadlineCancellationAndClose(mode:) started.
+◇ Test case passing 1 argument mode → 1 to shutdownDeadlineCancellationAndClose(mode:) started.
+◇ Test case passing 1 argument mode → 2 to shutdownDeadlineCancellationAndClose(mode:) started.
+✔ Test shutdownDeadlineCancellationAndClose(mode:) with 3 test cases passed after 0.061 seconds.
+◇ Test shutdownLateHandlerCannotEnterReplacement() started.
+✔ Test shutdownLateHandlerCannotEnterReplacement() passed after 0.033 seconds.
+◇ Test shutdownResponseSurvivesSaturatedLifecycleQueue() started.
+✔ Test shutdownResponseSurvivesSaturatedLifecycleQueue() passed after 0.044 seconds.
+◇ Test shutdownNativeTransportRejectsUiWithoutConsumingPresentation() started.
+✔ Test shutdownNativeTransportRejectsUiWithoutConsumingPresentation() passed after 0.001 seconds.
+◇ Test shutdownInvalidAdmissionDoesNotRetireConnection() started.
+✔ Test shutdownInvalidAdmissionDoesNotRetireConnection() passed after 0.001 seconds.
+◇ Test shutdownActualNativeWindow(mode:) started.
+◇ Test case passing 1 argument mode → "visible" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=visible hidden=false active=false minimized=false elapsed=0.035382084 seconds
+◇ Test case passing 1 argument mode → "hidden" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=hidden hidden=true active=false minimized=false elapsed=0.032825459 seconds
+◇ Test case passing 1 argument mode → "inactive" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=inactive hidden=false active=false minimized=false elapsed=0.034292 seconds
+◇ Test case passing 1 argument mode → "minimized" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=minimized hidden=false active=false minimized=true elapsed=0.036365708 seconds
+✔ Test shutdownActualNativeWindow(mode:) with 4 test cases passed after 1.331 seconds.
+✔ Suite NativeRuntimeTests passed after 3.235 seconds.
+✔ Test run with 21 tests in 3 suites passed after 3.235 seconds.

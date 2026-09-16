@@ -1,0 +1,22 @@
+[bonsai-swiftui-ios-framework-589b670cb560] Initialised
+[NOTE] Repository bonsai-swiftui-ios-framework-589b670cb560 has been added to the selections of switch bonsai-swiftui-ios only.
+       Run `opam repository add bonsai-swiftui-ios-framework-589b670cb560 --all-switches|--set-default' to use it in all existing switches, or in newly created switches, respectively.
+
+
+<><> Updating package repositories ><><><><><><><><><><><><><><><><><><><><>  🐫
+[bonsai-swiftui-ios-framework-589b670cb560] no changes from file:///Users/rcmerci/gh-repos/bonsai-ui/tool/ios/opam-repository/0.1.0
+The following actions will be performed:
+=== recompile 1 package
+  ↻ bonsai_swiftui         0.1.0~dev                    [upstream or system changes]
+=== upgrade 1 package
+  ↗ bonsai_swiftui_ios_sdk 0.1.0~dev.42 to 0.1.0~dev.43
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><>  🐫
+⬇ retrieved bonsai_swiftui_ios_sdk.0.1.0~dev.43  (https://github.com/logseq/bonsai-ui/archive/d8be5273407e8137e1d1a073f732ef4e702509e3.tar.gz)
+⬇ retrieved bonsai_swiftui.0.1.0~dev  (https://github.com/logseq/bonsai-ui/archive/d8be5273407e8137e1d1a073f732ef4e702509e3.tar.gz)
+⊘ removed   bonsai_swiftui_ios_sdk.0.1.0~dev.42
+⊘ removed   bonsai_swiftui.0.1.0~dev
+∗ installed bonsai_swiftui.0.1.0~dev
+∗ installed bonsai_swiftui_ios_sdk.0.1.0~dev.43
+Done.
+iPhoneOS framework SDK updated: 0.1.0~dev.43

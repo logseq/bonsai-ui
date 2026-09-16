@@ -1,0 +1,38 @@
+{
+  "source_commit": "d8be5273407e8137e1d1a073f732ef4e702509e3",
+  "sdk_commit": "2211f9b89d4e8e2985db4dc851b6731b2f659b3d",
+  "branch": "codex/cooperative-application-shutdown",
+  "source_archive": "/Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16-cooperative-shutdown-source/source.tar.gz",
+  "source_sha256": "9acfb3a7a26c5c7d68cea47d91b762eea7a7bcf417917d315f22e28e2bd65489",
+  "final_archive": "/Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16-cooperative-shutdown-final/bonsai-swiftui-0.1.0~dev.tar.gz",
+  "final_sha256": "72ca232e251821d50776f312ee2976c4169d0627703e45dc49d8e567cf3f42a3",
+  "host_packages": {
+    "bonsai_swiftui": {
+      "version": "0.1.0~dev",
+      "sha256": "72ca232e251821d50776f312ee2976c4169d0627703e45dc49d8e567cf3f42a3",
+      "record": "/Users/rcmerci/.opam/bonsai-ui/.opam-switch/packages/bonsai_swiftui.0.1.0~dev/opam"
+    },
+    "bonsai_swiftui_tool": {
+      "version": "0.1.0~dev",
+      "sha256": "72ca232e251821d50776f312ee2976c4169d0627703e45dc49d8e567cf3f42a3",
+      "record": "/Users/rcmerci/.opam/bonsai-ui/.opam-switch/packages/bonsai_swiftui_tool.0.1.0~dev/opam"
+    },
+    "bonsai_swiftui_test": {
+      "version": "0.1.0~dev",
+      "sha256": "72ca232e251821d50776f312ee2976c4169d0627703e45dc49d8e567cf3f42a3",
+      "record": "/Users/rcmerci/.opam/bonsai-ui/.opam-switch/packages/bonsai_swiftui_test.0.1.0~dev/opam"
+    }
+  },
+  "framework_sdk": "0.1.0~dev.43",
+  "runtime_sdk": "0.1.0~dev.7",
+  "abi": "4.0",
+  "protocol": "8.0",
+  "sdk_manifest_sha256": "0d87ad3e1f7414d6093c0b4953cfc0a93f2e76ee4649dcd9fa088e9158de3c4e",
+  "matching_framework_file_count": 399,
+  "matching_framework_sources": true,
+  "framework_sources_sha256": "1f53bdee8447d0666412f0029b6f883f040bed927eca5913b7d4bbb7fd9e121e",
+  "host_switch": "bonsai-ui",
+  "ios_switch": "bonsai-swiftui-ios",
+  "host_cli_baseline": "Existing staged host-configuration changes retained; see baseline.patch.",
+  "sdk_repository_metadata": "SDK publication reuses the staged canonical logseq/bonsai-ui URL metadata for reproducible generation."
+}
