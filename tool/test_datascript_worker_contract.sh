@@ -201,7 +201,7 @@ reject_file \
   "$transit_repository/melange-transit-native/melange-transit-native.0.1.1"
 
 sdk_repository_lock=$(cat tool/ios/sdk_repository.lock 2>/dev/null)
-require_text "$sdk_repository_lock" "SDK_ABI_VERSION='3'" \
+require_text "$sdk_repository_lock" "SDK_ABI_VERSION='4'" \
   "ppx_deriving_yojson SDK ABI version"
 require_text "$sdk_repository_lock" "SDK_BUILD_RECIPE_REVISION='5'" \
   "ppx_deriving_yojson SDK build recipe revision"

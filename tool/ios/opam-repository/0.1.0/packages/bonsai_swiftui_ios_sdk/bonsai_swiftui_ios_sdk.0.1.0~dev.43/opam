@@ -7,17 +7,17 @@ of the exact immutable runtime SDK package.
 maintainer: "bonsai_swiftui contributors"
 authors: ["bonsai_swiftui contributors"]
 license: "MIT"
-homepage: "https://github.com/RCmerci/bonsai_flutter"
-bug-reports: "https://github.com/RCmerci/bonsai_flutter/issues"
-dev-repo: "git+https://github.com/RCmerci/bonsai_flutter.git"
+homepage: "https://github.com/logseq/bonsai-ui"
+bug-reports: "https://github.com/logseq/bonsai-ui/issues"
+dev-repo: "git+https://github.com/logseq/bonsai-ui.git"
 extra-source "bonsai_swiftui.tar.gz" {
-  src: "file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-16/bonsai-swiftui-0.1.0~dev.tar.gz"
-  checksum: ["sha256=0f525256fa3985476c5e682e05f0ceddc45f5dc7c800be9c22de8102cadb1f05"]
+  src: "https://github.com/logseq/bonsai-ui/archive/d8be5273407e8137e1d1a073f732ef4e702509e3.tar.gz"
+  checksum: ["sha256=9acfb3a7a26c5c7d68cea47d91b762eea7a7bcf417917d315f22e28e2bd65489"]
 }
 extra-files: [
-  ["build-installed-framework.sh" "sha256=1fad0e88138fbfa0ba390b0460c1790f917915ba580a52921cba4965378ba186"]
-  ["manifest.sexp" "sha256=3b70b7afcfc4557a0859116f9463353bdae982a346ee280b91469c452ff3d40f"]
-  ["package-lock.sexp" "sha256=a661fe508b7fb3b1f768e8b3aa80a5eb602f75cfbc2110c3381b39027f9f1d7b"]
+  ["build-installed-framework.sh" "sha256=ff92afd52aff4c1b7300c56566acd8f50bb448ec1c62b9712db6b07d601d196b"]
+  ["manifest.sexp" "sha256=0d87ad3e1f7414d6093c0b4953cfc0a93f2e76ee4649dcd9fa088e9158de3c4e"]
+  ["package-lock.sexp" "sha256=0dca9a7c1f287535ec915e74f6532d8ad8e86da757b10c3b2b12ff7d3a12d313"]
 ]
 depends: [
   "bonsai_swiftui" {= "0.1.0~dev"}
