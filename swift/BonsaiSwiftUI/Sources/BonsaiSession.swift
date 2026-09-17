@@ -23,6 +23,7 @@ final class BonsaiSession {
     let identity: RenderIdentity
     let controlsOwnInput: Bool
     let ignoringModalBlocking: Bool
+    let retainingNativeFocus: Bool
   }
   @ObservationIgnored private var eligibility: [EligibilityKey: Bool] = [:]
   @ObservationIgnored private var presentationDirty = true
@@ -165,22 +166,26 @@ final class BonsaiSession {
       controller.setPresentationActive(
         isInteractive && displayedRevision > 0
           && displayed.tree.epoch == node.id.epoch && matching
-          && isInActiveContent(node, ignoringModalBlocking: true))
+          && isInActiveContent(node, ignoringModalBlocking: true),
+        retainingPresentation: isInteractive && isInActiveContent(
+          node, ignoringModalBlocking: true, retainingNativeFocus: true))
     }
   }
 
   private func updateFieldFocus() {
     for node in tree.fieldNodes {
       let contentActive = isInteractive && isInActiveContent(node)
-      node.textController?.setContentActive(contentActive)
-      guard let controller = node.fieldController else { continue }
-      controller.setContentActive(contentActive)
+      let retainingFocus = isInteractive && isInActiveContent(node, retainingNativeFocus: true)
+      node.textController?.setContentActive(
+        contentActive, retainingFocus: retainingFocus)
+      node.fieldController?.setContentActive(contentActive, retainingFocus: retainingFocus)
       let active =
         isInteractive && displayedRevision > 0
         && displayed.tree.epoch == node.id.epoch
         && displayed.tree.nodes[node.id.node]?.properties == node.properties
         && contentActive
-      controller.setPresentationActive(active)
+      node.fieldController?.setPresentationActive(active)
+      node.textController?.setPresentationActive(active)
     }
   }
 
@@ -429,12 +434,23 @@ final class BonsaiSession {
       guard case .navigationPath = event.payload else { return nil }
       return tree.nodes[event.nodeID]
     }
+    let linkEmissions = batchEvents.compactMap { event -> NativeViewEmission? in
+      guard case .nativeView(let emission) = event.payload, emission.navigationRequest != nil else {
+        return nil
+      }
+      return emission
+    }
+    let linkControllers =
+      linkEmissions.isEmpty ? [] : tree.nodes.values.compactMap(\.navigationController)
     events.removePrefix(batchEvents.count)
     let output = try await runtime.pump(monotonicNanoseconds: now, events: batch)
     guard shutdownOperation == nil, sessionID == identity else { return false }
     defer {
       for (controller, request) in swipeRequests { controller.resolve(request) }
       for node in navigationRequests { node.navigationController?.resolve() }
+      for controller in linkControllers {
+        for emission in linkEmissions { controller.resolveLink(emission) }
+      }
       for (controller, state) in splitRequests { controller.resolve(state) }
       for (controller, request) in sliderRequests { controller.resolve(request) }
       for (controller, request) in booleanRequests { controller.resolve(request) }
@@ -867,21 +883,22 @@ final class BonsaiSession {
 
   private func isInActiveContent(
     _ node: RenderNodeState, controlsOwnInput: Bool = true,
-    ignoringModalBlocking: Bool = false
+    ignoringModalBlocking: Bool = false, retainingNativeFocus: Bool = false
   ) -> Bool {
     let key = EligibilityKey(
       identity: node.id, controlsOwnInput: controlsOwnInput,
-      ignoringModalBlocking: ignoringModalBlocking)
+      ignoringModalBlocking: ignoringModalBlocking, retainingNativeFocus: retainingNativeFocus)
     if let cached = eligibility[key] { return cached }
     let active = computeActiveContent(
-      node, controlsOwnInput: controlsOwnInput, ignoringModalBlocking: ignoringModalBlocking)
+      node, controlsOwnInput: controlsOwnInput, ignoringModalBlocking: ignoringModalBlocking,
+      retainingNativeFocus: retainingNativeFocus)
     eligibility[key] = active
     return active
   }
 
   private func computeActiveContent(
     _ node: RenderNodeState, controlsOwnInput: Bool,
-    ignoringModalBlocking: Bool
+    ignoringModalBlocking: Bool, retainingNativeFocus: Bool
   ) -> Bool {
     guard !windowHost.dialogs.blocksBackgroundInput else { return false }
     if !ignoringModalBlocking {
@@ -905,11 +922,15 @@ final class BonsaiSession {
     var child = node
     while let parentID = tree.parents[child.id.node], let parent = tree.nodes[parentID] {
       if let instance = parent.nativeView {
-        guard instance.containsMountedChild(child.id),
-          let mounted = displayed.tree.nodes[parentID], mounted.properties == parent.properties,
-          mounted.bindings == parent.bindings,
-          mounted.children == parent.children.map({ $0.id.node })
-        else { return false }
+        let childMounted = retainingNativeFocus
+          ? instance.isChildMounted(child.id) : instance.containsMountedChild(child.id)
+        guard childMounted else { return false }
+        if !retainingNativeFocus {
+          guard let mounted = displayed.tree.nodes[parentID],
+            mounted.properties == parent.properties, mounted.bindings == parent.bindings,
+            mounted.children == parent.children.map({ $0.id.node })
+          else { return false }
+        }
       }
       if controlsOwnInput, case .swipeAction = parent.properties { return false }
       if let current = parent.properties.presentation, current.isModal,
@@ -918,13 +939,17 @@ final class BonsaiSession {
         return false
       }
       if let current = parent.properties.presentation, parent.children.last === child {
-        guard let mounted = displayed.tree.nodes[parentID],
-          let previous = mounted.properties.presentation,
-          previous == current, current.presented, parent.presentationController?.presented == true,
-          parent.presentationController?.active == true,
-          parent.presentationController?.nativeVisible == true,
-          mounted.children == parent.children.map({ $0.id.node })
-        else { return false }
+        guard current.presented, parent.presentationController?.presented == true else { return false }
+        if retainingNativeFocus {
+          guard parent.presentationController?.isContentMounted(child.id) == true else { return false }
+        } else {
+          guard let mounted = displayed.tree.nodes[parentID],
+            mounted.properties.presentation == current,
+            parent.presentationController?.active == true,
+            parent.presentationController?.nativeVisible == true,
+            mounted.children == parent.children.map({ $0.id.node })
+          else { return false }
+        }
       }
       if case .booleanControl(let current) = parent.properties {
         switch current.style {
@@ -1017,12 +1042,20 @@ final class BonsaiSession {
   private func enqueue(_ node: RenderNodeState, handler: UInt64, payload: NativeEventPayload)
     -> Bool
   {
+    let continuousEdit: Bool
+    switch payload {
+    case .textEdit, .textLimitReached:
+      continuousEdit = node.textController?.retainsEditingFocus == true
+        || node.fieldController?.retainsEditingFocus == true
+    default: continuousEdit = false
+    }
     guard
       isInActiveContent(
         node,
         controlsOwnInput: payload.hoverPointer == nil
           && payload.tag != EventTagId.animationCompleted
-          && payload.tag != EventTagId.scrollNotification),
+          && payload.tag != EventTagId.scrollNotification,
+        retainingNativeFocus: continuousEdit),
       sequence < UInt64(Int64.max),
       events.append(
         NativeEvent(

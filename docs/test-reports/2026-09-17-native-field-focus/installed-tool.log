@@ -1,0 +1,12 @@
+
+<><> Synchronising pinned packages ><><><><><><><><><><><><><><><><><><><><>  🐫 
+[bonsai_swiftui_tool.0.1.0~dev] synchronised (file:///Users/rcmerci/gh-repos/bonsai-ui)
+
+The following actions will be performed:
+=== recompile 1 package
+  ↻ bonsai_swiftui_tool 0.1.0~dev (pinned)
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><>  🐫 
+⊘ removed   bonsai_swiftui_tool.0.1.0~dev
+∗ installed bonsai_swiftui_tool.0.1.0~dev
+Done.

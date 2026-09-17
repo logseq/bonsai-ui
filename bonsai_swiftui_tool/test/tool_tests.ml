@@ -206,6 +206,29 @@ let test_parse_valid_config () =
   Alcotest.(check (list string)) "iOS architectures" [ "arm64" ] config.ios.architectures
 ;;
 
+let test_application_ios_minimum () =
+  let configured version =
+    replace_once
+      valid_config
+      ~pattern:"(minimum_version 18.0)"
+      ~replacement:("(minimum_version " ^ version ^ ")")
+  in
+  List.iter
+    (fun version ->
+       let config = Config.parse_string (configured version) |> get_ok in
+       Alcotest.(check string)
+         "application minimum retained"
+         version
+         config.ios.minimum_version)
+    [ "18.0"; "26.0"; "26.1" ];
+  List.iter
+    (fun version ->
+       match Config.parse_string (configured version) with
+       | Error _ -> ()
+       | Ok _ -> Alcotest.failf "invalid deployment minimum accepted: %s" version)
+    [ "17.9"; "0.0"; "26"; "26.x"; "26.0.1"; "26.0beta"; "-26.0"; "026.0"; "26.00" ]
+;;
+
 let test_invalid_configs () =
   [ ( "unsupported schema"
     , replace_once valid_config ~pattern:"(lang 4)" ~replacement:"(lang 1)"
@@ -1441,6 +1464,7 @@ depends: [
   *"macosx --show-sdk-path"*) printf '%s\n' '/Xcode/MacOSX.sdk' ;;
   *"iphoneos --show-sdk-path"*) printf '%s\n' '/Xcode/iPhoneOS.sdk' ;;
   *"iphoneos --show-sdk-version"*) printf '%s\n' '26.0' ;;
+  *"iphoneos clang -r "*) shift 2; exec "$@" ;;
   *) exit 64 ;;
 esac
 |}
@@ -2300,6 +2324,7 @@ let () =
             `Quick
             test_schema_four_host_configuration
         ; Alcotest.test_case "parse valid config" `Quick test_parse_valid_config
+        ; Alcotest.test_case "application iOS minimum" `Quick test_application_ios_minimum
         ; Alcotest.test_case "invalid configs" `Quick test_invalid_configs
         ; Alcotest.test_case "command plans" `Quick test_command_plans
         ; Alcotest.test_case "fixed iphoneos switch" `Quick test_fixed_iphoneos_switch

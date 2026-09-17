@@ -69,8 +69,9 @@ func readTextExample(_ output: NativeOutput) throws -> (TextSnapshot, UInt64, [I
     let kind = Int(try reader.integer(UInt16.self))
     guard kind == NodeKindId.textEditor else { continue }
     let creating = operation.opcode == OperationId.createNode
-    if !creating { #expect(try reader.integer(UInt64.self) == 511) }
-    let properties = try RenderTextEditor.decode(&reader)
+    if !creating { #expect(try reader.integer(UInt64.self) == 1023) }
+    var properties = try RenderTextEditor.decode(&reader)
+    properties.autofocus = try reader.flag()
     let bindings = creating ? try reader.bindings() : [:]
     #expect(reader.remaining == 0)
     return (properties.snapshot, node, bindings)

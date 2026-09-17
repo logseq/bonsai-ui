@@ -39,6 +39,43 @@ class HostConfigurationTests(unittest.TestCase):
                 if p.is_file() else (None, p.stat().st_mtime_ns)
                 for p in self.root.rglob("*") if not p.is_symlink()}
 
+    def test_application_ios_minimum_reaches_all_host_targets(self):
+        import json
+        (self.root / "apple-ui-tests/ios").mkdir(parents=True)
+        (self.root / "apple-ui-tests/ios/Smoke.swift").write_text("import XCTest\n")
+        command = [sys.executable, str(ROOT / "tool/swiftui_xcode_host.py"),
+                   "--framework-root", str(ROOT), "--application-root", str(self.root),
+                   "--host-directory", str(self.host), "--product-name", "Acceptance",
+                   "--macos-bundle-identifier", "org.example.desktop",
+                   "--ios-bundle-identifier", "org.example.phone",
+                   "--ios-minimum-version", "26.0"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        project = self.host / "Acceptance.xcodeproj/project.pbxproj"
+        objects = json.loads(subprocess.check_output(
+            ["plutil", "-convert", "json", "-o", "-", str(project)]))["objects"]
+        targets = [v for v in objects.values() if v["isa"] == "PBXNativeTarget"
+                   and objects[objects[v["buildConfigurationList"]]["buildConfigurations"][0]]["buildSettings"]["SDKROOT"] == "iphoneos"]
+        self.assertEqual(len(targets), 4)
+        for target in targets:
+            for ref in objects[target["buildConfigurationList"]]["buildConfigurations"]:
+                self.assertEqual(objects[ref]["buildSettings"]["IPHONEOS_DEPLOYMENT_TARGET"], "26.0")
+        scripts = [v["shellScript"] for v in objects.values()
+                   if v["isa"] == "PBXShellScriptBuildPhase" and "iphoneos" in v["shellScript"]]
+        self.assertTrue(scripts)
+        for script in scripts:
+            self.assertIn("IOS 26.0 arm64", script)
+        before = self.snapshot()
+        self.assertEqual(subprocess.run(command + ["--check"], capture_output=True).returncode, 0)
+        self.assertEqual(before, self.snapshot())
+        changed = command[:-1] + ["26.1"]
+        self.assertNotEqual(subprocess.run(changed + ["--check"], capture_output=True).returncode, 0)
+        self.assertEqual(before, self.snapshot())
+        for invalid in ["17.9", "26", "26.x", "26.0.1", "026.0"]:
+            result = subprocess.run(command[:-1] + [invalid], capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(before, self.snapshot())
+
     def test_package_products_and_independent_test_entitlements(self):
         package = {"id": "collections", "url": "https://github.com/apple/swift-collections.git",
                    "requirement": {"exact": "1.1.4"},

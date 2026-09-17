@@ -128,8 +128,21 @@ struct NativeMenu: View {
   let properties: RenderMenu
   let controller: NativeMenuController
   let activate: @MainActor (RenderNodeState) -> Void
+  private let labels: [RenderNodeState]
+
+  init(
+    node: RenderNodeState, properties: RenderMenu, controller: NativeMenuController,
+    activate: @escaping @MainActor (RenderNodeState) -> Void
+  ) {
+    self.node = node
+    self.properties = properties
+    self.controller = controller
+    self.activate = activate
+    labels = node.children
+  }
+
   private func label(_ index: Int) -> some View {
-    NativeNodeView(node: node.children[index], activate: activate).allowsHitTesting(false)
+    NativeNodeView(node: labels[index], activate: activate).allowsHitTesting(false)
   }
   private func items(_ entries: [RenderMenu.Entry], enabled: Bool) -> some View {
     ForEach(entries) { entry in item(entry, enabled: enabled && entry.enabled) }
@@ -170,7 +183,7 @@ struct NativeMenu: View {
     Menu {
       items(properties.entries, enabled: properties.enabled)
     } label: {
-      label(0).modifier(NativeInteractiveBounds(icon: node.children.first?.containsSymbol == true))
+      label(0).modifier(NativeInteractiveBounds(icon: labels.first?.containsSymbol == true))
     }.disabled(!properties.enabled)
   }
   var body: some View {

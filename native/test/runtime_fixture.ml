@@ -2751,3 +2751,189 @@ let () =
        ~service:shutdown_service
        shutdown_component)
 ;;
+
+let () =
+  let extension =
+    Ui.Native_widget.Extension.create
+      ~kind_id:(Bonsai_swiftui_spec.Id.Native_widget.Kind_id.of_int 2101)
+      ~version:1
+      ~capabilities:[ Semantics ]
+      ~encode_props:(fun count -> Bytes.of_string (string_of_int count))
+      ~decode_event:(fun ~event_id bytes ->
+        if
+          Bonsai_swiftui_spec.Id.Native_widget.Event_id.to_int event_id = 1
+          && Bytes.to_string bytes = "open"
+        then Ok ()
+        else Error "Invalid link event")
+      ()
+  in
+  Native_backend.embed
+    ~name:(Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-link")
+    (App.create ~name:"Native Link" (fun handlers graph ->
+       let count, set_count = Bonsai_v017.state ~equal:Int.equal 0 graph in
+       let open_link =
+         Driver.Handler.create_native
+           handlers
+           ~name:"open-link"
+           extension
+           ~equal:( == )
+           set_count
+           ~f:(fun set_count () -> set_count (fun n -> n + 1))
+       in
+       let back =
+         Driver.Handler.create
+           handlers
+           ~name:"back"
+           ~equal:( == )
+           set_count
+           ~f:(fun set_count _ -> set_count (fun _ -> 0))
+       in
+       Bonsai.Cont.map2
+         count
+         (Bonsai.Cont.both open_link back)
+         ~f:(fun count (open_link, back) ->
+           let path =
+             if count < 2
+             then []
+             else
+               [ Ui.View.Navigation_stack.destination
+                   ~page_key:
+                     (Bonsai_swiftui_spec.Id.Navigation.Page_key.of_string "opened")
+                   ~title:"Opened"
+                   (Ui.View.Body.static (Ui.View.text "Opened after two requests"))
+               ]
+           in
+           App.View.create
+             ~theme:(Ui.Theme.create ())
+             ~body:
+               (Ui.View.Body.static
+                  (Ui.View.Navigation_stack.create
+                     ~title:"Links"
+                     ~on_path_change:back
+                     ~path
+                     (Ui.View.Body.static
+                        (Ui.Native_widget.widget_with_handler
+                           extension
+                           ~props:count
+                           ~on_event:open_link
+                           ())))))))
+;;
+
+let () =
+  let module ID = Bonsai_swiftui_spec.Id in
+  let card =
+    Ui.Native_widget.Extension.create
+      ~kind_id:(ID.Native_widget.Kind_id.of_int 1001)
+      ~version:1
+      ~capabilities:[ Ui.Native_widget.Capability.Stateful; Resource; Semantics ]
+      ~encode_props:Bytes.of_string
+      ~decode_event:(fun ~event_id:_ _ -> Ok ())
+      ()
+  in
+  let register name sheet field_kind =
+    Native_backend.embed
+      ~name:
+        (ID.Application.Entrypoint_name.of_string name)
+      (App.create ~name:"Editor Card Focus" (fun handlers graph ->
+         let revision, set_revision = Bonsai_v017.state ~equal:Int.equal 0 graph in
+         let change =
+           Driver.Handler.create
+             handlers
+             ~name:"Change native properties"
+             ~equal:( == )
+             set_revision
+             ~f:(fun set_revision _ -> set_revision succ)
+         in
+         let native =
+           Driver.Handler.create_native
+             handlers
+             ~name:"Editor card"
+             card
+             ~equal:( == )
+             set_revision
+             ~f:(fun _ () -> Bonsai.Effect.Ignore)
+         in
+         Bonsai.Cont.map2
+           revision
+           (Bonsai.Cont.both change native)
+           ~f:(fun revision (change, native) ->
+             let ignored = Ui.Event.Handler.create (fun _ -> ()) in
+             let value =
+               Ui.Text_editing.Value.create
+                 ~text:"Draft"
+                 ~selection:
+                   (Ui.Text_editing.Range.create
+                      ~text:"Draft"
+                      ~start_utf16:5
+                      ~end_utf16:5)
+                 ()
+             in
+             let editor =
+               (match field_kind with
+                | Some secure ->
+                  (if secure then Ui.View.secure_field else Ui.View.text_field)
+                    ~label:"Native field"
+                    ~key:(Ui.Key.string "editor")
+                    ~autofocus:true
+                    ~session_id:(ID.Text_input.Session_id.of_int64 1L)
+                    ~document_revision:(ID.Text_input.Document_revision.of_int64 1L)
+                    ~accepted_local_revision:ID.Text_input.Local_revision.zero
+                    ~update_mode:Ui.Text_editing.Force_replace
+                    ~value
+                    ~on_edit:change
+                    ~on_submit:ignored
+                    ~on_focus_changed:ignored
+                    ()
+                | None -> Ui.View.text_editor
+                 ~key:(Ui.Key.string "editor")
+                 ~autofocus:true
+                 ~session_id:(ID.Text_input.Session_id.of_int64 1L)
+                 ~document_revision:(ID.Text_input.Document_revision.of_int64 1L)
+                 ~accepted_local_revision:ID.Text_input.Local_revision.zero
+                 ~update_mode:Ui.Text_editing.Force_replace
+                 ~value
+                 ~on_edit:change
+                 ~on_submit:ignored
+                 ~on_focus_changed:ignored
+                 ())
+               |> Ui.View.frame ~height:100.
+             in
+             let body =
+               Ui.View.column
+                 [ Ui.View.button
+                     ~on_press:change
+                     ~child:(Ui.View.text "Change native properties")
+                     ()
+                 ; Ui.Native_widget.widget_with_handler
+                     card
+                     ~key:(Ui.Key.string "editor-card")
+                     ~props:(string_of_int revision)
+                     ~children:[ editor ]
+                     ~on_event:native
+                     ()
+                 ]
+             in
+             let body =
+               if sheet
+               then
+                 Ui.View.Sheet.create
+                   ~presented:true
+                   ~on_presented_changed:ignored
+                   ~content:
+                     (Ui.View.Navigation_stack.create
+                        ~title:"Editor"
+                        ~path:[]
+                        ~on_path_change:ignored
+                        (Ui.View.Body.static body))
+                   (Ui.View.text "Background")
+               else body
+             in
+             App.View.create ~theme:(Ui.Theme.create ()) ~body:(Ui.View.Body.static body))))
+  in
+  List.iter (fun (name, sheet, field) -> register name sheet field)
+    [ "native-editor-card", false, None
+    ; "native-editor-sheet", true, None
+    ; "native-field-card", false, Some false
+    ; "native-secure-card", false, Some true
+    ]
+;;

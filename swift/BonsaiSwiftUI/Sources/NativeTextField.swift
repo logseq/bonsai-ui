@@ -109,6 +109,7 @@ struct RenderTextField: Equatable, Sendable {
     private var failed: (any Error) -> Void
     private var hostEnabled = true
     private var contentActive = true
+    private var retainingFocus = false
     private var applying = false
     private var disposed = false
     private var focused = false
@@ -190,10 +191,16 @@ struct RenderTextField: Equatable, Sendable {
       field.placeholderString = prompt
       field.setAccessibilityLabel(label)
     }
-    func setContentActive(_ active: Bool) {
-      guard !disposed, active != contentActive else { return }
+    func setContentActive(_ active: Bool, retainingFocus: Bool = false) {
+      guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else { return }
       contentActive = active
+      self.retainingFocus = retainingFocus
       updateAvailability()
+    }
+    var retainsEditingFocus: Bool { retainingFocus && focused && !disposed }
+    private var acceptsEdits: Bool {
+      !disposed && hostEnabled && (contentActive || retainsEditingFocus)
+        && configuration.enabled && !configuration.readOnly
     }
     func setHostEnabled(_ enabled: Bool) {
       guard !disposed else { return }
@@ -201,10 +208,11 @@ struct RenderTextField: Equatable, Sendable {
       updateAvailability()
     }
     private func updateAvailability() {
-      let enabled = hostEnabled && contentActive && configuration.enabled
-      field.isEnabled = enabled
-      field.isEditable = enabled && !configuration.readOnly
-      field.isSelectable = enabled
+      let enabled = hostEnabled && (contentActive || retainsEditingFocus) && configuration.enabled
+      let editable = enabled && !configuration.readOnly
+      if field.isEnabled != enabled { field.isEnabled = enabled }
+      if field.isEditable != editable { field.isEditable = editable }
+      if field.isSelectable != enabled { field.isSelectable = enabled }
       if !enabled { releaseFocus() }
       attemptAutofocus()
     }
@@ -233,8 +241,7 @@ struct RenderTextField: Equatable, Sendable {
 
     private func accepts(_ candidate: String) -> Bool {
       if applying { return true }
-      guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly
-      else {
+      guard acceptsEdits else {
         return false
       }
       guard candidate.utf8.count <= configuration.maxUTF8Bytes ?? ProtocolLimits.maxStringBytes
@@ -411,6 +418,7 @@ struct RenderTextField: Equatable, Sendable {
     private var failed: (any Error) -> Void
     private var hostEnabled = true
     private var contentActive = true
+    private var retainingFocus = false
     private var applying = false
     private var disposed = false
     private var focused = false
@@ -443,8 +451,7 @@ struct RenderTextField: Equatable, Sendable {
       input.focusChanged = { [weak self] in self?.focus($0) }
       input.acceptsInput = { [weak self] in
         guard let self, !disposed else { return false }
-        return applying
-          || (hostEnabled && self.configuration.enabled && !self.configuration.readOnly)
+        return applying || acceptsEdits
       }
       input.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
       updateAvailability()
@@ -508,10 +515,16 @@ struct RenderTextField: Equatable, Sendable {
       input.placeholder = prompt
       input.accessibilityLabel = label
     }
-    func setContentActive(_ active: Bool) {
-      guard !disposed, active != contentActive else { return }
+    func setContentActive(_ active: Bool, retainingFocus: Bool = false) {
+      guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else { return }
       contentActive = active
+      self.retainingFocus = retainingFocus
       updateAvailability()
+    }
+    var retainsEditingFocus: Bool { retainingFocus && focused && !disposed }
+    private var acceptsEdits: Bool {
+      !disposed && hostEnabled && (contentActive || retainsEditingFocus)
+        && configuration.enabled && !configuration.readOnly
     }
     func setHostEnabled(_ enabled: Bool) {
       guard !disposed else { return }
@@ -519,7 +532,8 @@ struct RenderTextField: Equatable, Sendable {
       updateAvailability()
     }
     private func updateAvailability() {
-      input.isEnabled = hostEnabled && contentActive && configuration.enabled
+      let enabled = hostEnabled && (contentActive || retainsEditingFocus) && configuration.enabled
+      if input.isEnabled != enabled { input.isEnabled = enabled }
       let keyboard = configuration.readOnly ? readOnlyKeyboard : nil
       if input.inputView !== keyboard {
         input.inputView = keyboard
@@ -620,8 +634,7 @@ struct RenderTextField: Equatable, Sendable {
       _ textField: UITextField, shouldChangeCharactersIn range: NSRange,
       replacementString string: String
     ) -> Bool {
-      guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly
-      else {
+      guard acceptsEdits else {
         return false
       }
       let text = input.text ?? ""

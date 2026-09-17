@@ -40,6 +40,18 @@ public struct BonsaiNativeEvent: Sendable {
   /// Query current ownership before a local action that does not emit an OCaml event.
   public let canInteract: () -> Bool
   public let emit: (Event) -> Bool
+  let makeNavigationEvent: (Event) -> (NativeViewEmission, () -> Bool)?
+
+  /// Request a core-owned destination using a native link in the enclosing Bonsai stack.
+  /// The event must make the application publish its destination; no route is synthesized locally.
+  public func navigationLink<Label: View>(to event: Event, @ViewBuilder label: () -> Label)
+    -> some View
+  {
+    let request = makeNavigationEvent(event)
+    return NativeNavigationLink(
+      emission: request?.0, admit: request?.1 ?? { false },
+      canInteract: canInteract, label: label())
+  }
 }
 
 /// A keyed OCaml child. Omitted or unmounted children cannot continue dispatching input.
@@ -52,6 +64,7 @@ public struct BonsaiNativeEvent: Sendable {
     NativeNodeView(node: node, activate: activate)
       .onAppear { owner.mountChild(node.id) }
       .onDisappear { owner.unmountChild(node.id) }
+      .id(node.id)
   }
 }
 
@@ -68,7 +81,8 @@ public struct BonsaiNativeEvent: Sendable {
     makeResource: @escaping () -> Resource, dispose: @escaping (Resource) -> Void,
     @ViewBuilder content: @escaping (BonsaiNativeContext<Properties, Event, Resource>) -> Content
   ) throws {
-    guard kind > 0, kind <= 65535, kind != 6, kind != 7, kind != 8, version > 0, capabilities.isValid
+    guard kind > 0, kind <= 65535, kind != 6, kind != 7, kind != 8, version > 0,
+      capabilities.isValid
     else { throw BonsaiNativeViewError.invalidRegistration }
     guard definitions[kind] == nil else { throw BonsaiNativeViewError.duplicateKind(kind) }
     definitions[kind] = Self.definition(
@@ -121,6 +135,26 @@ public struct BonsaiNativeEvent: Sendable {
                   instance: instance.id, generation: generation,
                   kind: instance.prepared.envelope.kind, version: version,
                   event: encoded.id, payload: encoded.payload)))
+          },
+          makeNavigationEvent: { [weak instance] event in
+            guard let instance else { return nil }
+            let encoded = encodeEvent(event)
+            guard encoded.id > 0, encoded.payload.count < ProtocolLimits.maxFrameBytes else {
+              return nil
+            }
+            let emission = NativeViewEmission(
+              navigationRequest: UUID(), instance: instance.id, generation: generation,
+              kind: instance.prepared.envelope.kind, version: version,
+              event: encoded.id, payload: encoded.payload)
+            return (
+              emission,
+              { [weak instance] in
+                guard let instance, instance.accepts(generation), instance.canInteract() else {
+                  return false
+                }
+                return instance.emit(.nativeView(emission))
+              }
+            )
           })
         return AnyView(content(context))
       })
@@ -158,6 +192,8 @@ struct RenderNativeView: Equatable, Sendable {
   }
 }
 struct NativeViewEmission: Equatable, Sendable {
+  // Local admission identity; never encoded into the application wire payload.
+  var navigationRequest: UUID? = nil
   let instance: UUID
   let generation: UInt64
   let kind: UInt32
@@ -256,7 +292,8 @@ struct NativeViewEmission: Equatable, Sendable {
     mounted -= 1
     if mounted == 0 {
       generation += 1
-      childMounts.removeAll()
+      // UIKit can retain toolbar children while their owning page is hidden.
+      // Their own disappearance callbacks balance those independent mounts.
       onPresentationChange?()
     }
   }
@@ -275,8 +312,11 @@ struct NativeViewEmission: Equatable, Sendable {
       }
     }
   }
+  func isChildMounted(_ id: RenderIdentity) -> Bool {
+    !disposed && mounted > 0 && (childMounts[id] ?? 0) > 0
+  }
   func containsMountedChild(_ id: RenderIdentity) -> Bool {
-    accepts(generation) && (childMounts[id] ?? 0) > 0
+    accepts(generation) && isChildMounted(id)
   }
   func dispose() {
     guard !disposed else { return }

@@ -218,6 +218,7 @@ final class RenderNodeState: Identifiable, Equatable {
       textController = NativeTextController(
         snapshot: editor.snapshot, configuration: editor.configuration,
         emit: { input(identity, $0) }, failed: failed)
+      textController?.configureAutofocus(editor.autofocus)
     } else {
       textController = nil
     }
@@ -388,10 +389,12 @@ final class RenderTree {
           state.fieldController?.configureTraits(field.traits)
         }
         if case .textEditor(let editor) = node.properties {
+          state.textController?.setPresentationActive(false)
           do { try state.textController?.apply(editor.snapshot) } catch {
             preconditionFailure("Text updates must validate before commit")
           }
           state.textController?.configure(editor.configuration)
+          state.textController?.configureAutofocus(editor.autofocus)
         }
       }
       state.accessibilityHidden = store.accessibilityHiddenNodes.contains(id)
@@ -467,6 +470,7 @@ final class RenderTree {
         state.pickerController?.synchronize(properties)
       }
       if let properties = state.properties.presentation {
+        state.presentationController?.setContentIdentity(state.children.last?.id)
         state.presentationController?.synchronize(properties)
       }
       if case .booleanControl(let properties) = state.properties {
@@ -746,6 +750,7 @@ struct NativeNodeView: View {
           child
         } icon: {
           NativeNodeView(node: node.children[1], activate: activate)
+            .environment(\.bonsaiLabelIcon, true)
         })
     case .sheet(let properties):
       return AnyView(

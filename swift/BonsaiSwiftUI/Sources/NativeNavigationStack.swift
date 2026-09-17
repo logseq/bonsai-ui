@@ -21,6 +21,27 @@ struct RenderNavigationDestination: Equatable, Sendable {
 struct NavigationRouteIdentity: Hashable {
   let node: RenderIdentity
   let key: Data
+  var link: NavigationLinkRequest? = nil
+  static func == (lhs: Self, rhs: Self) -> Bool { lhs.node == rhs.node && lhs.key == rhs.key }
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(node)
+    hasher.combine(key)
+  }
+}
+
+@MainActor final class NavigationLinkRequest {
+  let controller: ObjectIdentifier
+  let path: [NavigationRouteIdentity]
+  let emission: NativeViewEmission
+  let admit: () -> Bool
+  init(
+    controller: NavigationStackController, emission: NativeViewEmission, admit: @escaping () -> Bool
+  ) {
+    self.controller = ObjectIdentifier(controller)
+    self.path = controller.path
+    self.emission = emission
+    self.admit = admit
+  }
 }
 
 @MainActor @Observable final class NavigationStackController {
@@ -39,6 +60,23 @@ struct NavigationRouteIdentity: Hashable {
   }
   private var pending = false
   private var disposed = false
+  private var pendingLink: NativeViewEmission?
+  private var pathRevision: UInt64 = 0
+
+  func linkValue(emission: NativeViewEmission, admit: @escaping () -> Bool)
+    -> NavigationRouteIdentity
+  {
+    NavigationRouteIdentity(
+      node: RenderIdentity(epoch: 0, node: 0), key: Data(UUID().uuidString.utf8),
+      link: NavigationLinkRequest(controller: self, emission: emission, admit: admit))
+  }
+
+  func resolveLink(_ emission: NativeViewEmission) {
+    if pendingLink == emission {
+      pendingLink = nil
+      pathRevision &+= 1
+    }
+  }
 
   func synchronize(_ children: [RenderNodeState]) {
     let next = Array(children.dropFirst())
@@ -57,7 +95,16 @@ struct NavigationRouteIdentity: Hashable {
   @discardableResult func request(
     _ requested: [NavigationRouteIdentity], emit: (NativeEventPayload) -> Bool
   ) -> Bool {
-    guard !disposed, !pending, requested.count < path.count,
+    guard !disposed, !pending, pendingLink == nil else { return false }
+    if requested.count == path.count + 1, Array(requested.dropLast()) == path,
+      let link = requested.last?.link,
+      link.controller == ObjectIdentifier(self), link.path == path
+    {
+      guard link.admit() else { return false }
+      pendingLink = link.emission
+      return true
+    }
+    guard requested.count < path.count,
       Array(path.prefix(requested.count)) == requested,
       destinations.dropFirst(requested.count).allSatisfy({
         if case .navigationDestination(let destination) = $0.properties {
@@ -79,10 +126,14 @@ struct NavigationRouteIdentity: Hashable {
   }
 
   func binding(emit: @escaping (NativeEventPayload) -> Bool) -> Binding<[NavigationRouteIdentity]> {
+    _ = pathRevision
     let expectedPath = path
     return Binding(
       get: { self.path },
       set: {
+        // SwiftUI optimistically changes its internal path even when admission fails.
+        // Re-publish the controlled path without inventing a destination.
+        defer { self.pathRevision &+= 1 }
         guard self.path == expectedPath else { return }
         self.request($0, emit: emit)
       })
@@ -95,6 +146,7 @@ struct NavigationRouteIdentity: Hashable {
   func dispose() {
     disposed = true
     pending = false
+    pendingLink = nil
     path = []
     destinations = []
     committedPath = []
@@ -117,5 +169,30 @@ struct NativeNavigationStack: View {
           }
         }
     }
+    .environment(\.bonsaiNavigationStack, controller)
+  }
+}
+
+private struct BonsaiNavigationStackKey: EnvironmentKey {
+  static let defaultValue: NavigationStackController? = nil
+}
+extension EnvironmentValues {
+  var bonsaiNavigationStack: NavigationStackController? {
+    get { self[BonsaiNavigationStackKey.self] }
+    set { self[BonsaiNavigationStackKey.self] = newValue }
+  }
+}
+
+struct NativeNavigationLink<Label: View>: View {
+  @Environment(\.bonsaiNavigationStack) private var controller
+  let emission: NativeViewEmission?
+  let admit: () -> Bool
+  let canInteract: () -> Bool
+  let label: Label
+
+  var body: some View {
+    let value = emission.flatMap { controller?.linkValue(emission: $0, admit: admit) }
+    NavigationLink(value: value) { label }
+      .disabled(value == nil || !canInteract())
   }
 }

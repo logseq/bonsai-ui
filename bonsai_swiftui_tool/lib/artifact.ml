@@ -144,12 +144,39 @@ let embed_macos_network_gmp ~(build : Plan.native_build) ~config destination =
       else Ok ())
 ;;
 
+let link_iphoneos_application ~(build : Plan.native_build) ~config destination =
+  match List.assoc_opt "BONSAI_SWIFTUI_APPLE_SDK_ROOT" build.command.environment with
+  | None -> Error "The iPhoneOS SDK root is missing from the native build plan"
+  | Some sdk_root ->
+    Scaffold.ensure_directory (Filename.dirname destination);
+    let architecture = only_architecture config.Config.ios.architectures in
+    Process_runner.run
+      { program = "xcrun"
+      ; arguments =
+          [ "--sdk"
+          ; "iphoneos"
+          ; "clang"
+          ; "-r"
+          ; "-target"
+          ; Printf.sprintf "%s-apple-ios%s" architecture config.ios.minimum_version
+          ; "-isysroot"
+          ; sdk_root
+          ; build.source_object
+          ; "-o"
+          ; destination
+          ]
+      ; working_directory = build.command.working_directory
+      ; environment = []
+      }
+;;
+
 let prepare_source ~(build : Plan.native_build) ~config ~target destination =
   match target with
   | Plan.Macos
     when List.exists (Config.Feature.equal Config.Feature.Network) config.Config.features
     -> embed_macos_network_gmp ~build ~config destination
-  | Plan.Macos | Plan.Iphoneos ->
+  | Plan.Iphoneos -> link_iphoneos_application ~build ~config destination
+  | Plan.Macos ->
     copy_file build.source_object destination;
     Ok ()
 ;;

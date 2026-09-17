@@ -1,0 +1,6 @@
+{
+  "swift/BonsaiSwiftUI/Sources/NativeTextField.swift": "0754369e220838f805ffae6df972a39cb7d088bfe19b86a9d930e5d785fc042f",
+  "swift/BonsaiSwiftUI/Sources/BonsaiSession.swift": "0ea68e48bf92d4478837a2616fd9a434efec3fa4d501a8a960dc04115694b9ad",
+  "swift/BonsaiSwiftUI/Tests/NativeViewTests.swift": "5845afb75d1f08a5821fafdedaee671486c759be4692c1d35d068d73b65b52fd",
+  "native/test/runtime_fixture.ml": "6e0e34ce6df61c5bcf302f5e4de54b239f2382ac24bc1776942373fe1424958a"
+}

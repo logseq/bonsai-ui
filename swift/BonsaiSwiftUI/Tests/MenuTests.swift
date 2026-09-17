@@ -43,6 +43,51 @@ extension TreeFixture {
 }
 
 @MainActor struct MenuTests {
+  @Test func retainedMenuRendersAfterAValidLabelReduction() async throws {
+    _ = NSApplication.shared
+    let tree = RenderTree()
+    tree.commit(try NodeStore().staging(TreeFixture.frame(TreeFixture.menuTree())).tree)
+    let node = try #require(tree.root)
+    guard case .menu(let properties) = node.properties else {
+      Issue.record("Expected a menu")
+      return
+    }
+    let retained = NativeMenu(
+      node: node, properties: properties, controller: try #require(node.menuController),
+      activate: { _ in })
+    let replacement = try NodeStore().staging(TreeFixture.frame([
+      TreeFixture.menu(items: [(-7, 0, true, false, 0, true, 0)]),
+      TreeFixture.text(2, "Actions"), TreeFixture.text(3, "Open"),
+      TreeFixture.children(1, [2, 3]), TreeFixture.root(1),
+    ], revision: 2)).tree
+    tree.commit(replacement)
+    let host = NSHostingView(rootView: retained)
+    host.frame = NSRect(x: 0, y: 0, width: 200, height: 80)
+    let window = NSWindow(contentRect: host.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+    window.isReleasedWhenClosed = false
+    defer { window.close() }
+    window.contentView = host
+    window.orderFront(nil)
+    try await Task.sleep(for: .milliseconds(50))
+    host.layoutSubtreeIfNeeded()
+    func menuButton(in view: NSView) -> NSPopUpButton? {
+      if let button = view as? NSPopUpButton { return button }
+      for child in view.subviews {
+        if let button = menuButton(in: child) { return button }
+      }
+      return nil
+    }
+    let button = try #require(menuButton(in: host))
+    let menu = try #require(button.menu)
+    let cancellation = Timer(timeInterval: 0.05, repeats: true) { _ in
+      MainActor.assumeIsolated { button.menu?.cancelTrackingWithoutAnimation() }
+    }
+    RunLoop.main.add(cancellation, forMode: .eventTracking)
+    defer { cancellation.invalidate() }
+    button.performClick(nil)
+    #expect(menu.items.contains { $0.title == "Pinned" })
+  }
+
   @Test func menuActionsRetainEveryRequestIncludingRepeatedSignedIds() throws {
     var queue = NativeEventQueue()
     for sequence in UInt64(1)...3 {

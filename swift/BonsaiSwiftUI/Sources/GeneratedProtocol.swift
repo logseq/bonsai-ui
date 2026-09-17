@@ -852,6 +852,7 @@ public enum TextEditorPropId {
     public static let `readOnly` = 7
     public static let `submitOnReturn` = 8
     public static let `maxUtf8Bytes` = 9
+    public static let `autofocus` = 10
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
@@ -864,6 +865,7 @@ public enum TextEditorPropId {
         case 7: return "read_only"
         case 8: return "submit_on_return"
         case 9: return "max_utf8_bytes"
+        case 10: return "autofocus"
         default: return nil
         }
     }

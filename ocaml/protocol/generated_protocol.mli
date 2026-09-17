@@ -421,6 +421,7 @@ module Text_editor_prop : sig
   val read_only : Bonsai_swiftui_spec.Id.Protocol.property
   val submit_on_return : Bonsai_swiftui_spec.Id.Protocol.property
   val max_utf8_bytes : Bonsai_swiftui_spec.Id.Protocol.property
+  val autofocus : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 

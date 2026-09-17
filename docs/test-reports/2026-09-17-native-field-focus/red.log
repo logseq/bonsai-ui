@@ -1,0 +1,101 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Compiling BonsaiSwiftUITests NativeViewTests.swift
+[4/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/6] Write Objects.LinkFileList
+[5/6] Linking BonsaiSwiftUIPackageTests
+Build complete! (4.68s)
+Test Suite 'Selected tests' started at 2026-09-17 15:31:04.148.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-17 15:31:04.149.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-17 15:31:04.149.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-17 15:31:04.149.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.002) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+◇ Test case passing 1 argument secure → false to mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:33:7: Expectation failed: (window.firstResponder → <NSWindow: 0xc4c4e4000>) === (editor → <NSTextView: 0xc4c594800>
+    Frame = {{4.00, 4.00}, {492.00, 20.00}}, Bounds = {{0.00, 0.00}, {492.00, 20.00}}
+    Horizontally resizable: NO, Vertically resizable: YES
+    MinSize = {492.00, 20.00}, MaxSize = {40000.00, 40000.00}
+)
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:34:7: Expectation failed: (field.isEnabled → false) && (field.isEditable → <not evaluated>)
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:37:7: Expectation failed: (controller.session.value.text → "Draft") == "Draft typed"
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:40:7: Expectation failed: (window.firstResponder → <NSWindow: 0xc4c4e4000>) === (editor → <NSTextView: 0xc4c594800>
+    Frame = {{4.00, 4.00}, {492.00, 20.00}}, Bounds = {{0.00, 0.00}, {492.00, 20.00}}
+    Horizontally resizable: NO, Vertically resizable: YES
+    MinSize = {492.00, 20.00}, MaxSize = {40000.00, 40000.00}
+)
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:41:7: Expectation failed: try await session.refresh()
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:45:7: Expectation failed: (controller.session.value.text → "Draft") == "Draft typed"
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → false at NativeViewTests.swift:51:7: Expectation failed: (controller.session.value.text → "Draft") == "Draft typed"
+◇ Test case passing 1 argument secure → true to mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:33:7: Expectation failed: (window.firstResponder → <NSWindow: 0xc4c5f0500>) === (editor → <NSSecureTextView: 0xc4c595c00>
+    Frame = {{4.00, 4.00}, {492.00, 20.00}}, Bounds = {{0.00, 0.00}, {492.00, 20.00}}
+    Horizontally resizable: NO, Vertically resizable: YES
+    MinSize = {492.00, 20.00}, MaxSize = {40000.00, 40000.00}
+)
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:34:7: Expectation failed: (field.isEnabled → false) && (field.isEditable → <not evaluated>)
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:37:7: Expectation failed: (controller.session.value.text → "Draft") == "Draft typed"
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:40:7: Expectation failed: (window.firstResponder → <NSWindow: 0xc4c5f0500>) === (editor → <NSSecureTextView: 0xc4c595c00>
+    Frame = {{4.00, 4.00}, {492.00, 20.00}}, Bounds = {{0.00, 0.00}, {492.00, 20.00}}
+    Horizontally resizable: NO, Vertically resizable: YES
+    MinSize = {492.00, 20.00}, MaxSize = {40000.00, 40000.00}
+)
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:41:7: Expectation failed: try await session.refresh()
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:45:7: Expectation failed: (controller.session.value.text → "Draft") == "Draft typed"
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) recorded an issue with 1 argument secure → true at NativeViewTests.swift:51:7: Expectation failed: (controller.session.value.text → "Draft") == "Draft typed"
+✘ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) with 2 test cases failed after 2.407 seconds with 14 issues.
+✘ Suite NativeRuntimeTests failed after 2.407 seconds with 14 issues.
+✘ Test run with 1 test in 1 suite failed after 2.407 seconds with 14 issues.

@@ -139,7 +139,7 @@ def read_package_lock(root, host, packages, required=False, matching=True):
 
 
 def generate_project(*, framework_root, application_root, host_directory, product_name,
-                     bundle_identifiers, entitlements=None, swift_packages=(),
+                     bundle_identifiers, entitlements=None, swift_packages=(), ios_minimum_version="18.0",
                      development_team="", check=False, validate_only=False, inputs_only=False,
                      require_lock=False, refresh_lock=False, package_validation=False):
     framework_root = Path(framework_root).resolve()
@@ -153,6 +153,8 @@ def generate_project(*, framework_root, application_root, host_directory, produc
             value = identifier + suffix
             if len(value) > 255 or not re.fullmatch(r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+", value):
                 raise ValueError(f"Invalid bundle identifier: {value}")
+    if not re.fullmatch(r"[1-9][0-9]*\.(0|[1-9][0-9]*)", ios_minimum_version) or int(ios_minimum_version.split(".")[0]) < 18:
+        raise ValueError(f"Unsupported iOS minimum version: {ios_minimum_version}; framework minimum is 18.0")
     effective = effective_entitlements(application_root, host, entitlements)
     lock = read_package_lock(application_root, host, swift_packages, require_lock, matching=not refresh_lock)
     if inputs_only:
@@ -215,6 +217,8 @@ def generate_project(*, framework_root, application_root, host_directory, produc
     targets, products, schemes, test_host_files, ui_test_files = [], [], [], [], []
 
     for platform, (sdk, macho, minimum) in PLATFORMS.items():
+        if platform == "iOS":
+            minimum = ios_minimum_version
         target_name = f"{product_name}-{platform}"
         platform_ui_files = [] if package_validation else [file(path, "sourcecode.swift") for path in sorted(
             (application_root / "apple-ui-tests" / platform.lower()).glob("*.swift"))]
@@ -246,7 +250,7 @@ def generate_project(*, framework_root, application_root, host_directory, produc
             "ARCHS": "arm64", "ONLY_ACTIVE_ARCH": "NO", "SDKROOT": sdk,
             "SUPPORTED_PLATFORMS": sdk, "SUPPORTS_MACCATALYST": "NO",
             "SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD": "NO",
-            "MACOSX_DEPLOYMENT_TARGET": "26.0", "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
+            "MACOSX_DEPLOYMENT_TARGET": "26.0", "IPHONEOS_DEPLOYMENT_TARGET": ios_minimum_version,
             "SWIFT_VERSION": "6.0", "CLANG_ENABLE_MODULES": "YES",
             "SWIFT_INCLUDE_PATHS": ["$(inherited)", f'"$(PROJECT_DIR)/{os.path.relpath(framework_root / "native/src", host)}"'],
             "OTHER_LDFLAGS": ["$(inherited)", f'"$(PROJECT_DIR)/Native/{sdk}/$(CONFIGURATION)/runtime.complete.o"',
@@ -475,6 +479,7 @@ def main():
     parser.add_argument("--product-name", required=True)
     parser.add_argument("--macos-bundle-identifier", required=True)
     parser.add_argument("--ios-bundle-identifier", required=True)
+    parser.add_argument("--ios-minimum-version", default="18.0")
     parser.add_argument("--entitlement", nargs=3, action="append", default=[])
     parser.add_argument("--swift-package", nargs=4, action="append", default=[])
     parser.add_argument("--swift-product", nargs=3, action="append", default=[])

@@ -359,7 +359,10 @@ type props =
       ; fill_viewport : bool
       ; initial_anchor : int
       }
-  | Text_editor_props of text_editor
+  | Text_editor_props of
+      { editing : text_editor
+      ; autofocus : bool
+      }
   | Text_field_props of text_field
   | Image_props of
       { source : image_source

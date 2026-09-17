@@ -150,6 +150,10 @@ private struct NativeExpandableComposerView: View {
       canInteract: { controller.accepts(token) && context.canInteract() },
       emit: { (event: ComposerEvent) in
         controller.accepts(token) && context.canInteract() && context.emit(event)
+      },
+      makeNavigationEvent: { event in
+        guard let request = context.makeNavigationEvent(event) else { return nil }
+        return (request.0, { controller.accepts(token) && request.1() })
       })
     return NativeMessageComposerView(context: nested, closeSheet: { controller.close(token) })
       .onAppear { controller.appeared(token) }

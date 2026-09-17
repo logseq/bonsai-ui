@@ -490,15 +490,18 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
     in
     Ok
       (Text_editor_props
-         { session_id = fields.session_id
-         ; document_revision = fields.document_revision
-         ; accepted_local_revision = fields.accepted_local_revision
-         ; update_mode
-         ; value
-         ; enabled = fields.enabled
-         ; read_only = fields.read_only
-         ; submit_on_return = fields.submit_on_return
-         ; max_utf8_bytes = fields.max_utf8_bytes
+         { editing =
+             { session_id = fields.session_id
+             ; document_revision = fields.document_revision
+             ; accepted_local_revision = fields.accepted_local_revision
+             ; update_mode
+             ; value
+             ; enabled = fields.enabled
+             ; read_only = fields.read_only
+             ; submit_on_return = fields.submit_on_return
+             ; max_utf8_bytes = fields.max_utf8_bytes
+             }
+         ; autofocus = fields.autofocus
          })
   | Text_field fields ->
     let wire_range range =

@@ -321,7 +321,9 @@ private func properties(_ reader: inout WireReader, kind: Int) throws -> NodePro
   case NodeKindId.textField, NodeKindId.secureField:
     return .textField(try RenderTextField.decode(&reader, secure: kind == NodeKindId.secureField))
   case NodeKindId.textEditor:
-    return .textEditor(try RenderTextEditor.decode(&reader))
+    var editor = try RenderTextEditor.decode(&reader)
+    editor.autofocus = try reader.flag()
+    return .textEditor(editor)
   case NodeKindId.image:
     return .image(try RenderImage.decode(&reader))
   case NodeKindId.frame:
@@ -398,7 +400,8 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.collectionWindow: return 3
   case NodeKindId.scroll: return 15
   case NodeKindId.textField, NodeKindId.secureField: return 32767
-  case NodeKindId.frame, NodeKindId.textEditor: return 511
+  case NodeKindId.frame: return 511
+  case NodeKindId.textEditor: return 1023
   case NodeKindId.spacer, NodeKindId.padding, NodeKindId.opacity: return 1
   case NodeKindId.background, NodeKindId.clip: return 3
   case NodeKindId.animatedOpacity: return 15

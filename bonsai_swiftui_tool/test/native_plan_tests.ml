@@ -182,6 +182,92 @@ let test_direct_target_validation () =
       (List.mem_assoc "BONSAI_SWIFTUI_EMBED_OCAML" build.command.environment))
 ;;
 
+let test_iphoneos_artifact_minimum () =
+  with_project (fun root ->
+    let original = config "app/native_embed.exe.o" in
+    let config = { original with ios = { original.ios with minimum_version = "26.0" } } in
+    let sdk_root =
+      Process_runner.capture
+        ~working_directory:root
+        ~environment:[]
+        "xcrun"
+        [ "--sdk"; "iphoneos"; "--show-sdk-path" ]
+      |> get_ok
+    in
+    let sdk_version =
+      Process_runner.capture
+        ~working_directory:root
+        ~environment:[]
+        "xcrun"
+        [ "--sdk"; "iphoneos"; "--show-sdk-version" ]
+      |> get_ok
+    in
+    let build =
+      Plan.native_build
+        ~project_root:root
+        ~config
+        ~target:Plan.Iphoneos
+        ~profile:Plan.Release
+        ~toolchain_fingerprint:"ios-floor-test"
+        ~apple_sdk_root:sdk_root
+        ~apple_sdk_version:(Some sdk_version)
+      |> get_ok
+    in
+    Scaffold.ensure_directory (Filename.dirname build.source_object);
+    let source = Filename.concat root "answer.c" in
+    write source "int retained_answer(void) { return 42; }\n";
+    Process_runner.run
+      { program = "xcrun"
+      ; arguments =
+          [ "--sdk"
+          ; "iphoneos"
+          ; "clang"
+          ; "-target"
+          ; "arm64-apple-ios18.0"
+          ; "-isysroot"
+          ; sdk_root
+          ; "-c"
+          ; source
+          ; "-o"
+          ; build.source_object
+          ]
+      ; working_directory = root
+      ; environment = []
+      }
+    |> get_ok;
+    let input_digest = Digest.file build.source_object in
+    let destination = Filename.concat root "application.o" in
+    Artifact.prepare_source ~build ~config ~target:Plan.Iphoneos destination |> get_ok;
+    let metadata =
+      Process_runner.capture
+        ~working_directory:root
+        ~environment:[]
+        "xcrun"
+        [ "vtool"; "-show-build"; destination ]
+      |> get_ok
+    in
+    Alcotest.(check bool)
+      "application minimum is adopted"
+      true
+      (Artifact.contains ~needle:"minos 26.0" metadata);
+    Alcotest.(check bool)
+      "SDK-floor input is not rewritten"
+      true
+      (input_digest = Digest.file build.source_object);
+    let symbols =
+      Process_runner.capture
+        ~working_directory:root
+        ~environment:[]
+        "nm"
+        [ "-g"; destination ]
+      |> get_ok
+    in
+    Alcotest.(check bool)
+      "relocation retains input code"
+      true
+      (Artifact.contains ~needle:"_retained_answer" symbols))
+;;
+
 let () =
   Alcotest.run
     "SwiftUI native build"
@@ -194,6 +280,10 @@ let () =
             "actual Counter staging without aliases"
             `Quick
             test_native_build_without_managed_aliases
+        ; Alcotest.test_case
+            "iPhoneOS application deployment target"
+            `Quick
+            test_iphoneos_artifact_minimum
         ; Alcotest.test_case
             "direct target validation"
             `Quick

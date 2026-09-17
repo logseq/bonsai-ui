@@ -18,7 +18,7 @@ extension TreeFixture {
     operation(update ? OperationId.updateProps : OperationId.createNode) {
       $0.integer(id)
       $0.integer(UInt16(kind))
-      if update { $0.integer(UInt64(kind == 6 ? 511 : 32767)) }
+      if update { $0.integer(UInt64(kind == 6 ? 1023 : 32767)) }
       $0.integer(session)
       $0.integer(document)
       $0.integer(accepted)
@@ -33,6 +33,7 @@ extension TreeFixture {
       $0.integer(submit)
       $0.integer(UInt8(maximum == nil ? 0 : 1))
       if let maximum { $0.integer(maximum) }
+      if kind == 6 { $0.integer(autofocus) }
       if kind != 6 {
         for string in [label, prompt] {
           $0.integer(UInt32(string.utf8.count))
@@ -98,6 +99,7 @@ struct TextEditorWireTests {
     ).tree
     #expect(after.nodes[1]?.kind == 6 && after.revision == 2)
     var invalid = [
+      TreeFixture.editor(autofocus: 2, update: true),
       TreeFixture.editor(mode: 3, update: true), TreeFixture.editor(enabled: 2, update: true),
       TreeFixture.editor(maximum: 0, update: true),
       TreeFixture.editor(session: UInt64.max, update: true),

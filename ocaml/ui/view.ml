@@ -364,6 +364,7 @@ module Private_types = struct
         ; read_only : bool
         ; submit_on_return : bool
         ; max_utf8_bytes : int option
+        ; autofocus : bool
         }
         -> [ `Text_editor ] node
     | Text_field :
@@ -843,6 +844,7 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && x.accepted_local_revision = y.accepted_local_revision
     && x.update_mode = y.update_mode
     && Text_editing.Value.equal x.value y.value
+    && x.autofocus = y.autofocus
     && x.enabled = y.enabled
     && x.read_only = y.read_only
     && x.submit_on_return = y.submit_on_return
@@ -1180,6 +1182,7 @@ let image ?key ?(sizing = Style.Image_sizing.Original) ?(scale = 1.) ~source () 
 
 let text_editor
       ?key
+      ?(autofocus = false)
       ?(enabled = true)
       ?(read_only = false)
       ?(submit_on_return = false)
@@ -1231,6 +1234,7 @@ let text_editor
          ; read_only
          ; submit_on_return
          ; max_utf8_bytes
+         ; autofocus
          })
     ~event_bindings:(Array.of_list bindings)
     ~children:[||]

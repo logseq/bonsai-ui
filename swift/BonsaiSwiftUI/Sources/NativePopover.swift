@@ -23,13 +23,9 @@ struct NativePopover: View {
   let properties: RenderPopover
   let activate: @MainActor (RenderNodeState) -> Void
   var body: some View {
-    let token = controller.generation
     NativeNodeView(node: node.children[0], activate: activate)
-      .popover(isPresented: controller.binding(emit: node.emit), arrowEdge: properties.arrowEdge) {
-        NativeNodeView(node: node.children[1], activate: activate)
-          .onAppear { controller.appeared(true, token: token) }
-          .onDisappear { controller.appeared(false, token: token) }
-          .id(token)
+      .popover(isPresented: controller.nativeBinding(emit: node.emit), arrowEdge: properties.arrowEdge) {
+        NativePresentationContent(node: node.children[1], controller: controller, activate: activate)
       }
   }
 }

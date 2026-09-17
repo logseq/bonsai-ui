@@ -5,6 +5,67 @@ import Testing
 @testable import BonsaiSwiftUI
 
 extension NativeRuntimeTests {
+  @Test(arguments: [false, true]) @MainActor func mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure: Bool) async throws {
+    initializeAccessibilityApplication()
+    let trace = CardTrace()
+    let session = BonsaiSession(nativeViews: try trace.registry())
+    session.isVisible = true
+    do {
+      try await session.start(entrypoint: secure ? "native-secure-card" : "native-field-card")
+      let host = NSHostingView(rootView: NativeNodeView(
+        node: try #require(session.tree.root), activate: { session.activate($0) }))
+      let window = NSWindow(
+        contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
+        styleMask: [.titled], backing: .buffered, defer: false)
+      window.contentView = host
+      window.orderFront(nil)
+      defer { window.orderOut(nil); window.contentView = nil }
+      try await settleCard(host)
+      #expect(try await session.presented(#require(session.ticket)))
+      try await settleCard(host)
+      let controller = try #require(session.tree.nodes.values.compactMap { $0.fieldController }.first)
+      let field = controller.field
+      let editor = try #require(field.currentEditor() as? NSTextView)
+      #expect(window.firstResponder === editor)
+      #expect(session.activate(try cardButton(session, "Change native properties")))
+      #expect(try await session.refresh())
+      try await settleCard(host)
+      #expect(window.firstResponder === editor)
+      #expect(field.isEnabled && field.isEditable)
+      editor.insertText(" typed", replacementRange: NSRange(location: editor.string.utf16.count, length: 0))
+      try await settleCard(host)
+      #expect(controller.session.value.text == "Draft typed")
+      #expect(try await session.presented(#require(session.ticket)))
+      try await settleCard(host)
+      #expect(window.firstResponder === editor)
+      #expect(try await session.refresh())
+      if let ticket = session.ticket { #expect(try await session.presented(ticket)) }
+      try await settleCard(host)
+      #expect(trace.emissions["2"] != nil)
+      #expect(controller.session.value.text == "Draft typed")
+      let resource = try #require(trace.resource)
+      resource.showsChild = false
+      try await settleCard(host)
+      #expect(window.firstResponder !== editor)
+      #expect(!field.isEnabled)
+      #expect(controller.session.value.text == "Draft typed")
+      resource.showsChild = true
+      try await settleCard(host)
+      #expect(field.currentEditor() == nil)
+      #expect(window.makeFirstResponder(field))
+      session.isActive = false
+      #expect(field.currentEditor() == nil)
+      session.isActive = true
+      try await settleCard(host)
+      #expect(field.currentEditor() == nil)
+      await session.close()
+      #expect(field.delegate == nil && field.currentEditor() == nil)
+    } catch {
+      await session.close()
+      throw error
+    }
+  }
+
   @Test func actualOcamlNativeViewEnvelopeStages() async throws {
     let runtime = try await NativeRuntime.open(entrypoint: "native-view")
     do {
@@ -306,6 +367,92 @@ private func nativeCardOperation(
   }
 }
 struct NativeViewValidationTests {
+  @Test @MainActor func parentVisibilityPreservesIndependentChildMountLifetimes() throws {
+    let tree = RenderTree(nativeViews: try CardTrace().registry())
+    let store = try NodeStore().staging(TreeFixture.frame([
+      nativeCardOperation(), TreeFixture.text(2, "Retained toolbar"),
+      TreeFixture.text(3, "Removed child"), TreeFixture.children(1, [2, 3]), TreeFixture.root(1),
+    ])).tree
+    try tree.validate(store)
+    tree.commit(store)
+    let root = try #require(tree.root)
+    let instance = try #require(root.nativeView)
+    let retained = root.children[0].id
+    let removed = root.children[1].id
+    instance.mount()
+    instance.mountChild(retained)
+    instance.mountChild(removed)
+    instance.setPresented(true)
+    let originalGeneration = instance.generation
+    #expect(instance.containsMountedChild(retained))
+    instance.unmount()
+    #expect(!instance.containsMountedChild(retained))
+    #expect(!instance.accepts(originalGeneration))
+    instance.unmountChild(removed)
+    instance.mount()
+    #expect(instance.containsMountedChild(retained))
+    #expect(!instance.containsMountedChild(removed))
+    #expect(!instance.accepts(originalGeneration))
+    instance.mount()
+    instance.unmount()
+    #expect(instance.containsMountedChild(retained))
+    instance.unmountChild(retained)
+    #expect(!instance.containsMountedChild(retained))
+    instance.mountChild(retained)
+    instance.dispose()
+    instance.mount()
+    #expect(!instance.containsMountedChild(retained))
+  }
+
+  @Test @MainActor func directlyIndexedNativeChildTracksReplacementIdentity() async throws {
+    initializeAccessibilityApplication()
+    var registry = BonsaiNativeViews()
+    try registry.register(
+      kind: 1001, version: 1, capabilities: [.stateful, .resource, .semantics],
+      decode: { _ in () },
+      encodeEvent: { (_: Bool) in BonsaiNativeEvent(id: 1) },
+      makeResource: { () }, dispose: { _ in },
+      content: { context in context.children[0] })
+    let tree = RenderTree(nativeViews: registry)
+    func commit(child: UInt64, title: String, revision: UInt64) throws {
+      let store = try NodeStore().staging(TreeFixture.frame([
+        nativeCardOperation(), TreeFixture.text(child, title),
+        TreeFixture.children(1, [child]), TreeFixture.root(1),
+      ], revision: revision)).tree
+      try tree.validate(store)
+      tree.commit(store)
+    }
+    try commit(child: 2, title: "Initial", revision: 1)
+    let root = try #require(tree.root)
+    let instance = try #require(root.nativeView)
+    let initial = try #require(root.children.first).id
+    let host = NSHostingView(rootView: NativeNodeView(node: root, activate: { _ in }))
+    let window = NSWindow(
+      contentRect: NSRect(x: 0, y: 0, width: 300, height: 100),
+      styleMask: [.borderless], backing: .buffered, defer: false)
+    window.isReleasedWhenClosed = false
+    defer { window.close() }
+    window.contentView = host
+    window.orderFront(nil)
+    try await settleCard(host)
+    instance.setPresented(true)
+    #expect(instance.containsMountedChild(initial))
+    try commit(child: 2, title: "Updated", revision: 2)
+    try await settleCard(host)
+    #expect(instance.containsMountedChild(initial))
+    try commit(child: 3, title: "Replacement", revision: 3)
+    try await settleCard(host)
+    instance.setPresented(true)
+    let replacement = try #require(root.children.first).id
+    #expect(!instance.containsMountedChild(initial))
+    #expect(instance.containsMountedChild(replacement))
+    #expect(accessibilityElements(host).contains { $0.value == "Replacement" })
+    window.contentView = nil
+    try await settleCard(host)
+    #expect(!instance.containsMountedChild(initial))
+    #expect(!instance.containsMountedChild(replacement))
+  }
+
   @Test @MainActor func nativeViewValidationAllocatesOnlyAfterCompleteFrameAcceptance() throws {
     let trace = CardTrace()
     let tree = RenderTree(nativeViews: try trace.registry())
@@ -413,6 +560,69 @@ extension NativeRuntimeTests {
       #expect(cardHasText(session, "Native events: 9"))
       await session.close()
       #expect(trace.disposed == 9)
+    } catch {
+      await session.close()
+      throw error
+    }
+  }
+}
+
+extension NativeRuntimeTests {
+  @Test(arguments: [false, true]) @MainActor func mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet: Bool) async throws {
+    initializeAccessibilityApplication()
+    let trace = CardTrace()
+    let session = BonsaiSession(nativeViews: try trace.registry())
+    session.isVisible = true
+    do {
+      try await session.start(entrypoint: sheet ? "native-editor-sheet" : "native-editor-card")
+      let host = NSHostingView(rootView: NativeNodeView(
+        node: try #require(session.tree.root), activate: { session.activate($0) }))
+      let window = NSWindow(
+        contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
+        styleMask: [.titled], backing: .buffered, defer: false)
+      window.contentView = host
+      window.orderFront(nil)
+      defer { window.orderOut(nil); window.contentView = nil }
+      try await settleCard(host)
+      #expect(try await session.presented(#require(session.ticket)))
+      try await settleCard(host)
+      let editors = session.tree.nodes.values.compactMap { $0.textController?.view }
+      let editor = try #require(editors.first)
+      for _ in 0..<10 { try await settleCard(host); if editor.window != nil { break } }
+      let editingWindow = try #require(editor.window)
+      #expect(editingWindow.firstResponder === editor)
+      #expect(session.activate(try cardButton(session, "Change native properties")))
+      #expect(try await session.refresh())
+      try await settleCard(host)
+      #expect(editingWindow.firstResponder === editor)
+      #expect(editor.isEditable)
+      editor.insertText(" typed", replacementRange: NSRange(location: NSNotFound, length: 0))
+      #expect(editor.string == "Draft typed")
+      #expect(try await session.presented(#require(session.ticket)))
+      try await settleCard(host)
+      #expect(editingWindow.firstResponder === editor)
+      #expect(try await session.refresh())
+      if let ticket = session.ticket { #expect(try await session.presented(ticket)) }
+      try await settleCard(host)
+      #expect(trace.emissions["2"] != nil)
+      #expect(editor.string == "Draft typed")
+      let resource = try #require(trace.resource)
+      resource.showsChild = false
+      try await settleCard(host)
+      #expect(editingWindow.firstResponder !== editor)
+      editor.insertText("Hidden", replacementRange: NSRange(location: NSNotFound, length: 0))
+      #expect(editor.string == "Draft typed")
+      resource.showsChild = true
+      try await settleCard(host)
+      #expect(editingWindow.firstResponder !== editor)
+      #expect(editingWindow.makeFirstResponder(editor))
+      session.isActive = false
+      #expect(editingWindow.firstResponder !== editor)
+      session.isActive = true
+      try await settleCard(host)
+      #expect(editingWindow.firstResponder !== editor)
+      await session.close()
+      #expect(editor.delegate == nil)
     } catch {
       await session.close()
       throw error

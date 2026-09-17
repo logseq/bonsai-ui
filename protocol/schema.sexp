@@ -158,7 +158,8 @@
    (text_editor
     ((session_id 1 u64) (document_revision 2 u64) (accepted_local_revision 3 u64)
      (update_mode 4 text_update_mode) (value 5 text_editing_value) (enabled 6 bool)
-     (read_only 7 bool) (submit_on_return 8 bool) (max_utf8_bytes 9 optional_u32)))
+     (read_only 7 bool) (submit_on_return 8 bool) (max_utf8_bytes 9 optional_u32)
+     (autofocus 10 bool)))
    (image
     ((source 1 image_source)
      (sizing 2 image_sizing)

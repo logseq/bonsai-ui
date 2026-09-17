@@ -1419,7 +1419,9 @@ let write_props writer kind props =
     write_text_field writer fields
   | Secure_field, Text_field_props fields when fields.secure ->
     write_text_field writer fields
-  | Text_editor, Text_editor_props fields -> write_text_editor writer fields
+  | Text_editor, Text_editor_props fields ->
+    write_text_editor writer fields.editing;
+    write_bool writer fields.autofocus
   | Image, Image_props { source; sizing; scale } ->
     write_image_props writer source sizing scale
   | Button, Button_props { enabled; role; style; autofocus } ->
@@ -1883,7 +1885,7 @@ let changed_fields = function
   | Scroll_targets_props _ -> 511L
   | Scroll_props _ -> 15L
   | Text_field_props _ -> 32767L
-  | Text_editor_props _ -> 511L
+  | Text_editor_props _ -> 1023L
   | Image_props _ ->
     List.fold_left
       Int64.logor
@@ -2095,7 +2097,9 @@ let write_update_props writer props =
   | Collection_catalog_props fields -> write_collection_catalog writer fields
   | Collection_window_props fields -> write_collection_window writer fields
   | Text_field_props fields -> write_text_field writer fields
-  | Text_editor_props fields -> write_text_editor writer fields
+  | Text_editor_props fields ->
+    write_text_editor writer fields.editing;
+    write_bool writer fields.autofocus
   | Button_props { enabled; role; style; autofocus } ->
     check_button_properties ~role ~style;
     write_bool writer enabled;
@@ -3485,7 +3489,7 @@ let read_props reader kind =
       }
     in
     if kind = Text_editor
-    then Text_editor_props editing
+    then Text_editor_props { editing; autofocus = read_bool reader }
     else (
       let label = read_string reader in
       let prompt = read_string reader in

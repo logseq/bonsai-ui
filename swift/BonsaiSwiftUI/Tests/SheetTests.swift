@@ -274,3 +274,44 @@ extension NativeRuntimeTests {
     }
   }
 }
+
+extension SheetTests {
+  @Test func rebindingSheetActionsPreservesNativeEditorMount() async throws {
+    initializeAccessibilityApplication()
+    let original = try NodeStore().staging(TreeFixture.frame([
+      TreeFixture.sheet(presented: 1), TreeFixture.text(2, "Background"),
+      TreeFixture.editor(3), TreeFixture.children(1, [2, 3]), TreeFixture.root(1),
+    ])).tree
+    let tree = RenderTree()
+    tree.onInput = { _, _ in true }
+    tree.commit(original)
+    let controller = try #require(tree.nodes[1]?.presentationController)
+    let editor = try #require(tree.nodes[3]?.textController?.view)
+    controller.setPresentationActive(true)
+    let host = NSHostingView(rootView: NativeNodeView(node: try #require(tree.root), activate: { _ in }))
+    let window = NSWindow(
+      contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+      styleMask: [.titled], backing: .buffered, defer: false)
+    window.contentView = host
+    window.orderFront(nil)
+    defer { tree.commit(NodeStore()); window.orderOut(nil); window.contentView = nil }
+    for _ in 0..<10 { try await settleAccessibility(host); if controller.nativeVisible { break } }
+    #expect(controller.nativeVisible)
+    let scroll = try #require(editor.enclosingScrollView)
+    let sheet = try #require(editor.window)
+    #expect(sheet.makeFirstResponder(editor))
+    let obsolete = controller.binding(emit: { _ in Issue.record("Stale dismissal"); return true })
+    let rebind = TreeFixture.operation(OperationId.updateEventBindings) {
+      $0.integer(UInt64(1)); $0.integer(UInt16(1))
+      $0.integer(UInt16(EventTagId.valueChanged)); $0.integer(UInt64(92))
+    }
+    tree.commit(try original.staging(TreeFixture.frame([rebind], base: 1, revision: 2)).tree)
+    for _ in 0..<5 { try await settleAccessibility(host) }
+    #expect(editor.enclosingScrollView === scroll)
+    #expect(editor.window === sheet)
+    #expect(sheet.firstResponder === editor)
+    #expect(controller.nativeVisible)
+    obsolete.wrappedValue = false
+    #expect(controller.presented)
+  }
+}

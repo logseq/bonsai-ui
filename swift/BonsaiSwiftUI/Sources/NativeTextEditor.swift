@@ -36,6 +36,10 @@ struct TextEditorConfiguration: Equatable, Sendable {
   private var focused = false
   private var hostEnabled = true
   private var contentActive = true
+  private var retainingFocus = false
+  private var presentationActive = false
+  private var autofocus = false
+  private var autofocusPending = false
 
   init(
     snapshot: TextSnapshot, configuration: TextEditorConfiguration,
@@ -47,13 +51,12 @@ struct TextEditorConfiguration: Equatable, Sendable {
     self.failed = failed
     super.init()
     view.delegate = self
+    view.attached = { [weak self] in self?.attemptAutofocus() }
     view.changed = { [weak self] in self?.capture() }
     view.focusChanged = { [weak self] in self?.focus($0) }
     view.acceptsInput = { [weak self] in
       guard let self, !disposed else { return false }
-      return applying
-        || (self.hostEnabled && self.contentActive && self.configuration.enabled
-          && !self.configuration.readOnly)
+      return applying || self.acceptsEdits
     }
     #if os(macOS)
       view.isRichText = false
@@ -72,6 +75,40 @@ struct TextEditorConfiguration: Equatable, Sendable {
     replaceNativeValue()
   }
 
+  func configureAutofocus(_ autofocus: Bool) {
+    guard !disposed else { return }
+    if !autofocus {
+      autofocusPending = false
+    } else if !self.autofocus {
+      autofocusPending = true
+    }
+    self.autofocus = autofocus
+    attemptAutofocus()
+  }
+
+  func setPresentationActive(_ active: Bool) {
+    guard !disposed else { return }
+    presentationActive = active
+    attemptAutofocus()
+  }
+
+  private func attemptAutofocus() {
+    guard !disposed, presentationActive, autofocusPending, hostEnabled, contentActive,
+      configuration.enabled, !configuration.readOnly, let window = view.window
+    else { return }
+    #if os(macOS)
+      guard window.isVisible, !view.isHiddenOrHasHiddenAncestor else { return }
+    #else
+      guard !view.isHidden else { return }
+    #endif
+    autofocusPending = false
+    #if os(macOS)
+      if !window.makeFirstResponder(view) { autofocusPending = true }
+    #else
+      if !view.becomeFirstResponder() { autofocusPending = true }
+    #endif
+  }
+
   @discardableResult func apply(_ snapshot: TextSnapshot) throws -> Bool {
     guard !disposed else { return false }
     let replace = try session.apply(snapshot)
@@ -85,9 +122,10 @@ struct TextEditorConfiguration: Equatable, Sendable {
     updateAvailability()
   }
 
-  func setContentActive(_ active: Bool) {
-    guard !disposed, active != contentActive else { return }
+  func setContentActive(_ active: Bool, retainingFocus: Bool = false) {
+    guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else { return }
     contentActive = active
+    self.retainingFocus = retainingFocus
     updateAvailability()
   }
   func setHostEnabled(_ enabled: Bool) {
@@ -96,10 +134,18 @@ struct TextEditorConfiguration: Equatable, Sendable {
     updateAvailability()
   }
 
+  var retainsEditingFocus: Bool { retainingFocus && focused && !disposed }
+
+  private var acceptsEdits: Bool {
+    !disposed && hostEnabled && (contentActive || retainsEditingFocus)
+      && configuration.enabled && !configuration.readOnly
+  }
+
   private func updateAvailability() {
-    let enabled = hostEnabled && contentActive && configuration.enabled
-    view.isEditable = enabled && !configuration.readOnly
-    view.isSelectable = enabled
+    let enabled = hostEnabled && (contentActive || (retainingFocus && focused)) && configuration.enabled
+    let editable = enabled && !configuration.readOnly
+    if view.isEditable != editable { view.isEditable = editable }
+    if view.isSelectable != enabled { view.isSelectable = enabled }
     if !enabled {
       #if os(macOS)
         if view.window?.firstResponder === view { view.window?.makeFirstResponder(nil) }
@@ -107,6 +153,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
         if view.isFirstResponder { view.resignFirstResponder() }
       #endif
     }
+    attemptAutofocus()
   }
 
   func dispose() {
@@ -114,6 +161,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
     disposed = true
     hostEnabled = false
     updateAvailability()
+    view.attached = nil
     view.changed = nil
     view.focusChanged = nil
     view.acceptsInput = nil
@@ -205,10 +253,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
 
   private func shouldReplace(_ range: NSRange, with replacement: String?) -> Bool {
     if applying { return true }
-    guard !disposed, hostEnabled, contentActive, configuration.enabled, !configuration.readOnly
-    else {
-      return false
-    }
+    guard acceptsEdits else { return false }
     guard let replacement else { return true }
     let text = nativeText as NSString
     guard range.location >= 0, range.location <= text.length, range.length >= 0,
@@ -253,10 +298,16 @@ struct TextEditorConfiguration: Equatable, Sendable {
   }
 
   @MainActor final class NativeEditingTextView: NSTextView {
+    var attached: (() -> Void)?
     var changed: (() -> Void)?
     var focusChanged: ((Bool) -> Void)?
     var acceptsInput: (() -> Bool)?
     private(set) var mutationDepth = 0
+
+    override func viewDidMoveToWindow() {
+      super.viewDidMoveToWindow()
+      attached?()
+    }
 
     private func mutation(_ action: () -> Void) {
       mutationDepth += 1
@@ -317,10 +368,16 @@ struct TextEditorConfiguration: Equatable, Sendable {
   }
 
   @MainActor final class NativeEditingTextView: UITextView {
+    var attached: (() -> Void)?
     var changed: (() -> Void)?
     var focusChanged: ((Bool) -> Void)?
     var acceptsInput: (() -> Bool)?
     private(set) var mutationDepth = 0
+
+    override func didMoveToWindow() {
+      super.didMoveToWindow()
+      attached?()
+    }
 
     private func mutation(_ action: () -> Void) {
       mutationDepth += 1

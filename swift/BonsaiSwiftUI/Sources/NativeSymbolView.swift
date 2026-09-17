@@ -1,5 +1,16 @@
 import SwiftUI
 
+private struct NativeLabelIconKey: EnvironmentKey {
+  static let defaultValue = false
+}
+
+extension EnvironmentValues {
+  var bonsaiLabelIcon: Bool {
+    get { self[NativeLabelIconKey.self] }
+    set { self[NativeLabelIconKey.self] = newValue }
+  }
+}
+
 struct RenderSymbol: Equatable, Sendable {
   let name: String
   let size: Double?
@@ -30,6 +41,7 @@ struct RenderSymbol: Equatable, Sendable {
 struct NativeSymbolView: View {
   let symbol: RenderSymbol
   @Environment(\.bonsaiDefaults) private var defaults
+  @Environment(\.bonsaiLabelIcon) private var isLabelIcon
 
   private var mode: SymbolRenderingMode {
     switch symbol.rendering == 3 ? defaults.defaultSymbolRendering() : symbol.rendering {
@@ -51,6 +63,6 @@ struct NativeSymbolView: View {
       } else {
         image
       }
-    }.accessibilityHidden(true)
+    }.accessibilityHidden(!isLabelIcon)
   }
 }

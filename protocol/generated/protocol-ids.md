@@ -446,6 +446,7 @@ Protocol version: `8.0`
 | `read_only` | 7 | `bool` |
 | `submit_on_return` | 8 | `bool` |
 | `max_utf8_bytes` | 9 | `optional_u32` |
+| `autofocus` | 10 | `bool` |
 
 ## Image properties
 

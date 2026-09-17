@@ -232,9 +232,12 @@ val image
 (** A native scrollable plain-text editor. Selection and composing state use
     the revisioned Text_editing contract. Return inserts a newline by default;
     submit_on_return sends on_submit outside composition. Use frame and padding
-    for layout. max_utf8_bytes, when provided, is in 1..1048576. *)
+    for layout. max_utf8_bytes, when provided, is in 1..1048576. [autofocus]
+    requests native editing focus once after mounting and presentation, while
+    enabled and editable. Toggling false to true requests focus again. *)
 val text_editor
   :  ?key:Key.t
+  -> ?autofocus:bool
   -> ?enabled:bool
   -> ?read_only:bool
   -> ?submit_on_return:bool
@@ -1403,6 +1406,7 @@ module Private : sig
         ; read_only : bool
         ; submit_on_return : bool
         ; max_utf8_bytes : int option
+        ; autofocus : bool
         }
         -> [ `Text_editor ] node
     | Text_field :

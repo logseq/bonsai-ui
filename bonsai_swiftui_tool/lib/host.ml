@@ -23,6 +23,8 @@ let sync ~framework_root ~project_root ~(config : Config.t) ~mode =
          ; config.macos.bundle_identifier
          ; "--ios-bundle-identifier"
          ; config.ios.bundle_identifier
+         ; "--ios-minimum-version"
+         ; config.ios.minimum_version
          ]
          @ List.concat_map
              (fun (platform, (settings : Config.platform)) ->

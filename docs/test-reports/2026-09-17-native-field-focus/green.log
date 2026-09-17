@@ -1,0 +1,147 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/5] Compiling BonsaiSwiftUITests NativeViewTests.swift
+[4/6] Write Objects.LinkFileList
+[5/6] Linking BonsaiSwiftUIPackageTests
+Build complete! (4.81s)
+Test Suite 'Selected tests' started at 2026-09-17 15:32:42.027.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-17 15:32:42.028.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-17 15:32:42.028.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-17 15:32:42.028.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite TextFieldTests started.
+◇ Suite TextEventTests started.
+◇ Suite NativeRuntimeTests started.
+◇ Suite TextFieldWireTests started.
+◇ Suite TextSessionTests started.
+◇ Suite FocusScopeTests started.
+◇ Test heterogeneousEventsKeepOrderAndBoundTheirPayloads() started.
+◇ Test nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test plainFieldAppearanceRetainsNativeInputAndRestoresRoundedStyle(kind:) started.
+◇ Test nativeFieldsRetainEditingAcrossReorderingAndRejectFutureAcks(kind:) started.
+◇ Test nativeFieldPreservesMarkedTextAndSelectionAcrossAcknowledgment() started.
+◇ Test unicodeEditMatchesCanonicalCrossLanguageBytes() started.
+◇ Test aNewSessionRequiresNativeResetEvenWhenItsTextIsIdentical() started.
+◇ Test invalidAcknowledgmentsAndExhaustedCountersDoNotMutateSession() started.
+◇ Test fieldMalformedSnapshotsBindingsAndChildrenRejectAtomically(kind:) started.
+◇ Test acknowledgmentsAndStaleCorrectionsPreserveLocalMarkedText() started.
+◇ Test autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test case passing 1 argument secure → false to fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test case passing 1 argument secure → true to fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test case passing 1 argument secure → false to nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test case passing 1 argument kind → 49 to nativeFieldsRetainEditingAcrossReorderingAndRejectFutureAcks(kind:) started.
+◇ Test case passing 1 argument kind → 49 to plainFieldAppearanceRetainsNativeInputAndRestoresRoundedStyle(kind:) started.
+◇ Test utf16RangesRespectScalarsWithoutNormalizingText() started.
+◇ Test case passing 1 argument kind → 47 to nativeFieldsRetainEditingAcrossReorderingAndRejectFutureAcks(kind:) started.
+◇ Test case passing 1 argument kind → 47 to plainFieldAppearanceRetainsNativeInputAndRestoresRoundedStyle(kind:) started.
+◇ Test case passing 1 argument secure → true to nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test byteLimitAndDuplicateNotificationsDoNotConsumeRevisions() started.
+◇ Test case passing 1 argument secure → false to autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test repeatedAndOldForceUpdatesCannotRollbackLaterTyping() started.
+◇ Test autofocusWaitsForMountAndEnablementAndIsCancelledByProperties() started.
+◇ Test case passing 1 argument secure → true to autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test case passing 1 argument kind → 47 to fieldMalformedSnapshotsBindingsAndChildrenRejectAtomically(kind:) started.
+◇ Test case passing 1 argument kind → 49 to fieldMalformedSnapshotsBindingsAndChildrenRejectAtomically(kind:) started.
+◇ Test changedAutofocusWaitsForTheNewPropertiesToBePresented() started.
+◇ Test inactiveUnmountedReboundAndDisposedScopesDoNotPublishStaleFocus() started.
+◇ Test autofocusUsesNativeFocusAndDoesNotRepeatAfterFocusMovesAway() started.
+◇ Test invalidFocusScopeFramesRejectAtomically() started.
+◇ Test nativeFieldEditorsReportNestedScopeTransitionsToOCaml() started.
+✔ Test byteLimitAndDuplicateNotificationsDoNotConsumeRevisions() passed after 0.001 seconds.
+✔ Test aNewSessionRequiresNativeResetEvenWhenItsTextIsIdentical() passed after 0.001 seconds.
+✔ Test repeatedAndOldForceUpdatesCannotRollbackLaterTyping() passed after 0.001 seconds.
+✔ Test acknowledgmentsAndStaleCorrectionsPreserveLocalMarkedText() passed after 0.001 seconds.
+✔ Test invalidAcknowledgmentsAndExhaustedCountersDoNotMutateSession() passed after 0.001 seconds.
+✔ Test utf16RangesRespectScalarsWithoutNormalizingText() passed after 0.001 seconds.
+✔ Suite TextSessionTests passed after 0.001 seconds.
+✔ Test unicodeEditMatchesCanonicalCrossLanguageBytes() passed after 0.001 seconds.
+✔ Test heterogeneousEventsKeepOrderAndBoundTheirPayloads() passed after 0.009 seconds.
+✔ Suite TextEventTests passed after 0.009 seconds.
+✔ Test changedAutofocusWaitsForTheNewPropertiesToBePresented() passed after 0.263 seconds.
+✔ Test autofocusWaitsForMountAndEnablementAndIsCancelledByProperties() passed after 0.263 seconds.
+✔ Test inactiveUnmountedReboundAndDisposedScopesDoNotPublishStaleFocus() passed after 0.263 seconds.
+✔ Test invalidFocusScopeFramesRejectAtomically() passed after 0.263 seconds.
+✔ Test fieldMalformedSnapshotsBindingsAndChildrenRejectAtomically(kind:) with 2 test cases passed after 0.263 seconds.
+✔ Test nativeFieldPreservesMarkedTextAndSelectionAcrossAcknowledgment() passed after 0.614 seconds.
+✔ Test nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) with 2 test cases passed after 0.756 seconds.
+✔ Test plainFieldAppearanceRetainsNativeInputAndRestoresRoundedStyle(kind:) with 2 test cases passed after 0.757 seconds.
+✔ Test nativeFieldsRetainEditingAcrossReorderingAndRejectFutureAcks(kind:) with 2 test cases passed after 0.758 seconds.
+✔ Suite TextFieldWireTests passed after 0.758 seconds.
+✔ Test fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) with 2 test cases passed after 0.864 seconds.
+✔ Test autofocusUsesNativeFocusAndDoesNotRepeatAfterFocusMovesAway() passed after 1.006 seconds.
+✔ Suite FocusScopeTests passed after 1.006 seconds.
+✔ Test autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) with 2 test cases passed after 1.253 seconds.
+✔ Suite TextFieldTests passed after 1.253 seconds.
+✔ Test nativeFieldEditorsReportNestedScopeTransitionsToOCaml() passed after 1.647 seconds.
+◇ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+◇ Test case passing 1 argument secure → false to mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+◇ Test case passing 1 argument secure → true to mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+✔ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) with 2 test cases passed after 2.189 seconds.
+◇ Test mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) started.
+◇ Test case passing 1 argument sheet → false to mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) started.
+◇ Test case passing 1 argument sheet → true to mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) started.
+✔ Test mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) with 2 test cases passed after 2.742 seconds.
+◇ Test nativeTextEditsReachTheActualOcamlExampleAndRejectStaleLocalVersions() started.
+✔ Test nativeTextEditsReachTheActualOcamlExampleAndRejectStaleLocalVersions() passed after 0.003 seconds.
+◇ Test actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) started.
+◇ Test case passing 1 argument entrypoint → "native-field" to actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) started.
+◇ Test case passing 1 argument entrypoint → "native-secure-field" to actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) started.
+✔ Test actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits(entrypoint:) with 2 test cases passed after 0.964 seconds.
+◇ Test actualFieldAutofocusRequiresDisplayedActiveApplication() started.
+✔ Test actualFieldAutofocusRequiresDisplayedActiveApplication() passed after 0.474 seconds.
+✔ Suite NativeRuntimeTests passed after 8.021 seconds.
+✔ Test run with 26 tests in 6 suites passed after 8.021 seconds.

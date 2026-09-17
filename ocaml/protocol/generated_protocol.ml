@@ -822,6 +822,7 @@ module Text_editor_prop = struct
   let read_only = ID.Protocol.Property.of_int 7
   let submit_on_return = ID.Protocol.Property.of_int 8
   let max_utf8_bytes = ID.Protocol.Property.of_int 9
+  let autofocus = ID.Protocol.Property.of_int 10
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
@@ -834,6 +835,7 @@ module Text_editor_prop = struct
     | 7 -> Some "read_only"
     | 8 -> Some "submit_on_return"
     | 9 -> Some "max_utf8_bytes"
+    | 10 -> Some "autofocus"
     | _ -> None
   ;;
 end

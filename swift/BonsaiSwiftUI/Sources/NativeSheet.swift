@@ -52,12 +52,8 @@ struct NativeSheet: View {
     _detent = State(initialValue: properties.configuration.initial)
   }
   private var content: some View {
-    let token = controller.generation
-    return NativeNodeView(node: node.children[1], activate: activate)
+    NativePresentationContent(node: node.children[1], controller: controller, activate: activate)
       .interactiveDismissDisabled(!properties.configuration.interactive)
-      .onAppear { controller.appeared(true, token: token) }
-      .onDisappear { controller.appeared(false, token: token) }
-      .id(token)
   }
   @ViewBuilder private var sizedContent: some View {
     switch properties.configuration.sizing {
@@ -80,9 +76,9 @@ struct NativeSheet: View {
   @ViewBuilder private var presentation: some View {
     #if os(iOS)
       if properties.configuration.fullscreen {
-        background.fullScreenCover(isPresented: controller.binding(emit: node.emit)) { content }
+        background.fullScreenCover(isPresented: controller.nativeBinding(emit: node.emit)) { content }
       } else {
-        background.sheet(isPresented: controller.binding(emit: node.emit)) {
+        background.sheet(isPresented: controller.nativeBinding(emit: node.emit)) {
           sizedContent
             .presentationDetents(
               Set(
@@ -96,7 +92,7 @@ struct NativeSheet: View {
         }
       }
     #else
-      background.sheet(isPresented: controller.binding(emit: node.emit)) { sizedContent }
+      background.sheet(isPresented: controller.nativeBinding(emit: node.emit)) { sizedContent }
     #endif
   }
   var body: some View {

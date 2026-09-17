@@ -138,6 +138,20 @@ let unique ~scope values =
   then invalid "Duplicate %s" scope
 ;;
 
+let supported_ios_minimum value =
+  let component text =
+    match int_of_string_opt text with
+    | Some value when value >= 0 && string_of_int value = text -> Some value
+    | _ -> None
+  in
+  match String.split_on_char '.' value with
+  | [ major; minor ] ->
+    (match component major, component minor with
+     | Some major, Some _ -> major >= 18
+     | _ -> false)
+  | _ -> false
+;;
+
 let parse_platform scope minimum values =
   let fields = named_fields ~scope values in
   reject_unknown
@@ -150,10 +164,14 @@ let parse_platform scope minimum values =
     [ ""; ".test-host"; ".tests"; ".ui-tests" ];
   let minimum_version = single_atom ~scope ~name:"minimum_version" fields in
   let label = if scope = "macos" then "macOS" else "iOS" in
-  if minimum_version <> minimum
+  if
+    not
+      (if scope = "ios"
+       then supported_ios_minimum minimum_version
+       else minimum_version = minimum)
   then
     invalid
-      "Unsupported %s minimum version: %s; expected %s"
+      "Unsupported %s minimum version: %s; framework minimum is %s"
       label
       minimum_version
       minimum;

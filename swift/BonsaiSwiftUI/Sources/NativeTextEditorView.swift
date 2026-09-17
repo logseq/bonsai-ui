@@ -4,6 +4,7 @@ import SwiftUI
 struct RenderTextEditor: Equatable, Sendable {
   let snapshot: TextSnapshot
   let configuration: TextEditorConfiguration
+  var autofocus = false
 
   static func decode(_ reader: inout WireReader) throws -> Self {
     let session = try reader.integer(UInt64.self)
