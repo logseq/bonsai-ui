@@ -119,7 +119,9 @@ let apple_build
       @ (if config.Config.swift_packages = []
          then []
          else
-           [ "-disableAutomaticPackageResolution"
+           [ "-clonedSourcePackagesDirPath"
+           ; Filename.concat project_root "_build/bonsai-swiftui/dependencies/packages"
+           ; "-disableAutomaticPackageResolution"
            ; "-onlyUsePackageVersionsFromResolvedFile"
            ; "-skipPackageUpdates"
            ])

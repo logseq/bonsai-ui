@@ -1352,6 +1352,11 @@ let test_clean_removes_only_selected_platform () =
     ; "state/iphoneos/release/build-manifest.sexp", "iphoneos"
     ; "logs/iphoneos/release.log", "iphoneos"
     ; "locks/iphoneos/release.lock", "iphoneos"
+    ; "dependencies/probes/macos/debug/DerivedData/object", "macos"
+    ; "dependencies/validation/macos/debug.json", "macos"
+    ; "dependencies/probes/ios/release/DerivedData/object", "iphoneos"
+    ; "dependencies/validation/ios/release.json", "iphoneos"
+    ; "dependencies/packages/checkouts/package/source", "shared"
     ; "unrelated/keep", "unrelated"
     ]
   in

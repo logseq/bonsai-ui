@@ -17,13 +17,22 @@ let rec remove_tree path =
 
 let platform_paths = function
   | Macos ->
-    [ "dune/macos"; "artifacts/macos"; "state/macos"; "logs/macos"; "locks/macos" ]
+    [ "dune/macos"
+    ; "artifacts/macos"
+    ; "state/macos"
+    ; "logs/macos"
+    ; "locks/macos"
+    ; "dependencies/probes/macos"
+    ; "dependencies/validation/macos"
+    ]
   | Iphoneos ->
     [ "dune/iphoneos"
     ; "artifacts/ios"
     ; "state/iphoneos"
     ; "logs/iphoneos"
     ; "locks/iphoneos"
+    ; "dependencies/probes/ios"
+    ; "dependencies/validation/ios"
     ]
   | All -> []
 ;;
@@ -98,8 +107,10 @@ let run ~project_root ~(config : Config.t) target =
             validate rest
         in
         let* () = validate paths in
-        List.iter (fun path -> remove_tree (Filename.concat project_root path)) paths;
-        Ok ()))
+        Lock.with_apple_lock ~project_root (fun () ->
+          let* () = validate paths in
+          List.iter (fun path -> remove_tree (Filename.concat project_root path)) paths;
+          Ok ())))
   with
   | Config.Invalid message | Sys_error message | Unix.Unix_error (_, _, message) ->
     Error message

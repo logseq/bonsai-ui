@@ -1,12 +1,14 @@
 type sync_mode =
   | Check
   | Write
+  | Write_locked
   | Validate
   | Inputs
-  | Locked
+  | Locked_inputs
+  | Locked of Plan.platform * Plan.profile
   | Resolve
 
-let sync ~framework_root ~project_root ~(config : Config.t) ~mode =
+let rec sync ~framework_root ~project_root ~(config : Config.t) ~mode =
   let command : Plan.command =
     { program = "python3"
     ; arguments =
@@ -52,14 +54,32 @@ let sync ~framework_root ~project_root ~(config : Config.t) ~mode =
          @
          match mode with
          | Check -> [ "--check" ]
-         | Write -> []
+         | Write | Write_locked -> []
          | Validate -> [ "--validate-only" ]
          | Inputs -> [ "--inputs-only" ]
-         | Locked -> [ "--locked-preflight" ]
+         | Locked_inputs -> [ "--validate-only"; "--require-lock" ]
+         | Locked (platform, profile) ->
+           [ "--locked-preflight"
+           ; "--platform"
+           ; (match platform with
+              | Plan.Macos_platform -> "macos"
+              | Plan.Ios_platform -> "ios")
+           ; "--profile"
+           ; Plan.profile_name profile
+           ; "--lock-held-by-parent"
+           ]
          | Resolve -> [ "--resolve-packages" ])
     ; working_directory = project_root
     ; environment = []
     }
   in
-  Process_runner.run command
+  match mode with
+  | Write ->
+    (match sync ~framework_root ~project_root ~config ~mode:Validate with
+     | Error _ as error -> error
+     | Ok () ->
+       Lock.with_apple_lock ~project_root (fun () ->
+         sync ~framework_root ~project_root ~config ~mode:Write_locked))
+  | Check | Write_locked | Validate | Inputs | Locked_inputs | Locked _ | Resolve ->
+    Process_runner.run command
 ;;

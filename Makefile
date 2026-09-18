@@ -87,6 +87,7 @@ native-object:
 integration-test: swift-test
 	dune build bonsai_swiftui_tool/bin/main.exe
 	python3 tool/test_swiftui_cli.py
+	python3 tool/test_swiftui_dependency_cache.py
 	python3 tool/test_swiftui_doctor.py
 	python3 tool/test_swiftui_example_cli.py
 	$(MAKE) installed-cli-test

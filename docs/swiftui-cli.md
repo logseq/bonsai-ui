@@ -357,13 +357,41 @@ bonsai-swiftui build macos --profile release
 bonsai-swiftui build ios --profile release --no-codesign
 ```
 
-`resolve-packages` resolves both platform schemes in a disposable Xcode host,
-compiles isolated SwiftUI probes with the selected products on both platforms,
-and publishes the application-owned
-`swift-packages/Package.resolved` and generated host only after success. Builds
-require matching direct pins and preserve all resolved transitive pins with
-Xcode's automatic updates disabled. Missing or stale locks request an explicit
-resolution. A lock is projected into the generated project's workspace.
+`resolve-packages` resolves both platform schemes and compiles isolated Debug
+probes with the selected products before publishing the application-owned
+`swift-packages/Package.resolved` and generated host. It always validates both
+platforms, reusing project-local package checkouts and incremental probe outputs.
+
+Build/run preflight validates only the requested platform and profile. A matching
+successful validation skips dependency resolution and probe compilation; the
+actual application Xcode build still runs. A miss runs the selected locked probe
+before publishing the host or staging native objects. Changes to pins, products,
+probe inputs, deployment target, toolchain/SDK, generator, or local framework
+manifests invalidate validation. Application-only source edits retain dependency
+validation while the application build observes those edits. Debug resolution
+can populate Debug validation records; Release and Profile validate separately.
+
+Disposable dependency state lives under `_build/bonsai-swiftui/dependencies/`:
+shared package checkouts, stable per-platform/profile probes and DerivedData,
+and atomic success records. The application build shares the checkouts, with
+its own DerivedData. `clean macos` / `clean iphoneos` remove the selected
+platform's probes and records while retaining shared downloads;
+`clean --all-project-builds` removes all project dependency state. The application
+lock and global SwiftPM repository cache are preserved. Build, resolution, and
+cleanup serialize through `_build/.bonsai-swiftui-apple.lock`, which survives
+cleanup. Do not manually edit generated cache state.
+
+Builds require matching direct pins and preserve all resolved transitive pins
+with Xcode's automatic updates disabled. Missing or stale locks request explicit
+resolution. A lock is projected into the generated project's workspace. Failed
+remote validation may leave disposable cache/log files but preserves the
+application lock, generated host, and native staging outputs. Diagnostics report
+cache hit/miss reasons and separate dependency, native, and application build
+timings. A cache hit does not promise an offline application build when required
+sources or artifacts are absent. On a validation miss, the tool rebuilds Xcode's
+resolver bookkeeping while retaining repositories, checkouts, artifacts, and
+compiled outputs. It compares the actual resolved checkout closure with the
+lock, so an old SwiftPM dependency graph cannot hide missing transitive pins.
 `sync-host` and `sync-host --check` remain offline; they do not certify remote
 availability or exported products. Generation before the first lock is allowed.
 Check mode never resolves packages or writes consumer files. Adoption preserves

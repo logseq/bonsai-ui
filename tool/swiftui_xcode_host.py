@@ -9,6 +9,10 @@ import plistlib
 import shlex
 import subprocess
 import tempfile
+import contextlib
+import fcntl
+import sys
+import time
 import xml.etree.ElementTree as ET
 
 
@@ -141,7 +145,7 @@ def read_package_lock(root, host, packages, required=False, matching=True):
 def generate_project(*, framework_root, application_root, host_directory, product_name,
                      bundle_identifiers, entitlements=None, swift_packages=(), ios_minimum_version="18.0",
                      development_team="", check=False, validate_only=False, inputs_only=False,
-                     require_lock=False, refresh_lock=False, package_validation=False):
+                     require_lock=False, refresh_lock=False, package_validation=False, rendered_outputs=None):
     framework_root = Path(framework_root).resolve()
     application_root = Path(application_root).resolve()
     host = Path(host_directory).resolve()
@@ -408,6 +412,8 @@ struct RuntimeTestHost: App {
     if lock_projection not in outputs:
         obsolete.append(lock_projection)
     obsolete = [p for p in obsolete if p.is_file()]
+    if rendered_outputs is not None:
+        rendered_outputs.update(outputs)
     if validate_only:
         return project
     changed = [path for path, content in outputs.items()
@@ -422,52 +428,252 @@ struct RuntimeTestHost: App {
     return project
 
 
-def resolve_packages(*, locked=False, **options):
-    """Resolve both platform graphs in a disposable host before publishing anything."""
+def phase(name, started):
+    print(f"bonsai-swiftui: {name}: {time.monotonic() - started:.3f}s", file=sys.stderr, flush=True)
+
+
+def safe_cache_directory(root, path):
+    """Reject symlink parents before writing disposable project state."""
+    current = root
+    for part in path.relative_to(root).parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f"Dependency cache path must not be a symlink: {current}")
+        if current.exists() and not current.is_dir():
+            raise ValueError(f"Dependency cache path must be a directory: {current}")
+
+
+@contextlib.contextmanager
+def project_lock(root, held_by_parent):
+    path = root / "_build/.bonsai-swiftui-apple.lock"
+    safe_cache_directory(root, path.parent)
+    if held_by_parent:
+        yield
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    try:
+        fcntl.lockf(descriptor, fcntl.LOCK_EX)
+        yield
+    finally:
+        os.close(descriptor)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def toolchain_identity(platform):
+    sdk = "macosx" if platform == "macos" else "iphoneos"
+    commands = [["xcode-select", "-p"], ["xcodebuild", "-version"],
+                ["xcrun", "swift", "--version"],
+                ["xcrun", "--sdk", sdk, "--show-sdk-path"],
+                ["xcrun", "--sdk", sdk, "--show-sdk-version"],
+                ["xcrun", "--sdk", sdk, "--show-sdk-build-version"]]
+    values = []
+    for command in commands:
+        result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+        if result.returncode:
+            raise ValueError("Cannot identify Apple toolchain: " + result.stdout + result.stderr)
+        values.append(result.stdout.strip())
+    return values
+
+
+def validation_identity(options, platform, profile, probe, toolchain, require_lock=True):
+    outputs = {}
+    generate_project(**{**options, "host_directory": probe}, package_validation=True,
+                     validate_only=True, require_lock=require_lock, rendered_outputs=outputs)
+    lock = Path(options["application_root"]) / "swift-packages/Package.resolved"
+    framework = Path(options["framework_root"]).resolve()
+    # The local framework manifest is the only local package declaration emitted
+    # by this generator. Remote manifests are fixed by the resolved revisions.
+    manifests = {str(p): digest(p.read_bytes()) for p in sorted(framework.glob("Package*.swift"))}
+    return {
+        "format": 1,
+        "generator": digest(Path(__file__).read_bytes()),
+        "packages": options["swift_packages"],
+        "lock": digest(lock.read_bytes()) if lock.exists() else None,
+        "selection": [platform, profile],
+        "toolchain": toolchain,
+        "environment": {name: os.environ.get(name) for name in
+                        ("DEVELOPER_DIR", "TOOLCHAINS", "SDKROOT", "SWIFT_EXEC", "CC", "CXX", "CPATH", "LIBRARY_PATH", "SDKPATH")},
+        "locations": [str(Path(options["application_root"]).resolve()), str(framework)],
+        "manifests": manifests,
+        "probe": {str(p.relative_to(probe)): digest(content) for p, content in outputs.items()
+                  if p.name != "Package.resolved"},
+    }
+
+
+def canonical_pins(data):
+    return sorted(json.loads(data)["pins"], key=lambda pin: (pin["identity"], pin["location"]))
+
+
+def verify_resolved_checkouts(cache, resolved):
+    """Check Xcode's actual checkout closure, not just its lock projection."""
+    def pin_key(pin):
+        state = pin["state"]
+        return (pin["identity"], normalized_url(pin["location"]),
+                state["revision"], state.get("version"), state.get("branch"))
+    try:
+        state = json.loads((cache / "packages/workspace-state.json").read_bytes())
+        actual = []
+        for dependency in state["object"]["dependencies"]:
+            ref = dependency["packageRef"]
+            if ref["kind"] == "fileSystem":
+                continue
+            if ref["kind"] != "remoteSourceControl":
+                raise ValueError("unsupported dependency kind")
+            actual.append(pin_key({**ref, "state": dependency["state"]["checkoutState"]}))
+        expected = [pin_key(pin) for pin in json.loads(resolved)["pins"]]
+        if sorted(actual) != sorted(expected):
+            raise ValueError("resolved checkout closure differs from locked pins")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        raise ValueError(f"Invalid resolved dependency closure: {error}; run bonsai-swiftui resolve-packages") from error
+
+
+def atomic_record(path, content):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(prefix=".validation-", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "w") as stream:
+            json.dump(content, stream, sort_keys=True)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
+def cache_record(path, identity, cache):
+    try:
+        record = json.loads(path.read_bytes())
+        previous = record["identity"]
+        changes = [name for name, value in identity.items() if previous.get(name) != value]
+        if changes:
+            return False, ", ".join(changes)
+        required = record["required"]
+        if not isinstance(required, list) or not required:
+            return False, "invalid record"
+        for relative in required:
+            path = cache / relative
+            if not isinstance(relative, str) or Path(relative).is_absolute() or ".." in Path(relative).parts or not path.exists():
+                return False, "missing cache outputs"
+        return True, "unchanged inputs"
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return False, "missing or invalid record"
+
+
+def required_cache_outputs(cache, probe, product, platform, profile):
+    configuration = profile.title() + ("-iphoneos" if platform == "ios" else "")
+    app = probe / "DerivedData/Build/Products" / configuration / (product + ".app")
+    binary = app / (product if platform == "ios" else "Contents/MacOS/" + product)
+    paths = [binary, cache / "packages/workspace-state.json"]
+    paths += sorted((cache / "packages/checkouts").glob("*/Package.swift"))
+    paths += sorted((cache / "packages/artifacts").glob("*/*"))
+    if not all(p.exists() for p in paths):
+        raise ValueError("Dependency validation succeeded without its required cache outputs")
+    return [str(p.relative_to(cache)) for p in paths]
+
+
+def resolve_packages(*, locked=False, platform=None, profile=None, lock_held_by_parent=False, **options):
+    """Validate locked dependencies with persistent, selection-specific probes."""
+    started = time.monotonic()
     root = Path(options["application_root"]).resolve()
     host = Path(options["host_directory"]).resolve()
     packages = options.get("swift_packages", ())
+    if locked and (platform not in ("macos", "ios") or profile not in ("debug", "profile", "release")):
+        raise ValueError("Locked dependency preflight requires a platform and profile")
     options = {**options, "refresh_lock": not locked}
     generate_project(**options, validate_only=True, require_lock=locked)
+    phase("dependency local validation", started)
     if not packages:
-        return generate_project(**options, validate_only=True) if locked else generate_project(**options)
+        with project_lock(root, lock_held_by_parent):
+            return generate_project(**options, validate_only=locked)
     lock_path = root / "swift-packages/Package.resolved"
     resolved_lock_path = lock_path.resolve()
     if not resolved_lock_path.is_relative_to(root) or resolved_lock_path.is_relative_to(host):
         raise ValueError("Package lock ownership requires a path inside the application and outside generated output")
-    previous = read_package_lock(root, host, packages, required=locked, matching=locked)
-    with tempfile.TemporaryDirectory(prefix="bonsai-package-resolution-") as directory:
-        staging = Path(directory)
-        project = generate_project(**{**options, "host_directory": staging / "host"}, require_lock=locked, package_validation=True)
-        base = ["xcodebuild", "-project", str(project), "-clonedSourcePackagesDirPath", str(staging / "packages"),
-                "-derivedDataPath", str(staging / "DerivedData"), "-disablePackageRepositoryCache"]
-        flags = ["-disableAutomaticPackageResolution", "-onlyUsePackageVersionsFromResolvedFile", "-skipPackageUpdates"] if locked else []
-        projection = project / "project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+    cache = root / "_build/bonsai-swiftui/dependencies"
+    safe_cache_directory(root, cache)
+    with project_lock(root, lock_held_by_parent):
+        # Re-read inputs after waiting for another builder or explicit resolver.
+        generate_project(**options, validate_only=True, require_lock=locked)
+        previous = read_package_lock(root, host, packages, required=locked, matching=locked)
+        selections = [(platform, profile)] if locked else [("macos", "debug"), ("ios", "debug")]
         first_pins = None
-        for platform in PLATFORMS:
-            # Build an isolated SwiftUI probe with precisely the selected products.
-            # Xcode resolution alone does not validate exported products, and
-            # its modern build system does not implement -dry-run.
-            destination = "platform=macOS,arch=arm64" if platform == "macOS" else "generic/platform=iOS"
-            command = base + ["-scheme", options["product_name"] + "-" + platform,
-                              "-configuration", "Debug", "-destination", destination]
-            for operation in (["-resolvePackageDependencies"], ["CODE_SIGNING_ALLOWED=NO", "build"]):
-                result = subprocess.run(command + flags + operation, text=True, capture_output=True, timeout=300)
-                if result.returncode:
-                    raise ValueError("Swift package resolution failed in staging" + ("; run bonsai-swiftui resolve-packages" if locked else "") + ":\n" + (result.stdout + result.stderr)[-16000:])
+        validated = []
+        for platform, profile in selections:
+            lookup = time.monotonic()
+            probe = cache / "probes" / platform / profile
+            record_path = cache / "validation" / platform / (profile + ".json")
+            for path in (probe, record_path.parent, cache / "packages"):
+                safe_cache_directory(root, path)
+            toolchain = toolchain_identity(platform)
+            identity = validation_identity(options, platform, profile, probe, toolchain, require_lock=locked)
+            hit, reason = cache_record(record_path, identity, cache) if locked else (False, "explicit resolution")
+            print(f"bonsai-swiftui: dependency cache {'hit' if hit else 'miss'} {platform}/{profile}: {reason}", file=sys.stderr, flush=True)
+            phase("dependency cache lookup", lookup)
+            if hit:
+                continue
+            # A cached workspace can satisfy a damaged lock from its previous
+            # graph without rewriting Package.resolved. Recreate only resolver
+            # bookkeeping; retain repositories, checkouts, artifacts and builds.
+            (cache / "packages/workspace-state.json").unlink(missing_ok=True)
+            project = generate_project(**{**options, "host_directory": probe}, require_lock=locked, package_validation=True)
+            base = ["xcodebuild", "-project", str(project), "-clonedSourcePackagesDirPath", str(cache / "packages"),
+                    "-derivedDataPath", str(probe / "DerivedData")]
+            flags = ["-disableAutomaticPackageResolution", "-onlyUsePackageVersionsFromResolvedFile", "-skipPackageUpdates"] if locked else []
+            projection = project / "project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+            # Use the first resolved graph as the input for the second platform.
+            if not locked and first_pins is not None:
+                write_if_changed(projection, resolved)
+            destination = "platform=macOS,arch=arm64" if platform == "macos" else "generic/platform=iOS"
+            command = base + ["-scheme", options["product_name"] + ("-macOS" if platform == "macos" else "-iOS"),
+                              "-configuration", profile.title(), "-destination", destination]
+            for label, operation in [("dependency resolution/fetch", ["-resolvePackageDependencies"]),
+                                     ("dependency probe build", ["CODE_SIGNING_ALLOWED=NO", "build"])]:
+                operation_started = time.monotonic()
+                log_path = probe / ("resolve.log" if label.endswith("fetch") else "build.log")
+                try:
+                    with log_path.open("w") as log:
+                        result = subprocess.run(command + flags + operation, text=True, stdout=log, stderr=subprocess.STDOUT, timeout=300)
+                    if result.returncode:
+                        raise ValueError("Swift package validation failed; run bonsai-swiftui resolve-packages. Log: " + str(log_path) + ":\n" + log_path.read_text()[-16000:])
+                finally:
+                    phase(label + " " + platform + "/" + profile, operation_started)
             if not projection.is_file():
                 raise ValueError("Xcode did not produce Package.resolved")
-            pins = json.loads(projection.read_bytes())["pins"]
+            resolved = projection.read_bytes()
+            pins = canonical_pins(resolved)
+            verify_resolved_checkouts(cache, resolved)
             if first_pins is not None and pins != first_pins:
                 raise ValueError("Platform package graphs disagree; no shared lock can be published")
             first_pins = pins
-        resolved = projection.read_bytes()
-        if locked:
-            if json.loads(previous)["pins"] != json.loads(resolved)["pins"]:
-                raise ValueError("Xcode changed locked pins; run bonsai-swiftui resolve-packages")
-        else:
+            if locked:
+                if canonical_pins(previous) != pins:
+                    raise ValueError("Xcode changed locked pins; run bonsai-swiftui resolve-packages")
+            current = validation_identity(options, platform, profile, probe, toolchain_identity(platform), require_lock=locked)
+            if current != identity:
+                raise ValueError("Dependency inputs changed during validation; retry the build")
+            required = required_cache_outputs(cache, probe, options["product_name"], platform, profile)
+            validated.append((platform, profile, probe, record_path, identity, required, toolchain))
+        # A two-platform resolution must not publish evidence for inputs that
+        # changed after the first platform finished.
+        for selected_platform, selected_profile, probe, _, identity, _, toolchain in validated:
+            current = validation_identity(options, selected_platform, selected_profile, probe,
+                                          toolchain_identity(selected_platform), require_lock=locked)
+            if current != identity:
+                raise ValueError("Dependency inputs changed during validation; retry the build")
+        if not locked:
             write_if_changed(lock_path, resolved)
-    return generate_project(**{**options, "refresh_lock": False})
+            options = {**options, "refresh_lock": False}
+        for platform, profile, probe, record_path, identity, required, toolchain in validated:
+            if not locked:
+                identity = validation_identity(options, platform, profile, probe, toolchain)
+            atomic_record(record_path, {"identity": identity, "required": required})
+        result = generate_project(**{**options, "refresh_lock": False})
+        phase("dependency preflight total", started)
+        return result
 
 
 def main():
@@ -489,6 +695,9 @@ def main():
     parser.add_argument("--resolve-packages", action="store_true")
     parser.add_argument("--locked-preflight", action="store_true")
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--platform", choices=("macos", "ios"))
+    parser.add_argument("--profile", choices=("debug", "profile", "release"))
+    parser.add_argument("--lock-held-by-parent", action="store_true", help=argparse.SUPPRESS)
     arguments = vars(parser.parse_args())
     arguments["bundle_identifiers"] = {p: arguments.pop(p + "_bundle_identifier") for p in ("macos", "ios")}
     entitlements = {}
@@ -508,6 +717,8 @@ def main():
                 arguments.pop(name)
             print(resolve_packages(**arguments, locked=locked))
         else:
+            for name in ("platform", "profile", "lock_held_by_parent"):
+                arguments.pop(name)
             print(generate_project(**arguments))
     except (OSError, ValueError, subprocess.TimeoutExpired) as error:
         parser.exit(1, f"{error}\n")

@@ -36,10 +36,19 @@ class SwiftUICliTests(unittest.TestCase):
     def initialize(self):
         self.cli("init", "--name", "journal", "--macos-bundle-identifier", "org.example.journal", "--ios-bundle-identifier", "org.example.journal.ios")
 
-    def snapshot(self):
+    def snapshot(self, *, include_build=True):
+        paths = []
+        for directory, directories, files in os.walk(self.project):
+            base = Path(directory)
+            if not include_build:
+                if base == self.project:
+                    directories[:] = [d for d in directories if d != "_build"]
+                if base == self.project / "apple":
+                    directories[:] = [d for d in directories if d != "DerivedData"]
+            paths.extend(base / name for name in directories + files)
         return {str(p.relative_to(self.project)): (p.read_bytes(), p.stat().st_mtime_ns)
                 if p.is_file() else (None, p.stat().st_mtime_ns)
-                for p in self.project.rglob("*") if not p.is_symlink()}
+                for p in paths if not p.is_symlink()}
 
     def configured_entitlements(self):
         import plistlib
@@ -159,10 +168,10 @@ import Algorithms
 }
 """)
         self.cli("sync-host")
-        before = self.snapshot()
+        before = self.snapshot(include_build=False)
         result = self.cli("build", "macos", success=False)
         self.assertIn("resolve-packages", result.stdout + result.stderr)
-        self.assertEqual(before, self.snapshot())
+        self.assertEqual(before, self.snapshot(include_build=False))
         self.cli("resolve-packages", timeout=600)
         lock = self.project / "swift-packages/Package.resolved"
         resolved = lock.read_bytes()
@@ -172,9 +181,9 @@ import Algorithms
         self.assertTrue(any(p["identity"] == "swift-numerics" for p in pins), "The lock must cover the transitive graph")
         self.cli("sync-host", "--check")
         print("Resolved remote pins: " + json.dumps(pins, sort_keys=True), flush=True)
-        before = self.snapshot()
+        before = self.snapshot(include_build=False)
         self.cli("resolve-packages", timeout=600)
-        self.assertEqual(before, self.snapshot(), "Fresh-cache resolution must preserve bytes and mtimes")
+        self.assertEqual(before, self.snapshot(include_build=False), "Repeated resolution must preserve protected bytes and mtimes")
         for profile in ("debug", "profile", "release"):
             self.cli("build", "macos", "--profile", profile, timeout=600)
             bundle = self.project / f"apple/DerivedData/Build/Products/{profile.title()}/BonsaiJournal.app"
@@ -186,6 +195,14 @@ import Algorithms
             self.assertIn("PASS: OrderedCollections executed", result.stdout)
             self.assertEqual(lock.read_bytes(), resolved)
             print(f"PASS: locked {profile} build and package execution", flush=True)
+        offline = subprocess.run(
+            ["sandbox-exec", "-p", "(version 1)(allow default)(deny network-outbound)",
+             str(CLI), "build", "macos", "--profile", "release", "--no-codesign"],
+            cwd=self.project, env=self.env, capture_output=True, text=True, timeout=300,
+        )
+        self.assertEqual(offline.returncode, 0, (offline.stdout + offline.stderr)[-12000:])
+        self.assertIn("dependency cache hit macos/release", offline.stderr)
+        print("PASS: offline locked application build with cached packages", flush=True)
         if self.env.get("BONSAI_SWIFTUI_ACCEPT_IOS") == "1":
             self.cli("toolchain", "verify", "iphoneos")
             self.cli("build", "ios", "--profile", "release", "--no-codesign", timeout=900)
@@ -196,10 +213,10 @@ import Algorithms
         incomplete = json.loads(resolved)
         incomplete["pins"] = [p for p in pins if p["identity"] != "swift-numerics"]
         lock.write_text(json.dumps(incomplete))
-        before = self.snapshot()
+        before = self.snapshot(include_build=False)
         result = self.cli("build", "macos", success=False, timeout=600)
         self.assertIn("resolve-packages", result.stdout + result.stderr)
-        self.assertEqual(before, self.snapshot())
+        self.assertEqual(before, self.snapshot(include_build=False))
         lock.write_bytes(resolved)
         original = config.read_text()
         for bad in (original.replace("OrderedCollections", "MissingAcceptanceProduct"),
@@ -211,11 +228,11 @@ import Algorithms
             if "MissingAcceptanceProduct" not in bad:
                 import shutil
                 shutil.rmtree(self.project / "apple")
-            before = self.snapshot()
+            before = self.snapshot(include_build=False)
             self.cli("resolve-packages", success=False, timeout=600)
-            self.assertEqual(before, self.snapshot())
+            self.assertEqual(before, self.snapshot(include_build=False))
             self.cli("build", "macos", success=False, timeout=600)
-            self.assertEqual(before, self.snapshot())
+            self.assertEqual(before, self.snapshot(include_build=False))
         config.write_text(original.replace("(exact 1.1.4)", "(revision " + pin["state"]["revision"] + ")"))
         self.cli("resolve-packages", timeout=600)
         self.cli("build", "macos", timeout=600)
@@ -411,6 +428,15 @@ import AppKit
                 process.communicate()
         self.assertEqual(owned, {p: p.read_bytes() for p in owned})
 
+    def test_local_only_native_failure_does_not_publish_an_absent_host(self):
+        import shutil
+        self.initialize()
+        host = self.project / "apple"
+        shutil.rmtree(host)
+        self.cli("build", "macos", "--native-object", self.project / "missing.o", success=False)
+        self.assertFalse(host.exists(), "Local-only preflight must remain read-only")
+        self.assertFalse((self.project / "_build/bonsai-swiftui/dependencies").exists())
+
     def test_clean_native_and_xcode_outputs_preserves_sources_and_other_platform(self):
         self.initialize()
         apple = self.project / "apple"
@@ -422,13 +448,24 @@ import AppKit
             path.write_text("generated output")
         owned = {p: p.read_bytes() for p in [self.project / "swift/App.swift", self.project / "app/dune",
                                             apple / "BonsaiJournal.xcodeproj/project.pbxproj"]}
+        dependencies = self.project / "_build/bonsai-swiftui/dependencies"
+        for relative in ("packages/keep", "probes/macos/debug/object", "validation/macos/debug.json", "probes/ios/release/object", "validation/ios/release.json"):
+            path = dependencies / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("cache")
         self.cli("clean", "macos")
         self.assertFalse((apple / "Native/macosx").exists())
         self.assertFalse((apple / "DerivedData/Build/Products/Debug").exists())
         self.assertFalse((apple / "DerivedData/Build/Products/Release").exists())
         self.assertTrue((apple / "Native/iphoneos/Debug/runtime.complete.o").is_file())
         self.assertTrue((apple / "DerivedData/Build/Products/Debug-iphoneos/app-marker").is_file())
+        self.assertFalse((dependencies / "probes/macos").exists())
+        self.assertFalse((dependencies / "validation/macos").exists())
+        self.assertTrue((dependencies / "probes/ios/release/object").is_file())
+        self.assertTrue((dependencies / "packages/keep").is_file())
         self.cli("clean", "--all-project-builds")
+        self.assertFalse(dependencies.exists())
+        self.assertTrue((self.project / "_build/.bonsai-swiftui-apple.lock").is_file())
         self.assertFalse((apple / "Native").exists())
         self.assertFalse((apple / "DerivedData").exists())
         self.assertEqual(owned, {p: p.read_bytes() for p in owned})

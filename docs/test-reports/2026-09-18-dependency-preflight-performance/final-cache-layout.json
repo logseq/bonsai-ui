@@ -1,0 +1,12 @@
+{
+  "probes": [
+    "probes/ios/release",
+    "probes/macos/debug"
+  ],
+  "checkout_directory_count": 30,
+  "records": [
+    "validation/ios/release.json",
+    "validation/macos/debug.json"
+  ],
+  "consumer_inputs_restored": true
+}

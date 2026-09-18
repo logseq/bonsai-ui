@@ -307,6 +307,14 @@ let verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_code
     Ok bundle
 ;;
 
+let timed name f =
+  let started = Unix.gettimeofday () in
+  Fun.protect
+    ~finally:(fun () ->
+      Printf.eprintf "bonsai-swiftui: %s: %.3fs\n%!" name (Unix.gettimeofday () -. started))
+    f
+;;
+
 let build_apple
       ~framework_root
       ~project_root
@@ -323,33 +331,43 @@ let build_apple
     | Plan.Macos_platform -> Plan.Macos
     | Plan.Ios_platform -> Plan.Iphoneos
   in
-  let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Locked in
-  Lock.with_lock
-    (Filename.concat project_root "_build/bonsai-swiftui/locks/apple.lock")
-    (fun () ->
-       let* artifact =
-         selected_native
-           ~framework_root
-           ~project_root
-           ~config
-           ~target
-           ~profile
-           ~native_object
-       in
-       let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Write in
-       let* () = stage_host_object ~project_root ~config ~target ~profile artifact in
-       let* () =
-         Process_runner.run
-           (Plan.apple_build
-              ~project_root
-              ~config
-              ~platform
-              ~profile
-              ~no_codesign
-              ~development_team
-              ~signing_identity)
-       in
-       verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_codesign)
+  let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Locked_inputs in
+  Lock.with_apple_lock ~project_root (fun () ->
+    let* () =
+      Host.sync
+        ~framework_root
+        ~project_root
+        ~config
+        ~mode:(Host.Locked (platform, profile))
+    in
+    let* artifact =
+      timed "native compilation/selection" (fun () ->
+        selected_native
+          ~framework_root
+          ~project_root
+          ~config
+          ~target
+          ~profile
+          ~native_object)
+    in
+    let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Write_locked in
+    let* () =
+      timed "native staging" (fun () ->
+        stage_host_object ~project_root ~config ~target ~profile artifact)
+    in
+    let* () =
+      timed "application Xcode build" (fun () ->
+        Process_runner.run
+          (Plan.apple_build
+             ~project_root
+             ~config
+             ~platform
+             ~profile
+             ~no_codesign
+             ~development_team
+             ~signing_identity))
+    in
+    verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_codesign)
 ;;
 
 let run_apple
@@ -424,40 +442,38 @@ let exec
   | [] -> Error "A command is required after --"
   | program :: arguments ->
     let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Validate in
-    Lock.with_lock
-      (Filename.concat project_root "_build/bonsai-swiftui/locks/apple.lock")
-      (fun () ->
-         let* artifact =
-           selected_native
-             ~framework_root
-             ~project_root
-             ~config
-             ~target:Plan.Macos
-             ~profile
-             ~native_object
-         in
-         let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Write in
-         let* () =
-           stage_host_object ~project_root ~config ~target:Plan.Macos ~profile artifact
-         in
-         with_forwarded_interrupts (fun ~on_spawn ~received_signal ->
-           let command : Plan.command =
-             { program
-             ; arguments
-             ; working_directory
-             ; environment =
-                 [ "BONSAI_SWIFTUI_NATIVE_OBJECT", artifact
-                 ; "BONSAI_SWIFTUI_CONFIGURATION", Plan.ios_configuration_name profile
-                 ]
-             }
-           in
-           let result =
-             match received_signal () with
-             | Some signal -> Ok (Process_runner.signal_exit_code signal)
-             | None -> Process_runner.run_status ~on_spawn command
-           in
-           match result, received_signal () with
-           | Ok _, Some signal -> Ok (Process_runner.signal_exit_code signal)
-           | result, None -> result
-           | (Error _ as error), Some _ -> error))
+    Lock.with_apple_lock ~project_root (fun () ->
+      let* artifact =
+        selected_native
+          ~framework_root
+          ~project_root
+          ~config
+          ~target:Plan.Macos
+          ~profile
+          ~native_object
+      in
+      let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Write_locked in
+      let* () =
+        stage_host_object ~project_root ~config ~target:Plan.Macos ~profile artifact
+      in
+      with_forwarded_interrupts (fun ~on_spawn ~received_signal ->
+        let command : Plan.command =
+          { program
+          ; arguments
+          ; working_directory
+          ; environment =
+              [ "BONSAI_SWIFTUI_NATIVE_OBJECT", artifact
+              ; "BONSAI_SWIFTUI_CONFIGURATION", Plan.ios_configuration_name profile
+              ]
+          }
+        in
+        let result =
+          match received_signal () with
+          | Some signal -> Ok (Process_runner.signal_exit_code signal)
+          | None -> Process_runner.run_status ~on_spawn command
+        in
+        match result, received_signal () with
+        | Ok _, Some signal -> Ok (Process_runner.signal_exit_code signal)
+        | result, None -> result
+        | (Error _ as error), Some _ -> error))
 ;;
