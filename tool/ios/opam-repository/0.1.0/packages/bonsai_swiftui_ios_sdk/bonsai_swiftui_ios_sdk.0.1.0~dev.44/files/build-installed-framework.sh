@@ -25,7 +25,7 @@ stage_root="$work_root/stage"
 target_lib="$stage_root/ios-sysroot/lib"
 mkdir -p "$target_lib"
 
-framework_source_sha256='9d8d35b013c89300bc4171bc054a471530062411f533f6b050bf6f56550f917a'
+framework_source_sha256='b2d81bc9fde3472e411895914c9f21c63176f32c0d9ba6342488276c430a7dad'
 framework_deployment_target='18.0'
 framework_archive_source="$script_directory/bonsai_swiftui.tar.gz"
 framework_archive="$work_root/bonsai_swiftui.tar.gz"
