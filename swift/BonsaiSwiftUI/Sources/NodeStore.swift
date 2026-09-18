@@ -11,6 +11,7 @@ enum TreeError: Error, Equatable {
   case invalidGraph
   case unsupportedNode(Int)
   case unavailableSymbol(String)
+  case unavailableCapability(String, String)
 }
 
 struct RenderNode: Equatable, Sendable {
@@ -21,6 +22,14 @@ struct RenderNode: Equatable, Sendable {
   var children: [UInt64] = []
 }
 
+struct RenderNavigationLink: Equatable, Sendable {
+  let activation: String
+  let enabled: Bool
+  static func == (left: Self, right: Self) -> Bool {
+    left.enabled == right.enabled && left.activation.utf8.elementsEqual(right.activation.utf8)
+  }
+}
+
 enum NodeProperties: Equatable, Sendable {
   case nativeView(RenderNativeView)
   case empty
@@ -29,17 +38,30 @@ enum NodeProperties: Equatable, Sendable {
   case keyboardListener(RenderKeyboardListener)
   case hoverRegion(blocksBehind: Bool)
   case label
+  case form
+  case section(hasHeader: Bool, hasFooter: Bool)
+  case labeledContent
+  case contentUnavailable
+  case textSelection(Bool)
   case badge(RenderBadge)
   case sheet(RenderSheet)
   case popover(RenderPopover)
   case removal(RenderRemoval)
-  case nativeList
+  case nativeList(RenderListProperties)
   case listSection(RenderListSection)
-  case listRow(Int)
+  case listRow(RenderListRow)
+  case contextMenu(Bool)
+  case contextAction(RenderContextAction)
+  case contextMenuView
+  case listRowLabel
   case refresh(RenderRefresh)
   case scrollSections(RenderScrollSections)
   case scrollSection(RenderScrollSection)
-  case toolbar(RenderToolbar)
+  case confirmation(RenderConfirmation)
+  case toolbar
+  case toolbarEntry(RenderToolbarEntry)
+  case toolbarChild(String)
+  case toolbarBody
   case help(String)
   case groupBox(hasLabel: Bool)
   case slider(RenderSlider)
@@ -55,6 +77,7 @@ enum NodeProperties: Equatable, Sendable {
   case tabs(RenderTabKey)
   case tab(RenderTab)
   case navigationSplit(RenderNavigationSplit)
+  case navigationLink(RenderNavigationLink)
   case navigationStack(title: String)
   case navigationDestination(RenderNavigationDestination)
   case ignoresSafeArea(RenderSafeArea)
@@ -239,13 +262,21 @@ private func properties(_ reader: inout WireReader, kind: Int) throws -> NodePro
   case NodeKindId.sheet: return .sheet(try RenderSheet.decode(&reader))
   case NodeKindId.popover: return .popover(try RenderPopover.decode(&reader))
   case NodeKindId.removal: return .removal(try RenderRemoval.decode(&reader))
-  case NodeKindId.nativeList: return .nativeList
+  case NodeKindId.nativeList: return .nativeList(try RenderListProperties.decode(&reader))
   case NodeKindId.listSection: return .listSection(try RenderListSection.decode(&reader))
-  case NodeKindId.listRow: return .listRow(try reader.choice(2))
+  case NodeKindId.listRow: return .listRow(try RenderListRow.decode(&reader))
+  case NodeKindId.confirmation: return .confirmation(try RenderConfirmation.decode(&reader))
+  case NodeKindId.contextMenu: return .contextMenu(try reader.flag())
+  case NodeKindId.contextAction: return .contextAction(try RenderContextAction.decode(&reader))
+  case NodeKindId.contextMenuView: return .contextMenuView
+  case NodeKindId.listRowLabel: return .listRowLabel
   case NodeKindId.refresh: return .refresh(try RenderRefresh.decode(&reader))
   case NodeKindId.scrollSections: return .scrollSections(try RenderScrollSections.decode(&reader))
   case NodeKindId.scrollSection: return .scrollSection(try RenderScrollSection.decode(&reader))
-  case NodeKindId.toolbar: return .toolbar(try RenderToolbar.decode(&reader))
+  case NodeKindId.toolbar: return .toolbar
+  case NodeKindId.toolbarEntry: return .toolbarEntry(try RenderToolbarEntry.decode(&reader))
+  case NodeKindId.toolbarChild: return .toolbarChild(try reader.string())
+  case NodeKindId.toolbarBody: return .toolbarBody
   case NodeKindId.help:
     let message = try reader.string()
     // Match OCaml String.trim without discarding other Unicode whitespace.
@@ -253,6 +284,12 @@ private func properties(_ reader: inout WireReader, kind: Int) throws -> NodePro
     else { throw TreeError.invalidProperties }
     return .help(message)
   case NodeKindId.groupBox: return .groupBox(hasLabel: try reader.flag())
+  case NodeKindId.form: return .form
+  case NodeKindId.section:
+    return .section(hasHeader: try reader.flag(), hasFooter: try reader.flag())
+  case NodeKindId.labeledContent: return .labeledContent
+  case NodeKindId.contentUnavailable: return .contentUnavailable
+  case NodeKindId.textSelection: return .textSelection(try reader.flag())
   case NodeKindId.toggle: return .booleanControl(try RenderBooleanControl.decode(&reader))
   case NodeKindId.disclosureGroup:
     return .booleanControl(try RenderBooleanControl.decode(&reader, disclosure: true))
@@ -271,6 +308,10 @@ private func properties(_ reader: inout WireReader, kind: Int) throws -> NodePro
   case NodeKindId.tab: return .tab(try RenderTab.decode(&reader))
   case NodeKindId.navigationSplit:
     return .navigationSplit(try RenderNavigationSplit.decode(&reader))
+  case NodeKindId.navigationLink:
+    let activation = try reader.string()
+    guard !activation.isEmpty else { throw TreeError.invalidProperties }
+    return .navigationLink(RenderNavigationLink(activation: activation, enabled: try reader.flag()))
   case NodeKindId.navigationStack: return .navigationStack(title: try reader.string())
   case NodeKindId.navigationDestination:
     return .navigationDestination(try RenderNavigationDestination.decode(&reader))
@@ -378,14 +419,22 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.badge: return 7
   case NodeKindId.sheet: return 255
   case NodeKindId.popover: return 3
-  case NodeKindId.toolbar, NodeKindId.help, NodeKindId.groupBox, NodeKindId.hoverRegion: return 1
+  case NodeKindId.toolbar, NodeKindId.toolbarBody: return 0
+  case NodeKindId.toolbarEntry: return 7
+  case NodeKindId.toolbarChild: return 1
+  case NodeKindId.help, NodeKindId.groupBox, NodeKindId.hoverRegion: return 1
   case NodeKindId.disclosureGroup: return 3
   case NodeKindId.datePicker: return 31
   case NodeKindId.timePicker: return 15
   case NodeKindId.removal: return 63
-  case NodeKindId.nativeList: return 0
-  case NodeKindId.listSection: return 7
-  case NodeKindId.listRow: return 1
+  case NodeKindId.nativeList: return 3
+  case NodeKindId.listSection: return 15
+  case NodeKindId.listRow: return 7
+  case NodeKindId.confirmation: return 31
+  case NodeKindId.contextMenu: return 1
+  case NodeKindId.contextAction: return 31
+  case NodeKindId.contextMenuView: return 0
+  case NodeKindId.listRowLabel: return 0
   case NodeKindId.refresh: return 7
   case NodeKindId.scrollSections: return 63
   case NodeKindId.scrollSection: return 15
@@ -399,6 +448,7 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.tab: return 31
   case NodeKindId.morphingSurface: return 7
   case NodeKindId.navigationSplit: return 63
+  case NodeKindId.navigationLink: return 3
   case NodeKindId.navigationStack: return 1
   case NodeKindId.navigationDestination: return 7
   case NodeKindId.text: return 31
@@ -418,6 +468,9 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.button: return 15
   case NodeKindId.semantics: return 4095
   case NodeKindId.progress: return 3
+  case NodeKindId.form, NodeKindId.labeledContent, NodeKindId.contentUnavailable: return 0
+  case NodeKindId.section: return 3
+  case NodeKindId.textSelection: return 1
   case NodeKindId.ignoresSafeArea: return 3
   case NodeKindId.safeAreaPadding: return 1
   case NodeKindId.theme: return 1
@@ -438,6 +491,8 @@ struct NodeStore: Equatable, Sendable {
   var root: UInt64?
   var nodes: [UInt64: RenderNode] = [:]
   private(set) var accessibilityHiddenNodes: Set<UInt64> = []
+  private var structuralParents: [UInt64: UInt64] = [:]
+  private var listScrollHistory: [UInt64: RenderListScrollRequest] = [:]
   private var highestNodeID: UInt64 = 0
 
   func staging(_ frame: WireFrame) throws -> NodeTransaction {
@@ -511,8 +566,21 @@ struct NodeStore: Equatable, Sendable {
       }
       guard reader.remaining == 0 else { throw WireError.invalidLength }
     }
+    candidate.listScrollHistory =
+      frame.epoch == epoch
+      ? listScrollHistory.filter { candidate.nodes[$0.key]?.kind == NodeKindId.nativeList } : [:]
+    candidate.structuralParents =
+      frame.epoch == epoch
+      ? structuralParents.filter { candidate.nodes[$0.key] != nil } : [:]
     try candidate.validateGraph()
     return NodeTransaction(tree: candidate, ancillaryOperations: ancillary)
+  }
+
+  private mutating func ownStructuralNode(_ child: UInt64, parent: UInt64) throws {
+    if let previous = structuralParents[child], previous != parent {
+      throw TreeError.invalidIdentity
+    }
+    structuralParents[child] = parent
   }
 
   private mutating func validateGraph() throws {
@@ -520,17 +588,23 @@ struct NodeStore: Equatable, Sendable {
     guard let root, nodes[root] != nil else { throw TreeError.missingNode }
     var visited: Set<UInt64> = []
     var ownedWindows: Set<UInt64> = []
+    var ownedToolbarEntries: Set<UInt64> = []
+    var ownedToolbarChildren: Set<UInt64> = []
+    var ownedToolbarBodies: Set<UInt64> = []
     var ownedDestinations: Set<UInt64> = []
     var ownedSections: Set<UInt64> = []
     var ownedTabs: Set<UInt64> = []
     var ownedListSections: Set<UInt64> = []
     var ownedListRows: Set<UInt64> = []
+    var ownedContextMenus: Set<UInt64> = []
+    var ownedContextActions: Set<UInt64> = []
     var ownedSwipeRows: Set<UInt64> = []
+    var ownedRowLabels: Set<UInt64> = []
     var ownedSwipeActions: Set<UInt64> = []
-    var pending = [(root, false)]
+    var pending = [(root, false, false)]
     // Iterative traversal also rejects duplicate parents and cycles without
     // risking a native stack overflow on a deep or malicious logical tree.
-    while let (id, ancestorHidden) = pending.popLast() {
+    while let (id, ancestorHidden, hasNavigationStack) = pending.popLast() {
       guard visited.insert(id).inserted else { throw TreeError.invalidGraph }
       guard let node = nodes[id] else { throw TreeError.missingNode }
       let hidden = ancestorHidden || node.properties.accessibilityHidden
@@ -563,7 +637,15 @@ struct NodeStore: Equatable, Sendable {
         guard Set(node.bindings.keys) == [EventTagId.pointerEnter, EventTagId.pointerLeave] else {
           throw TreeError.invalidBindings
         }
-      case .label:
+      case .section:
+        guard node.children.count >= 2, node.bindings.isEmpty else {
+          throw TreeError.invalidChildren
+        }
+      case .contentUnavailable:
+        guard node.children.count == 3, node.bindings.isEmpty else {
+          throw TreeError.invalidChildren
+        }
+      case .label, .labeledContent:
         guard node.children.count == 2 else { throw TreeError.invalidChildren }
         guard node.bindings.isEmpty else { throw TreeError.invalidBindings }
       case .popover, .sheet:
@@ -575,13 +657,35 @@ struct NodeStore: Equatable, Sendable {
         guard node.children.count == 1 else { throw TreeError.invalidChildren }
         guard Set(node.bindings.keys) == [EventTagId.removalRequested, EventTagId.removalCompleted]
         else { throw TreeError.invalidBindings }
-      case .nativeList:
-        guard Set(node.bindings.keys).isSubset(of: [EventTagId.visibleRangeChanged]) else {
+      case .nativeList(let properties):
+        #if os(macOS)
+          if properties.style == 2 {
+            throw TreeError.unavailableCapability("Inset_grouped", "macOS")
+          }
+        #endif
+        guard
+          Set(node.bindings.keys).isSubset(of: [
+            EventTagId.visibleRangeChanged, EventTagId.listScrollCompleted,
+          ]),
+          properties.request == nil || node.bindings[EventTagId.listScrollCompleted] != nil
+        else {
           throw TreeError.invalidBindings
         }
+        if let request = properties.request {
+          if let previous = listScrollHistory[id] {
+            guard request.token > previous.token || request == previous else {
+              throw TreeError.invalidProperties
+            }
+          }
+          listScrollHistory[id] = request
+        }
+        var sectionKeys = Set<Data>()
         for child in node.children {
+          try ownStructuralNode(child, parent: id)
           ownedListSections.insert(child)
-          guard let section = nodes[child], case .listSection = section.properties else {
+          guard let section = nodes[child], case .listSection(let value) = section.properties,
+            sectionKeys.insert(value.key).inserted
+          else {
             throw TreeError.invalidChildren
           }
         }
@@ -590,20 +694,79 @@ struct NodeStore: Equatable, Sendable {
         guard node.bindings.isEmpty, node.children.count >= 2 else {
           throw TreeError.invalidChildren
         }
+        var rowKeys = Set<Data>()
         for child in node.children.dropFirst(2) {
+          try ownStructuralNode(child, parent: id)
           ownedListRows.insert(child)
-          guard let row = nodes[child], case .listRow = row.properties else {
+          guard let row = nodes[child], case .listRow(let properties) = row.properties,
+            rowKeys.insert(properties.key).inserted
+          else {
             throw TreeError.invalidChildren
           }
         }
-      case .listRow:
-        guard ownedListRows.contains(id), node.bindings.isEmpty, node.children.count == 1 else {
+      case .listRow(let properties):
+        guard ownedListRows.contains(id), node.children.count >= 3,
+          nodes[node.children[0]]?.properties == .listRowLabel,
+          nodes[node.children[1]]?.kind == NodeKindId.swipeActions,
+          nodes[node.children[2]]?.kind == NodeKindId.contextMenu,
+          properties.expanded != nil || node.children.count == 3
+        else { throw TreeError.invalidChildren }
+        guard
+          properties.expanded == nil
+            ? node.bindings.isEmpty
+            : Set(node.bindings.keys) == [EventTagId.valueChanged]
+        else { throw TreeError.invalidBindings }
+        try ownStructuralNode(node.children[0], parent: id)
+        try ownStructuralNode(node.children[1], parent: id)
+        try ownStructuralNode(node.children[2], parent: id)
+        ownedContextMenus.insert(node.children[2])
+        ownedRowLabels.insert(node.children[0])
+        ownedSwipeRows.insert(node.children[1])
+        var rowKeys = Set<Data>()
+        for child in node.children.dropFirst(3) {
+          try ownStructuralNode(child, parent: id)
+          ownedListRows.insert(child)
+          guard let row = nodes[child], case .listRow(let properties) = row.properties,
+            rowKeys.insert(properties.key).inserted
+          else { throw TreeError.invalidChildren }
+        }
+      case .contextMenuView:
+        guard node.children.count == 2, node.bindings.isEmpty,
+          nodes[node.children[1]]?.kind == NodeKindId.contextMenu
+        else {
           throw TreeError.invalidChildren
         }
-        ownedSwipeRows.insert(node.children[0])
+        try ownStructuralNode(node.children[1], parent: id)
+        ownedContextMenus.insert(node.children[1])
+      case .contextMenu:
+        guard ownedContextMenus.contains(id), node.bindings.isEmpty, node.children.count <= 64
+        else {
+          throw TreeError.invalidChildren
+        }
+        var keys = Set<Data>()
+        for child in node.children {
+          guard case .contextAction(let action) = nodes[child]?.properties,
+            keys.insert(action.key).inserted
+          else { throw TreeError.invalidChildren }
+          try ownStructuralNode(child, parent: id)
+          ownedContextActions.insert(child)
+        }
+      case .contextAction(let properties):
+        guard ownedContextActions.contains(id), node.children.isEmpty else {
+          throw TreeError.invalidChildren
+        }
+        guard
+          properties.enabled
+            ? Set(node.bindings.keys) == [EventTagId.press] : node.bindings.isEmpty
+        else {
+          throw TreeError.invalidBindings
+        }
+      case .listRowLabel:
+        guard ownedRowLabels.contains(id), node.children.count == 1, node.bindings.isEmpty
+        else { throw TreeError.invalidChildren }
       case .refresh:
         guard node.children.count == 1,
-          nodes[node.children[0]]?.properties == .nativeList
+          nodes[node.children[0]]?.kind == NodeKindId.nativeList
         else { throw TreeError.invalidChildren }
         guard Set(node.bindings.keys) == [EventTagId.refreshRequest] else {
           throw TreeError.invalidBindings
@@ -624,9 +787,57 @@ struct NodeStore: Equatable, Sendable {
         guard ownedSections.contains(id), node.children.count >= 2, node.bindings.isEmpty,
           properties.heroHeight == nil || node.children.count == 3
         else { throw TreeError.invalidChildren }
-      case .toolbar(let properties):
-        guard node.children.count == properties.placements.count + 1, node.bindings.isEmpty
+      case .toolbar:
+        guard let body = node.children.first, nodes[body]?.kind == NodeKindId.toolbarBody,
+          node.children.count <= 257, node.bindings.isEmpty
         else { throw TreeError.invalidChildren }
+        ownedToolbarBodies.insert(body)
+        try ownStructuralNode(body, parent: id)
+        var keys: Set<Data> = []
+        var principal = false
+        for child in node.children.dropFirst() {
+          guard let entry = nodes[child], case .toolbarEntry(let properties) = entry.properties,
+            keys.insert(Data(properties.key.utf8)).inserted,
+            properties.placement != 1 || !principal
+          else { throw TreeError.invalidChildren }
+          principal = principal || properties.placement == 1
+          ownedToolbarEntries.insert(child)
+          try ownStructuralNode(child, parent: id)
+        }
+      case .toolbarEntry(let properties):
+        guard ownedToolbarEntries.contains(id), node.bindings.isEmpty else {
+          throw TreeError.invalidChildren
+        }
+        #if os(macOS)
+          if properties.placement == 9 {
+            throw TreeError.unavailableCapability("Bottom_bar", "macOS")
+          }
+        #endif
+        switch properties.kind {
+        case 0:
+          guard node.children.count == 1,
+            nodes[node.children[0]]?.properties.isToolbarStructure == false
+          else { throw TreeError.invalidChildren }
+          try ownStructuralNode(node.children[0], parent: id)
+        case 1:
+          guard node.children.count <= 256 else { throw TreeError.invalidChildren }
+          var keys: Set<Data> = []
+          for child in node.children {
+            guard let item = nodes[child], case .toolbarChild(let key) = item.properties,
+              keys.insert(Data(key.utf8)).inserted
+            else { throw TreeError.invalidChildren }
+            ownedToolbarChildren.insert(child)
+            try ownStructuralNode(child, parent: id)
+          }
+        default:
+          guard node.children.isEmpty else { throw TreeError.invalidChildren }
+        }
+      case .toolbarBody, .toolbarChild:
+        let owned = node.kind == NodeKindId.toolbarBody ? ownedToolbarBodies : ownedToolbarChildren
+        guard owned.contains(id), node.children.count == 1, node.bindings.isEmpty,
+          nodes[node.children[0]]?.properties.isToolbarStructure == false
+        else { throw TreeError.invalidChildren }
+        try ownStructuralNode(node.children[0], parent: id)
       case .groupBox(let hasLabel):
         guard node.children.count == (hasLabel ? 2 : 1) else { throw TreeError.invalidChildren }
         guard node.bindings.isEmpty else { throw TreeError.invalidBindings }
@@ -662,6 +873,10 @@ struct NodeStore: Equatable, Sendable {
         if properties.hasSort { required.insert(EventTagId.tableSortRequested) }
         if properties.hasSelection { required.insert(EventTagId.tableRowSelected) }
         guard Set(node.bindings.keys) == required else { throw TreeError.invalidBindings }
+      case .confirmation(let properties):
+        guard node.children.count == 1 else { throw TreeError.invalidChildren }
+        let required: Set<Int> = properties.request == nil ? [] : [EventTagId.confirmationResponse]
+        guard Set(node.bindings.keys) == required else { throw TreeError.invalidBindings }
       case .menu(let properties):
         guard node.children.count == properties.labelCount else { throw TreeError.invalidChildren }
         guard
@@ -689,13 +904,10 @@ struct NodeStore: Equatable, Sendable {
         else { throw TreeError.invalidBindings }
       case .swipeActions:
         guard ownedSwipeRows.contains(id) else { throw TreeError.invalidChildren }
-        guard node.bindings.isEmpty, !node.children.isEmpty, node.children.count <= 65 else {
+        guard node.bindings.isEmpty, node.children.count <= 64 else {
           throw TreeError.invalidChildren
         }
-        if let first = nodes[node.children[0]], case .swipeAction = first.properties {
-          throw TreeError.invalidChildren
-        }
-        for child in node.children.dropFirst() {
+        for child in node.children {
           guard let action = nodes[child], case .swipeAction = action.properties else {
             throw TreeError.invalidChildren
           }
@@ -735,6 +947,11 @@ struct NodeStore: Equatable, Sendable {
         }
         guard node.bindings.count == 1, node.bindings[EventTagId.navigationSplitChanged] != nil
         else { throw TreeError.invalidBindings }
+      case .navigationLink:
+        guard hasNavigationStack else { throw TreeError.invalidChildren }
+        guard node.children.count == 1, Set(node.bindings.keys) == [EventTagId.press] else {
+          throw TreeError.invalidChildren
+        }
       case .navigationStack:
         guard node.bindings.count == 1, node.bindings[EventTagId.navigationPathChanged] != nil
         else { throw TreeError.invalidBindings }
@@ -798,7 +1015,8 @@ struct NodeStore: Equatable, Sendable {
         guard node.children.count == 1, node.bindings.count == 1,
           node.bindings[EventTagId.animationCompleted] != nil
         else { throw TreeError.invalidBindings }
-      case .help, .badge, .projection, .controlSize, .ignoresSafeArea, .safeAreaPadding,
+      case .textSelection, .help, .badge, .projection, .controlSize, .ignoresSafeArea,
+        .safeAreaPadding,
         .environment,
         .frame,
         .padding, .background,
@@ -830,7 +1048,7 @@ struct NodeStore: Equatable, Sendable {
       case .progress, .empty, .divider, .text, .richText, .symbol, .image, .spacer:
         guard node.bindings.isEmpty else { throw TreeError.invalidBindings }
         guard node.children.isEmpty else { throw TreeError.invalidChildren }
-      case .flow, .row, .column, .stack:
+      case .form, .flow, .row, .column, .stack:
         guard node.bindings.isEmpty else { throw TreeError.invalidBindings }
       }
       let childrenHidden: Bool
@@ -848,6 +1066,8 @@ struct NodeStore: Equatable, Sendable {
             inactive = index == (sheet.presented ? 0 : 1)
           } else if case .popover(let popover) = node.properties {
             inactive = index == 1 && !popover.presented
+          } else if case .listRow(let row) = node.properties {
+            inactive = index >= 3 && row.expanded != true
           } else if case .booleanControl(let control) = node.properties,
             control.style == .disclosure
           {
@@ -855,7 +1075,10 @@ struct NodeStore: Equatable, Sendable {
           } else {
             inactive = false
           }
-          return (child, childrenHidden || inactive)
+          return (
+            child, childrenHidden || inactive,
+            hasNavigationStack || node.kind == NodeKindId.navigationStack
+          )
         })
     }
     guard visited.count == nodes.count else { throw TreeError.invalidGraph }

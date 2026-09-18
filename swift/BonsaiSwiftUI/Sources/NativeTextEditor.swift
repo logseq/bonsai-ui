@@ -27,6 +27,19 @@ struct TextEditorConfiguration: Equatable, Sendable {
 
 @MainActor final class NativeTextController: NSObject {
   let view = NativeEditingTextView(frame: CGRect(x: 0, y: 0, width: 320, height: 120))
+  lazy var attachment: NativeControlAttachment = {
+    #if os(macOS)
+      let scroll = NSScrollView()
+      scroll.drawsBackground = false
+      scroll.hasVerticalScroller = true
+      scroll.autohidesScrollers = true
+      view.autoresizingMask = [.width]
+      scroll.documentView = view
+      return NativeControlAttachment(scroll)
+    #else
+      return NativeControlAttachment(view)
+    #endif
+  }()
   private(set) var session: TextSession
   private var configuration: TextEditorConfiguration
   private var emit: (NativeEventPayload) -> Bool
@@ -34,6 +47,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
   private var applying = false
   private var disposed = false
   private var focused = false
+  private var toolbarFocusTransfer = false
   private var hostEnabled = true
   private var contentActive = true
   private var retainingFocus = false
@@ -111,7 +125,9 @@ struct TextEditorConfiguration: Equatable, Sendable {
 
   @discardableResult func apply(_ snapshot: TextSnapshot) throws -> Bool {
     guard !disposed else { return false }
+    let sessionChanged = snapshot.sessionID != session.sessionID
     let replace = try session.apply(snapshot)
+    if sessionChanged { endToolbarFocusTransfer() }
     if replace { replaceNativeValue() }
     return replace
   }
@@ -123,7 +139,9 @@ struct TextEditorConfiguration: Equatable, Sendable {
   }
 
   func setContentActive(_ active: Bool, retainingFocus: Bool = false) {
-    guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else { return }
+    guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else {
+      return
+    }
     contentActive = active
     self.retainingFocus = retainingFocus
     updateAvailability()
@@ -142,11 +160,13 @@ struct TextEditorConfiguration: Equatable, Sendable {
   }
 
   private func updateAvailability() {
-    let enabled = hostEnabled && (contentActive || (retainingFocus && focused)) && configuration.enabled
+    let enabled =
+      hostEnabled && (contentActive || (retainingFocus && focused)) && configuration.enabled
     let editable = enabled && !configuration.readOnly
     if view.isEditable != editable { view.isEditable = editable }
     if view.isSelectable != enabled { view.isSelectable = enabled }
     if !enabled {
+      endToolbarFocusTransfer()
       #if os(macOS)
         if view.window?.firstResponder === view { view.window?.makeFirstResponder(nil) }
       #else
@@ -159,6 +179,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
   func dispose() {
     guard !disposed else { return }
     disposed = true
+    toolbarFocusTransfer = false
     hostEnabled = false
     updateAvailability()
     view.attached = nil
@@ -166,6 +187,7 @@ struct TextEditorConfiguration: Equatable, Sendable {
     view.focusChanged = nil
     view.acceptsInput = nil
     view.delegate = nil
+    attachment.dispose()
     view.unmarkText()
     #if os(iOS)
       view.resignFirstResponder()
@@ -275,7 +297,23 @@ struct TextEditorConfiguration: Equatable, Sendable {
     return true
   }
 
+  var hasToolbarFocusTransfer: Bool { toolbarFocusTransfer && !disposed && acceptsEdits }
+  func beginToolbarFocusTransfer() -> Bool {
+    guard focused, acceptsEdits else { return false }
+    capture()
+    toolbarFocusTransfer = true
+    return true
+  }
+  func endToolbarFocusTransfer() {
+    toolbarFocusTransfer = false
+    #if os(macOS)
+      focus(view.window?.firstResponder === view)
+    #else
+      focus(view.isFirstResponder)
+    #endif
+  }
   private func focus(_ value: Bool) {
+    if !value && toolbarFocusTransfer { return }
     guard !disposed, value != focused else { return }
     focused = value
     _ = emit(.focusChanged(value))

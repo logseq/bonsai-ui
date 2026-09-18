@@ -8,7 +8,7 @@
 #include "bonsai_swiftui_ocaml_bridge.h"
 #endif
 
-#define BS_PROTOCOL_MAJOR 9
+#define BS_PROTOCOL_MAJOR 10
 #define BS_PROTOCOL_MINOR 0
 #define BS_ABI_MAJOR 4
 #define BS_ABI_MINOR 0

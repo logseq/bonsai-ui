@@ -5,6 +5,7 @@ import Testing
 
 enum SwiftInputFixtures {
   static let names = [
+    "confirmation_action", "confirmation_dismissed",
     "counter_press", "host_response", "text_edit_unicode",
     "text_limit_reached", "environment_changed", "application_response", "application_event",
   ]
@@ -21,6 +22,14 @@ enum SwiftInputFixtures {
     let epoch: UInt64
     let event: NativeEvent
     switch name {
+    case "confirmation_action", "confirmation_dismissed":
+      epoch = 22
+      event = NativeEvent(
+        sequence: 10, displayedRevision: 2, nodeID: 5, handlerID: 46,
+        payload: .confirmationResponse(
+          .init(
+            serial: UUID(), token: 7, handler: 46,
+            result: name == "confirmation_action" ? .action("删除😀") : .dismissed)))
     case "counter_press":
       epoch = 21
       event = NativeEvent(sequence: 1, displayedRevision: 1, nodeID: 3, handlerID: 9001)

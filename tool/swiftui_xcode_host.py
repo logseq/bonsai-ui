@@ -17,7 +17,7 @@ import xml.etree.ElementTree as ET
 
 
 CONFIGURATIONS = ("Debug", "Profile", "Release")
-PLATFORMS = {"macOS": ("macosx", "MACOS", "26.0"), "iOS": ("iphoneos", "IOS", "18.0")}
+PLATFORMS = {"macOS": ("macosx", "MACOS", "26.0"), "iOS": ("iphoneos", "IOS", "26.0")}
 
 
 def write_if_changed(path, content):
@@ -143,7 +143,7 @@ def read_package_lock(root, host, packages, required=False, matching=True):
 
 
 def generate_project(*, framework_root, application_root, host_directory, product_name,
-                     bundle_identifiers, entitlements=None, swift_packages=(), ios_minimum_version="18.0",
+                     bundle_identifiers, entitlements=None, swift_packages=(), ios_minimum_version="26.0",
                      development_team="", check=False, validate_only=False, inputs_only=False,
                      require_lock=False, refresh_lock=False, package_validation=False, rendered_outputs=None):
     framework_root = Path(framework_root).resolve()
@@ -157,8 +157,8 @@ def generate_project(*, framework_root, application_root, host_directory, produc
             value = identifier + suffix
             if len(value) > 255 or not re.fullmatch(r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+", value):
                 raise ValueError(f"Invalid bundle identifier: {value}")
-    if not re.fullmatch(r"[1-9][0-9]*\.(0|[1-9][0-9]*)", ios_minimum_version) or int(ios_minimum_version.split(".")[0]) < 18:
-        raise ValueError(f"Unsupported iOS minimum version: {ios_minimum_version}; framework minimum is 18.0")
+    if not re.fullmatch(r"[1-9][0-9]*\.(0|[1-9][0-9]*)", ios_minimum_version) or int(ios_minimum_version.split(".")[0]) < 26:
+        raise ValueError(f"Unsupported iOS minimum version: {ios_minimum_version}; framework minimum is 26.0")
     effective = effective_entitlements(application_root, host, entitlements)
     lock = read_package_lock(application_root, host, swift_packages, require_lock, matching=not refresh_lock)
     if inputs_only:
@@ -685,7 +685,7 @@ def main():
     parser.add_argument("--product-name", required=True)
     parser.add_argument("--macos-bundle-identifier", required=True)
     parser.add_argument("--ios-bundle-identifier", required=True)
-    parser.add_argument("--ios-minimum-version", default="18.0")
+    parser.add_argument("--ios-minimum-version", default="26.0")
     parser.add_argument("--entitlement", nargs=3, action="append", default=[])
     parser.add_argument("--swift-package", nargs=4, action="append", default=[])
     parser.add_argument("--swift-product", nargs=3, action="append", default=[])

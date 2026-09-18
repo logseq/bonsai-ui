@@ -1,0 +1,665 @@
+dune runtest
+PASS: cleared search rejects delayed edits
+PASS: initial document and light appearance
+PASS: templates search, empty, clear and native dismissal
+PASS: selection, close, and seed isolation
+PASS: independent disclosures retain identity
+PASS: editing, Unicode, reopening and fresh template
+PASS: themes, insertion and named mock actions
+Testing `network example'.
+This run has ID `AV9F7FL3'.
+
+  [OK]          Configuration          0   renders the verified public smoke ...
+  [OK]          HTTPS                  0   renders initial state, success, ca...
+  [OK]          WebSocket              0   preserves revisions and bounds gen...
+
+Full test results in `~/gh-repos/bonsai-ui/_build/default/examples/network/test/_build/_tests/network example'.
+Test Successful in 0.018s. 3 tests run.
+tool/check_viewport_types.sh
+sh tool/test_native_runtime.sh
+test_invalid_startup_and_restart (__main__.NativeRuntimeTests.test_invalid_startup_and_restart) ... ok
+test_pump_without_acknowledgment_is_rejected (__main__.NativeRuntimeTests.test_pump_without_acknowledgment_is_rejected) ... ok
+test_real_counter_initial_frame_and_empty_presentation (__main__.NativeRuntimeTests.test_real_counter_initial_frame_and_empty_presentation) ... ok
+test_rejected_frame_recovers_with_full_snapshot (__main__.NativeRuntimeTests.test_rejected_frame_recovers_with_full_snapshot) ... ok
+test_terminal_shutdown_retires_pending_token_without_presentation (__main__.NativeRuntimeTests.test_terminal_shutdown_retires_pending_token_without_presentation) ... ok
+test_version_and_obsolete_exports (__main__.NativeRuntimeTests.test_version_and_obsolete_exports) ... ok
+test_worker_preserves_foreign_host_signal_handlers (__main__.NativeRuntimeTests.test_worker_preserves_foreign_host_signal_handlers) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.188s
+
+OK
+python3 tool/generate_ui_defaults.py --check
+dune exec protocol/generator/generate.exe -- --check
+python3 tool/test_swiftui_xcode_host.py
+test_application_ios_minimum_reaches_all_host_targets (__main__.HostConfigurationTests.test_application_ios_minimum_reaches_all_host_targets) ... ok
+test_entitlement_symlink_escapes_and_typed_merge_conflicts (__main__.HostConfigurationTests.test_entitlement_symlink_escapes_and_typed_merge_conflicts) ... ok
+test_lock_projection_validation_and_obsolete_file_cleanup (__main__.HostConfigurationTests.test_lock_projection_validation_and_obsolete_file_cleanup) ... ok
+test_package_products_and_independent_test_entitlements (__main__.HostConfigurationTests.test_package_products_and_independent_test_entitlements) ... ok
+test_generated_project_is_portable_between_checkouts (__main__.XcodeHostTests.test_generated_project_is_portable_between_checkouts) ... ok
+test_generation_and_apple_destination_settings (__main__.XcodeHostTests.test_generation_and_apple_destination_settings) ... ok
+test_ios_runtime_tests_build_with_an_isolated_application_host (__main__.XcodeHostTests.test_ios_runtime_tests_build_with_an_isolated_application_host) ... FAIL
+test_ios_ui_tests_build_separate_from_the_application_runtime (__main__.XcodeHostTests.test_ios_ui_tests_build_separate_from_the_application_runtime) ... FAIL
+test_macos_object_cannot_be_used_for_device_ios (__main__.XcodeHostTests.test_macos_object_cannot_be_used_for_device_ios) ... ok
+test_mail_build_and_xcode_runtime_test (__main__.XcodeHostTests.test_mail_build_and_xcode_runtime_test) ... ok
+test_optimized_mail_builds_and_runs_without_intel_artifacts (__main__.XcodeHostTests.test_optimized_mail_builds_and_runs_without_intel_artifacts) ... ok
+test_resources_preserve_nested_paths_in_built_bundle (__main__.XcodeHostTests.test_resources_preserve_nested_paths_in_built_bundle) ... ok
+test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) ... 
+  test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) (example='counter', platform='iOS') ... FAIL
+  test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) (example='sqlite_worker', platform='iOS') ... FAIL
+
+======================================================================
+FAIL: test_ios_runtime_tests_build_with_an_isolated_application_host (__main__.XcodeHostTests.test_ios_runtime_tests_build_with_an_isolated_application_host)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 328, in test_ios_runtime_tests_build_with_an_isolated_application_host
+    self.command(
+    ~~~~~~~~~~~~^
+        "xcodebuild", "-project", project, "-scheme", "BonsaiMail-iOS",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        "build-for-testing",
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 186, in command
+    self.assertEqual(result.returncode, 0, (result.stdout + result.stderr)[-12000:])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 65 != 0 : rngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build/Objects-normal/arm64/BonsaiMail-iOSTests.SwiftFileList
+    export SWIFT_VERSION\=6.0
+    export SYMROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products
+    export SYSTEM_ADMIN_APPS_DIR\=/Applications/Utilities
+    export SYSTEM_APPS_DIR\=/Applications
+    export SYSTEM_CORE_SERVICES_DIR\=/System/Library/CoreServices
+    export SYSTEM_DEMOS_DIR\=/Applications/Extras
+    export SYSTEM_DEVELOPER_APPS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications
+    export SYSTEM_DEVELOPER_BIN_DIR\=/Applications/Xcode.app/Contents/Developer/usr/bin
+    export SYSTEM_DEVELOPER_DEMOS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities/Built\ Examples
+    export SYSTEM_DEVELOPER_DIR\=/Applications/Xcode.app/Contents/Developer
+    export SYSTEM_DEVELOPER_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library
+    export SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Graphics\ Tools
+    export SYSTEM_DEVELOPER_JAVA_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Java\ Tools
+    export SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Performance\ Tools
+    export SYSTEM_DEVELOPER_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes
+    export SYSTEM_DEVELOPER_TOOLS\=/Applications/Xcode.app/Contents/Developer/Tools
+    export SYSTEM_DEVELOPER_TOOLS_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/documentation/DeveloperTools
+    export SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes/DeveloperTools
+    export SYSTEM_DEVELOPER_USR_DIR\=/Applications/Xcode.app/Contents/Developer/usr
+    export SYSTEM_DEVELOPER_UTILITIES_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities
+    export SYSTEM_DEXT_INSTALL_PATH\=/System/Library/DriverExtensions
+    export SYSTEM_DOCUMENTATION_DIR\=/Library/Documentation
+    export SYSTEM_EXTENSIONS_FOLDER_PATH\=BonsaiMail-iOSTests.xctest/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiMail-iOSTests.xctest/Library/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiMail-iOSTests.xctest/SystemExtensions
+    export SYSTEM_FRAMEWORK_SEARCH_PATHS\=\ \ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/Developer/Library/Frameworks
+    export SYSTEM_KEXT_INSTALL_PATH\=/System/Library/Extensions
+    export SYSTEM_LIBRARY_DIR\=/System/Library
+    export TAPI_DEMANGLE\=YES
+    export TAPI_ENABLE_PROJECT_HEADERS\=NO
+    export TAPI_LANGUAGE\=objective-c
+    export TAPI_LANGUAGE_STANDARD\=compiler-default
+    export TAPI_USE_SRCROOT\=YES
+    export TAPI_VERIFY_MODE\=Pedantic
+    export TARGETED_DEVICE_FAMILY\=1,2
+    export TARGETNAME\=BonsaiMail-iOSTests
+    export TARGET_BUILD_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns
+    export TARGET_BUILD_SUBPATH\=/BonsaiMailTestHost.app/PlugIns
+    export TARGET_NAME\=BonsaiMail-iOSTests
+    export TARGET_TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build
+    export TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build
+    export TEMP_FILES_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build
+    export TEMP_FILE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build
+    export TEMP_ROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex
+    export TEMP_SANDBOX_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/TemporaryTaskSandboxes
+    export TEST_FRAMEWORK_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/Developer/Library/Frameworks
+    export TEST_HOST\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/BonsaiMailTestHost
+    export TEST_LIBRARY_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib
+    export TOOLCHAINS\=com.apple.dt.toolchain.Metal.32023\ com.apple.dt.toolchain.XcodeDefault
+    export TOOLCHAIN_DIR\=/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.cQ1ZL7/Metal.xctoolchain
+    export TOOLCHAIN_VERSION\=32023
+    export TREAT_MISSING_BASELINES_AS_TEST_FAILURES\=NO
+    export TREAT_MISSING_SCRIPT_PHASE_OUTPUTS_AS_ERRORS\=NO
+    export UID\=501
+    export UNINSTALLED_PRODUCTS_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/UninstalledProducts
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH\=BonsaiMail-iOSTests.xctest
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiMail-iOSTests.xctest/Resources
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiMail-iOSTests.xctest
+    export UNSTRIPPED_PRODUCT\=NO
+    export USER\=rcmerci
+    export USER_APPS_DIR\=/Users/rcmerci/Applications
+    export USER_LIBRARY_DIR\=/Users/rcmerci/Library
+    export USE_DYNAMIC_NO_PIC\=YES
+    export USE_HEADERMAP\=YES
+    export USE_HEADER_SYMLINKS\=NO
+    export VALIDATE_DEVELOPMENT_ASSET_PATHS\=YES_ERROR
+    export VALIDATE_PRODUCT\=NO
+    export VALID_ARCHS\=arm64\ arm64e\ armv7\ armv7s
+    export VERBOSE_PBXCP\=NO
+    export VERSIONPLIST_PATH\=BonsaiMail-iOSTests.xctest/version.plist
+    export VERSION_INFO_BUILDER\=rcmerci
+    export VERSION_INFO_FILE\=BonsaiMail-iOSTests_vers.c
+    export VERSION_INFO_STRING\=\"@\(\#\)PROGRAM:BonsaiMail-iOSTests\ \ PROJECT:BonsaiMail-\"
+    export WORKSPACE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/BonsaiMail.xcodeproj
+    export WRAPPER_EXTENSION\=xctest
+    export WRAPPER_NAME\=BonsaiMail-iOSTests.xctest
+    export WRAPPER_SUFFIX\=.xctest
+    export WRAP_ASSET_PACKS_IN_SEPARATE_DIRECTORIES\=NO
+    export XCODE_APP_SUPPORT_DIR\=/Applications/Xcode.app/Contents/Developer/Library/Xcode
+    export XCODE_PRODUCT_BUILD_VERSION\=17B100
+    export XCODE_VERSION_ACTUAL\=2611
+    export XCODE_VERSION_MAJOR\=2600
+    export XCODE_VERSION_MINOR\=2610
+    export XPCSERVICES_FOLDER_PATH\=BonsaiMail-iOSTests.xctest/XPCServices
+    export YACC\=yacc
+    export _BUILDABLE_SERIALIZATION_KEY\=test-bundle-with-host:\ Path\(_str:\ \"/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/BonsaiMailTestHost\"\)
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS\=YES
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS_INCLUDE_WL\=YES
+    export _LD_MULTIARCH\=YES
+    export _WRAPPER_CONTENTS_DIR_SHALLOW_BUNDLE_NO\=/Contents
+    export _WRAPPER_PARENT_PATH_SHALLOW_BUNDLE_NO\=/..
+    export _WRAPPER_RESOURCES_DIR_SHALLOW_BUNDLE_NO\=/Resources
+    export __DIAGNOSE_DEPRECATED_ARCHS\=YES
+    export arch\=undefined_arch
+    export variant\=normal
+    /bin/sh -c /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\\\ device\\\ test\\\ host\\\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build/Script-6CD0EB4DF9F7D96C85D5CD29.sh
+
+ProcessInfoPlistFile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns/BonsaiMail-iOSTests.xctest/Info.plist /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build/empty-BonsaiMail-iOSTests.plist (in target 'BonsaiMail-iOSTests' from project 'BonsaiMail')
+    cd /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi
+    builtin-infoPlistUtility /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build/empty-BonsaiMail-iOSTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphoneos -scanforprivacyfile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns/BonsaiMail-iOSTests.xctest/BonsaiSwiftUI_BonsaiSwiftUI.bundle -requiredArchitecture arm64 -o /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns/BonsaiMail-iOSTests.xctest/Info.plist
+
+ProcessInfoPlistFile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/Info.plist /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/Info-iOS.plist (in target 'BonsaiMail-iOS' from project 'BonsaiMail')
+    cd /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi
+    builtin-infoPlistUtility /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/Info-iOS.plist -producttype com.apple.product-type.application -genpkginfo /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -scanforprivacyfile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/BonsaiSwiftUI_BonsaiSwiftUI.bundle -requiredArchitecture arm64 -o /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/Info.plist
+
+note: Run script build phase 'Verify native complete object' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'BonsaiMail-iOS' from project 'BonsaiMail')
+note: Run script build phase 'Verify native complete object' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'BonsaiMail-iOSTests' from project 'BonsaiMail')
+** TEST BUILD FAILED **
+
+
+The following build commands failed:
+	PhaseScriptExecution Verify\ native\ complete\ object /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ test\ host\ cufrngmi/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build/Script-2C85AE851EA8C7DC9AE378AD.sh (in target 'BonsaiMail-iOS' from project 'BonsaiMail')
+	Building project BonsaiMail for testing with scheme BonsaiMail-iOS
+(2 failures)
+
+
+======================================================================
+FAIL: test_ios_ui_tests_build_separate_from_the_application_runtime (__main__.XcodeHostTests.test_ios_ui_tests_build_separate_from_the_application_runtime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 285, in test_ios_ui_tests_build_separate_from_the_application_runtime
+    self.command(
+    ~~~~~~~~~~~~^
+        "xcodebuild", "-project", project, "-scheme", "BonsaiMail-iOS",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        "build-for-testing",
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 186, in command
+    self.assertEqual(result.returncode, 0, (result.stdout + result.stderr)[-12000:])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 65 != 0 : jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/../../../../../../../Users/rcmerci/gh-repos/bonsai-ui/native/src\"
+    export SWIFT_OPTIMIZATION_LEVEL\=-O
+    export SWIFT_PLATFORM_TARGET_PREFIX\=ios
+    export SWIFT_RESPONSE_FILE_PATH_normal_arm64\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build/Objects-normal/arm64/BonsaiMail.SwiftFileList
+    export SWIFT_VERSION\=6.0
+    export SYMROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products
+    export SYSTEM_ADMIN_APPS_DIR\=/Applications/Utilities
+    export SYSTEM_APPS_DIR\=/Applications
+    export SYSTEM_CORE_SERVICES_DIR\=/System/Library/CoreServices
+    export SYSTEM_DEMOS_DIR\=/Applications/Extras
+    export SYSTEM_DEVELOPER_APPS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications
+    export SYSTEM_DEVELOPER_BIN_DIR\=/Applications/Xcode.app/Contents/Developer/usr/bin
+    export SYSTEM_DEVELOPER_DEMOS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities/Built\ Examples
+    export SYSTEM_DEVELOPER_DIR\=/Applications/Xcode.app/Contents/Developer
+    export SYSTEM_DEVELOPER_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library
+    export SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Graphics\ Tools
+    export SYSTEM_DEVELOPER_JAVA_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Java\ Tools
+    export SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Performance\ Tools
+    export SYSTEM_DEVELOPER_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes
+    export SYSTEM_DEVELOPER_TOOLS\=/Applications/Xcode.app/Contents/Developer/Tools
+    export SYSTEM_DEVELOPER_TOOLS_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/documentation/DeveloperTools
+    export SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes/DeveloperTools
+    export SYSTEM_DEVELOPER_USR_DIR\=/Applications/Xcode.app/Contents/Developer/usr
+    export SYSTEM_DEVELOPER_UTILITIES_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities
+    export SYSTEM_DEXT_INSTALL_PATH\=/System/Library/DriverExtensions
+    export SYSTEM_DOCUMENTATION_DIR\=/Library/Documentation
+    export SYSTEM_EXTENSIONS_FOLDER_PATH\=BonsaiMail.app/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiMail.app/Library/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiMail.app/SystemExtensions
+    export SYSTEM_KEXT_INSTALL_PATH\=/System/Library/Extensions
+    export SYSTEM_LIBRARY_DIR\=/System/Library
+    export TAPI_DEMANGLE\=YES
+    export TAPI_ENABLE_PROJECT_HEADERS\=NO
+    export TAPI_LANGUAGE\=objective-c
+    export TAPI_LANGUAGE_STANDARD\=compiler-default
+    export TAPI_USE_SRCROOT\=YES
+    export TAPI_VERIFY_MODE\=Pedantic
+    export TARGETED_DEVICE_FAMILY\=1,2
+    export TARGETNAME\=BonsaiMail-iOS
+    export TARGET_BUILD_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos
+    export TARGET_NAME\=BonsaiMail-iOS
+    export TARGET_TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build
+    export TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build
+    export TEMP_FILES_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build
+    export TEMP_FILE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build
+    export TEMP_ROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex
+    export TEMP_SANDBOX_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/TemporaryTaskSandboxes
+    export TEST_FRAMEWORK_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/Developer/Library/Frameworks
+    export TEST_LIBRARY_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib
+    export TOOLCHAINS\=com.apple.dt.toolchain.Metal.32023\ com.apple.dt.toolchain.XcodeDefault
+    export TOOLCHAIN_DIR\=/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.cQ1ZL7/Metal.xctoolchain
+    export TOOLCHAIN_VERSION\=32023
+    export TREAT_MISSING_BASELINES_AS_TEST_FAILURES\=NO
+    export TREAT_MISSING_SCRIPT_PHASE_OUTPUTS_AS_ERRORS\=NO
+    export UID\=501
+    export UNINSTALLED_PRODUCTS_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/UninstalledProducts
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH\=BonsaiMail.app
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiMail.app/Resources
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiMail.app
+    export UNSTRIPPED_PRODUCT\=NO
+    export USER\=rcmerci
+    export USER_APPS_DIR\=/Users/rcmerci/Applications
+    export USER_LIBRARY_DIR\=/Users/rcmerci/Library
+    export USE_DYNAMIC_NO_PIC\=YES
+    export USE_HEADERMAP\=YES
+    export USE_HEADER_SYMLINKS\=NO
+    export VALIDATE_DEVELOPMENT_ASSET_PATHS\=YES_ERROR
+    export VALIDATE_PRODUCT\=NO
+    export VALID_ARCHS\=arm64\ arm64e\ armv7\ armv7s
+    export VERBOSE_PBXCP\=NO
+    export VERSIONPLIST_PATH\=BonsaiMail.app/version.plist
+    export VERSION_INFO_BUILDER\=rcmerci
+    export VERSION_INFO_FILE\=BonsaiMail_vers.c
+    export VERSION_INFO_STRING\=\"@\(\#\)PROGRAM:BonsaiMail\ \ PROJECT:BonsaiMail-\"
+    export WORKSPACE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/BonsaiMail.xcodeproj
+    export WRAPPER_EXTENSION\=app
+    export WRAPPER_NAME\=BonsaiMail.app
+    export WRAPPER_SUFFIX\=.app
+    export WRAP_ASSET_PACKS_IN_SEPARATE_DIRECTORIES\=NO
+    export XCODE_APP_SUPPORT_DIR\=/Applications/Xcode.app/Contents/Developer/Library/Xcode
+    export XCODE_PRODUCT_BUILD_VERSION\=17B100
+    export XCODE_VERSION_ACTUAL\=2611
+    export XCODE_VERSION_MAJOR\=2600
+    export XCODE_VERSION_MINOR\=2610
+    export XPCSERVICES_FOLDER_PATH\=BonsaiMail.app/XPCServices
+    export YACC\=yacc
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS\=YES
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS_INCLUDE_WL\=YES
+    export _LD_MULTIARCH\=YES
+    export _WRAPPER_CONTENTS_DIR_SHALLOW_BUNDLE_NO\=/Contents
+    export _WRAPPER_PARENT_PATH_SHALLOW_BUNDLE_NO\=/..
+    export _WRAPPER_RESOURCES_DIR_SHALLOW_BUNDLE_NO\=/Resources
+    export __DIAGNOSE_DEPRECATED_ARCHS\=YES
+    export __IS_NOT_MACOS\=YES
+    export __IS_NOT_MACOS_macosx\=NO
+    export __IS_NOT_SIMULATOR\=YES
+    export __IS_NOT_SIMULATOR_simulator\=NO
+    export arch\=undefined_arch
+    export variant\=normal
+    /bin/sh -c /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\\\ device\\\ UI\\\ tests\\\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build/Script-2C85AE851EA8C7DC9AE378AD.sh
+/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai device UI tests bcefc96m/Native/iphoneos/Release/runtime.complete.o: Mach-O 64-bit object arm64
+architectures arm64
+/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai device UI tests bcefc96m/Native/iphoneos/Release/runtime.complete.o:
+Load command 2
+      cmd LC_BUILD_VERSION
+  cmdsize 32
+ platform IOS
+    minos 18.0
+      sdk n/a
+   ntools 1
+     tool LD
+  version 956.6
+Mach-O verification failure: expected minimum version 26.0
+Command PhaseScriptExecution failed with a nonzero exit code
+
+ProcessInfoPlistFile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns/BonsaiMail-iOSTests.xctest/Info.plist /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build/empty-BonsaiMail-iOSTests.plist (in target 'BonsaiMail-iOSTests' from project 'BonsaiMail')
+    cd /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m
+    builtin-infoPlistUtility /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOSTests.build/empty-BonsaiMail-iOSTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphoneos -scanforprivacyfile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns/BonsaiMail-iOSTests.xctest/BonsaiSwiftUI_BonsaiSwiftUI.bundle -requiredArchitecture arm64 -o /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMailTestHost.app/PlugIns/BonsaiMail-iOSTests.xctest/Info.plist
+
+ProcessInfoPlistFile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/Info.plist /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/Info-iOS.plist (in target 'BonsaiMail-iOS' from project 'BonsaiMail')
+    cd /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m
+    builtin-infoPlistUtility /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/Info-iOS.plist -producttype com.apple.product-type.application -genpkginfo /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -scanforprivacyfile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/BonsaiSwiftUI_BonsaiSwiftUI.bundle -requiredArchitecture arm64 -o /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app/Info.plist
+
+note: Run script build phase 'Verify native complete object' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'BonsaiMail-iOSTests' from project 'BonsaiMail')
+note: Run script build phase 'Verify native complete object' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'BonsaiMail-iOS' from project 'BonsaiMail')
+** TEST BUILD FAILED **
+
+
+The following build commands failed:
+	PhaseScriptExecution Verify\ native\ complete\ object /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/bonsai\ device\ UI\ tests\ bcefc96m/DerivedData/Build/Intermediates.noindex/BonsaiMail.build/Release-iphoneos/BonsaiMail-iOS.build/Script-2C85AE851EA8C7DC9AE378AD.sh (in target 'BonsaiMail-iOS' from project 'BonsaiMail')
+	Building project BonsaiMail for testing with scheme BonsaiMail-iOS
+(2 failures)
+
+
+======================================================================
+FAIL: test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) (example='counter', platform='iOS')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 261, in test_system_sqlite_linkage_follows_the_native_object
+    self.command(
+    ~~~~~~~~~~~~^
+        "xcodebuild", "-project", host / f"{product}.xcodeproj",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        "-derivedDataPath", host / "DerivedData", "CODE_SIGNING_ALLOWED=NO", "build",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 186, in command
+    self.assertEqual(result.returncode, 0, (result.stdout + result.stderr)[-12000:])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 65 != 0 : ter-iOS.build
+    export STRINGS_FILE_INFOPLIST_RENAME\=YES
+    export STRINGS_FILE_OUTPUT_ENCODING\=binary
+    export STRING_CATALOG_GENERATE_SYMBOLS\=NO
+    export STRIP_BITCODE_FROM_COPIED_FILES\=YES
+    export STRIP_INSTALLED_PRODUCT\=YES
+    export STRIP_STYLE\=all
+    export STRIP_SWIFT_SYMBOLS\=YES
+    export SUPPORTED_DEVICE_FAMILIES\=1,2
+    export SUPPORTED_PLATFORMS\=iphoneos
+    export SUPPORTS_MACCATALYST\=NO
+    export SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD\=NO
+    export SUPPORTS_ON_DEMAND_RESOURCES\=YES
+    export SUPPORTS_TEXT_BASED_API\=NO
+    export SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD\=YES
+    export SUPPRESS_WARNINGS\=NO
+    export SWIFT_EMIT_CONST_VALUE_PROTOCOLS\=AppIntent\ EntityQuery\ AppEntity\ TransientEntity\ AppEnum\ AppShortcutProviding\ AppShortcutsProvider\ AnyResolverProviding\ AppIntentsPackage\ DynamicOptionsProvider\ _IntentValueRepresentable\ _AssistantIntentsProvider\ _GenerativeFunctionExtractable\ IntentValueQuery\ Resolver\ AppExtension\ ExtensionPointDefining
+    export SWIFT_EMIT_LOC_STRINGS\=NO
+    export SWIFT_ENABLE_EXPLICIT_MODULES\=YES
+    export SWIFT_INCLUDE_PATHS\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products/Release-iphoneos\ \ \"/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/../../../../../../../Users/rcmerci/gh-repos/bonsai-ui/native/src\"
+    export SWIFT_OPTIMIZATION_LEVEL\=-O
+    export SWIFT_PLATFORM_TARGET_PREFIX\=ios
+    export SWIFT_RESPONSE_FILE_PATH_normal_arm64\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build/Objects-normal/arm64/BonsaiCounter.SwiftFileList
+    export SWIFT_VERSION\=6.0
+    export SYMROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products
+    export SYSTEM_ADMIN_APPS_DIR\=/Applications/Utilities
+    export SYSTEM_APPS_DIR\=/Applications
+    export SYSTEM_CORE_SERVICES_DIR\=/System/Library/CoreServices
+    export SYSTEM_DEMOS_DIR\=/Applications/Extras
+    export SYSTEM_DEVELOPER_APPS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications
+    export SYSTEM_DEVELOPER_BIN_DIR\=/Applications/Xcode.app/Contents/Developer/usr/bin
+    export SYSTEM_DEVELOPER_DEMOS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities/Built\ Examples
+    export SYSTEM_DEVELOPER_DIR\=/Applications/Xcode.app/Contents/Developer
+    export SYSTEM_DEVELOPER_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library
+    export SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Graphics\ Tools
+    export SYSTEM_DEVELOPER_JAVA_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Java\ Tools
+    export SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Performance\ Tools
+    export SYSTEM_DEVELOPER_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes
+    export SYSTEM_DEVELOPER_TOOLS\=/Applications/Xcode.app/Contents/Developer/Tools
+    export SYSTEM_DEVELOPER_TOOLS_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/documentation/DeveloperTools
+    export SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes/DeveloperTools
+    export SYSTEM_DEVELOPER_USR_DIR\=/Applications/Xcode.app/Contents/Developer/usr
+    export SYSTEM_DEVELOPER_UTILITIES_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities
+    export SYSTEM_DEXT_INSTALL_PATH\=/System/Library/DriverExtensions
+    export SYSTEM_DOCUMENTATION_DIR\=/Library/Documentation
+    export SYSTEM_EXTENSIONS_FOLDER_PATH\=BonsaiCounter.app/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiCounter.app/Library/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiCounter.app/SystemExtensions
+    export SYSTEM_KEXT_INSTALL_PATH\=/System/Library/Extensions
+    export SYSTEM_LIBRARY_DIR\=/System/Library
+    export TAPI_DEMANGLE\=YES
+    export TAPI_ENABLE_PROJECT_HEADERS\=NO
+    export TAPI_LANGUAGE\=objective-c
+    export TAPI_LANGUAGE_STANDARD\=compiler-default
+    export TAPI_USE_SRCROOT\=YES
+    export TAPI_VERIFY_MODE\=Pedantic
+    export TARGETED_DEVICE_FAMILY\=1,2
+    export TARGETNAME\=BonsaiCounter-iOS
+    export TARGET_BUILD_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products/Release-iphoneos
+    export TARGET_NAME\=BonsaiCounter-iOS
+    export TARGET_TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build
+    export TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build
+    export TEMP_FILES_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build
+    export TEMP_FILE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build
+    export TEMP_ROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex
+    export TEMP_SANDBOX_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/TemporaryTaskSandboxes
+    export TEST_FRAMEWORK_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/Developer/Library/Frameworks
+    export TEST_LIBRARY_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib
+    export TOOLCHAINS\=com.apple.dt.toolchain.Metal.32023\ com.apple.dt.toolchain.XcodeDefault
+    export TOOLCHAIN_DIR\=/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.cQ1ZL7/Metal.xctoolchain
+    export TOOLCHAIN_VERSION\=32023
+    export TREAT_MISSING_BASELINES_AS_TEST_FAILURES\=NO
+    export TREAT_MISSING_SCRIPT_PHASE_OUTPUTS_AS_ERRORS\=NO
+    export UID\=501
+    export UNINSTALLED_PRODUCTS_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/UninstalledProducts
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH\=BonsaiCounter.app
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiCounter.app/Resources
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiCounter.app
+    export UNSTRIPPED_PRODUCT\=NO
+    export USER\=rcmerci
+    export USER_APPS_DIR\=/Users/rcmerci/Applications
+    export USER_LIBRARY_DIR\=/Users/rcmerci/Library
+    export USE_DYNAMIC_NO_PIC\=YES
+    export USE_HEADERMAP\=YES
+    export USE_HEADER_SYMLINKS\=NO
+    export VALIDATE_DEVELOPMENT_ASSET_PATHS\=YES_ERROR
+    export VALIDATE_PRODUCT\=NO
+    export VALID_ARCHS\=arm64\ arm64e\ armv7\ armv7s
+    export VERBOSE_PBXCP\=NO
+    export VERSIONPLIST_PATH\=BonsaiCounter.app/version.plist
+    export VERSION_INFO_BUILDER\=rcmerci
+    export VERSION_INFO_FILE\=BonsaiCounter_vers.c
+    export VERSION_INFO_STRING\=\"@\(\#\)PROGRAM:BonsaiCounter\ \ PROJECT:BonsaiCounter-\"
+    export WORKSPACE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/BonsaiCounter.xcodeproj
+    export WRAPPER_EXTENSION\=app
+    export WRAPPER_NAME\=BonsaiCounter.app
+    export WRAPPER_SUFFIX\=.app
+    export WRAP_ASSET_PACKS_IN_SEPARATE_DIRECTORIES\=NO
+    export XCODE_APP_SUPPORT_DIR\=/Applications/Xcode.app/Contents/Developer/Library/Xcode
+    export XCODE_PRODUCT_BUILD_VERSION\=17B100
+    export XCODE_VERSION_ACTUAL\=2611
+    export XCODE_VERSION_MAJOR\=2600
+    export XCODE_VERSION_MINOR\=2610
+    export XPCSERVICES_FOLDER_PATH\=BonsaiCounter.app/XPCServices
+    export YACC\=yacc
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS\=YES
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS_INCLUDE_WL\=YES
+    export _LD_MULTIARCH\=YES
+    export _WRAPPER_CONTENTS_DIR_SHALLOW_BUNDLE_NO\=/Contents
+    export _WRAPPER_PARENT_PATH_SHALLOW_BUNDLE_NO\=/..
+    export _WRAPPER_RESOURCES_DIR_SHALLOW_BUNDLE_NO\=/Resources
+    export __DIAGNOSE_DEPRECATED_ARCHS\=YES
+    export __IS_NOT_MACOS\=YES
+    export __IS_NOT_MACOS_macosx\=NO
+    export __IS_NOT_SIMULATOR\=YES
+    export __IS_NOT_SIMULATOR_simulator\=NO
+    export arch\=undefined_arch
+    export variant\=normal
+    /bin/sh -c /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\\\ native\\\ link\\\ requirements\\\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build/Script-E3A5A3EB385C55D29EBADED2.sh
+/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai native link requirements rrgcjkjz/Native/iphoneos/Release/runtime.complete.o: Mach-O 64-bit object arm64
+architectures arm64
+/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai native link requirements rrgcjkjz/Native/iphoneos/Release/runtime.complete.o:
+Load command 2
+      cmd LC_BUILD_VERSION
+  cmdsize 32
+ platform IOS
+    minos 18.0
+      sdk n/a
+   ntools 1
+     tool LD
+  version 956.6
+Mach-O verification failure: expected minimum version 26.0
+Command PhaseScriptExecution failed with a nonzero exit code
+
+ProcessInfoPlistFile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products/Release-iphoneos/BonsaiCounter.app/Info.plist /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/Info-iOS.plist (in target 'BonsaiCounter-iOS' from project 'BonsaiCounter')
+    cd /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz
+    builtin-infoPlistUtility /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/Info-iOS.plist -producttype com.apple.product-type.application -genpkginfo /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products/Release-iphoneos/BonsaiCounter.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -scanforprivacyfile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products/Release-iphoneos/BonsaiCounter.app/BonsaiSwiftUI_BonsaiSwiftUI.bundle -requiredArchitecture arm64 -o /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Products/Release-iphoneos/BonsaiCounter.app/Info.plist
+
+note: Run script build phase 'Verify native complete object' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'BonsaiCounter-iOS' from project 'BonsaiCounter')
+** BUILD FAILED **
+
+
+The following build commands failed:
+	PhaseScriptExecution Verify\ native\ complete\ object /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ rrgcjkjz/DerivedData/Build/Intermediates.noindex/BonsaiCounter.build/Release-iphoneos/BonsaiCounter-iOS.build/Script-E3A5A3EB385C55D29EBADED2.sh (in target 'BonsaiCounter-iOS' from project 'BonsaiCounter')
+	Building project BonsaiCounter with scheme BonsaiCounter-iOS and configuration Release
+(2 failures)
+
+
+======================================================================
+FAIL: test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) (example='sqlite_worker', platform='iOS')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 261, in test_system_sqlite_linkage_follows_the_native_object
+    self.command(
+    ~~~~~~~~~~~~^
+        "xcodebuild", "-project", host / f"{product}.xcodeproj",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        "-derivedDataPath", host / "DerivedData", "CODE_SIGNING_ALLOWED=NO", "build",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 186, in command
+    self.assertEqual(result.returncode, 0, (result.stdout + result.stderr)[-12000:])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 65 != 0 : ort STRIP_INSTALLED_PRODUCT\=YES
+    export STRIP_STYLE\=all
+    export STRIP_SWIFT_SYMBOLS\=YES
+    export SUPPORTED_DEVICE_FAMILIES\=1,2
+    export SUPPORTED_PLATFORMS\=iphoneos
+    export SUPPORTS_MACCATALYST\=NO
+    export SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD\=NO
+    export SUPPORTS_ON_DEMAND_RESOURCES\=YES
+    export SUPPORTS_TEXT_BASED_API\=NO
+    export SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD\=YES
+    export SUPPRESS_WARNINGS\=NO
+    export SWIFT_EMIT_CONST_VALUE_PROTOCOLS\=AppIntent\ EntityQuery\ AppEntity\ TransientEntity\ AppEnum\ AppShortcutProviding\ AppShortcutsProvider\ AnyResolverProviding\ AppIntentsPackage\ DynamicOptionsProvider\ _IntentValueRepresentable\ _AssistantIntentsProvider\ _GenerativeFunctionExtractable\ IntentValueQuery\ Resolver\ AppExtension\ ExtensionPointDefining
+    export SWIFT_EMIT_LOC_STRINGS\=NO
+    export SWIFT_ENABLE_EXPLICIT_MODULES\=YES
+    export SWIFT_INCLUDE_PATHS\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products/Release-iphoneos\ \ \"/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/../../../../../../../Users/rcmerci/gh-repos/bonsai-ui/native/src\"
+    export SWIFT_OPTIMIZATION_LEVEL\=-O
+    export SWIFT_PLATFORM_TARGET_PREFIX\=ios
+    export SWIFT_RESPONSE_FILE_PATH_normal_arm64\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build/Objects-normal/arm64/BonsaiSqliteWorker.SwiftFileList
+    export SWIFT_VERSION\=6.0
+    export SYMROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products
+    export SYSTEM_ADMIN_APPS_DIR\=/Applications/Utilities
+    export SYSTEM_APPS_DIR\=/Applications
+    export SYSTEM_CORE_SERVICES_DIR\=/System/Library/CoreServices
+    export SYSTEM_DEMOS_DIR\=/Applications/Extras
+    export SYSTEM_DEVELOPER_APPS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications
+    export SYSTEM_DEVELOPER_BIN_DIR\=/Applications/Xcode.app/Contents/Developer/usr/bin
+    export SYSTEM_DEVELOPER_DEMOS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities/Built\ Examples
+    export SYSTEM_DEVELOPER_DIR\=/Applications/Xcode.app/Contents/Developer
+    export SYSTEM_DEVELOPER_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library
+    export SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Graphics\ Tools
+    export SYSTEM_DEVELOPER_JAVA_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Java\ Tools
+    export SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Performance\ Tools
+    export SYSTEM_DEVELOPER_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes
+    export SYSTEM_DEVELOPER_TOOLS\=/Applications/Xcode.app/Contents/Developer/Tools
+    export SYSTEM_DEVELOPER_TOOLS_DOC_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/documentation/DeveloperTools
+    export SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR\=/Applications/Xcode.app/Contents/Developer/ADC\ Reference\ Library/releasenotes/DeveloperTools
+    export SYSTEM_DEVELOPER_USR_DIR\=/Applications/Xcode.app/Contents/Developer/usr
+    export SYSTEM_DEVELOPER_UTILITIES_DIR\=/Applications/Xcode.app/Contents/Developer/Applications/Utilities
+    export SYSTEM_DEXT_INSTALL_PATH\=/System/Library/DriverExtensions
+    export SYSTEM_DOCUMENTATION_DIR\=/Library/Documentation
+    export SYSTEM_EXTENSIONS_FOLDER_PATH\=BonsaiSqliteWorker.app/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiSqliteWorker.app/Library/SystemExtensions
+    export SYSTEM_EXTENSIONS_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiSqliteWorker.app/SystemExtensions
+    export SYSTEM_KEXT_INSTALL_PATH\=/System/Library/Extensions
+    export SYSTEM_LIBRARY_DIR\=/System/Library
+    export TAPI_DEMANGLE\=YES
+    export TAPI_ENABLE_PROJECT_HEADERS\=NO
+    export TAPI_LANGUAGE\=objective-c
+    export TAPI_LANGUAGE_STANDARD\=compiler-default
+    export TAPI_USE_SRCROOT\=YES
+    export TAPI_VERIFY_MODE\=Pedantic
+    export TARGETED_DEVICE_FAMILY\=1,2
+    export TARGETNAME\=BonsaiSqliteWorker-iOS
+    export TARGET_BUILD_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products/Release-iphoneos
+    export TARGET_NAME\=BonsaiSqliteWorker-iOS
+    export TARGET_TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build
+    export TEMP_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build
+    export TEMP_FILES_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build
+    export TEMP_FILE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build
+    export TEMP_ROOT\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex
+    export TEMP_SANDBOX_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/TemporaryTaskSandboxes
+    export TEST_FRAMEWORK_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/Developer/Library/Frameworks
+    export TEST_LIBRARY_SEARCH_PATHS\=\ /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib
+    export TOOLCHAINS\=com.apple.dt.toolchain.Metal.32023\ com.apple.dt.toolchain.XcodeDefault
+    export TOOLCHAIN_DIR\=/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.cQ1ZL7/Metal.xctoolchain
+    export TOOLCHAIN_VERSION\=32023
+    export TREAT_MISSING_BASELINES_AS_TEST_FAILURES\=NO
+    export TREAT_MISSING_SCRIPT_PHASE_OUTPUTS_AS_ERRORS\=NO
+    export UID\=501
+    export UNINSTALLED_PRODUCTS_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/UninstalledProducts
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH\=BonsaiSqliteWorker.app
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_NO\=BonsaiSqliteWorker.app/Resources
+    export UNLOCALIZED_RESOURCES_FOLDER_PATH_SHALLOW_BUNDLE_YES\=BonsaiSqliteWorker.app
+    export UNSTRIPPED_PRODUCT\=NO
+    export USER\=rcmerci
+    export USER_APPS_DIR\=/Users/rcmerci/Applications
+    export USER_LIBRARY_DIR\=/Users/rcmerci/Library
+    export USE_DYNAMIC_NO_PIC\=YES
+    export USE_HEADERMAP\=YES
+    export USE_HEADER_SYMLINKS\=NO
+    export VALIDATE_DEVELOPMENT_ASSET_PATHS\=YES_ERROR
+    export VALIDATE_PRODUCT\=NO
+    export VALID_ARCHS\=arm64\ arm64e\ armv7\ armv7s
+    export VERBOSE_PBXCP\=NO
+    export VERSIONPLIST_PATH\=BonsaiSqliteWorker.app/version.plist
+    export VERSION_INFO_BUILDER\=rcmerci
+    export VERSION_INFO_FILE\=BonsaiSqliteWorker_vers.c
+    export VERSION_INFO_STRING\=\"@\(\#\)PROGRAM:BonsaiSqliteWorker\ \ PROJECT:BonsaiSqliteWorker-\"
+    export WORKSPACE_DIR\=/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/BonsaiSqliteWorker.xcodeproj
+    export WRAPPER_EXTENSION\=app
+    export WRAPPER_NAME\=BonsaiSqliteWorker.app
+    export WRAPPER_SUFFIX\=.app
+    export WRAP_ASSET_PACKS_IN_SEPARATE_DIRECTORIES\=NO
+    export XCODE_APP_SUPPORT_DIR\=/Applications/Xcode.app/Contents/Developer/Library/Xcode
+    export XCODE_PRODUCT_BUILD_VERSION\=17B100
+    export XCODE_VERSION_ACTUAL\=2611
+    export XCODE_VERSION_MAJOR\=2600
+    export XCODE_VERSION_MINOR\=2610
+    export XPCSERVICES_FOLDER_PATH\=BonsaiSqliteWorker.app/XPCServices
+    export YACC\=yacc
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS\=YES
+    export _DISCOVER_COMMAND_LINE_LINKER_INPUTS_INCLUDE_WL\=YES
+    export _LD_MULTIARCH\=YES
+    export _WRAPPER_CONTENTS_DIR_SHALLOW_BUNDLE_NO\=/Contents
+    export _WRAPPER_PARENT_PATH_SHALLOW_BUNDLE_NO\=/..
+    export _WRAPPER_RESOURCES_DIR_SHALLOW_BUNDLE_NO\=/Resources
+    export __DIAGNOSE_DEPRECATED_ARCHS\=YES
+    export __IS_NOT_MACOS\=YES
+    export __IS_NOT_MACOS_macosx\=NO
+    export __IS_NOT_SIMULATOR\=YES
+    export __IS_NOT_SIMULATOR_simulator\=NO
+    export arch\=undefined_arch
+    export variant\=normal
+    /bin/sh -c /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\\\ native\\\ link\\\ requirements\\\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build/Script-4B8F7903BE4410BA91B2B2EE.sh
+/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai native link requirements hi83mx8p/Native/iphoneos/Release/runtime.complete.o: Mach-O 64-bit object arm64
+architectures arm64
+/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai native link requirements hi83mx8p/Native/iphoneos/Release/runtime.complete.o:
+Load command 2
+      cmd LC_BUILD_VERSION
+  cmdsize 32
+ platform IOS
+    minos 18.0
+      sdk n/a
+   ntools 1
+     tool LD
+  version 956.6
+Mach-O verification failure: expected minimum version 26.0
+Command PhaseScriptExecution failed with a nonzero exit code
+
+ProcessInfoPlistFile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products/Release-iphoneos/BonsaiSqliteWorker.app/Info.plist /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/Info-iOS.plist (in target 'BonsaiSqliteWorker-iOS' from project 'BonsaiSqliteWorker')
+    cd /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p
+    builtin-infoPlistUtility /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/Info-iOS.plist -producttype com.apple.product-type.application -genpkginfo /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products/Release-iphoneos/BonsaiSqliteWorker.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -scanforprivacyfile /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products/Release-iphoneos/BonsaiSqliteWorker.app/BonsaiSwiftUI_BonsaiSwiftUI.bundle -requiredArchitecture arm64 -o /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Products/Release-iphoneos/BonsaiSqliteWorker.app/Info.plist
+
+note: Run script build phase 'Verify native complete object' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'BonsaiSqliteWorker-iOS' from project 'BonsaiSqliteWorker')
+** BUILD FAILED **
+
+
+The following build commands failed:
+	PhaseScriptExecution Verify\ native\ complete\ object /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/Bonsai\ native\ link\ requirements\ hi83mx8p/DerivedData/Build/Intermediates.noindex/BonsaiSqliteWorker.build/Release-iphoneos/BonsaiSqliteWorker-iOS.build/Script-4B8F7903BE4410BA91B2B2EE.sh (in target 'BonsaiSqliteWorker-iOS' from project 'BonsaiSqliteWorker')
+	Building project BonsaiSqliteWorker with scheme BonsaiSqliteWorker-iOS and configuration Release
+(2 failures)
+
+
+----------------------------------------------------------------------
+Ran 13 tests in 592.827s
+
+FAILED (failures=4)
+make: *** [xcode-test] Error 1

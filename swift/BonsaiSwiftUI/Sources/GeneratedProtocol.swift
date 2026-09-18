@@ -1,7 +1,7 @@
 // Generated from protocol/schema.sexp. Do not edit.
 
 public enum ProtocolVersion {
-  public static let protocolMajor = 9
+  public static let protocolMajor = 10
   public static let protocolMinor = 0
 }
 
@@ -82,6 +82,12 @@ public enum NodeKindId {
     public static let `ignoresSafeArea` = 11
     public static let `safeAreaPadding` = 12
     public static let `navigationStack` = 13
+    public static let `navigationLink` = 134
+    public static let `form` = 140
+    public static let `section` = 141
+    public static let `labeledContent` = 142
+    public static let `contentUnavailable` = 143
+    public static let `textSelection` = 144
     public static let `navigationDestination` = 14
     public static let `navigationSplit` = 15
     public static let `flow` = 56
@@ -95,6 +101,14 @@ public enum NodeKindId {
     public static let `nativeList` = 80
     public static let `listSection` = 81
     public static let `listRow` = 82
+    public static let `listRowLabel` = 145
+    public static let `contextMenu` = 146
+    public static let `contextAction` = 147
+    public static let `contextMenuView` = 148
+    public static let `toolbarEntry` = 149
+    public static let `toolbarChild` = 150
+    public static let `toolbarBody` = 151
+    public static let `confirmation` = 152
     public static let `scrollTargets` = 62
     public static let `help` = 63
     public static let `popover` = 72
@@ -159,6 +173,12 @@ public enum NodeKindId {
         case 11: return "ignores_safe_area"
         case 12: return "safe_area_padding"
         case 13: return "navigation_stack"
+        case 134: return "navigation_link"
+        case 140: return "form"
+        case 141: return "section"
+        case 142: return "labeled_content"
+        case 143: return "content_unavailable"
+        case 144: return "text_selection"
         case 14: return "navigation_destination"
         case 15: return "navigation_split"
         case 56: return "flow"
@@ -172,6 +192,14 @@ public enum NodeKindId {
         case 80: return "native_list"
         case 81: return "list_section"
         case 82: return "list_row"
+        case 145: return "list_row_label"
+        case 146: return "context_menu"
+        case 147: return "context_action"
+        case 148: return "context_menu_view"
+        case 149: return "toolbar_entry"
+        case 150: return "toolbar_child"
+        case 151: return "toolbar_body"
+        case 152: return "confirmation"
         case 62: return "scroll_targets"
         case 63: return "help"
         case 72: return "popover"
@@ -258,6 +286,8 @@ public enum EventTagId {
     public static let `refreshRequest` = 56
     public static let `removalRequested` = 57
     public static let `removalCompleted` = 58
+    public static let `listScrollCompleted` = 59
+    public static let `confirmationResponse` = 60
     public static let `sliderChanged` = 30
     public static let `sliderChangeEnd` = 31
     public static let `rangeSliderChanged` = 32
@@ -306,6 +336,8 @@ public enum EventTagId {
         case 56: return "refresh_request"
         case 57: return "removal_requested"
         case 58: return "removal_completed"
+        case 59: return "list_scroll_completed"
+        case 60: return "confirmation_response"
         case 30: return "slider_changed"
         case 31: return "slider_change_end"
         case 32: return "range_slider_changed"
@@ -414,9 +446,26 @@ public enum CommonPropId {
 }
 
 public enum NativeListPropId {
+    public static let `style` = 1
+    public static let `scrollRequest` = 2
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
+        case 1: return "style"
+        case 2: return "scroll_request"
+        default: return nil
+        }
+    }
+}
+
+public enum NavigationLinkPropId {
+    public static let `activationId` = 1
+    public static let `enabled` = 2
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "activation_id"
+        case 2: return "enabled"
         default: return nil
         }
     }
@@ -426,12 +475,14 @@ public enum ListSectionPropId {
     public static let `hasHeader` = 1
     public static let `hasFooter` = 2
     public static let `separator` = 3
+    public static let `sectionKey` = 4
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
         case 1: return "has_header"
         case 2: return "has_footer"
         case 3: return "separator"
+        case 4: return "section_key"
         default: return nil
         }
     }
@@ -439,10 +490,62 @@ public enum ListSectionPropId {
 
 public enum ListRowPropId {
     public static let `separator` = 1
+    public static let `rowKey` = 2
+    public static let `expanded` = 3
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
         case 1: return "separator"
+        case 2: return "row_key"
+        case 3: return "expanded"
+        default: return nil
+        }
+    }
+}
+
+public enum ListRowLabelPropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum ContextMenuPropId {
+    public static let `enabled` = 1
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "enabled"
+        default: return nil
+        }
+    }
+}
+
+public enum ContextActionPropId {
+    public static let `actionKey` = 1
+    public static let `title` = 2
+    public static let `enabled` = 3
+    public static let `role` = 4
+    public static let `symbol` = 5
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "action_key"
+        case 2: return "title"
+        case 3: return "enabled"
+        case 4: return "role"
+        case 5: return "symbol"
+        default: return nil
+        }
+    }
+}
+
+public enum ContextMenuViewPropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
         default: return nil
         }
     }
@@ -487,11 +590,63 @@ public enum ScrollSectionPropId {
 }
 
 public enum ToolbarPropId {
-    public static let `placements` = 1
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
-        case 1: return "placements"
+        default: return nil
+        }
+    }
+}
+
+public enum ToolbarEntryPropId {
+    public static let `entryKey` = 1
+    public static let `placement` = 2
+    public static let `kind` = 3
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "entry_key"
+        case 2: return "placement"
+        case 3: return "kind"
+        default: return nil
+        }
+    }
+}
+
+public enum ToolbarChildPropId {
+    public static let `childKey` = 1
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "child_key"
+        default: return nil
+        }
+    }
+}
+
+public enum ToolbarBodyPropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum ConfirmationPropId {
+    public static let `style` = 1
+    public static let `requestToken` = 2
+    public static let `title` = 3
+    public static let `message` = 4
+    public static let `actions` = 5
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "style"
+        case 2: return "request_token"
+        case 3: return "title"
+        case 4: return "message"
+        case 5: return "actions"
         default: return nil
         }
     }
@@ -1376,6 +1531,57 @@ public enum LabelPropId {
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum FormPropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum SectionPropId {
+    public static let `hasHeader` = 1
+    public static let `hasFooter` = 2
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "has_header"
+        case 2: return "has_footer"
+        default: return nil
+        }
+    }
+}
+
+public enum LabeledContentPropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum ContentUnavailablePropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum TextSelectionPropId {
+    public static let `enabled` = 1
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "enabled"
         default: return nil
         }
     }

@@ -171,6 +171,45 @@ let additional_native_frame : Protocol.Wire_frame.t =
     ; Badge_props { count = None; alignment = 0; visible = true }
     ; Badge_props { count = Some Int64.max_int; alignment = 2; visible = false }
     ; Label_props
+    ; Form_props
+    ; Section_props { has_header = true; has_footer = false }
+    ; Section_props { has_header = false; has_footer = true }
+    ; Labeled_content_props
+    ; Content_unavailable_props
+    ; Text_selection_props { enabled = true }
+    ; Text_selection_props { enabled = false }
+    ; List_row_label_props
+    ; List_row_props { separator = 1; row_key = "parent"; expanded = Some true }
+    ; List_row_props { separator = 0; row_key = "child"; expanded = None }
+    ; Context_menu_props { enabled = true }
+    ; Context_action_props
+        { action_key = "delete"
+        ; title = "Delete"
+        ; enabled = true
+        ; role = 1
+        ; symbol = Some "trash"
+        }
+    ; Context_menu_view_props
+    ; Confirmation_props
+        { style = 0
+        ; request_token = Some 7L
+        ; title = "Delete entry?"
+        ; message = Some "Cannot undo."
+        ; actions =
+            [ "delete", "Delete", true, 2
+            ; "cancel", "Keep", true, 1
+            ; "disabled", "Unavailable", false, 0
+            ]
+        }
+    ; Confirmation_props
+        { style = 1; request_token = None; title = ""; message = None; actions = [] }
+    ; Toolbar_props
+    ; Toolbar_body_props
+    ; Toolbar_child_props { child_key = "capture" }
+    ; Toolbar_entry_props { entry_key = "navigation"; placement = 9; kind = 1 }
+    ; Toolbar_entry_props { entry_key = "flexible-gap"; placement = 9; kind = 3 }
+    ; Toolbar_entry_props { entry_key = "fixed-gap"; placement = 3; kind = 2 }
+    ; Toolbar_entry_props { entry_key = "ordinary"; placement = 3; kind = 0 }
     ; Group_box_props { has_label = false }
     ; Group_box_props { has_label = true }
     ; Divider_props

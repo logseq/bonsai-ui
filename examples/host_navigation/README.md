@@ -20,7 +20,7 @@ open examples/host_navigation/apple/DerivedData/Build/Products/Debug/BonsaiHostN
 
 This builds an ad-hoc signed macOS 26+ arm64 development application against the
 actual OCaml complete object. The Swift framework and App entrypoint typecheck
-against physical iOS 18 arm64. Native iPhoneOS packaging, device interaction and
+against physical iOS 26 arm64. Native iPhoneOS packaging, device interaction and
 visual acceptance remain outstanding. Simulator is unsupported. The previous
 Flutter host and configuration have been removed.
 
@@ -63,6 +63,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

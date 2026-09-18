@@ -22,6 +22,9 @@ final class RenderNodeState: Identifiable, Equatable {
   let emit: (NativeEventPayload) -> Bool
   var accessibilityHidden = false
   var progressAnimationsActive = true
+  var coreLinkEligible = false
+  var coreLinkReady = false
+  var coreLinkMounted = false
   let layoutTarget: NodeLayoutTarget
   let imageResource: ImageResource?
   let textController: NativeTextController?
@@ -29,21 +32,27 @@ final class RenderNodeState: Identifiable, Equatable {
   let collectionController: CollectionController?
   let navigationController: NavigationStackController?
   let splitController: NavigationSplitController?
+  let contextMenuController: ContextMenuController?
+  @ObservationIgnored weak var contextActionOwner: ContextMenuController?
   let swipeController: SwipeActionsController?
   @ObservationIgnored weak var swipeActionOwner: SwipeActionsController?
   let opacityController: AnimatedOpacityController?
   let morphingSurfaceController: MorphingSurfaceController?
   let tabsController: TabsController?
   let booleanControlController: BooleanControlController?
+  let confirmationController: ConfirmationController?
   let presentationController: PresentationController?
   let civilPickerController: CivilPickerController?
   let removalController: RemovalController?
   let listVisibility: ListVisibility?
+  let listRowInteraction: ListRowInteraction?
+  let listScrollController: ListScrollController?
   let refreshController: RefreshController?
   let scrollObserver: ScrollObserver?
   let scrollCommand: NativeScrollCommand?
   let scrollTargetsController: ScrollTargetsController?
   let tableController: NativeTableController?
+  let toolbarFocus: ToolbarFocusController?
   let menuController: NativeMenuController?
   let pickerController: PickerController?
   let sliderController: SliderController?
@@ -55,6 +64,7 @@ final class RenderNodeState: Identifiable, Equatable {
 
   func setPresentationChange(_ changed: (() -> Void)?) {
     nativeView?.onPresentationChange = changed
+    confirmationController?.onPresentationChange = changed
     presentationController?.onPresentationChange = changed
     booleanControlController?.onPresentationChange = changed
     tabsController?.onPresentationChange = changed
@@ -81,7 +91,12 @@ final class RenderNodeState: Identifiable, Equatable {
     } else {
       removalController = nil
     }
-    listVisibility = node.properties == .nativeList ? ListVisibility() : nil
+    toolbarFocus = node.kind == NodeKindId.toolbar ? ToolbarFocusController() : nil
+    listRowInteraction = node.kind == NodeKindId.listRow ? ListRowInteraction() : nil
+    listVisibility = node.kind == NodeKindId.nativeList ? ListVisibility() : nil
+    listScrollController =
+      node.kind == NodeKindId.nativeList
+      ? ListScrollController(emit: { input(identity, .listScrollCompleted($0)) }) : nil
     if case .refresh(let properties) = node.properties {
       refreshController = RefreshController(properties, emit: { input(identity, $0) })
     } else {
@@ -158,6 +173,11 @@ final class RenderNodeState: Identifiable, Equatable {
     } else {
       morphingSurfaceController = nil
     }
+    if case .contextMenu(let enabled) = node.properties {
+      contextMenuController = ContextMenuController(identity: identity, enabled: enabled)
+    } else {
+      contextMenuController = nil
+    }
     if case .swipeActions(let properties) = node.properties {
       swipeController = SwipeActionsController(identity: identity, properties: properties)
     } else {
@@ -188,12 +208,17 @@ final class RenderNodeState: Identifiable, Equatable {
     } else {
       pickerController = nil
     }
+    if case .confirmation(let properties) = node.properties {
+      confirmationController = ConfirmationController(properties)
+    } else {
+      confirmationController = nil
+    }
     if let properties = node.properties.presentation {
       presentationController = PresentationController(properties)
     } else {
       presentationController = nil
     }
-    if case .booleanControl(let properties) = node.properties {
+    if let properties = node.properties.booleanControlProperties {
       booleanControlController = BooleanControlController(properties)
     } else {
       booleanControlController = nil
@@ -243,9 +268,15 @@ final class RenderTree {
   private(set) var root: RenderNodeState?
   private(set) var nodes: [UInt64: RenderNodeState] = [:]
   private(set) var nativeViewNodes: [RenderNodeState] = []
+  private(set) var confirmationNodes: [RenderNodeState] = []
   private(set) var presentationNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var toolbarNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var fieldNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var swipeNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var contextMenuNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var listNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var coreLinkNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var navigationNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var collectionNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var focusAndGestureNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var scrollNodes: [RenderNodeState] = []
@@ -285,6 +316,9 @@ final class RenderTree {
   func validate(_ store: NodeStore) throws {
     var prepared: [UInt64: PreparedNativeView] = [:]
     for (id, node) in store.nodes {
+      if case .confirmation(let properties) = node.properties, epoch == store.epoch {
+        try nodes[id]?.confirmationController?.validate(properties)
+      }
       if case .nativeView(let envelope) = node.properties {
         if epoch == store.epoch, let existing = nodes[id]?.nativeView,
           existing.prepared.envelope == envelope
@@ -313,6 +347,7 @@ final class RenderTree {
       committing = false
       onPresentationChange?()
     }
+    for node in toolbarNodes { node.toolbarFocus?.beforeCommit(store) }
     var next: [UInt64: RenderNodeState] = [:]
     for (id, node) in store.nodes {
       if epoch == store.epoch, let existing = nodes[id], existing.kind == node.kind {
@@ -325,6 +360,7 @@ final class RenderTree {
             guard let self, let node = self.nodes[identity.node], node.id == identity else {
               return false
             }
+            for owner in self.toolbarNodes { owner.toolbarFocus?.received(node, payload) }
             return self.onInput?(node, payload) ?? false
           }, failed: { [weak self] error in self?.onInputFailure?(error) })
       }
@@ -385,6 +421,7 @@ final class RenderTree {
       if state.bindings != node.bindings {
         state.removalController?.invalidateBinding()
         state.refreshController?.invalidateBinding()
+        state.confirmationController?.invalidateBinding()
         state.presentationController?.invalidateBinding()
         state.scrollTargetsController?.invalidateBinding()
         state.menuController?.invalidateBinding()
@@ -397,6 +434,7 @@ final class RenderTree {
         return child
       }
       if state.children != children {
+        state.confirmationController?.invalidateBinding()
         state.presentationController?.invalidateBinding()
         state.scrollTargetsController?.invalidateBinding()
         state.menuController?.invalidateBinding()
@@ -422,11 +460,17 @@ final class RenderTree {
         state.scrollObserver?.synchronize(
           vertical: vertical, handler: state.bindings[EventTagId.scrollNotification])
       }
+      if case .contextMenu(let enabled) = state.properties,
+        let controller = state.contextMenuController
+      {
+        controller.synchronize(enabled: enabled, actions: state.children)
+        for action in state.children { action.contextActionOwner = controller }
+      }
       if case .swipeActions(let properties) = state.properties,
         let controller = state.swipeController
       {
-        controller.synchronize(properties, actions: Array(state.children.dropFirst()))
-        for action in state.children.dropFirst() { action.swipeActionOwner = controller }
+        controller.synchronize(properties, actions: state.children)
+        for action in state.children { action.swipeActionOwner = controller }
       }
       if case .tabs(let selection) = state.properties {
         state.tabsController?.synchronize(selection, children: state.children)
@@ -437,9 +481,14 @@ final class RenderTree {
       if case .removal(let properties) = state.properties {
         state.removalController?.synchronize(properties)
       }
-      state.listVisibility?.synchronize(
-        state.children.flatMap { Array($0.children.dropFirst(2)).map(\.id) },
-        handler: state.bindings[EventTagId.visibleRangeChanged])
+      if case .nativeList(let properties) = state.properties {
+        let catalog = ListRowCatalog(sections: state.children)
+        state.listScrollController?.synchronize(
+          properties.request,
+          handler: state.bindings[EventTagId.listScrollCompleted], rows: catalog.targets)
+        state.listVisibility?.synchronize(
+          catalog.visible, handler: state.bindings[EventTagId.visibleRangeChanged])
+      }
       if case .refresh(let properties) = state.properties {
         state.refreshController?.synchronize(properties)
       }
@@ -455,11 +504,14 @@ final class RenderTree {
       if case .picker(let properties) = state.properties {
         state.pickerController?.synchronize(properties)
       }
+      if case .confirmation(let properties) = state.properties {
+        state.confirmationController?.synchronize(properties)
+      }
       if let properties = state.properties.presentation {
         state.presentationController?.setContentIdentity(state.children.last?.id)
         state.presentationController?.synchronize(properties)
       }
-      if case .booleanControl(let properties) = state.properties {
+      if let properties = state.properties.booleanControlProperties {
         state.booleanControlController?.synchronize(properties)
       }
       if case .slider(let properties) = state.properties {
@@ -478,6 +530,8 @@ final class RenderTree {
     }
     for (id, old) in nodes where next[id] !== old {
       old.setPresentationChange(nil)
+      old.coreLinkEligible = false
+      old.coreLinkReady = false
       old.layoutTarget.dispose()
       old.nativeView?.dispose()
       old.imageResource?.cancel()
@@ -486,9 +540,11 @@ final class RenderTree {
       old.collectionController?.dispose()
       old.navigationController?.dispose()
       old.splitController?.dispose()
+      old.contextMenuController?.dispose()
       old.swipeController?.dispose()
       old.tabsController?.dispose()
       old.booleanControlController?.dispose()
+      old.confirmationController?.dispose()
       old.presentationController?.dispose()
       old.civilPickerController?.dispose()
       old.scrollTargetsController?.dispose()
@@ -496,6 +552,9 @@ final class RenderTree {
       old.refreshController?.dispose()
       old.scrollObserver?.dispose()
       old.scrollCommand?.dispose()
+      old.listScrollController?.dispose()
+      old.listRowInteraction?.dispose()
+      old.toolbarFocus?.cancel()
       old.menuController?.dispose()
       old.tableController?.dispose()
       old.pickerController?.dispose()
@@ -510,9 +569,15 @@ final class RenderTree {
     preparedViews.removeAll()
     nodes = next
     nativeViewNodes = []
+    confirmationNodes = []
     presentationNodes = []
+    toolbarNodes = []
     fieldNodes = []
+    swipeNodes = []
+    contextMenuNodes = []
     listNodes = []
+    coreLinkNodes = []
+    navigationNodes = []
     collectionNodes = []
     focusAndGestureNodes = []
     scrollNodes = []
@@ -539,10 +604,19 @@ final class RenderTree {
         }
       } else {
         node.setPresentationChange { [weak self] in self?.presentationChanged() }
+        if let focus = node.toolbarFocus {
+          toolbarNodes.append(node)
+          focus.synchronize(node)
+        }
         if node.nativeView != nil { nativeViewNodes.append(node) }
+        if node.confirmationController != nil { confirmationNodes.append(node) }
         if node.presentationController != nil { presentationNodes.append(node) }
         if node.fieldController != nil || node.textController != nil { fieldNodes.append(node) }
+        if node.swipeController != nil { swipeNodes.append(node) }
+        if node.contextMenuController != nil { contextMenuNodes.append(node) }
         if node.listVisibility != nil { listNodes.append(node) }
+        if node.kind == NodeKindId.navigationLink { coreLinkNodes.append(node) }
+        if node.navigationController != nil { navigationNodes.append(node) }
         if node.collectionController != nil { collectionNodes.append(node) }
         if node.focusController != nil || node.keyboardController != nil
           || node.gestureController != nil
@@ -573,6 +647,7 @@ final class RenderTree {
 }
 
 struct NativeNodeView: View {
+  @Environment(\.bonsaiListRowInteraction) private var listRowInteraction
   @Environment(\.bonsaiRowSpacing) private var rowSpacing
   @Environment(\.bonsaiDefaults) private var defaults
   let node: RenderNodeState
@@ -587,7 +662,8 @@ struct NativeNodeView: View {
     // only where native view state needs ownership: IDView introduces a layout
     // boundary that otherwise changes Spacer behavior inside modifiers.
     switch node.properties {
-    case .nativeList, .listSection, .listRow, .table, .removal, .refresh, .scrollSections, .sheet,
+    case .form, .nativeList, .listSection, .listRow, .table, .removal, .refresh, .scrollSections,
+      .sheet,
       .popover, .scrollTargets, .menu,
       .civilPicker,
       .picker,
@@ -644,17 +720,49 @@ struct NativeNodeView: View {
         preconditionFailure("Missing hover controller")
       }
       return AnyView(child.background(NativeHoverRegion(controller: controller).id(node.id)))
+    case .navigationLink(let properties):
+      return AnyView(
+        NativeCoreNavigationLink(
+          node: node, activation: properties.activation, enabled: properties.enabled,
+          activate: activate))
+    case .form:
+      return AnyView(NativeForm(node: node, activate: activate))
+    case .section:
+      return AnyView(NativeSection(node: node, activate: activate))
+    case .labeledContent:
+      return AnyView(
+        LabeledContent {
+          NativeNodeView(node: node.children[1], activate: activate)
+        } label: {
+          NativeNodeView(node: node.children[0], activate: activate)
+        })
+    case .contentUnavailable:
+      return AnyView(
+        ContentUnavailableView {
+          NativeNodeView(node: node.children[0], activate: activate)
+        } description: {
+          NativeNodeView(node: node.children[1], activate: activate)
+        } actions: {
+          NativeNodeView(node: node.children[2], activate: activate)
+        })
+    case .textSelection(let enabled):
+      return AnyView(child.modifier(NativeTextSelection(enabled: enabled)))
     case .nativeList:
       return AnyView(NativeList(node: node, activate: activate))
-    case .listRow:
+    case .contextMenuView:
+      return AnyView(
+        child.modifier(
+          NativeContextMenuModifier(controller: node.children[1].contextMenuController!)))
+    case .contextMenu, .contextAction:
+      preconditionFailure("Context descriptors render through their owning modifier")
+    case .listRowLabel:
       return AnyView(NativeNodeView(node: node.children[0], activate: activate))
+    case .listRow:
+      preconditionFailure("List rows render through their owning List")
     case .listSection:
       return AnyView(EmptyView())
     case .swipeActions:
-      guard let controller = node.swipeController else {
-        preconditionFailure("Missing swipe controller")
-      }
-      return AnyView(NativeSwipeActions(node: node, controller: controller, activate: activate))
+      preconditionFailure("Swipe descriptors render only on a row label")
     case .swipeAction:
       guard let controller = node.swipeActionOwner else {
         preconditionFailure("Missing swipe owner")
@@ -765,8 +873,12 @@ struct NativeNodeView: View {
       return AnyView(NativeScrollSections(node: node, properties: properties, activate: activate))
     case .scrollSection:
       preconditionFailure("Sections must be rendered by their scroll container")
-    case .toolbar(let properties):
-      return AnyView(NativeToolbar(node: node, properties: properties, activate: activate))
+    case .confirmation:
+      return AnyView(NativeConfirmationView(node: node, activate: activate))
+    case .toolbar:
+      return AnyView(NativeToolbar(node: node, activate: activate))
+    case .toolbarEntry, .toolbarChild, .toolbarBody:
+      preconditionFailure("Toolbar slots must be rendered by their toolbar owner")
     case .help(let message):
       return AnyView(child.help(Text(verbatim: message)))
     case .groupBox(let hasLabel):
@@ -889,6 +1001,7 @@ struct NativeNodeView: View {
       return AnyView(child.controlSize(sizes[size]))
     case .button(let enabled, let role, let style, let autofocus):
       let button = Button(role: role == 1 ? .cancel : role == 2 ? .destructive : nil) {
+        listRowInteraction?.labelActivated()
         activate(node)
       } label: {
         child.modifier(NativeInteractiveBounds(icon: node.children.first?.containsSymbol == true))

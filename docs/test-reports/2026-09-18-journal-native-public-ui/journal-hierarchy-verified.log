@@ -1,0 +1,29 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.08s)
+Test Suite 'Selected tests' started at 2026-09-18 17:31:34.380.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 17:31:34.381.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 17:31:34.381.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 17:31:34.381.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeListHierarchyTests started.
+◇ Test explicitActionSlotsAndSiblingScopedNestedRowsAreAccepted() started.
+✔ Test explicitActionSlotsAndSiblingScopedNestedRowsAreAccepted() passed after 0.004 seconds.
+◇ Test obsoleteWrapperGrammarAndInvalidRowSlotsAreRejected() started.
+✔ Test obsoleteWrapperGrammarAndInvalidRowSlotsAreRejected() passed after 0.001 seconds.
+◇ Test hostedDisclosureRowsRemainIndependentAndCollapsedRowsLeaveAccessibility() started.
+✔ Test hostedDisclosureRowsRemainIndependentAndCollapsedRowsLeaveAccessibility() passed after 0.502 seconds.
+◇ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() started.
+✔ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() passed after 0.003 seconds.
+◇ Test labelActivationWinsInEitherNativeCallbackOrderAndDisposalRevokesPendingExpansion() started.
+✔ Test labelActivationWinsInEitherNativeCallbackOrderAndDisposalRevokesPendingExpansion() passed after 0.001 seconds.
+◇ Test rejectedOrRepeatedLinkActivationCannotFallThroughToRowExpansion() started.
+✔ Test rejectedOrRepeatedLinkActivationCannotFallThroughToRowExpansion() passed after 0.001 seconds.
+◇ Test scrollingToAnExpandedParentUsesItsLabelRowInsteadOfItsSubtreeBounds() started.
+✔ Test scrollingToAnExpandedParentUsesItsLabelRowInsteadOfItsSubtreeBounds() passed after 0.287 seconds.
+✔ Suite NativeListHierarchyTests passed after 0.800 seconds.
+✔ Test run with 7 tests in 1 suite passed after 0.800 seconds.

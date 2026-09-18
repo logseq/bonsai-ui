@@ -1,0 +1,34 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:45:45.022.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:45:45.023.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:45:45.023.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:45:45.023.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite ToolbarIdentityTests started.
+◇ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (2, 47, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (2, 47, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 47, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 47, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 47, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 47, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 49, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 49, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 6, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 6, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 6, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 6, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+✔ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) with 12 test cases passed after 14.400 seconds.
+◇ Test toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "disabled" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "hidden" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "binding" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "session" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "expired" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "disposed" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+✔ Test toolbarFocusTransferCannotReviveInvalidatedInput(reason:) with 6 test cases passed after 3.161 seconds.
+✔ Suite ToolbarIdentityTests passed after 17.562 seconds.
+✔ Test run with 2 tests in 1 suite passed after 17.563 seconds.

@@ -13,7 +13,7 @@ open examples/text_input/apple/DerivedData/Build/Products/Debug/BonsaiTextInput.
 ```
 
 The build links the example's actual OCaml complete object and verifies the
-ad-hoc bundle signature. The SwiftUI source also targets physical arm64 iOS 18+;
+ad-hoc bundle signature. The SwiftUI source also targets physical arm64 iOS 26+;
 the signed Release bundle and hosted UIKit tests run on a physical iPhone.
 Simulator, Catalyst and Intel macOS are unsupported.
 
@@ -46,6 +46,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 Source package and spec-module identifiers now use the SwiftUI names. Installed
 SDK publication remains part of the unfinished repository migration.

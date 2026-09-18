@@ -1,0 +1,182 @@
+[
+  {
+    "script": "native/test/test_clock_window.py",
+    "status": 0,
+    "seconds": 217.9,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_clock_window.log"
+  },
+  {
+    "script": "native/test/test_mail_window.py",
+    "status": 1,
+    "seconds": 222.86,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_mail_window.log"
+  },
+  {
+    "script": "native/test/test_navigation_window.py",
+    "status": 1,
+    "seconds": 242.92,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_navigation_window.log"
+  },
+  {
+    "script": "native/test/test_network_window.py",
+    "status": 0,
+    "seconds": 143.88,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_network_window.log"
+  },
+  {
+    "script": "native/test/test_host_effects_window.py",
+    "status": 0,
+    "seconds": 137.03,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_host_effects_window.log"
+  },
+  {
+    "script": "native/test/test_sqlite_worker_window.py",
+    "status": 0,
+    "seconds": 158.6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_sqlite_worker_window.log"
+  },
+  {
+    "script": "native/test/test_notice_window.py",
+    "status": 0,
+    "seconds": 42.16,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_notice_window.log"
+  },
+  {
+    "script": "native/test/test_host_navigation_window.py",
+    "status": 0,
+    "seconds": 48.81,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_host_navigation_window.log"
+  },
+  {
+    "script": "native/test/test_picker_window.py",
+    "status": 0,
+    "seconds": 52.16,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_picker_window.log"
+  },
+  {
+    "script": "native/test/test_menu_window.py",
+    "status": 0,
+    "seconds": 49.8,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_menu_window.log"
+  },
+  {
+    "script": "native/test/test_selection_catalog_window.py",
+    "status": 0,
+    "seconds": 45.37,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_selection_catalog_window.log"
+  },
+  {
+    "script": "native/test/test_search_window.py",
+    "status": 0,
+    "seconds": 56.67,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_search_window.log"
+  },
+  {
+    "script": "native/test/test_table_window.py",
+    "status": 0,
+    "seconds": 64.59,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_table_window.log"
+  },
+  {
+    "script": "native/test/test_carousel_window.py",
+    "status": 0,
+    "seconds": 47.26,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_carousel_window.log"
+  },
+  {
+    "script": "native/test/test_multiple_selection_window.py",
+    "status": 0,
+    "seconds": 48.16,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_multiple_selection_window.log"
+  },
+  {
+    "script": "native/test/test_contextual_selection_window.py",
+    "status": 0,
+    "seconds": 59.34,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_contextual_selection_window.log"
+  },
+  {
+    "script": "native/test/test_tag_window.py",
+    "status": 0,
+    "seconds": 60.15,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_tag_window.log"
+  },
+  {
+    "script": "native/test/test_button_window.py",
+    "status": 0,
+    "seconds": 50.68,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_button_window.log"
+  },
+  {
+    "script": "native/test/test_projection_window.py",
+    "status": 0,
+    "seconds": 44.84,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_projection_window.log"
+  },
+  {
+    "script": "native/test/test_opacity_window.py",
+    "status": 0,
+    "seconds": 50.9,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_opacity_window.log"
+  },
+  {
+    "script": "native/test/test_workflow_window.py",
+    "status": 0,
+    "seconds": 46.58,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_workflow_window.log"
+  },
+  {
+    "script": "native/test/test_disclosure_window.py",
+    "status": 0,
+    "seconds": 126.05,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_disclosure_window.log"
+  },
+  {
+    "script": "native/test/test_group_box_window.py",
+    "status": 0,
+    "seconds": 118.97,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_group_box_window.log"
+  },
+  {
+    "script": "native/test/test_label_window.py",
+    "status": 0,
+    "seconds": 118.82,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_label_window.log"
+  },
+  {
+    "script": "native/test/test_badge_window.py",
+    "status": 0,
+    "seconds": 45.92,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_badge_window.log"
+  },
+  {
+    "script": "native/test/test_gesture_window.py",
+    "status": 5,
+    "seconds": 40.89,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_gesture_window.log"
+  },
+  {
+    "script": "native/test/test_hover_window.py",
+    "status": 0,
+    "seconds": 63.63,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_hover_window.log"
+  },
+  {
+    "script": "native/test/test_swipe_window.py",
+    "status": 0,
+    "seconds": 95.27,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_swipe_window.log"
+  },
+  {
+    "script": "native/test/test_removal_window.py",
+    "status": 0,
+    "seconds": 153.52,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_removal_window.log"
+  },
+  {
+    "script": "native/test/test_slider_window.py",
+    "status": 0,
+    "seconds": 134.9,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-native-windows/test_slider_window.log"
+  }
+]

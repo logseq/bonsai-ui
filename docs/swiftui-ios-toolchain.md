@@ -1,6 +1,6 @@
-# Physical iOS 18 OCaml toolchain
+# Physical iOS 26 OCaml toolchain
 
-The SwiftUI target is physical iOS/iPadOS 18.0 arm64. Simulator, Catalyst and
+The SwiftUI target is physical iOS/iPadOS 26.0 arm64. Simulator, Catalyst and
 Intel targets are unsupported. This document separates compiler verification
 from dependency-closure, application linking and physical-device acceptance.
 
@@ -21,12 +21,12 @@ OCaml 5.1.1 overlay. It creates an opam root and local switch under `_build/ios/
 
 It does not modify the user's existing global switches. The selected Xcode
 installation supplies the physical-device SDK; the source lock supplies arm64,
-iPhoneOS and minimum iOS 18.0. The local recipe identity includes the compiler
+iPhoneOS and minimum iOS 26.0. The local recipe identity includes the compiler
 recipe revision and minimum deployment target. Flutter and Dart version locks
 are removed from `tool/ios/toolchain.lock`.
 
 The compiler's C command and OCaml C flags embed their deployment target during
-installation. Setting `VER=18.0` when invoking an already installed iOS 15 compiler
+installation. Setting `VER=26.0` when invoking an already installed iOS 15 compiler
 does not rebuild those commands or its native runtime. The new target therefore
 requires an actual compiler/runtime rebuild.
 
@@ -42,7 +42,7 @@ python3 tool/test_ios_cross_compiler.py
 The tests check the installed OCaml configuration, compile a C foreign stub and
 an OCaml callback into an Apple complete object, and inspect a native allocation
 object extracted from the installed `libasmrun.a`. Mach-O validation checks
-physical IOS platform, arm64 and minimum 18.0. The complete object must contain
+physical IOS platform, arm64 and minimum 26.0. The complete object must contain
 the runtime startup symbol and the actual foreign-stub symbol. A separate check
 rejects Simulator input before setup begins.
 
@@ -74,7 +74,7 @@ python3 tool/test_ios_closure_artifacts.py
 ```
 
 These tests compile real OCaml libraries and C foreign objects. They check valid
-iOS 18 libraries, reject iOS 15 and macOS objects hidden inside static archives,
+iOS 26 libraries, reject iOS 15 and macOS objects hidden inside static archives,
 and reject missing declared `.cmxa` metadata or companion `.a` archives. The
 verifier uses the deployment target from `toolchain.lock` and audits every
 archive member as well as loose objects, deduplicating overlapping component
@@ -101,6 +101,19 @@ libraries such as Digestif are not required to manufacture native objects.
 
 ## Remaining application pipeline
 
+The dependency-closure results below are historical iOS 18 evidence. On
+2026-09-18, current Mail, Counter, SQLite Worker, Gallery, and the shared native
+fixture were cross-compiled with an iOS 26 compiler. Complete-object checks,
+generated-host builds, and physical iPhone 13 Mail runtime/UI tests passed.
+See the [Journal implementation report](test-reports/2026-09-18-journal-native-public-ui/README.md).
+
+The earlier local audit reported a missing `datascript_ocaml` interface because
+its directory scan did not follow the installed directory symlink. That message
+does not establish a missing interface. These application builds use the current
+worktree framework and compiler with the existing target dependency installation;
+they do not establish that every dependency was rebuilt and audited for iOS 26.
+A complete raised-baseline dependency audit and SDK publication remain separate.
+
 Compiler verification does not establish an audited dependency closure. Bonsai,
 Core, networking, SQLite and other locked native dependencies have completed
 their iOS 18 build. The full installation audit passes for 103 target packages
@@ -118,7 +131,7 @@ paths (`/tmp/swiftui-ios18-mail-object.log`). Build it from this checkout with:
 
 ```sh
 OPAMROOT="$PWD/_build/ios/opam-root" \
-  SDK="$(xcrun --sdk iphoneos --show-sdk-version)" VER=18.0 \
+  SDK="$(xcrun --sdk iphoneos --show-sdk-version)" VER=26.0 \
   opam exec --switch="$PWD/_build/ios/switches/iphoneos" -- \
   dune build --build-dir="$PWD/_build/ios/swiftui-framework" \
     --profile=release -x ios examples/mail/ocaml/native_embed.exe.o
@@ -133,9 +146,9 @@ passes `codesign --verify --deep --strict` and contains a valid provisioning
 profile. Its executable remains IOS/arm64/minimum 18.0; Info.plist declares only
 iPhoneOS and minimum 18.0.
 
-Installation and actual device interaction remain unverified. The paired iPhone
-13 is currently unavailable, and the Mac desktop remains locked for complete
-window captures. No Simulator substitute is accepted.
+At that historical iOS 18 checkpoint, installation and device interaction were
+unverified because the paired iPhone 13 was unavailable. The current iOS 26
+application/device evidence is recorded above; no Simulator substitute is used.
 
 The published SDK recipe and source identities are a separate deliverable. They
 must be generated from the exact pushed framework commit and published separately
@@ -169,7 +182,7 @@ process isolation, physical-iOS object metadata and an unsigned Worker App build
 ## Native physical-device preflight
 
 `tool/ci/ios_device_preflight.sh <UUID-or-UDID> [--require-signing]`
-uses Xcode CoreDevice JSON directly. It requires a physical iOS 18+ device
+uses Xcode CoreDevice JSON directly. It requires a physical iOS 26+ device
 with arm64 support, pairing, Developer Mode, available DDI services, and a
 successful current lock-state response. It accepts an exact CoreDevice UUID
 or hardware UDID, including case-insensitive hexadecimal spelling. It does

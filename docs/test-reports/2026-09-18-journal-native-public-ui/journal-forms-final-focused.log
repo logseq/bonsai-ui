@@ -1,0 +1,139 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/5] Compiling BonsaiSwiftUITests MenuTests.swift
+[4/6] Write Objects.LinkFileList
+[5/6] Linking BonsaiSwiftUIPackageTests
+Build complete! (4.04s)
+Test Suite 'Selected tests' started at 2026-09-18 15:40:39.764.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 15:40:39.765.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 15:40:39.765.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 15:40:39.765.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite CoreNavigationLinkTests started.
+◇ Test orphanCoreLinkIsRejectedBeforePublishingTree() started.
+✔ Test orphanCoreLinkIsRejectedBeforePublishingTree() passed after 0.001 seconds.
+◇ Test byteDistinctActivationReplacementReachesTheNativeOwner() started.
+✔ Test byteDistinctActivationReplacementReachesTheNativeOwner() passed after 0.004 seconds.
+◇ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() started.
+✔ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() passed after 0.001 seconds.
+◇ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() started.
+✔ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() passed after 0.001 seconds.
+◇ Test expiredAndForeignIntentsNeverEmit() started.
+✔ Test expiredAndForeignIntentsNeverEmit() passed after 0.563 seconds.
+◇ Test transportRejectionDoesNotReplayOnReadinessNotifications() started.
+✔ Test transportRejectionDoesNotReplayOnReadinessNotifications() passed after 0.001 seconds.
+✔ Suite CoreNavigationLinkTests passed after 0.568 seconds.
+◇ Suite NativeFormTests started.
+◇ Test sectionStructureSurvivesTheTypeErasedRenderer() started.
+✔ Test sectionStructureSurvivesTheTypeErasedRenderer() passed after 0.232 seconds.
+◇ Test nativeFormPreservesKeyedControlsAcrossReorderAndSelectionUpdates() started.
+✔ Test nativeFormPreservesKeyedControlsAcrossReorderAndSelectionUpdates() passed after 0.001 seconds.
+◇ Test malformedNativeSlotsCannotPublish() started.
+✔ Test malformedNativeSlotsCannotPublish() passed after 0.001 seconds.
+◇ Test hostedFormHasNativeSectionsSelectableValuesAndOrdinaryActions() started.
+✔ Test hostedFormHasNativeSectionsSelectableValuesAndOrdinaryActions() passed after 0.336 seconds.
+✔ Suite NativeFormTests passed after 0.571 seconds.
+◇ Suite NativeListStyleTests started.
+◇ Test supportedStylesPublishNativeList(style:) started.
+◇ Test case passing 1 argument style → 0 to supportedStylesPublishNativeList(style:) started.
+◇ Test case passing 1 argument style → 1 to supportedStylesPublishNativeList(style:) started.
+✔ Test supportedStylesPublishNativeList(style:) with 2 test cases passed after 0.001 seconds.
+◇ Test unavailableStyleFailsBeforePublicationWithCapabilityDiagnostic() started.
+✔ Test unavailableStyleFailsBeforePublicationWithCapabilityDiagnostic() passed after 0.001 seconds.
+◇ Test malformedStyleIsRejected() started.
+✔ Test malformedStyleIsRejected() passed after 0.001 seconds.
+✔ Suite NativeListStyleTests passed after 0.001 seconds.
+◇ Suite NativeRuntimeTests started.
+◇ Test nativeListRangesPreserveActualMailDelayedPaging() started.
+✔ Test nativeListRangesPreserveActualMailDelayedPaging() passed after 0.059 seconds.
+◇ Test coreLinkSurvivesRealPresentationGapAndReturnsToAnInteractiveRoot() started.
+✔ Test coreLinkSurvivesRealPresentationGapAndReturnsToAnInteractiveRoot() passed after 0.865 seconds.
+◇ Test nativeFormActionsReachOCamlAndRetainRowsDuringReordering() started.
+✔ Test nativeFormActionsReachOCamlAndRetainRowsDuringReordering() passed after 0.294 seconds.
+✔ Suite NativeRuntimeTests passed after 1.219 seconds.
+◇ Suite NavigationLinkRequestTests started.
+◇ Test linkAdmissionWaitsForExactSettlementAndKeepsTheCommittedPath() started.
+✔ Test linkAdmissionWaitsForExactSettlementAndKeepsTheCommittedPath() passed after 0.002 seconds.
+◇ Test deniedStaleForeignDisposedAndMalformedLinkRequestsDoNotNavigate() started.
+✔ Test deniedStaleForeignDisposedAndMalformedLinkRequestsDoNotNavigate() passed after 0.001 seconds.
+◇ Test committedDestinationReplacesIntentAndNativeBackStillWorks() started.
+✔ Test committedDestinationReplacesIntentAndNativeBackStillWorks() passed after 0.001 seconds.
+✔ Suite NavigationLinkRequestTests passed after 0.003 seconds.
+◇ Suite NavigationRequestTests started.
+◇ Test pendingBackRequestsAreBoundedAndRespectPolicyAndDisposal() started.
+✔ Test pendingBackRequestsAreBoundedAndRespectPolicyAndDisposal() passed after 0.001 seconds.
+◇ Test replacingAUnicodeRouteKeyChangesNativePathIdentity() started.
+✔ Test replacingAUnicodeRouteKeyChangesNativePathIdentity() passed after 0.001 seconds.
+◇ Test multiPageBackIsOneEventAndCannotRemoveProtectedIntermediatePages() started.
+✔ Test multiPageBackIsOneEventAndCannotRemoveProtectedIntermediatePages() passed after 0.001 seconds.
+◇ Test staleNativeBindingCannotPopAReplacementDestination() started.
+✔ Test staleNativeBindingCannotPopAReplacementDestination() passed after 0.001 seconds.
+✔ Suite NavigationRequestTests passed after 0.001 seconds.
+◇ Suite SystemControlsTests started.
+◇ Test listRetainsRowsAcrossReorderingAndRejectsMalformedComposition() started.
+✔ Test listRetainsRowsAcrossReorderingAndRejectsMalformedComposition() passed after 0.001 seconds.
+◇ Test listVisibilityCoalescesAndResendsForANewHandlerOrOrder() started.
+✔ Test listVisibilityCoalescesAndResendsForANewHandlerOrOrder() passed after 0.001 seconds.
+◇ Test hostedListExposesRowsAndSectionLabelsWithoutARefreshButtonRow() started.
+✔ Test hostedListExposesRowsAndSectionLabelsWithoutARefreshButtonRow() passed after 0.157 seconds.
+◇ Test nativeLinearProgressMatchesSystemPresentation() started.
+✔ Test nativeLinearProgressMatchesSystemPresentation() passed after 0.022 seconds.
+◇ Test progressRejectsUnsupportedModesInsteadOfChangingTheirMeaning() started.
+✔ Test progressRejectsUnsupportedModesInsteadOfChangingTheirMeaning() passed after 0.001 seconds.
+◇ Test ordinaryDateControlHostsASystemDatePicker() started.
+✔ Test ordinaryDateControlHostsASystemDatePicker() passed after 0.133 seconds.
+✔ Suite SystemControlsTests passed after 0.314 seconds.
+✔ Test run with 29 tests in 7 suites passed after 2.680 seconds.

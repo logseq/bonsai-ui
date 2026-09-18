@@ -44,9 +44,9 @@ described in the root README, then run from this directory:
 "$BONSAI_SWIFTUI_CLI" build ios --profile release --development-team "$IOS_DEVELOPMENT_TEAM"
 ```
 
-Physical iOS 18+ arm64 and macOS 26+ arm64 are supported. Simulator is unsupported.
+Physical iOS 26+ arm64 and macOS 26+ arm64 are supported. Simulator is unsupported.
 The iOS CLI requires its verified iOS SDK. A verified complete object from the
-source-checkout iOS 18 cross-toolchain can instead be passed with `--native-object`.
+source-checkout iOS 26 cross-toolchain can instead be passed with `--native-object`.
 
 The generated project includes `NoteRuntimeTests` (startup, presentation and
 restart) and physical-iOS `NoteUITests` (reference captures, search, editing,

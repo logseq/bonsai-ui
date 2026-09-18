@@ -1,0 +1,15 @@
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ld: warning: /opt/homebrew/Cellar/gmp/6.3.0/lib/libgmp.dylib, ignoring unexpected dylib file
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.tbd, ignoring unexpected dylib text stub file
+test_invalid_startup_and_restart (__main__.NativeRuntimeTests.test_invalid_startup_and_restart) ... ok
+test_pump_without_acknowledgment_is_rejected (__main__.NativeRuntimeTests.test_pump_without_acknowledgment_is_rejected) ... ok
+test_real_counter_initial_frame_and_empty_presentation (__main__.NativeRuntimeTests.test_real_counter_initial_frame_and_empty_presentation) ... ok
+test_rejected_frame_recovers_with_full_snapshot (__main__.NativeRuntimeTests.test_rejected_frame_recovers_with_full_snapshot) ... ok
+test_terminal_shutdown_retires_pending_token_without_presentation (__main__.NativeRuntimeTests.test_terminal_shutdown_retires_pending_token_without_presentation) ... ok
+test_version_and_obsolete_exports (__main__.NativeRuntimeTests.test_version_and_obsolete_exports) ... ok
+test_worker_preserves_foreign_host_signal_handlers (__main__.NativeRuntimeTests.test_worker_preserves_foreign_host_signal_handlers) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.891s
+
+OK

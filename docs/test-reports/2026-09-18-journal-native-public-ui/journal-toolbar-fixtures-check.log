@@ -1,0 +1,32 @@
+dune exec protocol/generator/generate_fixtures.exe -- --check
+python3 tool/generate_input_fixtures.py --check
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ld: warning: /opt/homebrew/Cellar/gmp/6.3.0/lib/libgmp.dylib, ignoring unexpected dylib file
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.tbd, ignoring unexpected dylib text stub file
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.14s)
+Test Suite 'Selected tests' started at 2026-09-18 18:26:04.003.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 18:26:04.004.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 18:26:04.004.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 18:26:04.004.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite SwiftInputFixtureTests started.
+◇ Test productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "counter_press" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "host_response" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "text_edit_unicode" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "text_limit_reached" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "environment_changed" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "application_response" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "application_event" to productionEncodingMatchesCommittedFixture(name:) started.
+✔ Test productionEncodingMatchesCommittedFixture(name:) with 7 test cases passed after 0.002 seconds.
+◇ Test invalidEnvironmentSamplesLeaveAdmittedInputIntact() started.
+✔ Test invalidEnvironmentSamplesLeaveAdmittedInputIntact() passed after 0.001 seconds.
+✔ Suite SwiftInputFixtureTests passed after 0.003 seconds.
+✔ Test run with 2 tests in 1 suite passed after 0.003 seconds.

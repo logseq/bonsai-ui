@@ -47,6 +47,7 @@ struct RenderSwipeAction: Equatable, Sendable {
   @ObservationIgnored private(set) var dispatching: RenderIdentity?
   @ObservationIgnored private var serial: UInt64 = 0
   @ObservationIgnored private var disposed = false
+  @ObservationIgnored private var active = true
   private struct Signature: Equatable {
     let id: RenderIdentity
     let properties: NodeProperties
@@ -76,7 +77,7 @@ struct RenderSwipeAction: Equatable, Sendable {
   @discardableResult func perform(
     _ action: RenderNodeState, expected: RenderSwipeAction, generation: UInt64
   ) -> Bool {
-    guard !disposed, generation == self.generation, properties.enabled, pending == nil,
+    guard !disposed, active, generation == self.generation, properties.enabled, pending == nil,
       expected.enabled,
       actions.contains(where: { $0 === action }), action.properties == .swipeAction(expected)
     else { return false }
@@ -89,6 +90,10 @@ struct RenderSwipeAction: Equatable, Sendable {
     return true
   }
   func resolve(_ request: Request) { if pending == request { pending = nil } }
+  func setActive(_ active: Bool) {
+    if self.active && !active { generation &+= 1 }
+    self.active = active
+  }
   func dispose() {
     disposed = true
     pending = nil
@@ -96,12 +101,10 @@ struct RenderSwipeAction: Equatable, Sendable {
   }
 }
 
-struct NativeSwipeActions: View {
-  let node: RenderNodeState
+struct NativeSwipeActionsModifier: ViewModifier {
   let controller: SwipeActionsController
-  let activate: @MainActor (RenderNodeState) -> Void
-  var body: some View {
-    NativeNodeView(node: node.children[0], activate: activate)
+  func body(content: Content) -> some View {
+    content
       .swipeActions(edge: .leading, allowsFullSwipe: controller.properties.allowsFullSwipe) {
         actions(0)
       }
@@ -111,7 +114,7 @@ struct NativeSwipeActions: View {
   }
   private func actions(_ side: Int) -> some View {
     ForEach(controller.items(side)) { action in
-      NativeSwipeAction(node: action, controller: controller, activate: activate)
+      NativeSwipeAction(node: action, controller: controller, activate: { _ in })
     }
   }
 }

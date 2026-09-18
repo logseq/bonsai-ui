@@ -63,7 +63,7 @@ privacy resource and permitted system dependencies. `verify_ios_bundle.sh`
 additionally checks signatures and provisioning authorization. See
 [Apple packaging](packaging.md).
 
-The supported destinations are macOS 26+ arm64 and physical iOS/iPadOS 18+
+The supported destinations are macOS 26+ arm64 and physical iOS/iPadOS 26+
 arm64. Device and Mac objects are not interchangeable, and Simulator is
 unsupported. Passing object or signature checks does not establish physical
 interaction, performance or screenshot acceptance.

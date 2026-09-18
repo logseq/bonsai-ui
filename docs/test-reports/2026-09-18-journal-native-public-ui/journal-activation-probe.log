@@ -1,0 +1,3 @@
+gap original=false corePermission=false sameHandler=true routeCount=0
+ready elapsed=0.034627584 seconds corePermission=true oldSnapshot=false
+committed destinations=1

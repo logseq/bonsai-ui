@@ -132,12 +132,12 @@ The source support closure includes this library. The checked-in published
 SDK snapshot still describes the earlier backend; a SwiftUI SDK release must
 be generated from the pushed migration source and independently published.
 The framework-only updater cannot replace a runtime with a different dependency
-closure. Use the worktree-local iOS 18 toolchain for current development;
+closure. Use the worktree-local iOS 26 toolchain for current development;
 see [the toolchain guide](../../docs/swiftui-ios-toolchain.md).
 
 `tool/test_rrbvec_sdk.sh` runs the shared vector probe on macOS and links it
 into an iPhoneOS complete object, checking arm64, platform IOS, and minimum
-iOS 18.0. `HOST_SWITCH` selects the native switch, and `IOS_SWITCH` defaults
+iOS 26.0. `HOST_SWITCH` selects the native switch, and `IOS_SWITCH` defaults
 to `bonsai-swiftui-ios`. For an isolated build of the new target library,
 `IOS_OCAMLFIND_CONF` may point to its generated findlib configuration; the test
 does not install packages or mutate the SDK. The application fixture also

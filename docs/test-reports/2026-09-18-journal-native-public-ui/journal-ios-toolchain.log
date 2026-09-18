@@ -1,0 +1,28 @@
+
+<><> Updating package repositories ><><><><><><><><><><><><><><><><><><><><>  🐫 
+[overlay] no changes from file:///Users/rcmerci/gh-repos/bonsai-ui/_build/ios/sources/opam-ios-overlay
+The following actions will be performed:
+=== recompile 2 packages
+  ↻ conf-ios    4
+  ↻ ocaml-ios64 5.1.1
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><>  🐫 
+⬇ retrieved ocaml-ios64.5.1.1  (cached)
+[NOTE] While removing ocaml-ios64.5.1.1: not removing non-empty directories:
+         - ios-sysroot/lib
+
+⊘ removed   ocaml-ios64.5.1.1
+⊘ removed   conf-ios.4
+∗ installed conf-ios.4
+∗ installed ocaml-ios64.5.1.1
+Done.
+test_actual_compiler_configuration (__main__.CrossCompilerTests.test_actual_compiler_configuration) ... ok
+test_foreign_stub_and_complete_object (__main__.CrossCompilerTests.test_foreign_stub_and_complete_object) ... ok
+test_installed_native_runtime_object (__main__.CrossCompilerTests.test_installed_native_runtime_object) ... ok
+test_unsupported_target_rejected_before_setup (__main__.CrossCompilerTests.test_unsupported_target_rejected_before_setup) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.378s
+
+OK
+iOS iphoneos toolchain setup passed

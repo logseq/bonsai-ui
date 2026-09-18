@@ -23,7 +23,7 @@ class PlatformTests(unittest.TestCase):
 
     def test_physical_ios_and_apple_silicon_macos(self):
         for sdk, target in [
-            ("iphoneos", "arm64-apple-ios18.0"),
+            ("iphoneos", "arm64-apple-ios26.0"),
             ("macosx", "arm64-apple-macos26.0"),
         ]:
             with self.subTest(target=target):
@@ -40,7 +40,7 @@ class PlatformTests(unittest.TestCase):
             result = subprocess.run(
                 ["xcrun", "swiftc", "-emit-module", "-parse-as-library",
                  "-module-name", "BonsaiSwiftUI", "-emit-module-path", str(module),
-                 "-sdk", sdk_path, "-target", "arm64-apple-ios18.0",
+                 "-sdk", sdk_path, "-target", "arm64-apple-ios26.0",
                  "-I", str(ROOT / "native/src"), *map(str, sources)],
                 capture_output=True, text=True,
             )
@@ -49,7 +49,7 @@ class PlatformTests(unittest.TestCase):
                 with self.subTest(example=application.parent.parent.name):
                     result = subprocess.run(
                         ["xcrun", "swiftc", "-typecheck", "-parse-as-library",
-                         "-sdk", sdk_path, "-target", "arm64-apple-ios18.0",
+                         "-sdk", sdk_path, "-target", "arm64-apple-ios26.0",
                          "-I", directory, "-I", str(ROOT / "native/src"),
                          *map(str, sorted(application.parent.glob("*.swift")))],
                         capture_output=True, text=True,
@@ -58,7 +58,7 @@ class PlatformTests(unittest.TestCase):
 
     def test_simulator_and_intel_macos_are_explicitly_rejected(self):
         for sdk, target, diagnostic in [
-            ("iphonesimulator", "arm64-apple-ios18.0-simulator", "Simulator is unsupported"),
+            ("iphonesimulator", "arm64-apple-ios26.0-simulator", "Simulator is unsupported"),
             ("macosx", "x86_64-apple-macos26.0", "Only arm64 is supported"),
         ]:
             with self.subTest(target=target):

@@ -110,6 +110,11 @@ type kind_tag =
   | K_native_list
   | K_list_section
   | K_list_row
+  | K_confirmation
+  | K_context_menu
+  | K_context_action
+  | K_context_menu_view
+  | K_list_row_label
   | K_scroll_targets
   | K_scroll
   | K_flow
@@ -143,12 +148,20 @@ type kind_tag =
   | K_table
   | K_divider
   | K_label
+  | K_form
+  | K_section
+  | K_labeled_content
+  | K_content_unavailable
+  | K_text_selection
   | K_badge
   | K_sheet
   | K_popover
   | K_scroll_sections
   | K_scroll_section
   | K_toolbar
+  | K_toolbar_entry
+  | K_toolbar_child
+  | K_toolbar_body
   | K_help
   | K_group_box
   | K_progress
@@ -161,6 +174,7 @@ type kind_tag =
   | K_tabs
   | K_tab
   | K_navigation_split
+  | K_navigation_link
   | K_navigation_stack
   | K_navigation_destination
   | K_ignores_safe_area
@@ -183,6 +197,11 @@ let kind_tag_to_string = function
   | K_removal -> "Removal"
   | K_native_list -> "Native_list"
   | K_list_section -> "List_section"
+  | K_confirmation -> "Confirmation"
+  | K_context_menu -> "Context_menu"
+  | K_context_action -> "Context_action"
+  | K_context_menu_view -> "Context_menu_view"
+  | K_list_row_label -> "List_row_label"
   | K_list_row -> "List_row"
   | K_refresh -> "Refresh"
   | K_scroll_targets -> "Scroll_targets"
@@ -221,12 +240,20 @@ let kind_tag_to_string = function
   | K_table -> "Table"
   | K_divider -> "Divider"
   | K_label -> "Label"
+  | K_form -> "Form"
+  | K_section -> "Section"
+  | K_labeled_content -> "Labeled_content"
+  | K_content_unavailable -> "Content_unavailable"
+  | K_text_selection -> "Text_selection"
   | K_badge -> "Badge"
   | K_sheet -> "Sheet"
   | K_popover -> "Popover"
   | K_scroll_sections -> "Scroll_sections"
   | K_scroll_section -> "Scroll_section"
   | K_toolbar -> "Toolbar"
+  | K_toolbar_entry -> "Toolbar_entry"
+  | K_toolbar_child -> "Toolbar_child"
+  | K_toolbar_body -> "Toolbar_body"
   | K_help -> "Help"
   | K_group_box -> "Group_box"
   | K_progress -> "Progress"
@@ -239,6 +266,7 @@ let kind_tag_to_string = function
   | K_tabs -> "Tabs"
   | K_tab -> "Tab"
   | K_navigation_split -> "Navigation_split"
+  | K_navigation_link -> "Navigation_link"
   | K_navigation_stack -> "Navigation_stack"
   | K_navigation_destination -> "Navigation_destination"
   | K_ignores_safe_area -> "Ignores_safe_area"
@@ -318,14 +346,43 @@ module Private_types = struct
         ; duration_ms : int
         }
         -> [ `Removal ] node
-    | Native_list : [ `Native_list ] node
+    | Native_list :
+        { style : int
+        ; scroll_request : (int64 * string * string list * int * bool) option
+        }
+        -> [ `Native_list ] node
     | List_section :
         { has_header : bool
         ; has_footer : bool
         ; separator : int
+        ; section_key : string
         }
         -> [ `List_section ] node
-    | List_row : { separator : int } -> [ `List_row ] node
+    | List_row :
+        { separator : int
+        ; row_key : string
+        ; expanded : bool option
+        }
+        -> [ `List_row ] node
+    | Confirmation :
+        { style : int
+        ; request_token : int64 option
+        ; title : string
+        ; message : string option
+        ; actions : (string * string * bool * int) list
+        }
+        -> [ `Confirmation ] node
+    | Context_menu : { enabled : bool } -> [ `Context_menu ] node
+    | Context_action :
+        { action_key : string
+        ; title : string
+        ; enabled : bool
+        ; role : int
+        ; symbol : string option
+        }
+        -> [ `Context_action ] node
+    | Context_menu_view : [ `Context_menu_view ] node
+    | List_row_label : [ `List_row_label ] node
     | Refresh :
         { request_token : int64
         ; request_state : int
@@ -559,6 +616,15 @@ module Private_types = struct
         -> [ `Table ] node
     | Divider : [ `Divider ] node
     | Label : [ `Label ] node
+    | Form : [ `Form ] node
+    | Section :
+        { has_header : bool
+        ; has_footer : bool
+        }
+        -> [ `Section ] node
+    | Labeled_content : [ `Labeled_content ] node
+    | Content_unavailable : [ `Content_unavailable ] node
+    | Text_selection : { enabled : bool } -> [ `Text_selection ] node
     | Badge :
         { count : int option
         ; alignment : Layout.Horizontal_alignment.t
@@ -597,7 +663,15 @@ module Private_types = struct
         ; stretch : bool
         }
         -> [ `Scroll_section ] node
-    | Toolbar : { placements : int list } -> [ `Toolbar ] node
+    | Toolbar : [ `Toolbar ] node
+    | Toolbar_entry :
+        { entry_key : string
+        ; placement : int
+        ; kind : int
+        }
+        -> [ `Toolbar_entry ] node
+    | Toolbar_child : { child_key : string } -> [ `Toolbar_child ] node
+    | Toolbar_body : [ `Toolbar_body ] node
     | Help : { message : string } -> [ `Help ] node
     | Group_box : { has_label : bool } -> [ `Group_box ] node
     | Progress :
@@ -653,6 +727,11 @@ module Private_types = struct
         ; detail_title : string
         }
         -> [ `Navigation_split ] node
+    | Navigation_link :
+        { activation_id : string
+        ; enabled : bool
+        }
+        -> [ `Navigation_link ] node
     | Navigation_stack : { title : string } -> [ `Navigation_stack ] node
     | Navigation_destination :
         { page_key : Bonsai_swiftui_spec.Id.Navigation.page_key
@@ -714,8 +793,13 @@ let node_kind_tag (type k) (n : k node) : kind_tag =
   | Collection_catalog _ -> K_collection_catalog
   | Collection_window _ -> K_collection_window
   | Removal _ -> K_removal
-  | Native_list -> K_native_list
+  | Native_list _ -> K_native_list
   | List_section _ -> K_list_section
+  | Confirmation _ -> K_confirmation
+  | Context_menu _ -> K_context_menu
+  | Context_action _ -> K_context_action
+  | Context_menu_view -> K_context_menu_view
+  | List_row_label -> K_list_row_label
   | List_row _ -> K_list_row
   | Refresh _ -> K_refresh
   | Scroll_targets _ -> K_scroll_targets
@@ -753,12 +837,20 @@ let node_kind_tag (type k) (n : k node) : kind_tag =
   | Table _ -> K_table
   | Divider -> K_divider
   | Label -> K_label
+  | Form -> K_form
+  | Section _ -> K_section
+  | Labeled_content -> K_labeled_content
+  | Content_unavailable -> K_content_unavailable
+  | Text_selection _ -> K_text_selection
   | Badge _ -> K_badge
   | Sheet _ -> K_sheet
   | Popover _ -> K_popover
   | Scroll_sections _ -> K_scroll_sections
   | Scroll_section _ -> K_scroll_section
-  | Toolbar _ -> K_toolbar
+  | Toolbar -> K_toolbar
+  | Toolbar_entry _ -> K_toolbar_entry
+  | Toolbar_child _ -> K_toolbar_child
+  | Toolbar_body -> K_toolbar_body
   | Help _ -> K_help
   | Group_box _ -> K_group_box
   | Progress _ -> K_progress
@@ -771,6 +863,7 @@ let node_kind_tag (type k) (n : k node) : kind_tag =
   | Tabs _ -> K_tabs
   | Tab _ -> K_tab
   | Navigation_split _ -> K_navigation_split
+  | Navigation_link _ -> K_navigation_link
   | Navigation_stack _ -> K_navigation_stack
   | Navigation_destination _ -> K_navigation_destination
   | Control_size _ -> K_control_size
@@ -817,12 +910,30 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && x.collapse_vertical = y.collapse_vertical
     && x.title = y.title
     && x.duration_ms = y.duration_ms
-  | Native_list, Native_list -> true
+  | Native_list x, Native_list y ->
+    x.style = y.style && x.scroll_request = y.scroll_request
   | List_section x, List_section y ->
     x.has_header = y.has_header
     && x.has_footer = y.has_footer
     && x.separator = y.separator
-  | List_row x, List_row y -> x.separator = y.separator
+    && x.section_key = y.section_key
+  | Confirmation x, Confirmation y ->
+    x.style = y.style
+    && x.request_token = y.request_token
+    && x.title = y.title
+    && x.message = y.message
+    && x.actions = y.actions
+  | Context_menu x, Context_menu y -> x.enabled = y.enabled
+  | Context_action x, Context_action y ->
+    x.action_key = y.action_key
+    && x.title = y.title
+    && x.enabled = y.enabled
+    && x.role = y.role
+    && x.symbol = y.symbol
+  | Context_menu_view, Context_menu_view -> true
+  | List_row_label, List_row_label -> true
+  | List_row x, List_row y ->
+    x.separator = y.separator && x.row_key = y.row_key && x.expanded = y.expanded
   | Refresh x, Refresh y ->
     x.request_token = y.request_token
     && x.request_state = y.request_state
@@ -972,6 +1083,11 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && Bool.equal x.has_on_row_selected y.has_on_row_selected
   | Divider, Divider -> true
   | Label, Label -> true
+  | Form, Form
+  | Labeled_content, Labeled_content
+  | Content_unavailable, Content_unavailable -> true
+  | Section x, Section y -> x.has_header = y.has_header && x.has_footer = y.has_footer
+  | Text_selection x, Text_selection y -> x.enabled = y.enabled
   | Badge x, Badge y ->
     Option.equal Int.equal x.count y.count
     && x.alignment = y.alignment
@@ -998,7 +1114,11 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && x.has_footer = y.has_footer
     && x.hero_height = y.hero_height
     && x.stretch = y.stretch
-  | Toolbar x, Toolbar y -> x.placements = y.placements
+  | Toolbar, Toolbar -> true
+  | Toolbar_entry x, Toolbar_entry y ->
+    String.equal x.entry_key y.entry_key && x.placement = y.placement && x.kind = y.kind
+  | Toolbar_child x, Toolbar_child y -> String.equal x.child_key y.child_key
+  | Toolbar_body, Toolbar_body -> true
   | Help x, Help y -> String.equal x.message y.message
   | Group_box x, Group_box y -> Bool.equal x.has_label y.has_label
   | Progress x, Progress y ->
@@ -1032,6 +1152,8 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && String.equal x.sidebar_title y.sidebar_title
     && Option.equal String.equal x.content_title y.content_title
     && String.equal x.detail_title y.detail_title
+  | Navigation_link x, Navigation_link y ->
+    x.activation_id = y.activation_id && x.enabled = y.enabled
   | Navigation_stack x, Navigation_stack y -> String.equal x.title y.title
   | Navigation_destination x, Navigation_destination y ->
     ID.Navigation.Page_key.equal x.page_key y.page_key
@@ -2249,6 +2371,73 @@ let scroll_observer_bindings = function
   | Some handler -> [| { tag = Event.Tag.Scroll_notification; handler } |]
 ;;
 
+let unique_keyed_children label items =
+  let children = keyed_children items in
+  let keys = Array.to_list children |> List.map (fun (T view) -> view.key) in
+  if
+    List.exists Option.is_none keys
+    || List.length (List.sort_uniq Stdlib.compare keys) <> List.length keys
+  then invalid_arg ("View." ^ label ^ ": duplicate or missing child key");
+  children
+;;
+
+module Section = struct
+  let create ?key ?header ?footer items =
+    let rows = unique_keyed_children "Section" items in
+    create_typed
+      ~key
+      ~node:
+        (Section
+           { has_header = Option.is_some header; has_footer = Option.is_some footer })
+      ~event_bindings:[||]
+      ~children:
+        (Array.append
+           [| frame (Option.value header ~default:(empty ()))
+            ; frame (Option.value footer ~default:(empty ()))
+           |]
+           rows)
+  ;;
+end
+
+module Form = struct
+  let vertical ?key items =
+    create_typed
+      ~key
+      ~node:Form
+      ~event_bindings:[||]
+      ~children:(unique_keyed_children "Form" items)
+    |> vertical_viewport
+  ;;
+end
+
+let labeled_content ?key ~label ~value () =
+  create_typed
+    ~key
+    ~node:Labeled_content
+    ~event_bindings:[||]
+    ~children:[| label; value |]
+;;
+
+let content_unavailable ?key ~label ?description ?actions () =
+  create_typed
+    ~key
+    ~node:Content_unavailable
+    ~event_bindings:[||]
+    ~children:
+      [| frame label
+       ; frame (Option.value description ~default:(empty ()))
+       ; frame (Option.value actions ~default:(empty ()))
+      |]
+;;
+
+let text_selection ?key ~enabled child =
+  create_typed
+    ~key
+    ~node:(Text_selection { enabled })
+    ~event_bindings:[||]
+    ~children:[| child |]
+;;
+
 module Scroll_anchor = struct
   type t =
     | Start
@@ -2522,7 +2711,249 @@ module Removal = struct
   ;;
 end
 
+module Swipe_actions = struct
+  type action = t
+  type nonrec t = t
+
+  type side =
+    | Start
+    | End
+
+  let action
+        ~key
+        ?(enabled = true)
+        ?(role = Button_role.Normal)
+        ?symbol
+        ~side
+        ~title
+        ~background
+        ~on_press
+        ()
+    =
+    if String.trim title = "" || symbol = Some ""
+    then invalid_arg "View.Swipe_actions.action: empty label or symbol";
+    create_typed
+      ~key:(Some key)
+      ~node:
+        (Swipe_action
+           { title
+           ; side =
+               (match side with
+                | Start -> 0
+                | End -> 1)
+           ; enabled
+           ; role =
+               (match role with
+                | Button_role.Normal -> 0
+                | Cancel -> 1
+                | Destructive -> 2)
+           ; background =
+               Int32.to_int (Style.Color.Private.to_argb32 background) land 0xffff_ffff
+           ; symbol
+           })
+      ~event_bindings:
+        (if enabled then [| { tag = Event.Tag.Press; handler = on_press } |] else [||])
+      ~children:[||]
+  ;;
+
+  let create ?(enabled = true) ?(allows_full_swipe = false) ~actions () =
+    if List.length actions > 64
+    then invalid_arg "View.Swipe_actions.create: too many actions";
+    let keys = List.map (fun (T view) -> view.key) actions in
+    if
+      List.exists Option.is_none keys
+      || List.length (List.sort_uniq Stdlib.compare keys) <> List.length keys
+    then invalid_arg "View.Swipe_actions.create: duplicate or missing action key";
+    create_typed
+      ~key:None
+      ~node:(Swipe_actions { enabled; allows_full_swipe })
+      ~event_bindings:[||]
+      ~children:(plain_children actions)
+  ;;
+end
+
+module Confirmation = struct
+  type action = string * string * bool * int
+
+  type request =
+    { token : int64
+    ; title : string
+    ; message : string option
+    ; actions : action list
+    }
+
+  let action ~key ~title ?(enabled = true) ?(role = Button_role.Normal) () =
+    if key = "" || String.trim title = ""
+    then invalid_arg "View.Confirmation.action: empty key or title";
+    let role =
+      match role with
+      | Button_role.Normal -> 0
+      | Cancel -> 1
+      | Destructive -> 2
+    in
+    key, title, enabled, role
+  ;;
+
+  let request ~token ~title ?message actions =
+    let keys = List.map (fun (key, _, _, _) -> key) actions in
+    if
+      token <= 0L
+      || String.trim title = ""
+      || actions = []
+      || List.length actions > 64
+      || List.length (List.sort_uniq String.compare keys) <> List.length keys
+      || List.length (List.filter (fun (_, _, _, role) -> role = 1) actions) > 1
+    then invalid_arg "View.Confirmation.request: invalid token, title, or actions";
+    { token; title; message; actions }
+  ;;
+
+  let create style ?key ~request ~on_response content =
+    let request_token, title, message, actions =
+      match request with
+      | None -> None, "", None, []
+      | Some request ->
+        Some request.token, request.title, request.message, request.actions
+    in
+    create_typed
+      ~key
+      ~node:(Confirmation { style; request_token; title; message; actions })
+      ~event_bindings:
+        (if request_token = None
+         then [||]
+         else [| { tag = Event.Tag.Confirmation_response; handler = on_response } |])
+      ~children:[| content |]
+  ;;
+
+  let alert ?key ~request ~on_response content =
+    create 0 ?key ~request ~on_response content
+  ;;
+
+  let dialog ?key ~request ~on_response content =
+    create 1 ?key ~request ~on_response content
+  ;;
+end
+
+module Context_menu = struct
+  type nonrec view = t
+  type action = t
+  type nonrec t = t
+
+  type role =
+    | Normal
+    | Destructive
+
+  let action ~key ?(enabled = true) ?(role = Normal) ?symbol ~title ~on_press () =
+    if String.trim title = "" || symbol = Some ""
+    then invalid_arg "View.Context_menu.action: empty title or symbol";
+    create_typed
+      ~key:(Some key)
+      ~node:
+        (Context_action
+           { action_key = Key.to_debug_string key
+           ; title
+           ; enabled
+           ; role =
+               (match role with
+                | Normal -> 0
+                | Destructive -> 1)
+           ; symbol
+           })
+      ~event_bindings:
+        (if enabled then [| { tag = Event.Tag.Press; handler = on_press } |] else [||])
+      ~children:[||]
+  ;;
+
+  let create ?(enabled = true) ~actions () =
+    if List.length actions > 64
+    then invalid_arg "View.Context_menu.create: too many actions";
+    let keys = List.map (fun (T view) -> view.key) actions in
+    if
+      List.exists Option.is_none keys
+      || List.length (List.sort_uniq Stdlib.compare keys) <> List.length keys
+    then invalid_arg "View.Context_menu.create: duplicate or missing action key";
+    create_typed
+      ~key:None
+      ~node:(Context_menu { enabled })
+      ~event_bindings:[||]
+      ~children:(plain_children actions)
+  ;;
+
+  let attach ?key menu content =
+    create_typed
+      ~key
+      ~node:Context_menu_view
+      ~event_bindings:[||]
+      ~children:[| content; menu |]
+  ;;
+end
+
 module Native_list = struct
+  type anchor =
+    | Top
+    | Center
+    | Bottom
+
+  type target = string * string list
+  type scroll_request = int64 * string * string list * int * bool
+
+  type outcome =
+    | Succeeded
+    | Missing_target
+    | Hidden_target
+    | Cancelled
+    | Superseded
+    | Positioning_failed
+
+  type completion =
+    { token : int64
+    ; outcome : outcome
+    }
+
+  let target ~section ~row_path =
+    if row_path = [] || List.length row_path > 256
+    then invalid_arg "View.Native_list.target: row path must contain 1 to 256 keys";
+    Key.to_debug_string section, List.map Key.to_debug_string row_path
+  ;;
+
+  let scroll_request
+        ~token
+        ~target:(section_key, row_path)
+        ?(anchor = Top)
+        ?(animated = false)
+        ()
+    =
+    if token <= 0L
+    then invalid_arg "View.Native_list.scroll_request: token must be positive";
+    ( token
+    , section_key
+    , row_path
+    , (match anchor with
+       | Top -> 0
+       | Center -> 1
+       | Bottom -> 2)
+    , animated )
+  ;;
+
+  let completion_of_payload = function
+    | Event.Payload.Int64_pair { first = token; second } when token > 0L ->
+      Option.map
+        (fun outcome -> { token; outcome })
+        (match second with
+         | 0L -> Some Succeeded
+         | 1L -> Some Missing_target
+         | 2L -> Some Hidden_target
+         | 3L -> Some Cancelled
+         | 4L -> Some Superseded
+         | 5L -> Some Positioning_failed
+         | _ -> None)
+    | _ -> None
+  ;;
+
+  type style =
+    | Plain
+    | Inset
+    | Inset_grouped
+
   type separator =
     | Automatic
     | Hidden
@@ -2539,19 +2970,89 @@ module Native_list = struct
     then invalid_arg ("View.Native_list: duplicate or missing " ^ label ^ " key")
   ;;
 
-  let row ~key ?(separator = Automatic) content =
-    create_typed
-      ~key:(Some key)
-      ~node:
-        (List_row
-           { separator =
-               (match separator with
-                | Automatic -> 0
-                | Hidden -> 1
-                | Visible -> 2)
-           })
+  let make_row
+        ~key
+        ?test_id
+        ?(separator = Automatic)
+        ?swipe_actions
+        ?context_menu
+        ~expanded
+        ~event_bindings
+        ~label
+        rows
+    =
+    unique "row" rows;
+    let label =
+      create_typed
+        ~key:None
+        ~node:List_row_label
+        ~event_bindings:[||]
+        ~children:[| label |]
+    in
+    let swipe =
+      Option.value swipe_actions ~default:(Swipe_actions.create ~actions:[] ())
+    in
+    let row =
+      create_typed
+        ~key:(Some key)
+        ~node:
+          (List_row
+             { row_key = Key.to_debug_string key
+             ; expanded
+             ; separator =
+                 (match separator with
+                  | Automatic -> 0
+                  | Hidden -> 1
+                  | Visible -> 2)
+             })
+        ~event_bindings
+        ~children:
+          (plain_children
+             (label
+              :: swipe
+              :: Option.value context_menu ~default:(Context_menu.create ~actions:[] ())
+              :: rows))
+    in
+    match test_id with
+    | None -> row
+    | Some id -> with_test_id id row
+  ;;
+
+  let row ~key ?test_id ?separator ?swipe_actions ?context_menu label =
+    make_row
+      ~key
+      ?test_id
+      ?separator
+      ?swipe_actions
+      ?context_menu
+      ~expanded:None
       ~event_bindings:[||]
-      ~children:[| content |]
+      ~label
+      []
+  ;;
+
+  let disclosure_row
+        ~key
+        ?test_id
+        ?separator
+        ?swipe_actions
+        ?context_menu
+        ~expanded
+        ~on_expanded_changed
+        ~label
+        rows
+    =
+    make_row
+      ~key
+      ?test_id
+      ?separator
+      ?swipe_actions
+      ?context_menu
+      ~expanded:(Some expanded)
+      ~event_bindings:
+        [| { tag = Event.Tag.Value_changed; handler = on_expanded_changed } |]
+      ~label
+      rows
   ;;
 
   let section ~key ?header ?footer ?(separator = Automatic) rows =
@@ -2560,7 +3061,8 @@ module Native_list = struct
       ~key:(Some key)
       ~node:
         (List_section
-           { has_header = Option.is_some header
+           { section_key = Key.to_debug_string key
+           ; has_header = Option.is_some header
            ; has_footer = Option.is_some footer
            ; separator =
                (match separator with
@@ -2576,16 +3078,30 @@ module Native_list = struct
             :: rows))
   ;;
 
-  let vertical ?key ?on_visible_range sections =
+  let vertical ?key ~style ?scroll_request ?on_scroll_completed ?on_visible_range sections
+    =
+    if Option.is_some scroll_request && Option.is_none on_scroll_completed
+    then invalid_arg "View.Native_list: a scroll request requires its completion handler";
     unique "section" sections;
     create_typed
       ~key
-      ~node:Native_list
+      ~node:
+        (Native_list
+           { scroll_request
+           ; style =
+               (match style with
+                | Plain -> 0
+                | Inset -> 1
+                | Inset_grouped -> 2)
+           })
       ~event_bindings:
         (Array.of_list
            (List.map
               (fun handler -> { tag = Event.Tag.Visible_range_changed; handler })
-              (Option.to_list on_visible_range)))
+              (Option.to_list on_visible_range)
+            @ List.map
+                (fun handler -> { tag = Event.Tag.List_scroll_completed; handler })
+                (Option.to_list on_scroll_completed)))
       ~children:(plain_children sections)
     |> vertical_viewport
   ;;
@@ -3034,14 +3550,52 @@ module Toolbar = struct
     | Confirmation_action
     | Cancellation_action
     | Destructive_action
+    | Bottom_bar
+
+  type spacing =
+    | Fixed
+    | Flexible
+
+  type child = t
 
   type item =
     { key : Key.t
     ; placement : placement
-    ; content : t
+    ; kind : int
+    ; children : t list
     }
 
-  let item ~key ?(placement = Automatic) content = { key; placement; content }
+  let child ~key content =
+    create_typed
+      ~key:(Some key)
+      ~node:(Toolbar_child { child_key = Key.to_debug_string key })
+      ~event_bindings:[||]
+      ~children:[| content |]
+  ;;
+
+  let item ~key ?(placement = Automatic) content =
+    { key; placement; kind = 0; children = [ content ] }
+  ;;
+
+  let group ~key ?(placement = Automatic) children =
+    if List.length children > 256
+    then invalid_arg "View.Toolbar.group: at most 256 children";
+    let keys = List.map (fun (T view) -> view.key) children in
+    if List.length (List.sort_uniq Stdlib.compare keys) <> List.length keys
+    then invalid_arg "View.Toolbar.group: duplicate child keys";
+    { key; placement; kind = 1; children }
+  ;;
+
+  let spacer ~key ?(placement = Automatic) spacing =
+    { key
+    ; placement
+    ; kind =
+        (match spacing with
+         | Fixed -> 2
+         | Flexible -> 3)
+    ; children = []
+    }
+  ;;
 
   let placement_id = function
     | Automatic -> 0
@@ -3053,24 +3607,43 @@ module Toolbar = struct
     | Confirmation_action -> 6
     | Cancellation_action -> 7
     | Destructive_action -> 8
+    | Bottom_bar -> 9
   ;;
 
   let create ?key ~items content =
-    if List.length items > 256 then invalid_arg "View.Toolbar: at most 256 items";
+    if List.length items > 256 then invalid_arg "View.Toolbar: at most 256 entries";
     if List.length (List.filter (fun item -> item.placement = Principal) items) > 1
-    then invalid_arg "View.Toolbar: at most one principal item";
+    then invalid_arg "View.Toolbar: at most one principal entry";
     let keys = List.map (fun item -> item.key) items in
     if List.length (List.sort_uniq Key.compare keys) <> List.length keys
-    then invalid_arg "View.Toolbar: duplicate item keys";
+    then invalid_arg "View.Toolbar: duplicate entry keys";
+    let body =
+      create_typed
+        ~key:None
+        ~node:Toolbar_body
+        ~event_bindings:[||]
+        ~children:[| content |]
+    in
+    let entries =
+      List.map
+        (fun item ->
+           create_typed
+             ~key:(Some item.key)
+             ~node:
+               (Toolbar_entry
+                  { entry_key = Key.to_debug_string item.key
+                  ; placement = placement_id item.placement
+                  ; kind = item.kind
+                  })
+             ~event_bindings:[||]
+             ~children:(plain_children item.children))
+        items
+    in
     create_typed
       ~key
-      ~node:
-        (Toolbar { placements = List.map (fun item -> placement_id item.placement) items })
+      ~node:Toolbar
       ~event_bindings:[||]
-      ~children:
-        (plain_children
-           (content
-            :: List.map (fun item -> with_application_key item.key item.content) items))
+      ~children:(plain_children (body :: entries))
   ;;
 end
 
@@ -3284,6 +3857,17 @@ module Table = struct
          ~on_row_selected
          ~children
          ())
+  ;;
+end
+
+module Navigation_link = struct
+  let create ~key ~activation_id ?(enabled = true) ~on_activate ~label () =
+    if activation_id = "" then invalid_arg "Navigation_link: empty activation identity";
+    create_typed
+      ~key:(Some key)
+      ~node:(Navigation_link { activation_id; enabled })
+      ~event_bindings:[| { tag = Event.Tag.Press; handler = on_activate } |]
+      ~children:[| label |]
   ;;
 end
 
@@ -3524,61 +4108,6 @@ module Slider = struct
   ;;
 end
 
-module Swipe_actions = struct
-  type action = t
-
-  type side =
-    | Start
-    | End
-
-  let action
-        ?key
-        ?(enabled = true)
-        ?(role = Button_role.Normal)
-        ?symbol
-        ~side
-        ~title
-        ~background
-        ~on_press
-        ()
-    =
-    if String.trim title = "" || symbol = Some ""
-    then invalid_arg "View.Swipe_actions.action: empty label or symbol";
-    create_typed
-      ~key
-      ~node:
-        (Swipe_action
-           { title
-           ; side =
-               (match side with
-                | Start -> 0
-                | End -> 1)
-           ; enabled
-           ; role =
-               (match role with
-                | Button_role.Normal -> 0
-                | Cancel -> 1
-                | Destructive -> 2)
-           ; background =
-               Int32.to_int (Style.Color.Private.to_argb32 background) land 0xffff_ffff
-           ; symbol
-           })
-      ~event_bindings:
-        (if enabled then [| { tag = Event.Tag.Press; handler = on_press } |] else [||])
-      ~children:[||]
-  ;;
-
-  let create ~key ?(enabled = true) ?(allows_full_swipe = false) ~actions ~content () =
-    if List.length actions > 64
-    then invalid_arg "View.Swipe_actions.create: too many actions";
-    create_typed
-      ~key:(Some key)
-      ~node:(Swipe_actions { enabled; allows_full_swipe })
-      ~event_bindings:[||]
-      ~children:(plain_children (content :: actions))
-  ;;
-end
-
 module Morphing_surface = struct
   let create
         ?key
@@ -3698,6 +4227,11 @@ module Private = struct
     | K_native_list
     | K_list_section
     | K_list_row
+    | K_confirmation
+    | K_context_menu
+    | K_context_action
+    | K_context_menu_view
+    | K_list_row_label
     | K_scroll_targets
     | K_scroll
     | K_flow
@@ -3731,12 +4265,20 @@ module Private = struct
     | K_table
     | K_divider
     | K_label
+    | K_form
+    | K_section
+    | K_labeled_content
+    | K_content_unavailable
+    | K_text_selection
     | K_badge
     | K_sheet
     | K_popover
     | K_scroll_sections
     | K_scroll_section
     | K_toolbar
+    | K_toolbar_entry
+    | K_toolbar_child
+    | K_toolbar_body
     | K_help
     | K_group_box
     | K_progress
@@ -3749,6 +4291,7 @@ module Private = struct
     | K_tabs
     | K_tab
     | K_navigation_split
+    | K_navigation_link
     | K_navigation_stack
     | K_navigation_destination
     | K_ignores_safe_area

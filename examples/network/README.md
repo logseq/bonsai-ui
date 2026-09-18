@@ -2,7 +2,7 @@
 
 HTTPS and secure WebSocket behavior run in the OCaml Worker Domain. SwiftUI
 renders the application using native Buttons, a revisioned TextField and a
-bounded ScrollView. The supported targets are physical iOS 18+ arm64 and
+bounded ScrollView. The supported targets are physical iOS 26+ arm64 and
 macOS 26+ arm64. Simulator is unsupported.
 
 The HTTPS panel supports requests, cancellation, status and bounded response
@@ -56,7 +56,7 @@ dune exec --root=. ocaml/network_smoke_cli.exe
 ## Remaining migration work
 
 The actual OCaml Network program now cross-builds and links into a signed
-iOS 18 arm64 SwiftUI Release App. Its final executable has no unresolved GMP
+iOS 26 arm64 SwiftUI Release App. Its final executable has no unresolved GMP
 symbols. Physical-device interaction remains unverified; see
 [example build evidence](../../docs/swiftui-example-builds.md). Historical Flutter
 build sizes, iOS 15 results and signed-device results do not establish SwiftUI
@@ -80,6 +80,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

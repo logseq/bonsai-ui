@@ -1,0 +1,2 @@
+python3 tool/generate_ui_defaults.py --check
+dune exec protocol/generator/generate.exe -- --check

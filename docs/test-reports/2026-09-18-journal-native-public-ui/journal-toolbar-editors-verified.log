@@ -1,0 +1,115 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.07s)
+Test Suite 'Selected tests' started at 2026-09-18 19:03:28.476.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 19:03:28.477.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 19:03:28.477.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 19:03:28.477.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuTests started.
+◇ Test menuActionsRetainEveryRequestIncludingRepeatedSignedIds() started.
+✔ Test menuActionsRetainEveryRequestIncludingRepeatedSignedIds() passed after 0.001 seconds.
+◇ Test malformedMenuHierarchyCannotStage() started.
+✔ Test malformedMenuHierarchyCannotStage() passed after 0.001 seconds.
+◇ Test retainedMenuActionsCannotReachReplacedBindings() started.
+✔ Test retainedMenuActionsCannotReachReplacedBindings() passed after 0.003 seconds.
+✔ Suite MenuTests passed after 0.005 seconds.
+◇ Suite NativeRuntimeTests started.
+◇ Test expandableComposerRetainsDraftAndFencesBackgroundAcrossReopening() started.
+✔ Test expandableComposerRetainsDraftAndFencesBackgroundAcrossReopening() passed after 4.706 seconds.
+◇ Test expandableComposerDisableRemoveAndReplaceOwnResources() started.
+✔ Test expandableComposerDisableRemoveAndReplaceOwnResources() passed after 4.665 seconds.
+◇ Test expandableComposerValidatesPayloadChildrenAndReservedKind() started.
+✔ Test expandableComposerValidatesPayloadChildrenAndReservedKind() passed after 0.027 seconds.
+◇ Test actualGalleryMenuActionsRespectHierarchyAndOcamlOwnership() started.
+✔ Test actualGalleryMenuActionsRespectHierarchyAndOcamlOwnership() passed after 0.008 seconds.
+◇ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+◇ Test case passing 1 argument secure → false to mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+◇ Test case passing 1 argument secure → true to mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) started.
+✔ Test mountedFieldRetainsFocusAcrossNativeAncestorUpdates(secure:) with 2 test cases passed after 2.356 seconds.
+◇ Test mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) started.
+◇ Test case passing 1 argument sheet → false to mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) started.
+◇ Test case passing 1 argument sheet → true to mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) started.
+✔ Test mountedEditorRetainsFocusAcrossNativeAncestorUpdates(sheet:) with 2 test cases passed after 2.923 seconds.
+◇ Test actualToolbarRetainsCommandsAndRejectsStaleInput() started.
+✔ Test actualToolbarRetainsCommandsAndRejectsStaleInput() passed after 0.016 seconds.
+◇ Test actualToolbarGroupsExposeNativeControls() started.
+✔ Test actualToolbarGroupsExposeNativeControls() passed after 0.390 seconds.
+◇ Test actualToolbarReparentingChangesTheActionOwner() started.
+✔ Test actualToolbarReparentingChangesTheActionOwner() passed after 0.026 seconds.
+◇ Test actualToolbarOverflowKeepsNativeCommands() started.
+✔ Test actualToolbarOverflowKeepsNativeCommands() passed after 0.501 seconds.
+✔ Suite NativeRuntimeTests passed after 15.625 seconds.
+◇ Suite NativeTextEditorTests started.
+◇ Test appKitMarkedTextSurvivesAckAndRejectsStaleCorrections() started.
+✔ Test appKitMarkedTextSurvivesAckAndRejectsStaleCorrections() passed after 0.005 seconds.
+◇ Test nativeByteLimitReadOnlySelectionAndDisposalPreserveTheLastValidValue() started.
+✔ Test nativeByteLimitReadOnlySelectionAndDisposalPreserveTheLastValidValue() passed after 0.001 seconds.
+◇ Test movingNativeSelectionOutsideCompositionCommitsBeforeEmitting() started.
+✔ Test movingNativeSelectionOutsideCompositionCommitsBeforeEmitting() passed after 0.001 seconds.
+◇ Test contradictoryRemoteSelectionIsRejectedBeforeNativeMutation() started.
+✔ Test contradictoryRemoteSelectionIsRejectedBeforeNativeMutation() passed after 0.001 seconds.
+◇ Test nativeReturnSubmitsOnlyOutsideCompositionAndFocusIsReported() started.
+✔ Test nativeReturnSubmitsOnlyOutsideCompositionAndFocusIsReported() passed after 0.005 seconds.
+✔ Suite NativeTextEditorTests passed after 0.014 seconds.
+◇ Suite TextEditorAutofocusTests started.
+◇ Test autofocusWaitsForNativeAvailabilityAndDoesNotStealFocus() started.
+✔ Test autofocusWaitsForNativeAvailabilityAndDoesNotStealFocus() passed after 1.100 seconds.
+✔ Suite TextEditorAutofocusTests passed after 1.100 seconds.
+◇ Suite TextEditorWireTests started.
+◇ Test retainedControllerValidatesFutureAcksBeforePublishingAnyNode() started.
+✔ Test retainedControllerValidatesFutureAcksBeforePublishingAnyNode() passed after 0.003 seconds.
+◇ Test editorPropertiesAndBindingsStageAtomically() started.
+✔ Test editorPropertiesAndBindingsStageAtomically() passed after 0.002 seconds.
+✔ Suite TextEditorWireTests passed after 0.005 seconds.
+◇ Suite TextFieldTests started.
+◇ Test nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test case passing 1 argument secure → false to nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test case passing 1 argument secure → true to nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+✔ Test nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) with 2 test cases passed after 0.777 seconds.
+◇ Test nativeFieldPreservesMarkedTextAndSelectionAcrossAcknowledgment() started.
+✔ Test nativeFieldPreservesMarkedTextAndSelectionAcrossAcknowledgment() passed after 0.260 seconds.
+◇ Test fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test case passing 1 argument secure → false to fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test case passing 1 argument secure → true to fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+✔ Test fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) with 2 test cases passed after 0.996 seconds.
+◇ Test autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test case passing 1 argument secure → false to autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test case passing 1 argument secure → true to autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+✔ Test autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) with 2 test cases passed after 1.740 seconds.
+✔ Suite TextFieldTests passed after 3.775 seconds.
+◇ Suite ToolbarIdentityTests started.
+◇ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (2, 47, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (2, 47, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 47, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 47, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 47, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 47, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 49, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 49, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 6, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (3, 6, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 6, false) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+◇ Test case passing 1 argument scenario → (4, 6, true) to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) started.
+✔ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(scenario:) with 12 test cases passed after 15.683 seconds.
+◇ Test toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "disabled" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "hidden" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "binding" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "session" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "expired" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+◇ Test case passing 1 argument reason → "disposed" to toolbarFocusTransferCannotReviveInvalidatedInput(reason:) started.
+✔ Test toolbarFocusTransferCannotReviveInvalidatedInput(reason:) with 6 test cases passed after 3.268 seconds.
+✔ Suite ToolbarIdentityTests passed after 18.952 seconds.
+◇ Suite ToolbarTests started.
+◇ Test toolbarPlacementChangesAndReorderingRetainContent() started.
+✔ Test toolbarPlacementChangesAndReorderingRetainContent() passed after 0.001 seconds.
+◇ Test malformedToolbarUpdatesLeavePublishedTreeUntouched() started.
+✔ Test malformedToolbarUpdatesLeavePublishedTreeUntouched() passed after 0.001 seconds.
+✔ Suite ToolbarTests passed after 0.003 seconds.
+✔ Test run with 29 tests in 8 suites passed after 39.483 seconds.

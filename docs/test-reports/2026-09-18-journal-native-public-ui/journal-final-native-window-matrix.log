@@ -1,0 +1,30 @@
+1/30 native/test/test_clock_window.py: PASS
+2/30 native/test/test_mail_window.py: FAIL 1
+3/30 native/test/test_navigation_window.py: FAIL 1
+4/30 native/test/test_network_window.py: PASS
+5/30 native/test/test_host_effects_window.py: PASS
+6/30 native/test/test_sqlite_worker_window.py: PASS
+7/30 native/test/test_notice_window.py: PASS
+8/30 native/test/test_host_navigation_window.py: PASS
+9/30 native/test/test_picker_window.py: PASS
+10/30 native/test/test_menu_window.py: PASS
+11/30 native/test/test_selection_catalog_window.py: PASS
+12/30 native/test/test_search_window.py: PASS
+13/30 native/test/test_table_window.py: PASS
+14/30 native/test/test_carousel_window.py: PASS
+15/30 native/test/test_multiple_selection_window.py: PASS
+16/30 native/test/test_contextual_selection_window.py: PASS
+17/30 native/test/test_tag_window.py: PASS
+18/30 native/test/test_button_window.py: PASS
+19/30 native/test/test_projection_window.py: PASS
+20/30 native/test/test_opacity_window.py: PASS
+21/30 native/test/test_workflow_window.py: PASS
+22/30 native/test/test_disclosure_window.py: PASS
+23/30 native/test/test_group_box_window.py: PASS
+24/30 native/test/test_label_window.py: PASS
+25/30 native/test/test_badge_window.py: PASS
+26/30 native/test/test_gesture_window.py: FAIL 5
+27/30 native/test/test_hover_window.py: PASS
+28/30 native/test/test_swipe_window.py: PASS
+29/30 native/test/test_removal_window.py: PASS
+30/30 native/test/test_slider_window.py: PASS

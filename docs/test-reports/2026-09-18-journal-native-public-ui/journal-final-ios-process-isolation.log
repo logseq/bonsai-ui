@@ -1,0 +1,53 @@
+test_macos_does_not_override_native_process_apis (__main__.ProcessIsolationTests.test_macos_does_not_override_native_process_apis) ... ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ok
+test_physical_ios_complete_object_has_no_process_imports (__main__.ProcessIsolationTests.test_physical_ios_complete_object_has_no_process_imports) ... File "native/test/datascript_worker/dune", line 50, characters 2-6:
+50 |   uucp))
+       ^^^^
+Error: Library "uucp" not found.
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default/native/test/datascript_worker/datascript_worker_native_embed.exe.o
+File "native/test/datascript_worker/dune", line 26, characters 7-26:
+26 |   (pps ppx_deriving_yojson))
+            ^^^^^^^^^^^^^^^^^^^
+Error: Library "ppx_deriving_yojson" not found.
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default/native/test/datascript_worker/.merlin-conf/exe-datascript_worker_native_embed
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default/native/test/datascript_worker/datascript_worker_native_embed.exe.o
+Error: Library "ppx_deriving_yojson" not found.
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default/.ppx/1c070f8a59b49b38811d0af17d582645/ppx.exe
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default.ios/native/test/datascript_worker/datascript_worker_native_embed.pp.ml
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default.ios/native/test/datascript_worker/.datascript_worker_native_embed.eobjs/dune__exe__Datascript_worker_native_embed.impl.d
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default.ios/native/test/datascript_worker/.datascript_worker_native_embed.eobjs/dune__exe__Datascript_worker_native_embed.impl.all-deps
+-> required by
+   /Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework/default.ios/native/test/datascript_worker/datascript_worker_native_embed.exe.o
+ERROR
+
+======================================================================
+ERROR: test_physical_ios_complete_object_has_no_process_imports (__main__.ProcessIsolationTests.test_physical_ios_complete_object_has_no_process_imports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_ios_process_isolation.py", line 22, in test_physical_ios_complete_object_has_no_process_imports
+    subprocess.run([
+    ~~~~~~~~~~~~~~^^
+        "opam", "exec", f"--switch={SWITCH}", "--",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "dune", "build", f"--build-dir={ROOT / '_build/ios/swiftui-framework'}",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "--profile=release", "-j4", "-xios", TARGET,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ], env=env, cwd=ROOT, check=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['opam', 'exec', '--switch=/Users/rcmerci/gh-repos/bonsai-ui/_build/ios/switches/iphoneos', '--', 'dune', 'build', '--build-dir=/Users/rcmerci/gh-repos/bonsai-ui/_build/ios/swiftui-framework', '--profile=release', '-j4', '-xios', 'native/test/datascript_worker/datascript_worker_native_embed.exe.o']' returned non-zero exit status 1.
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.024s
+
+FAILED (errors=1)

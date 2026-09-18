@@ -1,0 +1,13 @@
+test_coredevice_failure_stops_preflight (__main__.DevicePreflightTests.test_coredevice_failure_stops_preflight) ... ok
+test_physical_ios_without_flutter_or_boot_state (__main__.DevicePreflightTests.test_physical_ios_without_flutter_or_boot_state) ... ok
+test_rejects_locked_or_incomplete_lock_response (__main__.DevicePreflightTests.test_rejects_locked_or_incomplete_lock_response) ... ok
+test_rejects_unsupported_or_unavailable_device_before_lock_query (__main__.DevicePreflightTests.test_rejects_unsupported_or_unavailable_device_before_lock_query) ... ok
+test_requires_exact_selected_identifier (__main__.DevicePreflightTests.test_requires_exact_selected_identifier) ... ok
+test_signing_membership_is_exact_and_only_uses_provisioned_devices (__main__.DevicePreflightTests.test_signing_membership_is_exact_and_only_uses_provisioned_devices) ... ok
+test_signing_resolves_coredevice_uuid_to_profile_udid (__main__.DevicePreflightTests.test_signing_resolves_coredevice_uuid_to_profile_udid) ... ok
+test_signing_still_checks_team_bundle_entitlements_and_expiry (__main__.DevicePreflightTests.test_signing_still_checks_team_bundle_entitlements_and_expiry) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 10.006s
+
+OK

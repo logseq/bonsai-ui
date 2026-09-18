@@ -1,0 +1,2270 @@
+[
+  {
+    "name": "AnimatedOpacityTests",
+    "status": 0,
+    "seconds": 12.93,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/AnimatedOpacityTests.log"
+  },
+  {
+    "name": "AppKitHoverCaptureTests",
+    "status": 0,
+    "seconds": 11.04,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/AppKitHoverCaptureTests.log"
+  },
+  {
+    "name": "AppKitPointerDeviceTests",
+    "status": 0,
+    "seconds": 4.96,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/AppKitPointerDeviceTests.log"
+  },
+  {
+    "name": "ApplicationTransportTests",
+    "status": 0,
+    "seconds": 2.92,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ApplicationTransportTests.log"
+  },
+  {
+    "name": "BadgeTests",
+    "status": 0,
+    "seconds": 3.34,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/BadgeTests.log"
+  },
+  {
+    "name": "ButtonAutofocusTests",
+    "status": 0,
+    "seconds": 9.07,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ButtonAutofocusTests.log"
+  },
+  {
+    "name": "CivilDateDomainTests",
+    "status": 0,
+    "seconds": 4.61,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CivilDateDomainTests.log"
+  },
+  {
+    "name": "CivilPickerTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CivilPickerTests.log"
+  },
+  {
+    "name": "CivilSelectionTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CivilSelectionTests.log"
+  },
+  {
+    "name": "CollectionAnimationTests",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CollectionAnimationTests.log"
+  },
+  {
+    "name": "CollectionEventTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CollectionEventTests.log"
+  },
+  {
+    "name": "CollectionGeometryTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CollectionGeometryTests.log"
+  },
+  {
+    "name": "CollectionNodeTests",
+    "status": 0,
+    "seconds": 1.48,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CollectionNodeTests.log"
+  },
+  {
+    "name": "CollectionPositionRefinementTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CollectionPositionRefinementTests.log"
+  },
+  {
+    "name": "CollectionViewportTests",
+    "status": 0,
+    "seconds": 110.93,
+    "completed_count": 18,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CollectionViewportTests.log"
+  },
+  {
+    "name": "ConfirmationControllerTests",
+    "status": 0,
+    "seconds": 21.73,
+    "completed_count": 7,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ConfirmationControllerTests.log"
+  },
+  {
+    "name": "ContextMenuTests",
+    "status": 0,
+    "seconds": 7.88,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ContextMenuTests.log"
+  },
+  {
+    "name": "ControlSizeTests",
+    "status": 0,
+    "seconds": 8.06,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ControlSizeTests.log"
+  },
+  {
+    "name": "CoreNavigationLinkTests",
+    "status": 0,
+    "seconds": 1.05,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/CoreNavigationLinkTests.log"
+  },
+  {
+    "name": "DisclosureTests",
+    "status": 0,
+    "seconds": 0.99,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/DisclosureTests.log"
+  },
+  {
+    "name": "DividerTests",
+    "status": 0,
+    "seconds": 0.67,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/DividerTests.log"
+  },
+  {
+    "name": "EventEncodingTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/EventEncodingTests.log"
+  },
+  {
+    "name": "FileCommandTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/FileCommandTests.log"
+  },
+  {
+    "name": "FileExportTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/FileExportTests.log"
+  },
+  {
+    "name": "FileImportTests",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/FileImportTests.log"
+  },
+  {
+    "name": "FlowLayoutTests",
+    "status": 0,
+    "seconds": 0.67,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/FlowLayoutTests.log"
+  },
+  {
+    "name": "FocusScopeTests",
+    "status": 0,
+    "seconds": 1.21,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/FocusScopeTests.log"
+  },
+  {
+    "name": "FrameTests",
+    "status": 0,
+    "seconds": 1.73,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/FrameTests.log"
+  },
+  {
+    "name": "GestureEventTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/GestureEventTests.log"
+  },
+  {
+    "name": "GroupBoxTests",
+    "status": 0,
+    "seconds": 1.09,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/GroupBoxTests.log"
+  },
+  {
+    "name": "HapticWireTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HapticWireTests.log"
+  },
+  {
+    "name": "HelpTests",
+    "status": 0,
+    "seconds": 0.93,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HelpTests.log"
+  },
+  {
+    "name": "HostCommandTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HostCommandTests.log"
+  },
+  {
+    "name": "HostMenuWireTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HostMenuWireTests.log"
+  },
+  {
+    "name": "HostPickerWireTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HostPickerWireTests.log"
+  },
+  {
+    "name": "HostResponseQueueTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HostResponseQueueTests.log"
+  },
+  {
+    "name": "HostServicesTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HostServicesTests.log"
+  },
+  {
+    "name": "HostedNavigationLinkTests",
+    "status": 0,
+    "seconds": 1.91,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HostedNavigationLinkTests.log"
+  },
+  {
+    "name": "HoverInputTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HoverInputTests.log"
+  },
+  {
+    "name": "HoverRegionTests",
+    "status": 0,
+    "seconds": 0.84,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HoverRegionTests.log"
+  },
+  {
+    "name": "HoverRouterTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HoverRouterTests.log"
+  },
+  {
+    "name": "HoverTransitionTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HoverTransitionTests.log"
+  },
+  {
+    "name": "HoverWindowSourcesTests",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/HoverWindowSourcesTests.log"
+  },
+  {
+    "name": "ImageLoadingTests",
+    "status": 0,
+    "seconds": 0.83,
+    "completed_count": 11,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ImageLoadingTests.log"
+  },
+  {
+    "name": "ImageWireTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ImageWireTests.log"
+  },
+  {
+    "name": "InitialScrollNodeTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/InitialScrollNodeTests.log"
+  },
+  {
+    "name": "KeyboardEventTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/KeyboardEventTests.log"
+  },
+  {
+    "name": "KeyboardListenerTests",
+    "status": 0,
+    "seconds": 1.27,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/KeyboardListenerTests.log"
+  },
+  {
+    "name": "KeyboardOcclusionTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/KeyboardOcclusionTests.log"
+  },
+  {
+    "name": "KeyboardPressesTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/KeyboardPressesTests.log"
+  },
+  {
+    "name": "KeyboardRouteTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/KeyboardRouteTests.log"
+  },
+  {
+    "name": "LabelTests",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/LabelTests.log"
+  },
+  {
+    "name": "ListScrollLifecycleTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ListScrollLifecycleTests.log"
+  },
+  {
+    "name": "MeasuredCollectionTests",
+    "status": 0,
+    "seconds": 3.95,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/MeasuredCollectionTests.log"
+  },
+  {
+    "name": "MenuTests",
+    "status": 1,
+    "seconds": 9.53,
+    "completed_count": null,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/MenuTests.log"
+  },
+  {
+    "name": "ModifierTests",
+    "status": 0,
+    "seconds": 2.2,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ModifierTests.log"
+  },
+  {
+    "name": "MorphingSurfaceTests",
+    "status": 0,
+    "seconds": 2.99,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/MorphingSurfaceTests.log"
+  },
+  {
+    "name": "NativeEventQueueTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeEventQueueTests.log"
+  },
+  {
+    "name": "NativeFormTests",
+    "status": 0,
+    "seconds": 1.0,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeFormTests.log"
+  },
+  {
+    "name": "NativeHoverHostTests",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeHoverHostTests.log"
+  },
+  {
+    "name": "NativeImageTests",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeImageTests.log"
+  },
+  {
+    "name": "NativeKeyMappingTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeKeyMappingTests.log"
+  },
+  {
+    "name": "NativeLayoutRequestsTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeLayoutRequestsTests.log"
+  },
+  {
+    "name": "NativeListHierarchyTests",
+    "status": 0,
+    "seconds": 1.26,
+    "completed_count": 7,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeListHierarchyTests.log"
+  },
+  {
+    "name": "NativeListPositioningTests",
+    "status": 0,
+    "seconds": 2.76,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeListPositioningTests.log"
+  },
+  {
+    "name": "NativeListScrollTests",
+    "status": 0,
+    "seconds": 8.6,
+    "completed_count": 9,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeListScrollTests.log"
+  },
+  {
+    "name": "NativeListStyleTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeListStyleTests.log"
+  },
+  {
+    "name": "NativeTextEditorTests",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeTextEditorTests.log"
+  },
+  {
+    "name": "NativeViewValidationTests",
+    "status": 0,
+    "seconds": 1.03,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeViewValidationTests.log"
+  },
+  {
+    "name": "NativeWindowHostTests",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NativeWindowHostTests.log"
+  },
+  {
+    "name": "NavigationLinkRequestTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NavigationLinkRequestTests.log"
+  },
+  {
+    "name": "NavigationRequestTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NavigationRequestTests.log"
+  },
+  {
+    "name": "NavigationSplitRequestTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NavigationSplitRequestTests.log"
+  },
+  {
+    "name": "NavigationSplitTests",
+    "status": 0,
+    "seconds": 0.94,
+    "completed_count": 8,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NavigationSplitTests.log"
+  },
+  {
+    "name": "NavigationStackTests",
+    "status": 0,
+    "seconds": 0.88,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NavigationStackTests.log"
+  },
+  {
+    "name": "NodeCommandTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NodeCommandTests.log"
+  },
+  {
+    "name": "NodeStoreTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NodeStoreTests.log"
+  },
+  {
+    "name": "NoticeWireTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/NoticeWireTests.log"
+  },
+  {
+    "name": "OverlayTests",
+    "status": 0,
+    "seconds": 0.72,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/OverlayTests.log"
+  },
+  {
+    "name": "PickerTests",
+    "status": 0,
+    "seconds": 1.86,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/PickerTests.log"
+  },
+  {
+    "name": "PlatformInformationTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/PlatformInformationTests.log"
+  },
+  {
+    "name": "PointerContactInputTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/PointerContactInputTests.log"
+  },
+  {
+    "name": "PointerEventTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/PointerEventTests.log"
+  },
+  {
+    "name": "PopoverTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/PopoverTests.log"
+  },
+  {
+    "name": "PresentationProbeTests",
+    "status": 0,
+    "seconds": 0.67,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/PresentationProbeTests.log"
+  },
+  {
+    "name": "ProgressTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ProgressTests.log"
+  },
+  {
+    "name": "ProjectionTests",
+    "status": 0,
+    "seconds": 0.72,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ProjectionTests.log"
+  },
+  {
+    "name": "RefreshLifecycleTests",
+    "status": 0,
+    "seconds": 4.09,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/RefreshLifecycleTests.log"
+  },
+  {
+    "name": "RefreshNodeTests",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/RefreshNodeTests.log"
+  },
+  {
+    "name": "RemovalNodeTests",
+    "status": 0,
+    "seconds": 6.81,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/RemovalNodeTests.log"
+  },
+  {
+    "name": "RenderTreeTests",
+    "status": 0,
+    "seconds": 3.89,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/RenderTreeTests.log"
+  },
+  {
+    "name": "RichTextTests",
+    "status": 0,
+    "seconds": 5.06,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/RichTextTests.log"
+  },
+  {
+    "name": "SafeAreaTests",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SafeAreaTests.log"
+  },
+  {
+    "name": "ScrollEventQueueTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ScrollEventQueueTests.log"
+  },
+  {
+    "name": "ScrollNodeTests",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ScrollNodeTests.log"
+  },
+  {
+    "name": "ScrollObserverTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ScrollObserverTests.log"
+  },
+  {
+    "name": "ScrollSectionsTests",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ScrollSectionsTests.log"
+  },
+  {
+    "name": "ScrollServiceWireTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ScrollServiceWireTests.log"
+  },
+  {
+    "name": "ScrollTargetsTests",
+    "status": 0,
+    "seconds": 17.63,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ScrollTargetsTests.log"
+  },
+  {
+    "name": "SemanticsNodeTests",
+    "status": 0,
+    "seconds": 4.37,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SemanticsNodeTests.log"
+  },
+  {
+    "name": "SharedDefaultsTests",
+    "status": 0,
+    "seconds": 6.59,
+    "completed_count": 15,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SharedDefaultsTests.log"
+  },
+  {
+    "name": "SheetTests",
+    "status": 0,
+    "seconds": 1.58,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SheetTests.log"
+  },
+  {
+    "name": "SliderTests",
+    "status": 0,
+    "seconds": 5.63,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SliderTests.log"
+  },
+  {
+    "name": "StackTests",
+    "status": 0,
+    "seconds": 1.22,
+    "completed_count": 9,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/StackTests.log"
+  },
+  {
+    "name": "SurfaceTests",
+    "status": 0,
+    "seconds": 3.94,
+    "completed_count": 11,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SurfaceTests.log"
+  },
+  {
+    "name": "SwiftInputFixtureTests",
+    "status": 0,
+    "seconds": 4.05,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SwiftInputFixtureTests.log"
+  },
+  {
+    "name": "SwipeActionsTests",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SwipeActionsTests.log"
+  },
+  {
+    "name": "SymbolTests",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SymbolTests.log"
+  },
+  {
+    "name": "SystemControlsTests",
+    "status": 0,
+    "seconds": 0.9,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/SystemControlsTests.log"
+  },
+  {
+    "name": "TabsRequestTests",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TabsRequestTests.log"
+  },
+  {
+    "name": "TabsTests",
+    "status": 0,
+    "seconds": 1.39,
+    "completed_count": 7,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TabsTests.log"
+  },
+  {
+    "name": "TextEditorAutofocusTests",
+    "status": 0,
+    "seconds": 1.6,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextEditorAutofocusTests.log"
+  },
+  {
+    "name": "TextEditorWireTests",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextEditorWireTests.log"
+  },
+  {
+    "name": "TextEventTests",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextEventTests.log"
+  },
+  {
+    "name": "TextFieldTests",
+    "status": 0,
+    "seconds": 4.09,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextFieldTests.log"
+  },
+  {
+    "name": "TextFieldWireTests",
+    "status": 0,
+    "seconds": 2.03,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextFieldWireTests.log"
+  },
+  {
+    "name": "TextSessionTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 6,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextSessionTests.log"
+  },
+  {
+    "name": "TextTests",
+    "status": 0,
+    "seconds": 0.87,
+    "completed_count": 8,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/TextTests.log"
+  },
+  {
+    "name": "ToggleTests",
+    "status": 0,
+    "seconds": 2.56,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ToggleTests.log"
+  },
+  {
+    "name": "ToolbarIdentityTests",
+    "status": 0,
+    "seconds": 18.09,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ToolbarIdentityTests.log"
+  },
+  {
+    "name": "ToolbarTests",
+    "status": 0,
+    "seconds": 8.62,
+    "completed_count": 2,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ToolbarTests.log"
+  },
+  {
+    "name": "URLHostServiceTests",
+    "status": 0,
+    "seconds": 9.63,
+    "completed_count": 4,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/URLHostServiceTests.log"
+  },
+  {
+    "name": "ViewEnvironmentTests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 3,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/ViewEnvironmentTests.log"
+  },
+  {
+    "name": "WeightedLayoutTests",
+    "status": 0,
+    "seconds": 0.73,
+    "completed_count": 5,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/WeightedLayoutTests.log"
+  },
+  {
+    "name": "runtime-actualAppBarsKeepPageCommandsWithinTheirNavigationScope",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualAppBarsKeepPageCommandsWithinTheirNavigationScope.log"
+  },
+  {
+    "name": "runtime-actualBadgeUpdatesRetainContentAndDisabledOwnership",
+    "status": 0,
+    "seconds": 0.55,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualBadgeUpdatesRetainContentAndDisabledOwnership.log"
+  },
+  {
+    "name": "runtime-actualCarouselKeepsPositionSeparateFromActionsAndRejectsObsoleteInput",
+    "status": 0,
+    "seconds": 0.55,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualCarouselKeepsPositionSeparateFromActionsAndRejectsObsoleteInput.log"
+  },
+  {
+    "name": "runtime-actualClockTimersAndPresentationWaitsUseNativeFrames",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualClockTimersAndPresentationWaitsUseNativeFrames.log"
+  },
+  {
+    "name": "runtime-actualCompleteGalleryStartsAndDispatches",
+    "status": 0,
+    "seconds": 1.0,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualCompleteGalleryStartsAndDispatches.log"
+  },
+  {
+    "name": "runtime-actualComposerOwnsDraftAndRoutesExactRawActions",
+    "status": 0,
+    "seconds": 2.13,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualComposerOwnsDraftAndRoutesExactRawActions.log"
+  },
+  {
+    "name": "runtime-actualConfirmationKeepsOcamlAuthorityAndBlocksBackground",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualConfirmationKeepsOcamlAuthorityAndBlocksBackground.log"
+  },
+  {
+    "name": "runtime-actualDisclosureOwnershipTracksExpansionAndPresentation",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualDisclosureOwnershipTracksExpansionAndPresentation.log"
+  },
+  {
+    "name": "runtime-actualDropdownCombinesQueryStatesAndIndependentSelections",
+    "status": 0,
+    "seconds": 7.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualDropdownCombinesQueryStatesAndIndependentSelections.log"
+  },
+  {
+    "name": "runtime-actualFieldAutofocusRequiresDisplayedActiveApplication",
+    "status": 0,
+    "seconds": 1.16,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualFieldAutofocusRequiresDisplayedActiveApplication.log"
+  },
+  {
+    "name": "runtime-actualGalleryAccessibilityActionsReachOcamlAndAnnounceAfterPresentation",
+    "status": 0,
+    "seconds": 1.11,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryAccessibilityActionsReachOcamlAndAnnounceAfterPresentation.log"
+  },
+  {
+    "name": "runtime-actualGalleryButtonScopesPreserveActivationAndIdentity",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryButtonScopesPreserveActivationAndIdentity.log"
+  },
+  {
+    "name": "runtime-actualGalleryDividersUseNativeRowAndColumnSeparators",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryDividersUseNativeRowAndColumnSeparators.log"
+  },
+  {
+    "name": "runtime-actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames",
+    "status": 0,
+    "seconds": 3.58,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryExtentTargetsAnimateWithoutAdditionalOcamlFrames.log"
+  },
+  {
+    "name": "runtime-actualGalleryFrameSectionRendersThroughNativeRuntime",
+    "status": 0,
+    "seconds": 3.29,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryFrameSectionRendersThroughNativeRuntime.log"
+  },
+  {
+    "name": "runtime-actualGalleryHoverFencesPresentationAndRetainsContent",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryHoverFencesPresentationAndRetainsContent.log"
+  },
+  {
+    "name": "runtime-actualGalleryImagesLoadAndRenderAtInitialFrame",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryImagesLoadAndRenderAtInitialFrame.log"
+  },
+  {
+    "name": "runtime-actualGalleryMenuActionsRespectHierarchyAndOcamlOwnership",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryMenuActionsRespectHierarchyAndOcamlOwnership.log"
+  },
+  {
+    "name": "runtime-actualGalleryModifiersRenderInBothLayoutDirections",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryModifiersRenderInBothLayoutDirections.log"
+  },
+  {
+    "name": "runtime-actualGalleryMorphRejectsInactiveAndUnpresentedBranchInput",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryMorphRejectsInactiveAndUnpresentedBranchInput.log"
+  },
+  {
+    "name": "runtime-actualGalleryMultipleSelectionCombinesIndependentIntents",
+    "status": 0,
+    "seconds": 3.13,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryMultipleSelectionCombinesIndependentIntents.log"
+  },
+  {
+    "name": "runtime-actualGalleryNativeTextRenders",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryNativeTextRenders.log"
+  },
+  {
+    "name": "runtime-actualGalleryOverlayCompositionsRenderInBothDirections",
+    "status": 0,
+    "seconds": 0.6,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryOverlayCompositionsRenderInBothDirections.log"
+  },
+  {
+    "name": "runtime-actualGalleryPickerPreservesIdentityAndControlledSelection",
+    "status": 0,
+    "seconds": 8.74,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryPickerPreservesIdentityAndControlledSelection.log"
+  },
+  {
+    "name": "runtime-actualGalleryProgressUpdatesValuesAndIndeterminateMode",
+    "status": 0,
+    "seconds": 3.79,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryProgressUpdatesValuesAndIndeterminateMode.log"
+  },
+  {
+    "name": "runtime-actualGalleryProjectionUpdatesPreserveControlsAndActivation",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryProjectionUpdatesPreserveControlsAndActivation.log"
+  },
+  {
+    "name": "runtime-actualGalleryRichTextRendersStyledRuns",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryRichTextRendersStyledRuns.log"
+  },
+  {
+    "name": "runtime-actualGallerySafeAreasUseNativeTitlebarInsetsAndRetainChildren",
+    "status": 0,
+    "seconds": 1.59,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGallerySafeAreasUseNativeTitlebarInsetsAndRetainChildren.log"
+  },
+  {
+    "name": "runtime-actualGalleryScrollsInBothAxesAndRetainsOffsetsThroughUpdates",
+    "status": 0,
+    "seconds": 1.16,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryScrollsInBothAxesAndRetainsOffsetsThroughUpdates.log"
+  },
+  {
+    "name": "runtime-actualGallerySlidersAcceptRejectAndDisableNativeChanges",
+    "status": 0,
+    "seconds": 2.03,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGallerySlidersAcceptRejectAndDisableNativeChanges.log"
+  },
+  {
+    "name": "runtime-actualGallerySplitAcceptsChangesAndRestoresDeclinedRequests",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGallerySplitAcceptsChangesAndRestoresDeclinedRequests.log"
+  },
+  {
+    "name": "runtime-actualGalleryStacksRenderThroughNativeRuntime",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryStacksRenderThroughNativeRuntime.log"
+  },
+  {
+    "name": "runtime-actualGallerySymbolSectionRendersThroughNativeRuntime",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGallerySymbolSectionRendersThroughNativeRuntime.log"
+  },
+  {
+    "name": "runtime-actualGalleryTabsKeepStateAndRejectHiddenOrUnpresentedInput",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryTabsKeepStateAndRejectHiddenOrUnpresentedInput.log"
+  },
+  {
+    "name": "runtime-actualGalleryTagActionsSelectionsAndRemovalRemainIndependent",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryTagActionsSelectionsAndRemovalRemainIndependent.log"
+  },
+  {
+    "name": "runtime-actualGalleryTogglesAcceptRejectDisableAndRetainNativeState",
+    "status": 0,
+    "seconds": 1.92,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryTogglesAcceptRejectDisableAndRetainNativeState.log"
+  },
+  {
+    "name": "runtime-actualGalleryWeightedLayoutsRenderInBothDirections",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGalleryWeightedLayoutsRenderInBothDirections.log"
+  },
+  {
+    "name": "runtime-actualGestureTreeStagesAndRejectsMalformedUpdatesAtomically",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGestureTreeStagesAndRejectsMalformedUpdatesAtomically.log"
+  },
+  {
+    "name": "runtime-actualGroupedCardsRetainContentAndIndependentActions",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualGroupedCardsRetainContentAndIndependentActions.log"
+  },
+  {
+    "name": "runtime-actualHelpPreservesOCamlActionsAndNativeHints",
+    "status": 0,
+    "seconds": 1.42,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualHelpPreservesOCamlActionsAndNativeHints.log"
+  },
+  {
+    "name": "runtime-actualHostEffectsExampleStages",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualHostEffectsExampleStages.log"
+  },
+  {
+    "name": "runtime-actualHostEffectsRoundTripOnlyAfterPresentationAndResume",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualHostEffectsRoundTripOnlyAfterPresentationAndResume.log"
+  },
+  {
+    "name": "runtime-actualHostNavigationRetainsClipboardAcrossSettingsAndFencesHiddenInput",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualHostNavigationRetainsClipboardAcrossSettingsAndFencesHiddenInput.log"
+  },
+  {
+    "name": "runtime-actualImagePropertiesUpdateWithoutReloadingOrRemounting",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualImagePropertiesUpdateWithoutReloadingOrRemounting.log"
+  },
+  {
+    "name": "runtime-actualInitialScrollPositionsAreExplicitAndDoNotReplay",
+    "status": 0,
+    "seconds": 93.26,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualInitialScrollPositionsAreExplicitAndDoNotReplay.log"
+  },
+  {
+    "name": "runtime-actualLabelRowsKeepAccessoryActionsIndependentAndTitlesStable",
+    "status": 0,
+    "seconds": 9.75,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualLabelRowsKeepAccessoryActionsIndependentAndTitlesStable.log"
+  },
+  {
+    "name": "runtime-actualMailRetainsNativeRowsAndRemovesCollapsedDetails",
+    "status": 0,
+    "seconds": 3.4,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualMailRetainsNativeRowsAndRemovesCollapsedDetails.log"
+  },
+  {
+    "name": "runtime-actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows",
+    "status": 0,
+    "seconds": 3.97,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualMeasuredGalleryRetainsNativeAnchorAndBoundsOcamlRows.log"
+  },
+  {
+    "name": "runtime-actualNativeConfirmationRendersAndResponds",
+    "status": 0,
+    "seconds": 6.83,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualNativeConfirmationRendersAndResponds.log"
+  },
+  {
+    "name": "runtime-actualNavigationExamplePushesAndAcceptsNativePathChanges",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualNavigationExamplePushesAndAcceptsNativePathChanges.log"
+  },
+  {
+    "name": "runtime-actualNetworkWorkerApplicationStagesAndRestarts",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualNetworkWorkerApplicationStagesAndRestarts.log"
+  },
+  {
+    "name": "runtime-actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits",
+    "status": 0,
+    "seconds": 1.59,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOCamlFieldsGatePresentationAndAcknowledgeNativeEdits.log"
+  },
+  {
+    "name": "runtime-actualOcamlNativeViewEnvelopeStages",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOcamlNativeViewEnvelopeStages.log"
+  },
+  {
+    "name": "runtime-actualOcamlRichTextUpdatesRetainIdentity",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOcamlRichTextUpdatesRetainIdentity.log"
+  },
+  {
+    "name": "runtime-actualOcamlSpacerPreservesFixedBlankSpace",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOcamlSpacerPreservesFixedBlankSpace.log"
+  },
+  {
+    "name": "runtime-actualOcamlStackUpdatesPreserveIdentityAndNativeLayout",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOcamlStackUpdatesPreserveIdentityAndNativeLayout.log"
+  },
+  {
+    "name": "runtime-actualOpacityWaitsForPresentationAndCompletesOnceThroughOcaml",
+    "status": 0,
+    "seconds": 3.36,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOpacityWaitsForPresentationAndCompletesOnceThroughOcaml.log"
+  },
+  {
+    "name": "runtime-actualOverlayAlignmentAndSignedInsetsUpdateWithoutRemounting",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualOverlayAlignmentAndSignedInsetsUpdateWithoutRemounting.log"
+  },
+  {
+    "name": "runtime-actualPageLayoutPinsControlsAndRetainsItsScrollingBody",
+    "status": 0,
+    "seconds": 1.69,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualPageLayoutPinsControlsAndRetainsItsScrollingBody.log"
+  },
+  {
+    "name": "runtime-actualPathRequestsPreservePrefixesAndRestoreRejectedNativePops",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualPathRequestsPreservePrefixesAndRestoreRejectedNativePops.log"
+  },
+  {
+    "name": "runtime-actualPlatformInformationWaitsForPresentationAndCannotCrossRestart",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualPlatformInformationWaitsForPresentationAndCannotCrossRestart.log"
+  },
+  {
+    "name": "runtime-actualPopoverFencesContentAndRestoresRejectedNativeDismissal",
+    "status": 0,
+    "seconds": 3.49,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualPopoverFencesContentAndRestoresRejectedNativeDismissal.log"
+  },
+  {
+    "name": "runtime-actualRefreshWaitsForOcamlAndPreservesItsViewport",
+    "status": 0,
+    "seconds": 5.19,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualRefreshWaitsForOcamlAndPreservesItsViewport.log"
+  },
+  {
+    "name": "runtime-actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance",
+    "status": 0,
+    "seconds": 22.7,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualRemovalPreservesRejectedItemsAndRemovesOnlyAfterAcceptance.log"
+  },
+  {
+    "name": "runtime-actualSQLiteWorkerStartsAndReopensItsDatabase",
+    "status": 0,
+    "seconds": 2.6,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualSQLiteWorkerStartsAndReopensItsDatabase.log"
+  },
+  {
+    "name": "runtime-actualScrollFillsRemainingSpaceWithoutCompressingLongContent",
+    "status": 0,
+    "seconds": 11.42,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualScrollFillsRemainingSpaceWithoutCompressingLongContent.log"
+  },
+  {
+    "name": "runtime-actualScrollObserversPreserveTravelAndNativeIdentity",
+    "status": 0,
+    "seconds": 50.11,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualScrollObserversPreserveTravelAndNativeIdentity.log"
+  },
+  {
+    "name": "runtime-actualSectionsPinNativeControlsAndRetainTheirIdentity",
+    "status": 0,
+    "seconds": 8.16,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualSectionsPinNativeControlsAndRetainTheirIdentity.log"
+  },
+  {
+    "name": "runtime-actualSegmentedNavigationPreservesSignedIDsAndComposedLabels",
+    "status": 0,
+    "seconds": 3.99,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualSegmentedNavigationPreservesSignedIDsAndComposedLabels.log"
+  },
+  {
+    "name": "runtime-actualSheetsOwnModalInputAndRetainChoicesAcrossPresentations",
+    "status": 0,
+    "seconds": 24.74,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualSheetsOwnModalInputAndRetainChoicesAcrossPresentations.log"
+  },
+  {
+    "name": "runtime-actualSidebarOwnsGroupedSelectionActionsAndModalPresentation",
+    "status": 1,
+    "seconds": 18.06,
+    "completed_count": null,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualSidebarOwnsGroupedSelectionActionsAndModalPresentation.log"
+  },
+  {
+    "name": "runtime-actualTabMetadataChangesFenceUnpresentedSelection",
+    "status": 0,
+    "seconds": 4.25,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualTabMetadataChangesFenceUnpresentedSelection.log"
+  },
+  {
+    "name": "runtime-actualTextExampleMountsInSwiftUIAndAcknowledgesQueuedNativeEdits",
+    "status": 0,
+    "seconds": 5.34,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualTextExampleMountsInSwiftUIAndAcknowledgesQueuedNativeEdits.log"
+  },
+  {
+    "name": "runtime-actualTextPropertiesUpdateWithoutRemounting",
+    "status": 0,
+    "seconds": 6.32,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualTextPropertiesUpdateWithoutRemounting.log"
+  },
+  {
+    "name": "runtime-actualTodoEditsReordersCompletesAddsAndDeletesWithoutLosingIdentity",
+    "status": 0,
+    "seconds": 8.9,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualTodoEditsReordersCompletesAddsAndDeletesWithoutLosingIdentity.log"
+  },
+  {
+    "name": "runtime-actualToolbarGroupsExposeNativeControls",
+    "status": 0,
+    "seconds": 12.25,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualToolbarGroupsExposeNativeControls.log"
+  },
+  {
+    "name": "runtime-actualToolbarOverflowKeepsNativeCommands",
+    "status": 0,
+    "seconds": 1.1,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualToolbarOverflowKeepsNativeCommands.log"
+  },
+  {
+    "name": "runtime-actualToolbarReparentingChangesTheActionOwner",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualToolbarReparentingChangesTheActionOwner.log"
+  },
+  {
+    "name": "runtime-actualToolbarRetainsCommandsAndRejectsStaleInput",
+    "status": 0,
+    "seconds": 0.52,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualToolbarRetainsCommandsAndRejectsStaleInput.log"
+  },
+  {
+    "name": "runtime-actualTwoColumnGalleryPreservesSelectionAndRejectsMissingContent",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualTwoColumnGalleryPreservesSelectionAndRejectsMissingContent.log"
+  },
+  {
+    "name": "runtime-actualWeightedUpdatesAndReordersRetainChildren",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualWeightedUpdatesAndReordersRetainChildren.log"
+  },
+  {
+    "name": "runtime-actualWindowRequestsWaitForPresentationAndResume",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualWindowRequestsWaitForPresentationAndResume.log"
+  },
+  {
+    "name": "runtime-actualWorkflowSelectsStepsAndFencesInactiveContent",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-actualWorkflowSelectsStepsAndFencesInactiveContent.log"
+  },
+  {
+    "name": "runtime-appKitCapturedHoverReachesOcaml",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-appKitCapturedHoverReachesOcaml.log"
+  },
+  {
+    "name": "runtime-applicationCloseCancelsTasksAndFencesOldSendersAcrossRestart",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationCloseCancelsTasksAndFencesOldSendersAcrossRestart.log"
+  },
+  {
+    "name": "runtime-applicationDelayedCancellationKeepsUiAndOtherRepliesAlive",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationDelayedCancellationKeepsUiAndOtherRepliesAlive.log"
+  },
+  {
+    "name": "runtime-applicationErrorsAreBoundedAndOversizedResponsesResolve",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationErrorsAreBoundedAndOversizedResponsesResolve.log"
+  },
+  {
+    "name": "runtime-applicationEventBackpressurePreservesQueuedInputAndPendingReply",
+    "status": 0,
+    "seconds": 0.52,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationEventBackpressurePreservesQueuedInputAndPendingReply.log"
+  },
+  {
+    "name": "runtime-applicationOpaqueRepliesEventsAndEveryErrorReachActualOcaml",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationOpaqueRepliesEventsAndEveryErrorReachActualOcaml.log"
+  },
+  {
+    "name": "runtime-applicationOwnsNotificationSubscriptionAndStopsItOnClose",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationOwnsNotificationSubscriptionAndStopsItOnClose.log"
+  },
+  {
+    "name": "runtime-applicationProviderWaitsForPresentationAndEchoesOpaqueBytes",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationProviderWaitsForPresentationAndEchoesOpaqueBytes.log"
+  },
+  {
+    "name": "runtime-applicationRequestConcurrencyIsBoundedAndExcessRequestsResolve",
+    "status": 0,
+    "seconds": 1.74,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationRequestConcurrencyIsBoundedAndExcessRequestsResolve.log"
+  },
+  {
+    "name": "runtime-applicationWithoutProviderResolvesUnavailableAfterPresentation",
+    "status": 0,
+    "seconds": 0.52,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-applicationWithoutProviderResolvesUnavailableAfterPresentation.log"
+  },
+  {
+    "name": "runtime-batchedConcurrentPointerEdgesReachActualOcamlWithoutLosingContacts",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-batchedConcurrentPointerEdgesReachActualOcamlWithoutLosingContacts.log"
+  },
+  {
+    "name": "runtime-buttonAutofocusRunsRealOCamlAndRetainsFocusAcrossHandlerReplacement",
+    "status": 0,
+    "seconds": 1.43,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-buttonAutofocusRunsRealOCamlAndRetainsFocusAcrossHandlerReplacement.log"
+  },
+  {
+    "name": "runtime-cancelledApplicationReplyCannotDiscardQueuedUiOrOtherReplies",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-cancelledApplicationReplyCannotDiscardQueuedUiOrOtherReplies.log"
+  },
+  {
+    "name": "runtime-choiceEventsQueuedAfterFilteringCannotChangeHiddenCanonicalChoices",
+    "status": 0,
+    "seconds": 1.47,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-choiceEventsQueuedAfterFilteringCannotChangeHiddenCanonicalChoices.log"
+  },
+  {
+    "name": "runtime-choiceLayoutsKeepModelStateAndRejectHiddenDisabledOrIgnoredRequests",
+    "status": 0,
+    "seconds": 3.33,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-choiceLayoutsKeepModelStateAndRejectHiddenDisabledOrIgnoredRequests.log"
+  },
+  {
+    "name": "runtime-choicePickerAdaptersFollowAllFiveNativeControlSizes",
+    "status": 0,
+    "seconds": 3.3,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-choicePickerAdaptersFollowAllFiveNativeControlSizes.log"
+  },
+  {
+    "name": "runtime-choiceSearchPreservesUnicodeSelectionAndMarkedTextThroughOcamlAcknowledgments",
+    "status": 0,
+    "seconds": 1.59,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-choiceSearchPreservesUnicodeSelectionAndMarkedTextThroughOcamlAcknowledgments.log"
+  },
+  {
+    "name": "runtime-civilControlsStageAndReturnToOcamlOwnedValues",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-civilControlsStageAndReturnToOcamlOwnedValues.log"
+  },
+  {
+    "name": "runtime-civilDateAndTimeEventsReachTheActualOcamlHandlers",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-civilDateAndTimeEventsReachTheActualOcamlHandlers.log"
+  },
+  {
+    "name": "runtime-closeIsIdempotentAndRuntimeCanRestart",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-closeIsIdempotentAndRuntimeCanRestart.log"
+  },
+  {
+    "name": "runtime-columnEchoAwaitingPresentationDoesNotDropTheFinalNativeIntent",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-columnEchoAwaitingPresentationDoesNotDropTheFinalNativeIntent.log"
+  },
+  {
+    "name": "runtime-composerChildValidationPrecedesResourceCreationAndCoversCachedProps",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-composerChildValidationPrecedesResourceCreationAndCoversCachedProps.log"
+  },
+  {
+    "name": "runtime-composerObservesDistinctUtf8SpellingsOfEquivalentText",
+    "status": 0,
+    "seconds": 0.88,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-composerObservesDistinctUtf8SpellingsOfEquivalentText.log"
+  },
+  {
+    "name": "runtime-composerRejectsMalformedPayloadAndReservedRegistration",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-composerRejectsMalformedPayloadAndReservedRegistration.log"
+  },
+  {
+    "name": "runtime-composerRetainsMarkedTextAndRejectsUnadmittedEdits",
+    "status": 0,
+    "seconds": 1.37,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-composerRetainsMarkedTextAndRejectsUnadmittedEdits.log"
+  },
+  {
+    "name": "runtime-concurrentPumpsAreSerializedBehindOneToken",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-concurrentPumpsAreSerializedBehindOneToken.log"
+  },
+  {
+    "name": "runtime-contextualSelectionUsesCurrentIdsForMembershipAndBatchCommands",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-contextualSelectionUsesCurrentIdsForMembershipAndBatchCommands.log"
+  },
+  {
+    "name": "runtime-coreLinkSurvivesRealPresentationGapAndReturnsToAnInteractiveRoot",
+    "status": 0,
+    "seconds": 1.43,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-coreLinkSurvivesRealPresentationGapAndReturnsToAnInteractiveRoot.log"
+  },
+  {
+    "name": "runtime-counterFrameAndNoDiffToken",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-counterFrameAndNoDiffToken.log"
+  },
+  {
+    "name": "runtime-decodeRealOcamlFrameAndRejectCorruptTransport",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-decodeRealOcamlFrameAndRejectCorruptTransport.log"
+  },
+  {
+    "name": "runtime-delayedHostRepliesRebaseAcrossPresentationAndCannotCrossRestart",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-delayedHostRepliesRebaseAcrossPresentationAndCannotCrossRestart.log"
+  },
+  {
+    "name": "runtime-expandableComposerDisableRemoveAndReplaceOwnResources",
+    "status": 0,
+    "seconds": 5.17,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-expandableComposerDisableRemoveAndReplaceOwnResources.log"
+  },
+  {
+    "name": "runtime-expandableComposerRetainsDraftAndFencesBackgroundAcrossReopening",
+    "status": 0,
+    "seconds": 5.07,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-expandableComposerRetainsDraftAndFencesBackgroundAcrossReopening.log"
+  },
+  {
+    "name": "runtime-expandableComposerValidatesPayloadChildrenAndReservedKind",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-expandableComposerValidatesPayloadChildrenAndReservedKind.log"
+  },
+  {
+    "name": "runtime-fileDialogCancellationDoesNotReplaceAnotherRequestOrCrossRestart",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-fileDialogCancellationDoesNotReplaceAnotherRequestOrCrossRestart.log"
+  },
+  {
+    "name": "runtime-fileSelectionPreservesAllResultsAndRejectsMalformedListsInActualOcaml",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-fileSelectionPreservesAllResultsAndRejectsMalformedListsInActualOcaml.log"
+  },
+  {
+    "name": "runtime-gesturesReachActualOcamlWithAllCoordinatesKindsAndReplayFencing",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-gesturesReachActualOcamlWithAllCoordinatesKindsAndReplayFencing.log"
+  },
+  {
+    "name": "runtime-hapticCancellationMissingWindowAndRestartResolveThroughOcaml",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hapticCancellationMissingWindowAndRestartResolveThroughOcaml.log"
+  },
+  {
+    "name": "runtime-hapticRequestsCompleteActualOcamlAndPreserveRepeatedEffects",
+    "status": 0,
+    "seconds": 0.68,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hapticRequestsCompleteActualOcamlAndPreserveRepeatedEffects.log"
+  },
+  {
+    "name": "runtime-hapticsWaitForPresentationActivationAndVisibility",
+    "status": 0,
+    "seconds": 0.72,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hapticsWaitForPresentationActivationAndVisibility.log"
+  },
+  {
+    "name": "runtime-hiddenSessionDefersPumpAndPresentationWithoutLosingEvents",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hiddenSessionDefersPumpAndPresentationWithoutLosingEvents.log"
+  },
+  {
+    "name": "runtime-hostFocusRequestsReachActualFieldsAndClearOnlyTheirWindow",
+    "status": 0,
+    "seconds": 0.94,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostFocusRequestsReachActualFieldsAndClearOnlyTheirWindow.log"
+  },
+  {
+    "name": "runtime-hostMeasurementUsesSwiftUIPointsAndRejectsRemovedNodes",
+    "status": 0,
+    "seconds": 0.83,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostMeasurementUsesSwiftUIPointsAndRejectsRemovedNodes.log"
+  },
+  {
+    "name": "runtime-hostMenusAndFileDialogsCannotOverlap",
+    "status": 0,
+    "seconds": 3.19,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostMenusAndFileDialogsCannotOverlap.log"
+  },
+  {
+    "name": "runtime-hostMenusCancelBusyRequestsAndFenceRestartedCallbacks",
+    "status": 0,
+    "seconds": 2.97,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostMenusCancelBusyRequestsAndFenceRestartedCallbacks.log"
+  },
+  {
+    "name": "runtime-hostMenusDeferInactiveRequestsAndCancelLostWindowContext",
+    "status": 0,
+    "seconds": 3.1,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostMenusDeferInactiveRequestsAndCancelLostWindowContext.log"
+  },
+  {
+    "name": "runtime-hostMenusDismissScrollAndRetainDisabledChoices",
+    "status": 0,
+    "seconds": 2.98,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostMenusDismissScrollAndRetainDisabledChoices.log"
+  },
+  {
+    "name": "runtime-hostMenusSelectActualOcamlAndBlockBackgroundAtBothWidths",
+    "status": 0,
+    "seconds": 2.93,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostMenusSelectActualOcamlAndBlockBackgroundAtBothWidths.log"
+  },
+  {
+    "name": "runtime-hostPickersCancelBlockAndFenceRealSheets",
+    "status": 0,
+    "seconds": 8.13,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostPickersCancelBlockAndFenceRealSheets.log"
+  },
+  {
+    "name": "runtime-hostPickersEditNativeControlsBeforeCommittingToOcaml",
+    "status": 0,
+    "seconds": 5.11,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostPickersEditNativeControlsBeforeCommittingToOcaml.log"
+  },
+  {
+    "name": "runtime-hostPickersFixtureStarts",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostPickersFixtureStarts.log"
+  },
+  {
+    "name": "runtime-hostScrollDefersPresentationCancelsAndRejectsRetiredTargets",
+    "status": 0,
+    "seconds": 2.54,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostScrollDefersPresentationCancelsAndRejectsRetiredTargets.log"
+  },
+  {
+    "name": "runtime-hostScrollRequestsMoveActualOCamlContainers",
+    "status": 0,
+    "seconds": 22.54,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostScrollRequestsMoveActualOCamlContainers.log"
+  },
+  {
+    "name": "runtime-hostScrollShortContentCompletesWithoutTravel",
+    "status": 0,
+    "seconds": 0.94,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostScrollShortContentCompletesWithoutTravel.log"
+  },
+  {
+    "name": "runtime-hostWindowPresentsCounterAndClosesWhenRemoved",
+    "status": 0,
+    "seconds": 0.62,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-hostWindowPresentsCounterAndClosesWhenRemoved.log"
+  },
+  {
+    "name": "runtime-invalidClockDoesNotConsumePendingToken",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-invalidClockDoesNotConsumePendingToken.log"
+  },
+  {
+    "name": "runtime-invalidEntrypointsAndSecondOwnerFailWithoutDisplacingFirst",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-invalidEntrypointsAndSecondOwnerFailWithoutDisplacingFirst.log"
+  },
+  {
+    "name": "runtime-keyboardEventsReachActualOcamlWithEveryFieldAndPreserveRepeatsAndReplayFence",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-keyboardEventsReachActualOcamlWithEveryFieldAndPreserveRepeatsAndReplayFence.log"
+  },
+  {
+    "name": "runtime-listScrollCompletionUsesItsOriginalOCamlHandlerAfterSeveralRebindings",
+    "status": 0,
+    "seconds": 0.78,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-listScrollCompletionUsesItsOriginalOCamlHandlerAfterSeveralRebindings.log"
+  },
+  {
+    "name": "runtime-mergedHoverAndMouseContactReachActualOcamlInOrder",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-mergedHoverAndMouseContactReachActualOcamlInOrder.log"
+  },
+  {
+    "name": "runtime-mixedCollectionKeepsOneViewportAndStableAnchor",
+    "status": 0,
+    "seconds": 21.03,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-mixedCollectionKeepsOneViewportAndStableAnchor.log"
+  },
+  {
+    "name": "runtime-mixedWindowChangesDoNotRepublishCatalog",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-mixedWindowChangesDoNotRepublishCatalog.log"
+  },
+  {
+    "name": "runtime-mountedEditorRetainsFocusAcrossNativeAncestorUpdates",
+    "status": 0,
+    "seconds": 3.47,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-mountedEditorRetainsFocusAcrossNativeAncestorUpdates.log"
+  },
+  {
+    "name": "runtime-mountedFieldRetainsFocusAcrossNativeAncestorUpdates",
+    "status": 0,
+    "seconds": 2.87,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-mountedFieldRetainsFocusAcrossNativeAncestorUpdates.log"
+  },
+  {
+    "name": "runtime-nativeAppKitKeyPacketsReachTheActualOcamlHandler",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeAppKitKeyPacketsReachTheActualOcamlHandler.log"
+  },
+  {
+    "name": "runtime-nativeDisclosureCollapseRevokesFocusBeforeTheNextPump",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeDisclosureCollapseRevokesFocusBeforeTheNextPump.log"
+  },
+  {
+    "name": "runtime-nativeFieldEditorsReportNestedScopeTransitionsToOCaml",
+    "status": 0,
+    "seconds": 1.86,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeFieldEditorsReportNestedScopeTransitionsToOCaml.log"
+  },
+  {
+    "name": "runtime-nativeFileExportCompletionReturnsDestinationThroughActualOcaml",
+    "status": 0,
+    "seconds": 0.61,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeFileExportCompletionReturnsDestinationThroughActualOcaml.log"
+  },
+  {
+    "name": "runtime-nativeFileImportCompletionCopiesAllFilesThroughActualOcaml",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeFileImportCompletionCopiesAllFilesThroughActualOcaml.log"
+  },
+  {
+    "name": "runtime-nativeFormActionsReachOCamlAndRetainRowsDuringReordering",
+    "status": 0,
+    "seconds": 0.84,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeFormActionsReachOCamlAndRetainRowsDuringReordering.log"
+  },
+  {
+    "name": "runtime-nativeHapticsRecheckActivityAtExecutionTime",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeHapticsRecheckActivityAtExecutionTime.log"
+  },
+  {
+    "name": "runtime-nativeHostEnvironmentReachesOCamlAndTracksWindowAndSettings",
+    "status": 0,
+    "seconds": 2.14,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeHostEnvironmentReachesOCamlAndTracksWindowAndSettings.log"
+  },
+  {
+    "name": "runtime-nativeHostEnvironmentRejectsInvalidAndRetiredSources",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeHostEnvironmentRejectsInvalidAndRetiredSources.log"
+  },
+  {
+    "name": "runtime-nativeHostEnvironmentResumesWithLatestSampleAndResendsAfterRestart",
+    "status": 0,
+    "seconds": 8.2,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeHostEnvironmentResumesWithLatestSampleAndResendsAfterRestart.log"
+  },
+  {
+    "name": "runtime-nativeKeyboardAutofocusWaitsForPresentationAndDoesNotStealFocus",
+    "status": 0,
+    "seconds": 1.16,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeKeyboardAutofocusWaitsForPresentationAndDoesNotStealFocus.log"
+  },
+  {
+    "name": "runtime-nativeKeyboardListenersBubbleToOCamlAndRespectNativeEditing",
+    "status": 0,
+    "seconds": 3.09,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeKeyboardListenersBubbleToOCamlAndRespectNativeEditing.log"
+  },
+  {
+    "name": "runtime-nativeLinkSettlementAllowsRetryAndExpiresOldPresentation",
+    "status": 0,
+    "seconds": 1.36,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeLinkSettlementAllowsRetryAndExpiresOldPresentation.log"
+  },
+  {
+    "name": "runtime-nativeListRangesPreserveActualMailDelayedPaging",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeListRangesPreserveActualMailDelayedPaging.log"
+  },
+  {
+    "name": "runtime-nativeNoticeButtonsCompleteRealOcamlAndFitCompactWindows",
+    "status": 0,
+    "seconds": 0.78,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeNoticeButtonsCompleteRealOcamlAndFitCompactWindows.log"
+  },
+  {
+    "name": "runtime-nativeNoticesCancelQueuedAndVisibleRequestsAndFenceRetiredButtons",
+    "status": 0,
+    "seconds": 1.04,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeNoticesCancelQueuedAndVisibleRequestsAndFenceRetiredButtons.log"
+  },
+  {
+    "name": "runtime-nativeNoticesQueueAndPauseTheirDisplayedTimeout",
+    "status": 0,
+    "seconds": 1.6,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeNoticesQueueAndPauseTheirDisplayedTimeout.log"
+  },
+  {
+    "name": "runtime-nativeOutlineContextMenusKeepParentAndChildHandlerOwnership",
+    "status": 0,
+    "seconds": 0.95,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeOutlineContextMenusKeepParentAndChildHandlerOwnership.log"
+  },
+  {
+    "name": "runtime-nativeOutlineScrollReportsHiddenThenRevealsAnOffscreenDescendant",
+    "status": 0,
+    "seconds": 0.89,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeOutlineScrollReportsHiddenThenRevealsAnOffscreenDescendant.log"
+  },
+  {
+    "name": "runtime-nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting",
+    "status": 0,
+    "seconds": 1.2,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting.log"
+  },
+  {
+    "name": "runtime-nativeStartupNoticeWaitsForActivePresentation",
+    "status": 0,
+    "seconds": 1.16,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeStartupNoticeWaitsForActivePresentation.log"
+  },
+  {
+    "name": "runtime-nativeTextEditsReachTheActualOcamlExampleAndRejectStaleLocalVersions",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeTextEditsReachTheActualOcamlExampleAndRejectStaleLocalVersions.log"
+  },
+  {
+    "name": "runtime-nativeViewRejectsFramesAtomicallyAndBoundsQueue",
+    "status": 0,
+    "seconds": 0.72,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nativeViewRejectsFramesAtomicallyAndBoundsQueue.log"
+  },
+  {
+    "name": "runtime-nestedNativeViewsBecomePresentedInOneAcknowledgment",
+    "status": 0,
+    "seconds": 0.84,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nestedNativeViewsBecomePresentedInOneAcknowledgment.log"
+  },
+  {
+    "name": "runtime-nestedScrollObserversKeepTheirSourcesAndReportBackpressure",
+    "status": 0,
+    "seconds": 1.64,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nestedScrollObserversKeepTheirSourcesAndReportBackpressure.log"
+  },
+  {
+    "name": "runtime-nodeServicesWaitForPresentationAndRejectDetachedWindows",
+    "status": 0,
+    "seconds": 0.77,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-nodeServicesWaitForPresentationAndRejectDetachedWindows.log"
+  },
+  {
+    "name": "runtime-pendingTokenAndStaleAcknowledgmentCannotAdvanceRuntime",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-pendingTokenAndStaleAcknowledgmentCannotAdvanceRuntime.log"
+  },
+  {
+    "name": "runtime-pointerEventsReachActualOcamlHandlersWithEveryFieldAndKind",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-pointerEventsReachActualOcamlHandlersWithEveryFieldAndKind.log"
+  },
+  {
+    "name": "runtime-presentationTicketsDoNotInvalidateApplicationContent",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-presentationTicketsDoNotInvalidateApplicationContent.log"
+  },
+  {
+    "name": "runtime-publicCollectionMountsAndSamplesWindowRequestsAfterPresentation",
+    "status": 0,
+    "seconds": 2.89,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-publicCollectionMountsAndSamplesWindowRequestsAfterPresentation.log"
+  },
+  {
+    "name": "runtime-realCounterIncludesOnlyValidatedSwiftUIEnvironment",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-realCounterIncludesOnlyValidatedSwiftUIEnvironment.log"
+  },
+  {
+    "name": "runtime-realCounterStagesAndUpdatesThroughSwiftButton",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-realCounterStagesAndUpdatesThroughSwiftButton.log"
+  },
+  {
+    "name": "runtime-realFrameChangesBetweenFixedAndFlexibleWithoutRemounting",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-realFrameChangesBetweenFixedAndFlexibleWithoutRemounting.log"
+  },
+  {
+    "name": "runtime-realModifierUpdatesRetainNativeNodes",
+    "status": 0,
+    "seconds": 0.56,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-realModifierUpdatesRetainNativeNodes.log"
+  },
+  {
+    "name": "runtime-realSymbolButtonUpdatesWithoutReplacingItsNativeNode",
+    "status": 0,
+    "seconds": 0.57,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-realSymbolButtonUpdatesWithoutReplacingItsNativeNode.log"
+  },
+  {
+    "name": "runtime-registeredNativeViewRoutesEventsAndOwnsResources",
+    "status": 0,
+    "seconds": 2.32,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-registeredNativeViewRoutesEventsAndOwnsResources.log"
+  },
+  {
+    "name": "runtime-rejectionRecoversWithFreshSnapshot",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-rejectionRecoversWithFreshSnapshot.log"
+  },
+  {
+    "name": "runtime-scopedThemeGalleryRetainsActionsAndNativeInheritance",
+    "status": 0,
+    "seconds": 2.39,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-scopedThemeGalleryRetainsActionsAndNativeInheritance.log"
+  },
+  {
+    "name": "runtime-scrollingPublishesOnlyTheWindowWithoutRepeatingTheCatalog",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-scrollingPublishesOnlyTheWindowWithoutRepeatingTheCatalog.log"
+  },
+  {
+    "name": "runtime-searchableChoicesPreserveCanonicalSelectionAcrossFilteringAndContentStates",
+    "status": 0,
+    "seconds": 2.44,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-searchableChoicesPreserveCanonicalSelectionAcrossFilteringAndContentStates.log"
+  },
+  {
+    "name": "runtime-sessionWaitsForPresentationAndDispatchesVisibleButton",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-sessionWaitsForPresentationAndDispatchesVisibleButton.log"
+  },
+  {
+    "name": "runtime-shutdownActualNativeWindow",
+    "status": 0,
+    "seconds": 1.76,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownActualNativeWindow.log"
+  },
+  {
+    "name": "runtime-shutdownDeadlineCancellationAndClose",
+    "status": 0,
+    "seconds": 0.55,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownDeadlineCancellationAndClose.log"
+  },
+  {
+    "name": "runtime-shutdownInvalidAdmissionDoesNotRetireConnection",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownInvalidAdmissionDoesNotRetireConnection.log"
+  },
+  {
+    "name": "runtime-shutdownLateHandlerCannotEnterReplacement",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownLateHandlerCannotEnterReplacement.log"
+  },
+  {
+    "name": "runtime-shutdownNativeTransportRejectsUiWithoutConsumingPresentation",
+    "status": 0,
+    "seconds": 0.46,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownNativeTransportRejectsUiWithoutConsumingPresentation.log"
+  },
+  {
+    "name": "runtime-shutdownProgressWithoutPresentation",
+    "status": 0,
+    "seconds": 0.72,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownProgressWithoutPresentation.log"
+  },
+  {
+    "name": "runtime-shutdownResponseSurvivesSaturatedLifecycleQueue",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-shutdownResponseSurvivesSaturatedLifecycleQueue.log"
+  },
+  {
+    "name": "runtime-swiftPressRunsActualOcamlCounterHandler",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-swiftPressRunsActualOcamlCounterHandler.log"
+  },
+  {
+    "name": "runtime-tabEchoAwaitingPresentationRetainsTheFinalIntentAndFencesPageInput",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-tabEchoAwaitingPresentationRetainsTheFinalIntentAndFencesPageInput.log"
+  },
+  {
+    "name": "runtime-tableFencesHiddenDetailsAndRetainsControlledSelection",
+    "status": 0,
+    "seconds": 0.51,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-tableFencesHiddenDetailsAndRetainsControlledSelection.log"
+  },
+  {
+    "name": "runtime-toggleEchoPreservesFinalIntentAndRejectsDisabledStaleBindings",
+    "status": 0,
+    "seconds": 0.5,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-toggleEchoPreservesFinalIntentAndRejectsDisabledStaleBindings.log"
+  },
+  {
+    "name": "runtime-unchangedPumpsDoNotReconcilePresentation",
+    "status": 0,
+    "seconds": 0.45,
+    "completed_count": 1,
+    "log": "/Users/rcmerci/gh-repos/bonsai-ui/_build/validation/journal-isolated-swift/runtime-unchangedPumpsDoNotReconcilePresentation.log"
+  }
+]

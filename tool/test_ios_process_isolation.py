@@ -16,7 +16,7 @@ SWITCH = os.environ.get("IOS_CROSS_TEST_SWITCH", str(ROOT / "_build/ios/switches
 
 class ProcessIsolationTests(unittest.TestCase):
     def test_physical_ios_complete_object_has_no_process_imports(self):
-        env = dict(os.environ, OPAMROOT=OPAM_ROOT, VER="18.0",
+        env = dict(os.environ, OPAMROOT=OPAM_ROOT, VER="26.0",
                    SDK=subprocess.check_output(["xcrun", "--sdk", "iphoneos", "--show-sdk-version"], text=True).strip())
         env.pop("OCAMLPATH", None)
         subprocess.run([

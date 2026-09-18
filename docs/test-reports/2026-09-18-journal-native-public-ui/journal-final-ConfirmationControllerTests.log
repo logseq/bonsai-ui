@@ -1,0 +1,34 @@
+[0/1] Planning build
+Test Suite 'Selected tests' started at 2026-09-18 20:42:49.690.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:42:49.691.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:42:49.691.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:42:49.691.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite ConfirmationControllerTests started.
+◇ Test buttonWinsBothNativeCallbackOrders(dismissFirst:) started.
+◇ Test case passing 1 argument dismissFirst → false to buttonWinsBothNativeCallbackOrders(dismissFirst:) started.
+◇ Test case passing 1 argument dismissFirst → true to buttonWinsBothNativeCallbackOrders(dismissFirst:) started.
+✔ Test buttonWinsBothNativeCallbackOrders(dismissFirst:) with 2 test cases passed after 0.001 seconds.
+◇ Test dismissalSettlesOnceAndDisabledActionsDoNotConsumeIt() started.
+✔ Test dismissalSettlesOnceAndDisabledActionsDoNotConsumeIt() passed after 0.001 seconds.
+◇ Test retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "token" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "binding" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "hidden" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "configuration" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "disposed" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+✔ Test retainedCallbacksNeverTargetANewPresentation(change:) with 5 test cases passed after 0.001 seconds.
+◇ Test rejectedAdmissionConsumesResponseWithoutReplayingDestructiveAction() started.
+✔ Test rejectedAdmissionConsumesResponseWithoutReplayingDestructiveAction() passed after 0.001 seconds.
+◇ Test oldSettlementCannotRestoreClearedOrReplaceNewToken() started.
+✔ Test oldSettlementCannotRestoreClearedOrReplaceNewToken() passed after 0.001 seconds.
+◇ Test freshTokensIncreaseWithinOnePresenter() started.
+✔ Test freshTokensIncreaseWithinOnePresenter() passed after 0.001 seconds.
+◇ Test confirmationWireRejectsMalformedPresentationAndPreservesTheBase() started.
+✔ Test confirmationWireRejectsMalformedPresentationAndPreservesTheBase() passed after 0.004 seconds.
+✔ Suite ConfirmationControllerTests passed after 0.005 seconds.
+✔ Test run with 7 tests in 1 suite passed after 0.006 seconds.

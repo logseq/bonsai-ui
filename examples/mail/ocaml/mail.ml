@@ -861,7 +861,7 @@ let expanded_mail_details ~reply ~open_message ~notice message =
   blocks
 ;;
 
-let with_swipe_actions ~swipe_actions message content =
+let row_swipe_actions ~swipe_actions message =
   let archive, (trash, read) = swipe_actions in
   let action ?role ~key ~side ~title ~background ~symbol ~on_press () =
     Ui.View.Swipe_actions.action
@@ -906,12 +906,9 @@ let with_swipe_actions ~swipe_actions message content =
       ()
   in
   Ui.View.Swipe_actions.create
-    ~key:(Ui.Key.int message.id)
     ~allows_full_swipe:true
     ~actions:[ archive_action; trash_action; read_action ]
-    ~content
     ()
-  |> Ui.View.with_test_id (Ui.Test_id.string (Printf.sprintf "mail-swipe-%d" message.id))
 ;;
 
 let render_mail_row
@@ -950,8 +947,11 @@ let render_mail_row
                     message.id)))
       ()
   in
-  with_swipe_actions ~swipe_actions message content
-  |> Ui.View.Native_list.row ~key:(Ui.Key.int message.id)
+  Ui.View.Native_list.row
+    ~key:(Ui.Key.int message.id)
+    ~test_id:(Ui.Test_id.string (Printf.sprintf "mail-swipe-%d" message.id))
+    ~swipe_actions:(row_swipe_actions ~swipe_actions message)
+    content
 ;;
 
 let mail_row handlers set_state large_text message_id row_data _graph =
@@ -1155,6 +1155,7 @@ let render_mail_body ~state ~rows ~open_menu ~on_visible_range =
     let rows = if has_loading_row then rows @ [ loading_more_row ] else rows in
     let list =
       Ui.View.Native_list.vertical
+        ~style:Plain
         ~key:(Ui.Key.string ("mail-list-" ^ mail_destination_title destination))
         ~on_visible_range
         [ Ui.View.Native_list.section ~key:(Ui.Key.string "messages") rows ]

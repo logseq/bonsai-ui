@@ -1,6 +1,6 @@
 # SQLite Worker Todo
 
-SwiftUI hosts the application on physical iOS 18+ arm64 and macOS 26+ arm64.
+SwiftUI hosts the application on physical iOS 26+ arm64 and macOS 26+ arm64.
 Simulator is unsupported. OCaml/Bonsai owns UI state, and a dedicated OCaml
 Worker owns all SQLite connections, statements, transactions and file operations.
 Native Swift code prepares the application data directory and the versioned
@@ -80,7 +80,7 @@ execution guarantee.
 
 ## Remaining acceptance
 
-The actual OCaml program now cross-builds and links into a signed iOS 18 arm64
+The actual OCaml program now cross-builds and links into a signed iOS 26 arm64
 SwiftUI Release App, using the system SQLite library. Installation and device
 behavior remain unverified; see
 [example build evidence](../../docs/swiftui-example-builds.md). Production
@@ -105,6 +105,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

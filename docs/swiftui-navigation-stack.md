@@ -131,3 +131,41 @@ physical iOS execution are established by these macOS tests.
 
 References: [Apple: Understanding the navigation stack](https://developer.apple.com/documentation/swiftui/understanding-the-navigation-stack)
 and [Apple: NSHostingController scene bridging](https://developer.apple.com/documentation/swiftui/nshostingcontroller/scenebridgingoptions).
+
+## Core activation links
+
+Use a keyed public link for navigation requests with ordinary OCaml labels:
+
+```ocaml
+View.Navigation_link.create
+  ~key:(Key.string "open-entry")
+  ~activation_id:"journal-entry:42"
+  ~on_activate:open_entry
+  ~label:(View.text "Open entry")
+  ()
+```
+
+The link must belong to a Navigation_stack. It uses a real SwiftUI NavigationLink
+with a full-width label hit area. OCaml accepts an activation by updating the path;
+no temporary destination is rendered. Disabled links cannot activate. Touch,
+accessibility default activation, and Return/Space enter the same captured
+navigation intent before SwiftUI can create optimistic value-link route state.
+The accepted OCaml path performs the native push. Physical testing showed that
+rejecting the value link's path write alone still recreated the root List; the
+explicit activation boundary preserves its native instance and scroll position
+without restoration commands.
+
+Change activation_id when the logical command changes. Its UTF-8 bytes define
+identity. Pending activation survives label/layout updates only while the node,
+stack, path, activation identity, enabled state, and exact Handler binding remain
+unchanged. A newly allocated Handler cancels the pending click. The framework
+waits at most 500ms for presentation readiness and retries on readiness changes.
+It does not replay transport rejection. One emitted activation blocks subsequent
+activations until its own event is pumped, including an unchanged route.
+
+CoreNavigationLinkTests exercises the actual OCaml fixture, native accessibility
+activation, a label replacement during the presentation gap, native Back, and
+activation after returning to the same root. Physical iPhone tests additionally
+verify unchanged-route settlement, interactive Back with the same visible row
+position, and working bottom-toolbar commands after returning. VoiceOver remains
+unverified; see the implementation report for exact platform evidence.

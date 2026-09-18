@@ -22,7 +22,7 @@ The only project configuration is `bonsai-swiftui.sexp`, using schema 4:
  (native_target app/native_embed.exe.o)
  (features)
  (macos (bundle_identifier org.example.journal) (minimum_version 26.0) (architectures arm64))
- (ios (bundle_identifier org.example.journal.ios) (minimum_version 18.0) (architectures arm64)))
+ (ios (bundle_identifier org.example.journal.ios) (minimum_version 26.0) (architectures arm64)))
 ```
 
 Core is implicit; `network` and `sqlite` are explicit features. Old schemas and
@@ -84,17 +84,17 @@ An explicitly selected complete object can enter the same verified pipeline:
 
 ```sh
 bonsai-swiftui build ios --profile release \
-  --native-object /path/to/ios18/native_embed.exe.o \
+  --native-object /path/to/ios26/native_embed.exe.o \
   --development-team "$APPLE_DEVELOPMENT_TEAM"
 bonsai-swiftui run ios --profile release \
-  --native-object /path/to/ios18/native_embed.exe.o \
+  --native-object /path/to/ios26/native_embed.exe.o \
   --development-team "$APPLE_DEVELOPMENT_TEAM" --device "$DEVICE_ID"
 ```
 
 The object must register the entrypoint used by the application's Swift source.
 Relative object paths are interpreted from the invocation directory. The
 physical device ID is mandatory before an iOS run can start building. Builds
-may use `--no-codesign`; runs always require signing. Only physical-iOS execution is supported. Automatic installed-SDK discovery requires the iOS 18
+may use `--no-codesign`; runs always require signing. Only physical-iOS execution is supported. Automatic installed-SDK discovery requires the iOS 26
 floor. A local SDK installation now passes an independent App build without an
 explicit object; public SDK publication remains pending.
 
@@ -287,7 +287,7 @@ validated native dependency closure.
    (release config/entitlements/macos-release.entitlements)))
  (ios
   (bundle_identifier com.logseq.journal)
-  (minimum_version 18.0)
+  (minimum_version 26.0)
   (architectures arm64))
  (swift_packages
   (package

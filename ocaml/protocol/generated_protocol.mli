@@ -53,6 +53,12 @@ module Node_kind : sig
   val ignores_safe_area : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val safe_area_padding : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val navigation_stack : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val navigation_link : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val form : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val section : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val labeled_content : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val content_unavailable : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val text_selection : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val navigation_destination : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val navigation_split : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val flow : Bonsai_swiftui_spec.Id.Protocol.node_kind
@@ -66,6 +72,14 @@ module Node_kind : sig
   val native_list : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val list_section : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val list_row : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val list_row_label : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val context_menu : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val context_action : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val context_menu_view : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val toolbar_entry : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val toolbar_child : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val toolbar_body : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val confirmation : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val scroll_targets : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val help : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val popover : Bonsai_swiftui_spec.Id.Protocol.node_kind
@@ -150,6 +164,8 @@ module Event_tag : sig
   val refresh_request : Bonsai_swiftui_spec.Id.Protocol.event_tag
   val removal_requested : Bonsai_swiftui_spec.Id.Protocol.event_tag
   val removal_completed : Bonsai_swiftui_spec.Id.Protocol.event_tag
+  val list_scroll_completed : Bonsai_swiftui_spec.Id.Protocol.event_tag
+  val confirmation_response : Bonsai_swiftui_spec.Id.Protocol.event_tag
   val slider_changed : Bonsai_swiftui_spec.Id.Protocol.event_tag
   val slider_change_end : Bonsai_swiftui_spec.Id.Protocol.event_tag
   val range_slider_changed : Bonsai_swiftui_spec.Id.Protocol.event_tag
@@ -209,6 +225,14 @@ module Common_prop : sig
 end
 
 module Native_list_prop : sig
+  val style : Bonsai_swiftui_spec.Id.Protocol.property
+  val scroll_request : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Navigation_link_prop : sig
+  val activation_id : Bonsai_swiftui_spec.Id.Protocol.property
+  val enabled : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -216,11 +240,36 @@ module List_section_prop : sig
   val has_header : Bonsai_swiftui_spec.Id.Protocol.property
   val has_footer : Bonsai_swiftui_spec.Id.Protocol.property
   val separator : Bonsai_swiftui_spec.Id.Protocol.property
+  val section_key : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
 module List_row_prop : sig
   val separator : Bonsai_swiftui_spec.Id.Protocol.property
+  val row_key : Bonsai_swiftui_spec.Id.Protocol.property
+  val expanded : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module List_row_label_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Context_menu_prop : sig
+  val enabled : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Context_action_prop : sig
+  val action_key : Bonsai_swiftui_spec.Id.Protocol.property
+  val title : Bonsai_swiftui_spec.Id.Protocol.property
+  val enabled : Bonsai_swiftui_spec.Id.Protocol.property
+  val role : Bonsai_swiftui_spec.Id.Protocol.property
+  val symbol : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Context_menu_view_prop : sig
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -243,7 +292,31 @@ module Scroll_section_prop : sig
 end
 
 module Toolbar_prop : sig
-  val placements : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Toolbar_entry_prop : sig
+  val entry_key : Bonsai_swiftui_spec.Id.Protocol.property
+  val placement : Bonsai_swiftui_spec.Id.Protocol.property
+  val kind : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Toolbar_child_prop : sig
+  val child_key : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Toolbar_body_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Confirmation_prop : sig
+  val style : Bonsai_swiftui_spec.Id.Protocol.property
+  val request_token : Bonsai_swiftui_spec.Id.Protocol.property
+  val title : Bonsai_swiftui_spec.Id.Protocol.property
+  val message : Bonsai_swiftui_spec.Id.Protocol.property
+  val actions : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -660,6 +733,29 @@ module Divider_prop : sig
 end
 
 module Label_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Form_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Section_prop : sig
+  val has_header : Bonsai_swiftui_spec.Id.Protocol.property
+  val has_footer : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Labeled_content_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Content_unavailable_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module Text_selection_prop : sig
+  val enabled : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 

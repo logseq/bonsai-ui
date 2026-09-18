@@ -62,12 +62,16 @@ let convert_tag tag =
   then Ok Removal_requested
   else if tag = Id.removal_completed
   then Ok Removal_completed
+  else if tag = Id.list_scroll_completed
+  then Ok List_scroll_completed
   else if tag = Id.refresh_request
   then Ok Refresh_request
   else if tag = Id.scroll_position_changed
   then Ok Scroll_position_changed
   else if tag = Id.menu_action
   then Ok Menu_action
+  else if tag = Id.confirmation_response
+  then Ok Confirmation_response
   else if tag = Id.picker_selected
   then Ok Picker_selected
   else if tag = Id.slider_changed
@@ -131,6 +135,13 @@ let convert_payload tag payload =
       | Key_repeat -> Key_repeat
     in
     Ok (Key { logical_key; physical_key; action; modifiers })
+  | Confirmation_response { token; action_key } when tag = Id.confirmation_response ->
+    let result =
+      match action_key with
+      | None -> Ui_event.Payload.Dismissed
+      | Some key -> Action key
+    in
+    Ok (Confirmation_response { token; result })
   | Int64 value when tag = Id.semantics_action -> Ok (Int64 value)
   | Text value when tag = Id.text_submit -> Ok (Text value)
   | Text_edit edit when tag = Id.text_edit ->
@@ -166,7 +177,8 @@ let convert_payload tag payload =
   | Int64_bool { id; value }
     when tag = Id.table_sort_requested || tag = Id.table_row_selected ->
     Ok (Int64_bool { id; value })
-  | Int64_pair { first; second } when tag = Id.removal_requested ->
+  | Int64_pair { first; second }
+    when tag = Id.removal_requested || tag = Id.list_scroll_completed ->
     Ok (Int64_pair { first; second })
   | Float value when tag = Id.slider_changed || tag = Id.slider_change_end ->
     Ok (Float value)

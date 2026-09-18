@@ -30,7 +30,7 @@ indicator such as "•". The renderer passes Text to native TabContent.badge rat
 than converting counts through a floating-point value or a zero-hiding integer
 badge overload. Use application-localized words when a textual indicator needs
 more context. The accessibility label uses TabContent.accessibilityLabel and does
-not replace the visible title. Both modifiers compile for physical iOS 18.
+not replace the visible title. Both modifiers compile for physical iOS 26.
 See Apple's [tab metadata API](https://developer.apple.com/documentation/swiftui/tabcontent).
 
 Material.Tabs is removed. Its single-selection strip is represented by
@@ -57,7 +57,7 @@ The system supplies tab controls, layout and platform adaptation. There is no
 custom bottom-bar implementation or platform-independent promise about bar
 placement. See Apple's [Tab](https://developer.apple.com/documentation/swiftui/tab)
 and [TabView](https://developer.apple.com/documentation/swiftui/tabview) APIs.
-The implementation targets physical iOS 18+ arm64 and macOS 26+ arm64 only.
+The implementation targets physical iOS 26+ arm64 and macOS 26+ arm64 only.
 
 ## Selection and retained content
 

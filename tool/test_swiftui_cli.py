@@ -278,7 +278,7 @@ import Algorithms
         self.initialize()
         config = self.project / "bonsai-swiftui.sexp"
         self.assertTrue(config.is_file())
-        self.assertIn("(minimum_version 18.0)", config.read_text())
+        self.assertIn("(minimum_version 26.0)", config.read_text())
         self.assertFalse(list(self.project.rglob("pubspec*")))
         sources = [self.project / "swift/App.swift", self.project / "app/application.ml",
                    self.project / "app/dune"]

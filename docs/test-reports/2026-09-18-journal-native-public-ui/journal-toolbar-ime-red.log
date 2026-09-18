@@ -1,0 +1,90 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Compiling BonsaiSwiftUITests ToolbarIdentityTests.swift
+[4/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/6] Write Objects.LinkFileList
+[5/6] Linking BonsaiSwiftUIPackageTests
+Build complete! (4.06s)
+Test Suite 'Selected tests' started at 2026-09-18 18:12:52.311.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 18:12:52.312.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 18:12:52.312.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 18:12:52.312.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite ToolbarIdentityTests started.
+◇ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 2, composing → false to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 2, composing → true to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 3, composing → false to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 3, composing → true to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 4, composing → false to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 4, composing → true to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:88:7: Expectation failed: (controller.session.value → TextValue(text: "中ocal draft", selection: {1, 0}, marked: nil)) == (draft → TextValue(text: "中ocal draft", selection: {1, 0}, marked: Optional({0, 1})))
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:91:7: Expectation failed: (editor.hasMarkedText() → false) == (composing → true)
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:92:22: Expectation failed: (editor.markedRange() → {11, 0}) == (draft.marked → {0, 1})
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:88:7: Expectation failed: (controller.session.value → TextValue(text: "中ocal draft", selection: {1, 0}, marked: nil)) == (draft → TextValue(text: "中ocal draft", selection: {1, 0}, marked: Optional({0, 1})))
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:91:7: Expectation failed: (editor.hasMarkedText() → false) == (composing → true)
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:92:22: Expectation failed: (editor.markedRange() → {11, 0}) == (draft.marked → {0, 1})
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:88:7: Expectation failed: (controller.session.value → TextValue(text: "中ocal draft", selection: {1, 0}, marked: nil)) == (draft → TextValue(text: "中ocal draft", selection: {1, 0}, marked: Optional({0, 1})))
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:91:7: Expectation failed: (editor.hasMarkedText() → false) == (composing → true)
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:92:22: Expectation failed: (editor.markedRange() → {11, 0}) == (draft.marked → {0, 1})
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:88:7: Expectation failed: (controller.session.value → TextValue(text: "中ocal draft", selection: {1, 0}, marked: nil)) == (draft → TextValue(text: "中ocal draft", selection: {1, 0}, marked: Optional({0, 1})))
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:91:7: Expectation failed: (editor.hasMarkedText() → false) == (composing → true)
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:92:22: Expectation failed: (editor.markedRange() → {11, 0}) == (draft.marked → {0, 1})
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:88:7: Expectation failed: (controller.session.value → TextValue(text: "中ocal draft", selection: {1, 0}, marked: nil)) == (draft → TextValue(text: "中ocal draft", selection: {1, 0}, marked: Optional({0, 1})))
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:91:7: Expectation failed: (editor.hasMarkedText() → false) == (composing → true)
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) recorded an issue with 2 arguments focused → 4, composing → true at ToolbarIdentityTests.swift:92:22: Expectation failed: (editor.markedRange() → {11, 0}) == (draft.marked → {0, 1})
+✘ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) with 6 test cases failed after 6.498 seconds with 15 issues.
+✘ Suite ToolbarIdentityTests failed after 6.498 seconds with 15 issues.
+✘ Test run with 1 test in 1 suite failed after 6.499 seconds with 15 issues.

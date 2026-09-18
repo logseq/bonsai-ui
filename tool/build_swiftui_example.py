@@ -31,7 +31,7 @@ def main():
     name = f"Bonsai{example.title().replace('_', '')}"
     host = (args.host_directory or ROOT / "examples" / example / "apple").resolve()
     if args.target == "iphoneos" and not args.generate_only and args.native_object is None:
-        parser.error("iPhoneOS builds require --native-object from the iOS 18 arm64 cross-toolchain")
+        parser.error("iPhoneOS builds require --native-object from the iOS 26 arm64 cross-toolchain")
     project = generate_project(
         framework_root=ROOT, application_root=ROOT / "examples" / example,
         host_directory=host, product_name=name,
@@ -44,7 +44,7 @@ def main():
         return
     sdk, platform, minimum, scheme = (
         ("macosx", "MACOS", "26.0", f"{name}-macOS") if args.target == "macos"
-        else ("iphoneos", "IOS", "18.0", f"{name}-iOS")
+        else ("iphoneos", "IOS", "26.0", f"{name}-iOS")
     )
     source = args.native_object
     if source is None:

@@ -69,4 +69,4 @@ accessibility value; Buttons and Toggles are identified by their labels.
 
 Physical iOS interactions, full Gallery visual acceptance and VoiceOver remain
 unverified. Compilation against the physical-iOS SDK is not device acceptance.
-The migration still targets physical iOS 18+ arm64 and macOS 26+ arm64 only.
+The migration still targets physical iOS 26+ arm64 and macOS 26+ arm64 only.

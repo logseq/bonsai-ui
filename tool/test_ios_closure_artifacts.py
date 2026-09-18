@@ -50,7 +50,7 @@ class ClosureArtifactTests(unittest.TestCase):
                                "--lock", str(lock), "--target-lib", str(root / "lib")],
                               cwd=root, env=env, text=True, capture_output=True, timeout=120)
 
-    def test_ios18_loose_objects_and_archives_are_accepted(self):
+    def test_ios26_loose_objects_and_archives_are_accepted(self):
         with tempfile.TemporaryDirectory(prefix="bonsai closure accepted ") as directory:
             root = Path(directory)
             source, library, lock = self.fixture(root)
@@ -59,7 +59,7 @@ class ClosureArtifactTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_wrong_platform_or_minimum_inside_archive_is_rejected(self):
-        for target, diagnostic in [("arm64-apple-ios15.0", "expected minimum version 18.0"),
+        for target, diagnostic in [("arm64-apple-ios15.0", "expected minimum version 26.0"),
                                    ("arm64-apple-macos26.0", "expected platform IOS")]:
             with self.subTest(target=target), tempfile.TemporaryDirectory(prefix="bonsai closure rejected ") as directory:
                 root = Path(directory)

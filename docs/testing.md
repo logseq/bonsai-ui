@@ -1,6 +1,6 @@
 # Testing the SwiftUI backend
 
-The target matrix is physical iOS/iPadOS 18.0+ arm64 and macOS 26.0+ arm64.
+The target matrix is physical iOS/iPadOS 26.0+ arm64 and macOS 26.0+ arm64.
 iOS Simulator and Intel Mac are explicitly unsupported. The backend migration
 is incomplete; commands below exercise the implemented boundaries. Their
 success does not establish every widget, physical-device execution or screenshot
@@ -165,11 +165,11 @@ mailboxes, read/star state, detail, attachment/reply notices and paging. These
 checks do not replace actual reviewed application screenshots.
 
 `tool/test_swift_platforms.py` compiles the full Swift module and available
-example entrypoints for physical iOS 18 arm64, and checks explicit rejection of
+example entrypoints for physical iOS 26 arm64, and checks explicit rejection of
 unsupported targets. It does not cross-link OCaml, provision/sign an application,
 install on a device or execute iOS UI tests.
 
-Physical iOS acceptance requires an available iOS 18+ device and development
+Physical iOS acceptance requires an available iOS 26+ device and development
 signing. It must include the runtime, input/IME, navigation, scrolling, native
 presentation, accessibility and screenshot gates in the governing decision.
 Do not add a Simulator lane to replace those requirements.

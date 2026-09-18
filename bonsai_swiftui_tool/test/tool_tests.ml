@@ -15,7 +15,7 @@ let valid_config =
   (architectures arm64))
  (ios
   (bundle_identifier org.example.journal.ios)
-  (minimum_version 18.0)
+  (minimum_version 26.0)
   (architectures arm64)))
 |}
 ;;
@@ -116,7 +116,7 @@ let test_schema_four_host_configuration () =
   (architectures arm64)
   (entitlements (debug config/debug.plist) (profile config/debug.plist)
    (release config/release.plist)))
- (ios (bundle_identifier org.example.phone) (minimum_version 18.0)
+ (ios (bundle_identifier org.example.phone) (minimum_version 26.0)
   (architectures arm64))
  (swift_packages
   (package (id swift-collections) (url https://github.com/apple/swift-collections.git)
@@ -202,7 +202,7 @@ let test_parse_valid_config () =
     [ "core"; "network"; "sqlite" ]
     (List.map Config.Feature.to_string config.features);
   Alcotest.(check string) "macOS minimum" "26.0" config.macos.minimum_version;
-  Alcotest.(check string) "iOS minimum" "18.0" config.ios.minimum_version;
+  Alcotest.(check string) "iOS minimum" "26.0" config.ios.minimum_version;
   Alcotest.(check (list string)) "iOS architectures" [ "arm64" ] config.ios.architectures
 ;;
 
@@ -210,8 +210,11 @@ let test_application_ios_minimum () =
   let configured version =
     replace_once
       valid_config
-      ~pattern:"(minimum_version 18.0)"
-      ~replacement:("(minimum_version " ^ version ^ ")")
+      ~pattern:"(bundle_identifier org.example.journal.ios)\n  (minimum_version 26.0)"
+      ~replacement:
+        ("(bundle_identifier org.example.journal.ios)\n  (minimum_version "
+         ^ version
+         ^ ")")
   in
   List.iter
     (fun version ->
@@ -220,13 +223,24 @@ let test_application_ios_minimum () =
          "application minimum retained"
          version
          config.ios.minimum_version)
-    [ "18.0"; "26.0"; "26.1" ];
+    [ "26.0"; "26.1" ];
   List.iter
     (fun version ->
        match Config.parse_string (configured version) with
        | Error _ -> ()
        | Ok _ -> Alcotest.failf "invalid deployment minimum accepted: %s" version)
-    [ "17.9"; "0.0"; "26"; "26.x"; "26.0.1"; "26.0beta"; "-26.0"; "026.0"; "26.00" ]
+    [ "18.0"
+    ; "25.9"
+    ; "17.9"
+    ; "0.0"
+    ; "26"
+    ; "26.x"
+    ; "26.0.1"
+    ; "26.0beta"
+    ; "-26.0"
+    ; "026.0"
+    ; "26.00"
+    ]
 ;;
 
 let test_invalid_configs () =
@@ -284,8 +298,14 @@ let test_invalid_configs () =
   ; ( "unsupported iOS architecture"
     , replace_once
         valid_config
-        ~pattern:"(minimum_version 18.0)\n  (architectures arm64)"
-        ~replacement:"(minimum_version 18.0)\n  (architectures x86_64)"
+        ~pattern:
+          "(bundle_identifier org.example.journal.ios)\n\
+          \  (minimum_version 26.0)\n\
+          \  (architectures arm64)"
+        ~replacement:
+          "(bundle_identifier org.example.journal.ios)\n\
+          \  (minimum_version 26.0)\n\
+          \  (architectures x86_64)"
     , "Unsupported iOS architecture" )
   ; ( "duplicate feature"
     , replace_once
@@ -389,7 +409,7 @@ let test_command_plans () =
     (List.assoc "SDK" ios.command.environment);
   Alcotest.(check string)
     "iOS deployment target"
-    "18.0"
+    "26.0"
     (List.assoc "VER" ios.command.environment);
   Alcotest.(check string)
     "iOS source object"
@@ -427,8 +447,11 @@ let test_fixed_iphoneos_switch () =
   Alcotest.(check string) "fixed switch" "bonsai-swiftui-ios" Plan.iphoneos_switch;
   valid_config
   |> replace_once
-       ~pattern:"(minimum_version 18.0)"
-       ~replacement:"(minimum_version 18.0)\n  (switch local-ios)"
+       ~pattern:"(bundle_identifier org.example.journal.ios)\n  (minimum_version 26.0)"
+       ~replacement:
+         "(bundle_identifier org.example.journal.ios)\n\
+         \  (minimum_version 26.0)\n\
+         \  (switch local-ios)"
   |> Config.parse_string
   |> check_error_contains "Unknown ios field: switch"
 ;;
@@ -449,7 +472,7 @@ let valid_sdk_manifest =
  (findlib_toolchain ios)
  (architecture arm64)
  (platform iphoneos)
- (minimum_deployment_target 18.0)
+ (minimum_deployment_target 26.0)
  (package_universe_digest package-digest)
  (target_components_digest component-digest)
  (required_frameworks Foundation Security)
@@ -486,7 +509,7 @@ let test_sdk_manifest_contract () =
     manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> get_ok;
   Sdk.Manifest.validate_packages
     manifest
@@ -504,13 +527,13 @@ let test_sdk_manifest_contract () =
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> check_error_contains "expected Apple platform iphoneos";
   Sdk.Manifest.validate
     manifest
     ~bonsai_swiftui_version:"0.2.0"
     ~abi_version:"4"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> check_error_contains
        "The iPhoneOS switch SDK manifest is incompatible with bonsai-swiftui 0.2.0";
   Sdk.Manifest.validate
@@ -521,7 +544,7 @@ let test_sdk_manifest_contract () =
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> check_error_contains
        "Run: bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
         iphoneos";
@@ -537,7 +560,7 @@ let test_sdk_manifest_contract () =
      |> parse_sdk_manifest)
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> check_error_contains
        "Run: bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
         iphoneos";
@@ -564,7 +587,7 @@ let test_sdk_accepts_framework_source_drift () =
     stale_manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> get_ok
 ;;
 
@@ -585,7 +608,7 @@ let test_sdk_accepts_missing_framework_source_identity () =
     legacy_manifest
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"1"
-    ~minimum_deployment_target:"18.0"
+    ~minimum_deployment_target:"26.0"
   |> get_ok
 ;;
 
@@ -727,7 +750,7 @@ fi
            ~project_root
            ~bonsai_swiftui_version:"0.1.0~dev"
            ~abi_version:"4"
-           ~minimum_deployment_target:"18.0"
+           ~minimum_deployment_target:"26.0"
            ~required_packages:[ "base", "v0.17.0" ]
          |> get_ok
        in
@@ -771,7 +794,7 @@ let test_sdk_preflight_reports_missing_switch () =
          ~project_root:(Filename.concat root "project")
          ~bonsai_swiftui_version:"0.1.0~dev"
          ~abi_version:"4"
-         ~minimum_deployment_target:"18.0"
+         ~minimum_deployment_target:"26.0"
          ~required_packages:[]
        |> check_error_contains
             "The global iPhoneOS switch \"bonsai-swiftui-ios\" is missing. Run: \

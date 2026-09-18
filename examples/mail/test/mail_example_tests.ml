@@ -68,11 +68,24 @@ let test_initial_inbox_and_semantics () =
          require
            (Ui.View.Private.kind_tag_equal
               slidable.Runtime.Mounted_tree.Snapshot.node_tag
-              Ui.View.Private.K_swipe_actions)
-           "mail swipe host is not a native Swipe_actions node";
+              Ui.View.Private.K_list_row)
+           "mail swipe host is not a native List row";
          require
-           (Array.length slidable.children = 4)
-           "mail Swipe_actions host does not expose content and three actions")
+           (Array.length slidable.children = 3)
+           "mail row does not expose separate label and swipe slots";
+         let actions =
+           List.find_opt
+             (fun (node : Runtime.Mounted_tree.Snapshot.node) ->
+                Runtime.Node_id.equal node.node_id slidable.children.(1))
+             (Test.Handle.find_all handle (Test.Query.kind "Swipe_actions"))
+         in
+         require
+           (Option.fold
+              ~none:false
+              ~some:(fun (node : Runtime.Mounted_tree.Snapshot.node) ->
+                Array.length node.children = 3)
+              actions)
+           "mail row does not own exactly three swipe actions")
       Mail.For_testing.initial_inbox_ids;
     require_present
       handle

@@ -1,0 +1,26 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:43:53.563.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:43:53.563.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:43:53.563.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:43:53.563.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeListHierarchyTests started.
+◇ Test explicitActionSlotsAndSiblingScopedNestedRowsAreAccepted() started.
+✔ Test explicitActionSlotsAndSiblingScopedNestedRowsAreAccepted() passed after 0.005 seconds.
+◇ Test obsoleteWrapperGrammarAndInvalidRowSlotsAreRejected() started.
+✔ Test obsoleteWrapperGrammarAndInvalidRowSlotsAreRejected() passed after 0.001 seconds.
+◇ Test hostedDisclosureRowsRemainIndependentAndCollapsedRowsLeaveAccessibility() started.
+✔ Test hostedDisclosureRowsRemainIndependentAndCollapsedRowsLeaveAccessibility() passed after 0.499 seconds.
+◇ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() started.
+✔ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() passed after 0.003 seconds.
+◇ Test labelActivationWinsInEitherNativeCallbackOrderAndDisposalRevokesPendingExpansion() started.
+✔ Test labelActivationWinsInEitherNativeCallbackOrderAndDisposalRevokesPendingExpansion() passed after 0.001 seconds.
+◇ Test rejectedOrRepeatedLinkActivationCannotFallThroughToRowExpansion() started.
+✔ Test rejectedOrRepeatedLinkActivationCannotFallThroughToRowExpansion() passed after 0.001 seconds.
+◇ Test scrollingToAnExpandedParentUsesItsLabelRowInsteadOfItsSubtreeBounds() started.
+✔ Test scrollingToAnExpandedParentUsesItsLabelRowInsteadOfItsSubtreeBounds() passed after 0.291 seconds.
+✔ Suite NativeListHierarchyTests passed after 0.801 seconds.
+✔ Test run with 7 tests in 1 suite passed after 0.801 seconds.

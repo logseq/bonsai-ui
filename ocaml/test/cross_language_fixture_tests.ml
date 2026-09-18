@@ -256,3 +256,25 @@ let () =
   test_application_event ();
   print_endline "cross-language fixture tests passed"
 ;;
+
+let () =
+  let open Protocol.Inbound_event in
+  List.iter
+    (fun (name, action_key) ->
+       expect_fixture
+         name
+         { runtime_epoch = epoch 22L
+         ; events =
+             [ { sequence = sequence 10L
+               ; displayed_revision = revision 2L
+               ; node_id = node 5L
+               ; handler_id = handler 46L
+               ; event_tag = Protocol.Generated_protocol.Event_tag.confirmation_response
+               ; payload = Confirmation_response { token = 7L; action_key }
+               }
+             ]
+         })
+    [ "swift_confirmation_action.hex", Some "删除😀"
+    ; "swift_confirmation_dismissed.hex", None
+    ]
+;;

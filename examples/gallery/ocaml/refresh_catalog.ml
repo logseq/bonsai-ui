@@ -50,6 +50,7 @@ let component handlers graph =
       in
       let viewport =
         V.Native_list.vertical
+          ~style:Plain
           [ V.Native_list.section
               ~key:(Ui.Key.string "refresh-rows")
               (List.init 100 (fun index ->

@@ -139,7 +139,7 @@ let test_retired_scroll_header_nodes_are_rejected () =
        | Error error ->
          fail "retired scroll header failed for wrong reason: %s" error.message
        | Ok _ -> fail "retired scroll header node was accepted")
-    [ {|42 53 46 52 09 00 00 00 30 00 03 00
+    [ {|42 53 46 52 0a 00 00 00 30 00 03 00
 07 00 00 00 00 00 00 00 01 00 00 00
 00 00 00 00 02 00 00 00 00 00 00 00
 77 00 00 00 00 00 00 00 00 00 00 00
@@ -153,7 +153,7 @@ ff 01 ef cd ab ff 02 00 00 00 01 01
 00 00 00 00 c0 4f 40 01 01 01 00 00
 00 00 00 a0 47 40 01 01 01 00 00 00
 00 00 00 11 40 00 0a 00 00 00 00|}
-    ; {|4253465209000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
+    ; {|425346520a000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
     ]
 ;;
 
@@ -161,7 +161,7 @@ let test_retired_navigation_bar_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-4253465209000000300003005a00000000000000010000000000000002000000
+425346520a000000300003005a00000000000000010000000000000002000000
 000000007b00000000000000000000000100000000036c000000010000000000
 00007300ff0f00000000000000000000020004000000486f6d65010107000000
 000110000000486f6d652064657374696e6174696f6e0800000053657474696e
@@ -179,7 +179,7 @@ let test_retired_route_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-42 53 46 52 09 00 00 00 30 00 03 00
+42 53 46 52 0a 00 00 00 30 00 03 00
 49 00 00 00 00 00 00 00 04 00 00 00
 00 00 00 00 05 00 00 00 00 00 00 00
 a8 00 00 00 00 00 00 00 00 00 00 00
@@ -1838,7 +1838,11 @@ let test_additional_native_protocol_validation () =
 let test_native_typed_event_payload_round_trip () =
   let open Inbound_event in
   let events =
-    [ Generated_protocol.Event_tag.navigation_destination_selected, Int64 2L
+    [ ( Generated_protocol.Event_tag.confirmation_response
+      , Confirmation_response { token = 5L; action_key = Some "delete" } )
+    ; ( Generated_protocol.Event_tag.confirmation_response
+      , Confirmation_response { token = 6L; action_key = None } )
+    ; Generated_protocol.Event_tag.navigation_destination_selected, Int64 2L
     ; Generated_protocol.Event_tag.radio_selected, Int64 (-9L)
     ; Generated_protocol.Event_tag.slider_changed, Float 0.25
     ; Generated_protocol.Event_tag.slider_change_end, Float 0.75
@@ -2168,7 +2172,7 @@ let () =
   match
     Binary_codec.decode
       (bytes_of_hex
-         "4253465209000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
+         "425346520a000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
   with
   | Error { code = Binary_codec.Unknown_node_kind; _ } -> ()
   | Error error -> fail "retired fill failed for wrong reason: %s" error.message
@@ -2274,4 +2278,28 @@ let () =
        Bytes.set invalid offset (Char.chr value);
        expect_invalid_props_decode "invalid civil host wire" invalid)
     [ 68, 24; 69, 60; 70, 3 ]
+;;
+
+let () =
+  let props token actions =
+    Wire_frame.Confirmation_props
+      { style = 1
+      ; request_token = token
+      ; title = (if token = None then "" else "Delete?")
+      ; message = None
+      ; actions
+      }
+  in
+  let action = "delete", "Delete", true, 2 in
+  expect_frame_round_trip
+    "controlled confirmation"
+    (props_frame (props (Some 7L) [ action ]));
+  expect_frame_round_trip "closed confirmation" (props_frame (props None []));
+  List.iter
+    (fun value -> expect_invalid_props_encode "invalid confirmation" (props_frame value))
+    [ props (Some 0L) [ action ]
+    ; props (Some 1L) []
+    ; props (Some 1L) [ action; action ]
+    ; props None [ action ]
+    ]
 ;;

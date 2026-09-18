@@ -213,7 +213,7 @@ dune exec examples/note/test/note_example_tests.exe
 python3 tool/build_swiftui_example.py note
 ```
 
-For physical acceptance, first build a verified iOS 18 arm64 Note complete
+For physical acceptance, first build a verified iOS 26 arm64 Note complete
 object with the repository toolchain. The installed SDK must match Protocol 8.
 The source-checkout build can provide the object explicitly:
 

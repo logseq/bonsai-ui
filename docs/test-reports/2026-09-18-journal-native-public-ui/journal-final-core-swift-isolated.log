@@ -1,0 +1,31 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.08s)
+Test Suite 'Selected tests' started at 2026-09-18 20:30:44.507.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:30:44.508.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:30:44.508.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:30:44.508.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite CoreNavigationLinkTests started.
+◇ Test orphanCoreLinkIsRejectedBeforePublishingTree() started.
+✔ Test orphanCoreLinkIsRejectedBeforePublishingTree() passed after 0.001 seconds.
+◇ Test byteDistinctActivationReplacementReachesTheNativeOwner() started.
+✔ Test byteDistinctActivationReplacementReachesTheNativeOwner() passed after 0.003 seconds.
+◇ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() started.
+✔ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() passed after 0.001 seconds.
+◇ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() started.
+✔ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() passed after 0.001 seconds.
+◇ Test expiredAndForeignIntentsNeverEmit() started.
+✔ Test expiredAndForeignIntentsNeverEmit() passed after 0.550 seconds.
+◇ Test transportRejectionDoesNotReplayOnReadinessNotifications() started.
+✔ Test transportRejectionDoesNotReplayOnReadinessNotifications() passed after 0.001 seconds.
+✔ Suite CoreNavigationLinkTests passed after 0.555 seconds.
+◇ Suite NativeRuntimeTests started.
+◇ Test coreLinkSurvivesRealPresentationGapAndReturnsToAnInteractiveRoot() started.
+✔ Test coreLinkSurvivesRealPresentationGapAndReturnsToAnInteractiveRoot() passed after 1.015 seconds.
+✔ Suite NativeRuntimeTests passed after 1.015 seconds.
+✔ Test run with 7 tests in 2 suites passed after 1.571 seconds.

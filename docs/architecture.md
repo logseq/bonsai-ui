@@ -1,7 +1,7 @@
 # Architecture
 
 BonsaiSwiftUI renders OCaml/Bonsai applications with SwiftUI on physical
-iOS/iPadOS 18.0+ arm64 and macOS 26.0+ arm64. OCaml owns application state;
+iOS/iPadOS 26.0+ arm64 and macOS 26.0+ arm64. OCaml owns application state;
 Swift owns presentation and native resources. The Flutter/Dart source tree has
 been removed. Package and OCaml module renaming remains unfinished: current
 `bonsai_swiftui` library identifiers describe this worktree, not a second backend.

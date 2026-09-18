@@ -1,4 +1,4 @@
-"""Verify the real OCaml cross-compiler and C runtime for physical iOS 18 arm64."""
+"""Verify the real OCaml cross-compiler and C runtime for physical iOS 26 arm64."""
 
 import os
 from pathlib import Path
@@ -24,7 +24,7 @@ class CrossCompilerTests(unittest.TestCase):
                             "--", "ocamlfind", "-toolchain", "ios", *arguments, cwd=cwd)
 
     def verify(self, artifact):
-        self.command("sh", ROOT / "tool/ios/verify_macho.sh", artifact, "IOS", "arm64", "18.0")
+        self.command("sh", ROOT / "tool/ios/verify_macho.sh", artifact, "IOS", "arm64", "26.0")
 
     def test_actual_compiler_configuration(self):
         configuration = self.cross("ocamlopt", "-config")
@@ -32,19 +32,19 @@ class CrossCompilerTests(unittest.TestCase):
         self.assertIn("architecture: arm64", configuration)
         for key in ("ocamlc_cflags", "ocamlopt_cflags"):
             line = next(line for line in configuration.splitlines() if line.startswith(key + ":"))
-            self.assertIn("-miphoneos-version-min=18.0", line)
+            self.assertIn("-miphoneos-version-min=26.0", line)
             self.assertNotIn("MacOSX", line)
 
     def test_foreign_stub_and_complete_object(self):
-        with tempfile.TemporaryDirectory(prefix="bonsai ios18 compiler ") as directory:
+        with tempfile.TemporaryDirectory(prefix="bonsai ios26 compiler ") as directory:
             work = Path(directory)
             (work / "probe.ml").write_text(
-                'external native_value : unit -> int = "bonsai_ios18_probe"\n'
+                'external native_value : unit -> int = "bonsai_ios26_probe"\n'
                 'let () = Callback.register "bonsai_swiftui_compiler_probe" native_value\n'
             )
             (work / "probe_stubs.c").write_text(
                 '#include <caml/mlvalues.h>\n'
-                'CAMLprim value bonsai_ios18_probe(value unit) { (void)unit; return Val_int(18); }\n'
+                'CAMLprim value bonsai_ios26_probe(value unit) { (void)unit; return Val_int(18); }\n'
             )
             self.cross("ocamlopt", "-c", "probe_stubs.c", cwd=work)
             self.verify(work / "probe_stubs.o")
@@ -53,13 +53,13 @@ class CrossCompilerTests(unittest.TestCase):
             self.verify(work / "probe.o")
             symbols = self.command("xcrun", "nm", "-g", work / "probe.o")
             self.assertIn("_caml_startup_exn", symbols)
-            self.assertIn("_bonsai_ios18_probe", symbols)
+            self.assertIn("_bonsai_ios26_probe", symbols)
 
     def test_installed_native_runtime_object(self):
         prefix = Path(self.command("opam", "var", f"--root={OPAM_ROOT}",
                                    f"--switch={SWITCH}", "prefix").strip())
         archive = prefix / "ios-sysroot/lib/ocaml/libasmrun.a"
-        with tempfile.TemporaryDirectory(prefix="bonsai ios18 runtime ") as directory:
+        with tempfile.TemporaryDirectory(prefix="bonsai ios26 runtime ") as directory:
             work = Path(directory)
             self.command("xcrun", "ar", "-x", archive, "alloc.n.o", cwd=work)
             self.verify(work / "alloc.n.o")

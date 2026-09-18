@@ -2,7 +2,7 @@ module Ui = Bonsai_swiftui_ui
 
 let component handlers graph =
   let state, set_state =
-    Bonsai_v017.state ~equal:( = ) (0, false, false, true, true, false) graph
+    Bonsai_v017.state ~equal:( = ) (0, false, false, true, true, false, false) graph
   in
   let bind name update =
     Driver.Handler.create
@@ -13,25 +13,32 @@ let component handlers graph =
       ~f:(fun set_state payload -> set_state (update payload))
   in
   let bindings =
-    [ bind "toolbar-action" (fun _ (n, r, m, e, v, p) -> n + 1, r, m, e, v, p)
-    ; bind "toolbar-reverse" (fun _ (n, r, m, e, v, p) -> n, not r, m, e, v, p)
-    ; bind "toolbar-move" (fun _ (n, r, m, e, v, p) -> n, r, not m, e, v, p)
-    ; bind "toolbar-enabled" (fun _ (n, r, m, e, v, p) -> n, r, m, not e, v, p)
-    ; bind "toolbar-visible" (fun _ (n, r, m, e, v, p) -> n, r, m, e, not v, p)
-    ; bind "toolbar-pin" (fun payload (n, r, m, e, v, p) ->
+    [ bind "toolbar-action" (fun _ (n, r, m, e, v, p, foreign) ->
+        n + 1, r, m, e, v, p, foreign)
+    ; bind "toolbar-reverse" (fun _ (n, r, m, e, v, p, foreign) ->
+        n, not r, m, e, v, p, foreign)
+    ; bind "toolbar-move" (fun _ (n, r, m, e, v, p, foreign) ->
+        n, r, not m, e, v, p, foreign)
+    ; bind "toolbar-enabled" (fun _ (n, r, m, e, v, p, foreign) ->
+        n, r, m, not e, v, p, foreign)
+    ; bind "toolbar-visible" (fun _ (n, r, m, e, v, p, foreign) ->
+        n, r, m, e, not v, p, foreign)
+    ; bind "toolbar-pin" (fun payload (n, r, m, e, v, p, foreign) ->
         let p =
           match payload with
           | Ui.Event.Payload.Bool value -> value
           | _ -> p
         in
-        n, r, m, e, v, p)
+        n, r, m, e, v, p, foreign)
     ; bind "toolbar-path" (fun _ state -> state)
+    ; bind "toolbar-reparent" (fun _ (n, r, m, e, v, p, foreign) ->
+        n, r, m, e, v, p, not foreign)
     ]
   in
   Bonsai.Cont.map2
     state
     (Bonsai.Cont.all bindings)
-    ~f:(fun (count, reversed, moved, enabled, visible, pinned) bindings ->
+    ~f:(fun (count, reversed, moved, enabled, visible, pinned, foreign) bindings ->
       let action = List.nth bindings 0 in
       let button ?(enabled = true) title handler =
         Ui.View.button
@@ -42,14 +49,40 @@ let component handlers graph =
           ()
       in
       let item key placement content =
-        Ui.View.Toolbar.item ~key:(Ui.Key.string key) ~placement content
+        Ui.View.Toolbar.group
+          ~key:(Ui.Key.string key)
+          ~placement
+          [ Ui.View.Toolbar.child ~key:(Ui.Key.string "control") content ]
       in
       let items =
-        [ item "title" Principal (Ui.View.text "Native toolbar")
-        ; item
-            "action"
-            (if moved then Navigation else Primary_action)
-            (button ~enabled "Toolbar action" action)
+        [ Ui.View.Toolbar.item
+            ~key:(Ui.Key.string "title")
+            ~placement:Principal
+            (Ui.View.text "Native toolbar")
+        ; Ui.View.Toolbar.spacer
+            ~key:(Ui.Key.string "command-gap")
+            ~placement:Primary_action
+            Fixed
+        ; Ui.View.Toolbar.group
+            ~key:(Ui.Key.string "action")
+            ~placement:(if moved then Navigation else Primary_action)
+            (if foreign
+             then []
+             else
+               [ Ui.View.Toolbar.child
+                   ~key:(Ui.Key.string "control")
+                   (button ~enabled "Toolbar action" action)
+               ])
+        ; Ui.View.Toolbar.group
+            ~key:(Ui.Key.string "other-action")
+            ~placement:Primary_action
+            (if foreign
+             then
+               [ Ui.View.Toolbar.child
+                   ~key:(Ui.Key.string "control")
+                   (button ~enabled "Toolbar action" action)
+               ]
+             else [])
         ; item
             "pin"
             Primary_action
@@ -92,6 +125,7 @@ let component handlers graph =
           ; Ui.View.text (if pinned then "Toolbar pinned" else "Toolbar unpinned")
           ; button "Reverse toolbar" (List.nth bindings 1)
           ; button "Move toolbar action" (List.nth bindings 2)
+          ; button "Reparent toolbar action" (List.nth bindings 7)
           ; button
               (if enabled then "Disable toolbar action" else "Enable toolbar action")
               (List.nth bindings 3)

@@ -1,0 +1,16 @@
+test_native_app_bars_reach_actual_gallery (__main__.NavigationWindowTests.test_native_app_bars_reach_actual_gallery) ... FAIL
+
+======================================================================
+FAIL: test_native_app_bars_reach_actual_gallery (__main__.NavigationWindowTests.test_native_app_bars_reach_actual_gallery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "native/test/test_navigation_window.py", line 37, in test_native_app_bars_reach_actual_gallery
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : FAIL: Error Domain=AppBarsWindowTest Code=3 "Bottom resize lost scroll position: 348.0" UserInfo={NSLocalizedDescription=Bottom resize lost scroll position: 348.0}
+
+
+----------------------------------------------------------------------
+Ran 1 test in 49.634s
+
+FAILED (failures=1)

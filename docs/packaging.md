@@ -15,7 +15,7 @@ Xcode project, shared schemes, plists and entitlement files. `sync-host --check`
 rejects stale generated output. Application sources remain application-owned.
 
 The only supported destinations are macOS 26.0+ arm64 and physical iOS/iPadOS
-18.0+ arm64. Debug, Profile and Release have separate build and staging paths.
+26.0+ arm64. Debug, Profile and Release have separate build and staging paths.
 Profile and Release use the optimized OCaml release profile; Xcode retains
 separate configurations and profiling actions. Simulator, Intel and Catalyst
 are unsupported.
@@ -34,7 +34,7 @@ Native/<sdk>/<configuration>/runtime.complete.o
 The SDK is `macosx` or `iphoneos`. Objects cannot be reused across destinations.
 Changing environment variables around an older installed cross-compiler does
 not rebuild its runtime or change the deployment target of existing objects.
-Use the actual [iOS 18 compiler and closure](swiftui-ios-toolchain.md).
+Use the actual [iOS 26 compiler and closure](swiftui-ios-toolchain.md).
 
 Network complete objects embed static GMP before Xcode links the App. Native
 linking uses Apple's Security and CoreFoundation frameworks. System SQLite is
@@ -122,7 +122,7 @@ in `vendor/opam-ios/sdk-packages`, the current cross-compiler template and the
 pinned upstream repositories. The framework opam file comes from the Git
 revision in `tool/ios/sdk_repository.lock`. It never comes from an earlier
 generated snapshot, a later HEAD or uncommitted package metadata. The framework
-builder and manifest both receive the iOS 18 minimum from `toolchain.lock`.
+builder and manifest both receive the iOS 26 minimum from `toolchain.lock`.
 
 After the locked cross-repository checkout is available, run
 `make ios-sdk-repository-test` to verify empty-output generation, locked-source

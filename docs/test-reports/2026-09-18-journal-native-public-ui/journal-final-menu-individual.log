@@ -1,0 +1,4 @@
+malformedMenuHierarchyCannotStage 0
+menuActionsRetainEveryRequestIncludingRepeatedSignedIds 0
+retainedMenuActionsCannotReachReplacedBindings 0
+retainedMenuRendersAfterAValidLabelReduction 0

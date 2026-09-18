@@ -8,7 +8,7 @@ from test_ios_cross_compiler import ROOT, SWITCH
 
 
 class VirtualLibraryTests(unittest.TestCase):
-    def test_all_concrete_virtual_modules_have_ios18_native_artifacts(self):
+    def test_all_concrete_virtual_modules_have_ios26_native_artifacts(self):
         prefix = Path(SWITCH) / "_opam"
         host = prefix / "lib/datascript_ocaml"
         target = prefix / "ios-sysroot/lib/datascript_ocaml"
@@ -19,7 +19,7 @@ class VirtualLibraryTests(unittest.TestCase):
         for name in expected:
             if name.endswith(".o"):
                 result = subprocess.run(
-                    ["sh", str(ROOT / "tool/ios/verify_macho.sh"), str(target / name), "IOS", "arm64", "18.0"],
+                    ["sh", str(ROOT / "tool/ios/verify_macho.sh"), str(target / name), "IOS", "arm64", "26.0"],
                     text=True, capture_output=True, timeout=30,
                 )
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

@@ -32,7 +32,7 @@ collection has a separate process timeout.
 
 ## Physical-device command
 
-Run with an explicitly selected, paired and ready physical iOS 18+ device:
+Run with an explicitly selected, paired and ready physical iOS 26+ device:
 
 ```sh
 IOS_DEVICE_ID='<CoreDevice UUID or UDID>' \
@@ -43,7 +43,7 @@ IOS_BUNDLE_IDENTIFIER='org.example.datascript-worker-probe' \
 ```
 
 The command preserves the pinned application dependency closure, cross-builds
-for iOS 18 arm64, and signs a Release SwiftUI App with the selected development
+for iOS 26 arm64, and signs a Release SwiftUI App with the selected development
 identity. It performs device preflight before setup and again before installing.
 It reinstalls the selected probe bundle to start with fresh storage, then
 launches two independent App processes and requires persistence/restoration,

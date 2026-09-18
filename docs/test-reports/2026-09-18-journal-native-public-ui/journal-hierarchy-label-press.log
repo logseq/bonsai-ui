@@ -1,0 +1,76 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/5] Compiling BonsaiSwiftUITests NativeListHierarchyTests.swift
+[4/6] Write Objects.LinkFileList
+[5/6] Linking BonsaiSwiftUIPackageTests
+Build complete! (4.10s)
+Test Suite 'Selected tests' started at 2026-09-18 16:42:43.254.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 16:42:43.255.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 16:42:43.255.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 16:42:43.255.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() started.
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:176:7: Expectation failed: (parent.booleanControlController?.value → false) == true
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:178:7: Expectation failed: (owner → BonsaiSwiftUI.SwipeActionsController).perform((action → BonsaiSwiftUI.RenderNodeState), expected: (properties → RenderSwipeAction(title: "Delete child", side: 1, enabled: true, role: 2, background: 4292615710, symbol: nil)), generation: (capturedGeneration → 1))
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:179:7: Expectation failed: (texts(root) → ["Move child", "Rebind actions", "Reject expansion", "Target hidden", "Reveal grandchild", "Actions 1 Open parent@0; scroll none", "Open parent", "Open child", "Branch", "Filler 0", "Filler 1", "Filler 2", "Filler 3", "Filler 4", "Filler 5", "Filler 6", "Filler 7", "Filler 8", "Filler 9", "Filler 10", "Filler 11", "Filler 12", "Filler 13", "Filler 14", "Filler 15", "Filler 16", "Filler 17", "Filler 18", "Filler 19", "Grandchild"]).contains("Actions 2 Delete child@0; scroll none")
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:185:7: Expectation failed: (texts(root) → ["Move child", "Rebind actions", "Reject expansion", "Target hidden", "Reveal grandchild", "Actions 2 Delete parent@0; scroll none", "Open parent", "Open child", "Branch", "Filler 0", "Filler 1", "Filler 2", "Filler 3", "Filler 4", "Filler 5", "Filler 6", "Filler 7", "Filler 8", "Filler 9", "Filler 10", "Filler 11", "Filler 12", "Filler 13", "Filler 14", "Filler 15", "Filler 16", "Filler 17", "Filler 18", "Filler 19", "Grandchild"]).contains("Actions 3 Delete parent@0; scroll none")
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:187:7: Expectation failed: (expansion → BonsaiSwiftUI.BooleanControlController).request(false, emit: parent.emit)
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:198:7: Expectation failed: (texts(root) → ["Move child", "Rebind actions", "Reject expansion", "Target hidden", "Reveal grandchild", "Actions 3 Delete child@1; scroll none", "Open parent", "Open child", "Branch", "Filler 0", "Filler 1", "Filler 2", "Filler 3", "Filler 4", "Filler 5", "Filler 6", "Filler 7", "Filler 8", "Filler 9", "Filler 10", "Filler 11", "Filler 12", "Filler 13", "Filler 14", "Filler 15", "Filler 16", "Filler 17", "Filler 18", "Filler 19", "Grandchild"]).contains("Actions 4 Delete child@1; scroll none")
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:209:7: Expectation failed: (texts(root) → ["Move child", "Rebind actions", "Reject expansion", "Target hidden", "Reveal grandchild", "Actions 4 Delete child@1; scroll none", "Open parent", "Branch", "Filler 0", "Filler 1", "Filler 2", "Filler 3", "Filler 4", "Filler 5", "Filler 6", "Filler 7", "Filler 8", "Filler 9", "Filler 10", "Filler 11", "Filler 12", "Filler 13", "Filler 14", "Filler 15", "Filler 16", "Filler 17", "Filler 18", "Filler 19", "Grandchild", "Open child"]).contains("Actions 5 Delete child@1; scroll none")
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() failed after 0.499 seconds with 7 issues.
+✘ Suite NativeRuntimeTests failed after 0.499 seconds with 7 issues.
+✘ Test run with 1 test in 1 suite failed after 0.499 seconds with 7 issues.

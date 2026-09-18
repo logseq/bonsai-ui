@@ -4,7 +4,7 @@
 Reduce Motion and scene animation policy are owned by the system. It installs no
 SDK TimelineView or custom progress style. Use semantics to supply an activity label.
 
-| Style | Value | iOS 18+ and macOS 26+ contract |
+| Style | Value | iOS 26+ and macOS 26+ contract |
 | --- | --- | --- |
 | Automatic (default) | omitted | System activity indicator |
 | Automatic | 0…1 | System determinate progress |

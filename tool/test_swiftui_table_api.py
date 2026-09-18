@@ -17,7 +17,7 @@ class TableAPIInvestigation(unittest.TestCase):
         ).strip()
         result = subprocess.run(
             ["xcrun", "swiftc", "-typecheck", "-parse-as-library", "-sdk", sdk,
-             "-target", "arm64-apple-ios18.0", str(SOURCE)],
+             "-target", "arm64-apple-ios26.0", str(SOURCE)],
             cwd=ROOT, capture_output=True, text=True, timeout=60,
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

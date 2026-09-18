@@ -120,6 +120,10 @@ type environment =
   }
 
 type payload =
+  | Confirmation_response of
+      { token : int64
+      ; action_key : string option
+      }
   | Unit
   | Bool of bool
   | Text of string

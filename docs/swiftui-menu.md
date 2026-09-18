@@ -28,7 +28,8 @@ A primary action with secondary options is a `View.row` containing a normal
 available independently. The former FAB menu uses a labeled symbol anchor and
 labeled action entries. Placement belongs to application layout; the Material
 left/right placement flag and alternate collapse icon are removed. SwiftUI owns
-menu opening, dismissal and platform presentation.
+menu opening, dismissal and platform presentation. Menus retain SwiftUI’s automatic
+style so toolbar overflow can discover and render their native submenus.
 
 Apple documents how [adaptive menu controls](https://developer.apple.com/documentation/swiftui/populating-swiftui-menus-with-adaptive-controls)
 map Button to actions, Menu to submenus and Section to groups. On the tested Mac,

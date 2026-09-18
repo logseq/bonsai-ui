@@ -41,26 +41,21 @@ struct RenderTextEditor: Equatable, Sendable {
   struct NativeTextEditorView: NSViewRepresentable {
     let controller: NativeTextController
     var maximumLines: Int? = nil
+    @Environment(\.bonsaiToolbarFocus) private var toolbarFocus
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
     @Environment(\.bonsaiDefaults) private var defaults
 
-    func makeNSView(context: Context) -> NSScrollView {
-      let scroll = NSScrollView()
-      scroll.drawsBackground = false
-      scroll.hasVerticalScroller = true
-      scroll.autohidesScrollers = true
-      controller.view.autoresizingMask = [.width]
-      scroll.documentView = controller.view
-      return scroll
-    }
-    func updateNSView(_ scroll: NSScrollView, context: Context) {
+    func makeNSView(context: Context) -> NativeControlMount { controller.attachment.makeMount() }
+    func updateNSView(_ mount: NativeControlMount, context: Context) {
+      mount.onMounted = toolbarFocus?.mounted
+      controller.attachment.attach(mount)
       controller.setHostEnabled(isEnabled)
       controller.view.font = defaults.bodyFont(
         family: fontFamily, legibility: context.environment.legibilityWeight)
       controller.view.textColor = NSColor(defaults.color(defaults.defaultForeground()))
     }
-    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSScrollView, context: Context)
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NativeControlMount, context: Context)
       -> CGSize?
     {
       if let maximumLines {
@@ -76,10 +71,7 @@ struct RenderTextEditor: Equatable, Sendable {
       }
       return CGSize(width: proposal.width ?? 320, height: proposal.height ?? 120)
     }
-    static func dismantleNSView(_ scroll: NSScrollView, coordinator: ()) {
-      // RenderTree owns the controller across native view rehosting.
-      scroll.documentView = nil
-    }
+
   }
 #else
   import UIKit
@@ -87,12 +79,16 @@ struct RenderTextEditor: Equatable, Sendable {
   struct NativeTextEditorView: UIViewRepresentable {
     let controller: NativeTextController
     var maximumLines: Int? = nil
+    @Environment(\.bonsaiToolbarFocus) private var toolbarFocus
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
     @Environment(\.bonsaiDefaults) private var defaults
 
-    func makeUIView(context: Context) -> NativeEditingTextView { controller.view }
-    func updateUIView(_ view: NativeEditingTextView, context: Context) {
+    func makeUIView(context: Context) -> NativeControlMount { controller.attachment.makeMount() }
+    func updateUIView(_ mount: NativeControlMount, context: Context) {
+      mount.onMounted = toolbarFocus?.mounted
+      controller.attachment.attach(mount)
+      let view = controller.view
       controller.setHostEnabled(isEnabled)
       view.font = defaults.bodyFont(
         family: fontFamily, legibility: context.environment.legibilityWeight,
@@ -100,10 +96,11 @@ struct RenderTextEditor: Equatable, Sendable {
       view.adjustsFontForContentSizeCategory = true
       view.textColor = UIColor(defaults.color(defaults.defaultForeground()))
     }
-    func sizeThatFits(_ proposal: ProposedViewSize, uiView: NativeEditingTextView, context: Context)
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: NativeControlMount, context: Context)
       -> CGSize?
     {
       if let maximumLines {
+        let uiView = controller.view
         let font = uiView.font ?? UIFont.preferredFont(forTextStyle: .body)
         return composerEditorSize(
           text: uiView.text ?? "", font: font, lineHeight: font.lineHeight,

@@ -29,9 +29,11 @@ module Tag : sig
     | Radio_selected
     | Removal_requested
     | Removal_completed
+    | List_scroll_completed
     | Refresh_request
     | Scroll_position_changed
     | Menu_action
+    | Confirmation_response
     | Picker_selected
     | Slider_changed
     | Slider_change_end
@@ -133,7 +135,17 @@ module Payload : sig
     ; modifiers : int
     }
 
+  type confirmation_result =
+    | Action of string
+    | Dismissed
+
+  type confirmation_response =
+    { token : int64
+    ; result : confirmation_result
+    }
+
   type t =
+    | Confirmation_response of confirmation_response
     | Unit
     | Bool of bool
     | Text of string

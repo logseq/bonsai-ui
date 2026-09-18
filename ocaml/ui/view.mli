@@ -450,6 +450,37 @@ module Viewport : sig
   end
 end
 
+(** Native structural sections. Header, footer and keyed content remain ordinary
+    views with their own handlers. Use a direct Section child in Form to preserve
+    native section boundaries; place decoration inside its slots. *)
+module Section : sig
+  val create : ?key:Key.t -> ?header:t -> ?footer:t -> Keyed.t list -> t
+end
+
+(** Native grouped Form. Every direct row or section needs an explicit sibling key.
+    Fill a bounded vertical Body slot, or give it an explicit finite height;
+    it cannot be inserted directly into another scrolling view. *)
+module Form : sig
+  val vertical : ?key:Key.t -> Keyed.t list -> Viewport.Vertical.t
+end
+
+(** Native LabeledContent with independently owned label and value views. *)
+val labeled_content : ?key:Key.t -> label:t -> value:t -> unit -> t
+
+(** Native ContentUnavailableView. Omitted description or action slots are empty.
+    Actions use ordinary buttons and semantic button roles. *)
+val content_unavailable
+  :  ?key:Key.t
+  -> label:t
+  -> ?description:t
+  -> ?actions:t
+  -> unit
+  -> t
+
+(** Native text selection for descendant text. This does not introduce an editor
+    or change application-owned values. A nearer modifier overrides its parent. *)
+val text_selection : ?key:Key.t -> enabled:bool -> t -> t
+
 module Scroll_anchor : sig
   type t =
     | Start
@@ -556,9 +587,138 @@ module Removal : sig
     -> t
 end
 
+(** Native row-owned swipe descriptors. Start/End follow layout direction.
+    The first action on a side is the full-swipe action when enabled. *)
+module Swipe_actions : sig
+  type action
+  type t
+
+  type side =
+    | Start
+    | End
+
+  val action
+    :  key:Key.t
+    -> ?enabled:bool
+    -> ?role:Button_role.t
+    -> ?symbol:string
+    -> side:side
+    -> title:string
+    -> background:Style.Color.t
+    -> on_press:Event.Handler.t
+    -> unit
+    -> action
+
+  val create
+    :  ?enabled:bool
+    -> ?allows_full_swipe:bool
+    -> actions:action list
+    -> unit
+    -> t
+end
+
+(** Controlled native Alert and ConfirmationDialog with one response per token.
+    Fresh tokens are positive and strictly increase within one retained presenter.
+    Titles, messages and action titles use the native surface's text content. *)
+module Confirmation : sig
+  type action
+  type request
+
+  val action
+    :  key:string
+    -> title:string
+    -> ?enabled:bool
+    -> ?role:Button_role.t
+    -> unit
+    -> action
+
+  val request : token:int64 -> title:string -> ?message:string -> action list -> request
+
+  val alert
+    :  ?key:Key.t
+    -> request:request option
+    -> on_response:Event.Handler.t
+    -> t
+    -> t
+
+  val dialog
+    :  ?key:Key.t
+    -> request:request option
+    -> on_response:Event.Handler.t
+    -> t
+    -> t
+end
+
+(** Native context actions retain the presented owner and handler snapshot. *)
+module Context_menu : sig
+  type nonrec view = t
+  type action
+  type t
+
+  type role =
+    | Normal
+    | Destructive
+
+  val action
+    :  key:Key.t
+    -> ?enabled:bool
+    -> ?role:role
+    -> ?symbol:string
+    -> title:string
+    -> on_press:Event.Handler.t
+    -> unit
+    -> action
+
+  val create : ?enabled:bool -> actions:action list -> unit -> t
+  val attach : ?key:Key.t -> t -> view -> view
+end
+
 (** Intrinsically sized native List rows and sections. Stable keys are required
     and unique among siblings. Data loading and pagination remain application-owned. *)
 module Native_list : sig
+  type anchor =
+    | Top
+    | Center
+    | Bottom
+
+  type target
+  type scroll_request
+
+  type outcome =
+    | Succeeded
+    | Missing_target
+    | Hidden_target
+    | Cancelled
+    | Superseded
+    | Positioning_failed
+
+  type completion =
+    { token : int64
+    ; outcome : outcome
+    }
+
+  (** Section and row keys are scoped to siblings. The ancestry path is nonempty. *)
+  val target : section:Key.t -> row_path:Key.t list -> target
+
+  (** Tokens must be positive and increase for each new command on a List owner.
+      Repeating a token does not repeat movement; changing its payload is invalid.
+      Clearing cancels pending work. Completion retains the original handler. *)
+  val scroll_request
+    :  token:int64
+    -> target:target
+    -> ?anchor:anchor
+    -> ?animated:bool
+    -> unit
+    -> scroll_request
+
+  val completion_of_payload : Event.Payload.t -> completion option
+
+  type style =
+    | Plain
+    | Inset
+    | Inset_grouped
+
+  (** Inset_grouped is available on iOS only. Unsupported platform styles are rejected before native publication. *)
   type separator =
     | Automatic
     | Hidden
@@ -567,7 +727,26 @@ module Native_list : sig
   type row
   type section
 
-  val row : key:Key.t -> ?separator:separator -> t -> row
+  val row
+    :  key:Key.t
+    -> ?test_id:Test_id.t
+    -> ?separator:separator
+    -> ?swipe_actions:Swipe_actions.t
+    -> ?context_menu:Context_menu.t
+    -> t
+    -> row
+
+  val disclosure_row
+    :  key:Key.t
+    -> ?test_id:Test_id.t
+    -> ?separator:separator
+    -> ?swipe_actions:Swipe_actions.t
+    -> ?context_menu:Context_menu.t
+    -> expanded:bool
+    -> on_expanded_changed:Event.Handler.t
+    -> label:t
+    -> row list
+    -> row
 
   val section
     :  key:Key.t
@@ -579,6 +758,9 @@ module Native_list : sig
 
   val vertical
     :  ?key:Key.t
+    -> style:style
+    -> ?scroll_request:scroll_request
+    -> ?on_scroll_completed:Event.Handler.t
     -> ?on_visible_range:Event.Handler.t
     -> section list
     -> Viewport.Vertical.t
@@ -928,9 +1110,8 @@ module Weighted : sig
     -> t
 end
 
-(** Native toolbar content attached to a navigation page or window. Each item
-    has a stable application key and contains an ordinary Button, Toggle, Menu,
-    label or other core view. The system owns placement and overflow. *)
+(** Ordered native toolbar entries attached to a stable page or window body.
+    SwiftUI owns materials, sizing, placement, safe areas, and overflow. *)
 module Toolbar : sig
   type placement =
     | Automatic
@@ -942,13 +1123,26 @@ module Toolbar : sig
     | Confirmation_action
     | Cancellation_action
     | Destructive_action
+    | Bottom_bar
 
+  type spacing =
+    | Fixed
+    | Flexible
+
+  type child
   type item
 
-  val item : key:Key.t -> ?placement:placement -> t -> item
+  (** Child keys are unique within their group. Moving a child to another group
+      creates a new input owner. Ordinary views keep their native semantics. *)
+  val child : key:Key.t -> t -> child
 
-  (** Empty lists remove all items; at most 256 items and one principal item.
-      Item keys must be unique. Content is the first child and retains its identity. *)
+  val item : key:Key.t -> ?placement:placement -> t -> item
+  val group : key:Key.t -> ?placement:placement -> child list -> item
+  val spacer : key:Key.t -> ?placement:placement -> spacing -> item
+
+  (** Entry keys are unique across this ordered list. At most 256 entries,
+      256 children per group, and one Principal entry are allowed. Fixed spacing
+      uses the system toolbar spacing. macOS rejects Bottom_bar explicitly. *)
   val create : ?key:Key.t -> items:item list -> t -> t
 end
 
@@ -1032,6 +1226,20 @@ module Table : sig
     -> rows:row list
     -> unit
     -> Body.t
+end
+
+(** A native link requests activation in its enclosing Navigation_stack. OCaml
+    remains authoritative for the route. Changing semantic meaning requires a new
+    activation_id. Pending intent survives only an identical Handler binding. *)
+module Navigation_link : sig
+  val create
+    :  key:Key.t
+    -> activation_id:string
+    -> ?enabled:bool
+    -> on_activate:Event.Handler.t
+    -> label:t
+    -> unit
+    -> t
 end
 
 module Navigation_stack : sig
@@ -1152,38 +1360,6 @@ module Slider : sig
     -> t
 end
 
-(** System swipe actions. Place the result directly inside a [Native_list.row].
-    Start/End follow layout direction. The first action on each side is the full
-    swipe action when [allows_full_swipe] is true. OCaml owns removal. *)
-module Swipe_actions : sig
-  type action
-
-  type side =
-    | Start
-    | End
-
-  val action
-    :  ?key:Key.t
-    -> ?enabled:bool
-    -> ?role:Button_role.t
-    -> ?symbol:string
-    -> side:side
-    -> title:string
-    -> background:Style.Color.t
-    -> on_press:Event.Handler.t
-    -> unit
-    -> action
-
-  val create
-    :  key:Key.t
-    -> ?enabled:bool
-    -> ?allows_full_swipe:bool
-    -> actions:action list
-    -> content:t
-    -> unit
-    -> t
-end
-
 module Morphing_surface : sig
   (** Animates the surface around one active content subtree. Removed content
       releases native editing, focus and accessibility resources immediately;
@@ -1255,6 +1431,11 @@ module Private : sig
     | K_native_list
     | K_list_section
     | K_list_row
+    | K_confirmation
+    | K_context_menu
+    | K_context_action
+    | K_context_menu_view
+    | K_list_row_label
     | K_scroll_targets
     | K_scroll
     | K_flow
@@ -1288,12 +1469,20 @@ module Private : sig
     | K_table
     | K_divider
     | K_label
+    | K_form
+    | K_section
+    | K_labeled_content
+    | K_content_unavailable
+    | K_text_selection
     | K_badge
     | K_sheet
     | K_popover
     | K_scroll_sections
     | K_scroll_section
     | K_toolbar
+    | K_toolbar_entry
+    | K_toolbar_child
+    | K_toolbar_body
     | K_help
     | K_group_box
     | K_progress
@@ -1306,6 +1495,7 @@ module Private : sig
     | K_tabs
     | K_tab
     | K_navigation_split
+    | K_navigation_link
     | K_navigation_stack
     | K_navigation_destination
     | K_ignores_safe_area
@@ -1382,14 +1572,43 @@ module Private : sig
         ; duration_ms : int
         }
         -> [ `Removal ] node
-    | Native_list : [ `Native_list ] node
+    | Native_list :
+        { style : int
+        ; scroll_request : (int64 * string * string list * int * bool) option
+        }
+        -> [ `Native_list ] node
     | List_section :
         { has_header : bool
         ; has_footer : bool
         ; separator : int
+        ; section_key : string
         }
         -> [ `List_section ] node
-    | List_row : { separator : int } -> [ `List_row ] node
+    | List_row :
+        { separator : int
+        ; row_key : string
+        ; expanded : bool option
+        }
+        -> [ `List_row ] node
+    | Confirmation :
+        { style : int
+        ; request_token : int64 option
+        ; title : string
+        ; message : string option
+        ; actions : (string * string * bool * int) list
+        }
+        -> [ `Confirmation ] node
+    | Context_menu : { enabled : bool } -> [ `Context_menu ] node
+    | Context_action :
+        { action_key : string
+        ; title : string
+        ; enabled : bool
+        ; role : int
+        ; symbol : string option
+        }
+        -> [ `Context_action ] node
+    | Context_menu_view : [ `Context_menu_view ] node
+    | List_row_label : [ `List_row_label ] node
     | Refresh :
         { request_token : int64
         ; request_state : int
@@ -1623,6 +1842,15 @@ module Private : sig
         -> [ `Table ] node
     | Divider : [ `Divider ] node
     | Label : [ `Label ] node
+    | Form : [ `Form ] node
+    | Section :
+        { has_header : bool
+        ; has_footer : bool
+        }
+        -> [ `Section ] node
+    | Labeled_content : [ `Labeled_content ] node
+    | Content_unavailable : [ `Content_unavailable ] node
+    | Text_selection : { enabled : bool } -> [ `Text_selection ] node
     | Badge :
         { count : int option
         ; alignment : Layout.Horizontal_alignment.t
@@ -1661,7 +1889,15 @@ module Private : sig
         ; stretch : bool
         }
         -> [ `Scroll_section ] node
-    | Toolbar : { placements : int list } -> [ `Toolbar ] node
+    | Toolbar : [ `Toolbar ] node
+    | Toolbar_entry :
+        { entry_key : string
+        ; placement : int
+        ; kind : int
+        }
+        -> [ `Toolbar_entry ] node
+    | Toolbar_child : { child_key : string } -> [ `Toolbar_child ] node
+    | Toolbar_body : [ `Toolbar_body ] node
     | Help : { message : string } -> [ `Help ] node
     | Group_box : { has_label : bool } -> [ `Group_box ] node
     | Progress :
@@ -1717,6 +1953,11 @@ module Private : sig
         ; detail_title : string
         }
         -> [ `Navigation_split ] node
+    | Navigation_link :
+        { activation_id : string
+        ; enabled : bool
+        }
+        -> [ `Navigation_link ] node
     | Navigation_stack : { title : string } -> [ `Navigation_stack ] node
     | Navigation_destination :
         { page_key : Bonsai_swiftui_spec.Id.Navigation.page_key

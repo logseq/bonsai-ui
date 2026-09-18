@@ -1,0 +1,181 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/5] Compiling BonsaiSwiftUITests NativeListHierarchyTests.swift
+[5/80] Compiling BonsaiSwiftUITests RefreshTests.swift
+[6/80] Compiling BonsaiSwiftUITests RemovalTests.swift
+[7/80] Compiling BonsaiSwiftUITests RenderTreeTests.swift
+[8/80] Compiling BonsaiSwiftUITests RichTextTests.swift
+[9/80] Compiling BonsaiSwiftUITests SafeAreaTests.swift
+[10/80] Compiling BonsaiSwiftUITests FrameTests.swift
+[11/80] Compiling BonsaiSwiftUITests GestureEventTests.swift
+[12/80] Compiling BonsaiSwiftUITests GroupBoxTests.swift
+[13/80] Compiling BonsaiSwiftUITests HapticServiceTests.swift
+[14/80] Compiling BonsaiSwiftUITests HelpTests.swift
+[15/80] Compiling BonsaiSwiftUITests DividerTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[16/80] Compiling BonsaiSwiftUITests ExpandableComposerTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[17/80] Compiling BonsaiSwiftUITests FileCommandTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[18/80] Compiling BonsaiSwiftUITests FlowLayoutTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[19/80] Compiling BonsaiSwiftUITests FocusScopeTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[20/80] Compiling BonsaiSwiftUITests TextFieldWireTests.swift
+[21/80] Compiling BonsaiSwiftUITests TextTests.swift
+[22/80] Compiling BonsaiSwiftUITests ToggleTests.swift
+[23/80] Compiling BonsaiSwiftUITests ToolbarTests.swift
+[24/80] Compiling BonsaiSwiftUITests SymbolTests.swift
+[25/80] Compiling BonsaiSwiftUITests SystemControlsTests.swift
+[26/80] Compiling BonsaiSwiftUITests TabsTests.swift
+[27/80] Compiling BonsaiSwiftUITests TextEditorViewTests.swift
+[28/80] Compiling BonsaiSwiftUITests TreeFixture.swift
+[29/80] Compiling BonsaiSwiftUITests URLHostServiceTests.swift
+[30/80] Compiling BonsaiSwiftUITests ViewEnvironmentTests.swift
+[31/80] Compiling BonsaiSwiftUITests WeightedLayoutTests.swift
+[32/80] Compiling BonsaiSwiftUITests SharedDefaultsTests.swift
+[33/80] Compiling BonsaiSwiftUITests SheetTests.swift
+[34/80] Compiling BonsaiSwiftUITests SliderFixture.swift
+[35/80] Compiling BonsaiSwiftUITests SliderTests.swift
+[36/80] Compiling BonsaiSwiftUITests NavigationLinkTests.swift
+[37/80] Compiling BonsaiSwiftUITests NavigationSplitTests.swift
+[38/80] Compiling BonsaiSwiftUITests NavigationStackTests.swift
+[39/80] Compiling BonsaiSwiftUITests NodeCommandTests.swift
+[40/80] Compiling BonsaiSwiftUITests NodeStoreTests.swift
+[41/80] Compiling BonsaiSwiftUITests AnimatedOpacityTests.swift
+[42/80] Compiling BonsaiSwiftUITests ApplicationTransportTests.swift
+[43/80] Compiling BonsaiSwiftUITests BadgeTests.swift
+[44/80] Compiling BonsaiSwiftUITests ButtonAutofocusTests.swift
+[45/80] Compiling BonsaiSwiftUITests CivilPickerTests.swift
+[46/80] Compiling BonsaiSwiftUITests ScrollNodeTests.swift
+[47/80] Compiling BonsaiSwiftUITests ScrollObservationTests.swift
+[48/80] Compiling BonsaiSwiftUITests ScrollSectionsTests.swift
+[49/80] Compiling BonsaiSwiftUITests ScrollTargetsTests.swift
+[50/80] Compiling BonsaiSwiftUITests SemanticsNodeTests.swift
+[51/80] Compiling BonsaiSwiftUITests OverlayTests.swift
+[52/80] Compiling BonsaiSwiftUITests PickerTests.swift
+[53/80] Compiling BonsaiSwiftUITests PopoverTests.swift
+[54/80] Compiling BonsaiSwiftUITests ProgressTests.swift
+[55/80] Compiling BonsaiSwiftUITests ProjectionTests.swift
+[56/80] Compiling BonsaiSwiftUITests CollectionNodeTests.swift
+[57/80] Compiling BonsaiSwiftUITests ComposerTests.swift
+[58/80] Compiling BonsaiSwiftUITests ControlSizeTests.swift
+[59/80] Compiling BonsaiSwiftUITests CoreNavigationLinkTests.swift
+[60/80] Compiling BonsaiSwiftUITests DisclosureTests.swift
+[61/80] Compiling BonsaiSwiftUITests HostCommandTests.swift
+[62/80] Compiling BonsaiSwiftUITests HoverRegionTests.swift
+[63/80] Compiling BonsaiSwiftUITests ImageLoadingTests.swift
+[64/80] Compiling BonsaiSwiftUITests ImageTests.swift
+[65/80] Compiling BonsaiSwiftUITests InitialScrollTests.swift
+[66/80] Compiling BonsaiSwiftUITests KeyboardListenerTests.swift
+[67/80] Compiling BonsaiSwiftUITests LabelTests.swift
+[68/80] Compiling BonsaiSwiftUITests MeasuredCollectionTests.swift
+[69/80] Compiling BonsaiSwiftUITests MenuTests.swift
+[70/80] Compiling BonsaiSwiftUITests ModifierTests.swift
+[71/80] Compiling BonsaiSwiftUITests StackTests.swift
+[72/80] Compiling BonsaiSwiftUITests SurfaceTests.swift
+[73/80] Compiling BonsaiSwiftUITests SwipeActionsFixture.swift
+[74/80] Compiling BonsaiSwiftUITests SwipeActionsTests.swift
+[75/80] Compiling BonsaiSwiftUITests MorphingSurfaceTests.swift
+[76/80] Compiling BonsaiSwiftUITests NativeFormTests.swift
+[77/80] Compiling BonsaiSwiftUITests NativeListScrollTests.swift
+[78/80] Compiling BonsaiSwiftUITests NativeListStyleTests.swift
+[79/80] Compiling BonsaiSwiftUITests NativeViewTests.swift
+[79/81] Write Objects.LinkFileList
+[80/81] Linking BonsaiSwiftUIPackageTests
+Build complete! (10.94s)
+Test Suite 'Selected tests' started at 2026-09-18 16:37:23.919.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 16:37:23.919.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 16:37:23.919.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 16:37:23.919.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeListHierarchyTests started.
+◇ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() started.
+✘ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() recorded an issue at NativeListHierarchyTests.swift:125:7: Expectation failed: an error was expected but none was thrown and "NodeTransaction(tree: BonsaiSwiftUI.NodeStore(epoch: 7, revision: 2, root: Optional(1), nodes: [41: BonsaiSwiftUI.RenderNode(id: 41, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Branch", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 400002: BonsaiSwiftUI.RenderNode(id: 400002, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: false)), bindings: [:], children: []), 11: BonsaiSwiftUI.RenderNode(id: 11, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Parent", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 40: BonsaiSwiftUI.RenderNode(id: 40, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 6 bytes, expanded: Optional(false))), bindings: [18: 130], children: [400001, 400002, 50]), 13: BonsaiSwiftUI.RenderNode(id: 13, kind: 43, properties: BonsaiSwiftUI.NodeProperties.swipeAction(BonsaiSwiftUI.RenderSwipeAction(title: "Delete parent", side: 0, enabled: true, role: 0, background: 4280711228, symbol: Optional("archivebox"))), bindings: [1: 103], children: []), 20: BonsaiSwiftUI.RenderNode(id: 20, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 7 bytes, expanded: nil)), bindings: [:], children: [200001, 200002]), 100001: BonsaiSwiftUI.RenderNode(id: 100001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [11]), 30: BonsaiSwiftUI.RenderNode(id: 30, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 5 bytes, expanded: nil)), bindings: [:], children: [300001, 32]), 12: BonsaiSwiftUI.RenderNode(id: 12, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: true)), bindings: [:], children: [13]), 200002: BonsaiSwiftUI.RenderNode(id: 200002, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: false)), bindings: [:], children: []), 500001: BonsaiSwiftUI.RenderNode(id: 500001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [51]), 1: BonsaiSwiftUI.RenderNode(id: 1, kind: 80, properties: BonsaiSwiftUI.NodeProperties.nativeList(BonsaiSwiftUI.RenderListProperties(style: 0, request: nil)), bindings: [:], children: [2]), 33: BonsaiSwiftUI.RenderNode(id: 33, kind: 43, properties: BonsaiSwiftUI.NodeProperties.swipeAction(BonsaiSwiftUI.RenderSwipeAction(title: "Delete child", side: 0, enabled: true, role: 0, background: 4280711228, symbol: Optional("archivebox"))), bindings: [1: 123], children: []), 32: BonsaiSwiftUI.RenderNode(id: 32, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: true)), bindings: [:], children: [33]), 300001: BonsaiSwiftUI.RenderNode(id: 300001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [31]), 400001: BonsaiSwiftUI.RenderNode(id: 400001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [41]), 3: BonsaiSwiftUI.RenderNode(id: 3, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Header", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 21: BonsaiSwiftUI.RenderNode(id: 21, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Sibling", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 2: BonsaiSwiftUI.RenderNode(id: 2, kind: 81, properties: BonsaiSwiftUI.NodeProperties.listSection(BonsaiSwiftUI.RenderListSection(hasHeader: true, hasFooter: true, separator: 0, key: 1 bytes)), bindings: [:], children: [3, 4, 10, 20, 30]), 200001: BonsaiSwiftUI.RenderNode(id: 200001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [21]), 10: BonsaiSwiftUI.RenderNode(id: 10, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 6 bytes, expanded: Optional(true))), bindings: [18: 100], children: [100001, 12, 40]), 50: BonsaiSwiftUI.RenderNode(id: 50, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 5 bytes, expanded: nil)), bindings: [:], children: [500001, 500002]), 31: BonsaiSwiftUI.RenderNode(id: 31, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Child", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 4: BonsaiSwiftUI.RenderNode(id: 4, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Footer", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 500002: BonsaiSwiftUI.RenderNode(id: 500002, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: false)), bindings: [:], children: []), 51: BonsaiSwiftUI.RenderNode(id: 51, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Grandchild", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: [])], accessibilityHiddenNodes: Set([500002, 51, 50, 500001]), listScrollHistory: [:], highestNodeID: 500002), ancillaryOperations: [])" was returned
+✘ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() recorded an issue at NativeListHierarchyTests.swift:125:7: Expectation failed: an error was expected but none was thrown and "NodeTransaction(tree: BonsaiSwiftUI.NodeStore(epoch: 7, revision: 2, root: Optional(1), nodes: [41: BonsaiSwiftUI.RenderNode(id: 41, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Branch", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 400002: BonsaiSwiftUI.RenderNode(id: 400002, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: false)), bindings: [:], children: []), 11: BonsaiSwiftUI.RenderNode(id: 11, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Parent", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 40: BonsaiSwiftUI.RenderNode(id: 40, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 6 bytes, expanded: Optional(false))), bindings: [18: 130], children: [400001, 400002, 50]), 13: BonsaiSwiftUI.RenderNode(id: 13, kind: 43, properties: BonsaiSwiftUI.NodeProperties.swipeAction(BonsaiSwiftUI.RenderSwipeAction(title: "Delete parent", side: 0, enabled: true, role: 0, background: 4280711228, symbol: Optional("archivebox"))), bindings: [1: 103], children: []), 20: BonsaiSwiftUI.RenderNode(id: 20, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 7 bytes, expanded: nil)), bindings: [:], children: [200001, 200002]), 100001: BonsaiSwiftUI.RenderNode(id: 100001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [11]), 30: BonsaiSwiftUI.RenderNode(id: 30, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 5 bytes, expanded: nil)), bindings: [:], children: [300001, 12]), 12: BonsaiSwiftUI.RenderNode(id: 12, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: true)), bindings: [:], children: [13]), 200002: BonsaiSwiftUI.RenderNode(id: 200002, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: false)), bindings: [:], children: []), 500001: BonsaiSwiftUI.RenderNode(id: 500001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [51]), 1: BonsaiSwiftUI.RenderNode(id: 1, kind: 80, properties: BonsaiSwiftUI.NodeProperties.nativeList(BonsaiSwiftUI.RenderListProperties(style: 0, request: nil)), bindings: [:], children: [2]), 33: BonsaiSwiftUI.RenderNode(id: 33, kind: 43, properties: BonsaiSwiftUI.NodeProperties.swipeAction(BonsaiSwiftUI.RenderSwipeAction(title: "Delete child", side: 0, enabled: true, role: 0, background: 4280711228, symbol: Optional("archivebox"))), bindings: [1: 123], children: []), 32: BonsaiSwiftUI.RenderNode(id: 32, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: true)), bindings: [:], children: [33]), 300001: BonsaiSwiftUI.RenderNode(id: 300001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [31]), 400001: BonsaiSwiftUI.RenderNode(id: 400001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [41]), 3: BonsaiSwiftUI.RenderNode(id: 3, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Header", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 21: BonsaiSwiftUI.RenderNode(id: 21, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Sibling", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 2: BonsaiSwiftUI.RenderNode(id: 2, kind: 81, properties: BonsaiSwiftUI.NodeProperties.listSection(BonsaiSwiftUI.RenderListSection(hasHeader: true, hasFooter: true, separator: 0, key: 1 bytes)), bindings: [:], children: [3, 4, 10, 20]), 200001: BonsaiSwiftUI.RenderNode(id: 200001, kind: 145, properties: BonsaiSwiftUI.NodeProperties.listRowLabel, bindings: [:], children: [21]), 10: BonsaiSwiftUI.RenderNode(id: 10, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 6 bytes, expanded: Optional(true))), bindings: [18: 100], children: [100001, 32, 30, 40]), 50: BonsaiSwiftUI.RenderNode(id: 50, kind: 82, properties: BonsaiSwiftUI.NodeProperties.listRow(BonsaiSwiftUI.RenderListRow(separator: 0, key: 5 bytes, expanded: nil)), bindings: [:], children: [500001, 500002]), 31: BonsaiSwiftUI.RenderNode(id: 31, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Child", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 4: BonsaiSwiftUI.RenderNode(id: 4, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Footer", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: []), 500002: BonsaiSwiftUI.RenderNode(id: 500002, kind: 42, properties: BonsaiSwiftUI.NodeProperties.swipeActions(BonsaiSwiftUI.RenderSwipeActions(enabled: true, allowsFullSwipe: false)), bindings: [:], children: []), 51: BonsaiSwiftUI.RenderNode(id: 51, kind: 2, properties: BonsaiSwiftUI.NodeProperties.text(BonsaiSwiftUI.RenderText(value: "Grandchild", style: nil, alignment: 0, lineLimit: nil, truncation: 0)), bindings: [:], children: [])], accessibilityHiddenNodes: Set([500002, 50, 51, 500001]), listScrollHistory: [:], highestNodeID: 500002), ancillaryOperations: [])" was returned
+✘ Test reparentingCannotReuseNativeRowOrActionSlotIncarnations() failed after 0.001 seconds with 2 issues.
+✘ Suite NativeListHierarchyTests failed after 0.002 seconds with 2 issues.
+✘ Test run with 1 test in 1 suite failed after 0.002 seconds with 2 issues.

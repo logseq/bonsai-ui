@@ -1,0 +1,769 @@
+[0/1] Planning build
+Building for debugging...
+[0/5] Write sources
+[2/5] Write swift-version--58304C5D6DBC2206.txt
+[4/7] Emitting module BonsaiSwiftUI
+[5/7] Compiling BonsaiSwiftUI NativeNavigationStack.swift
+[6/104] Compiling BonsaiSwiftUI NativePointer.swift
+[7/104] Compiling BonsaiSwiftUI NativePopover.swift
+[8/104] Compiling BonsaiSwiftUI NativePresentation.swift
+[9/104] Compiling BonsaiSwiftUI NativeProgressView.swift
+[10/104] Compiling BonsaiSwiftUI NativeProjection.swift
+[11/104] Compiling BonsaiSwiftUI NativeRefresh.swift
+[12/104] Compiling BonsaiSwiftUI AnimatedOpacity.swift
+[13/104] Compiling BonsaiSwiftUI AppKitHoverCapture.swift
+[14/104] Compiling BonsaiSwiftUI AppKitHoverSource.swift
+[15/104] Compiling BonsaiSwiftUI AppKitPointerDevices.swift
+[16/104] Compiling BonsaiSwiftUI ApplicationTransport.swift
+[17/104] Compiling BonsaiSwiftUI BonsaiApplicationBridge.swift
+[18/104] Compiling BonsaiSwiftUI BonsaiApplicationShutdown.swift
+[19/104] Compiling BonsaiSwiftUI NativeKeyMapping.swift
+[20/104] Compiling BonsaiSwiftUI NativeKeyboardListener.swift
+[21/104] Compiling BonsaiSwiftUI NativeKeyboardOcclusion.swift
+[22/104] Compiling BonsaiSwiftUI NativeKeyboardPresses.swift
+[23/104] Compiling BonsaiSwiftUI NativeKeyboardRoute.swift
+[24/104] Compiling BonsaiSwiftUI NativeList.swift
+[25/104] Compiling BonsaiSwiftUI NativeHostEnvironment.swift
+[26/104] Compiling BonsaiSwiftUI NativeHostEnvironmentObserver.swift
+[27/104] Compiling BonsaiSwiftUI NativeHostPickers.swift
+[28/104] Compiling BonsaiSwiftUI NativeHoverRegion.swift
+[29/104] Compiling BonsaiSwiftUI NativeImageView.swift
+[30/104] Compiling BonsaiSwiftUI NativeKey.swift
+[31/104] Compiling BonsaiSwiftUI NativeFlowLayout.swift
+[32/104] Compiling BonsaiSwiftUI NativeFocusScope.swift
+[33/104] Compiling BonsaiSwiftUI NativeFrameModifier.swift
+[34/104] Compiling BonsaiSwiftUI NativeGesture.swift
+[35/104] Compiling BonsaiSwiftUI NativeHapticFeedback.swift
+[36/104] Compiling BonsaiSwiftUI NativeHostDialogs.swift
+[37/104] Compiling BonsaiSwiftUI NativeButtonFocus.swift
+[38/104] Compiling BonsaiSwiftUI NativeCivilPicker.swift
+[39/104] Compiling BonsaiSwiftUI NativeEventQueue.swift
+[40/104] Compiling BonsaiSwiftUI NativeExpandableComposer.swift
+[41/104] Compiling BonsaiSwiftUI NativeFileDialogs.swift
+[42/104] Compiling BonsaiSwiftUI NativeFileImports.swift
+[43/104] Compiling BonsaiSwiftUI SharedUIDefaults.swift
+[44/104] Compiling BonsaiSwiftUI SwiftUIEnvironment.swift
+[45/104] Compiling BonsaiSwiftUI SwipeActions.swift
+[46/104] Compiling BonsaiSwiftUI TextSession.swift
+[47/104] Compiling BonsaiSwiftUI ViewEnvironment.swift
+[48/104] Compiling BonsaiSwiftUI WireFrame.swift
+[49/104] Compiling BonsaiSwiftUI NativeToolbar.swift
+[50/104] Compiling BonsaiSwiftUI NativeWeightedLayout.swift
+[51/104] Compiling BonsaiSwiftUI NativeWindowHost.swift
+[52/104] Compiling BonsaiSwiftUI NodeStore.swift
+[53/104] Compiling BonsaiSwiftUI PointerContactInput.swift
+[54/104] Compiling BonsaiSwiftUI PresentationProbe.swift
+[55/104] Compiling BonsaiSwiftUI CollectionGeometry.swift
+[56/104] Compiling BonsaiSwiftUI CollectionMeasurements.swift
+[57/104] Compiling BonsaiSwiftUI CollectionViewport.swift
+[58/104] Compiling BonsaiSwiftUI EventBatch.swift
+[59/104] Compiling BonsaiSwiftUI HostCommands.swift
+[60/104] Compiling BonsaiSwiftUI HostServices.swift
+[61/104] Compiling BonsaiSwiftUI NativeTable.swift
+[62/104] Compiling BonsaiSwiftUI NativeTabs.swift
+[63/104] Compiling BonsaiSwiftUI NativeTextEditor.swift
+[64/104] Compiling BonsaiSwiftUI NativeTextEditorView.swift
+[65/104] Compiling BonsaiSwiftUI NativeTextField.swift
+[66/104] Compiling BonsaiSwiftUI NativeTextView.swift
+[67/104] Compiling BonsaiSwiftUI NativeScrollSections.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/NativeSurface.swift:93:43: warning: will never be executed
+ 91 |       validateChildren: { _, count in
+ 92 |         guard count == 1 else { throw TreeError.invalidChildren }
+ 93 |       }, encodeEvent: { (event: Never) in switch event {} }, makeResource: { () },
+    |                       |                   `- warning: will never be executed
+    |                       `- note: 'event' is of type 'Never' which cannot be constructed because it is an enum with no cases
+ 94 |       dispose: { _ in },
+ 95 |       content: { NativeSurfaceView(context: $0) })
+[68/104] Compiling BonsaiSwiftUI NativeScrollTargets.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/NativeSurface.swift:93:43: warning: will never be executed
+ 91 |       validateChildren: { _, count in
+ 92 |         guard count == 1 else { throw TreeError.invalidChildren }
+ 93 |       }, encodeEvent: { (event: Never) in switch event {} }, makeResource: { () },
+    |                       |                   `- warning: will never be executed
+    |                       `- note: 'event' is of type 'Never' which cannot be constructed because it is an enum with no cases
+ 94 |       dispose: { _ in },
+ 95 |       content: { NativeSurfaceView(context: $0) })
+[69/104] Compiling BonsaiSwiftUI NativeSheet.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/NativeSurface.swift:93:43: warning: will never be executed
+ 91 |       validateChildren: { _, count in
+ 92 |         guard count == 1 else { throw TreeError.invalidChildren }
+ 93 |       }, encodeEvent: { (event: Never) in switch event {} }, makeResource: { () },
+    |                       |                   `- warning: will never be executed
+    |                       `- note: 'event' is of type 'Never' which cannot be constructed because it is an enum with no cases
+ 94 |       dispose: { _ in },
+ 95 |       content: { NativeSurfaceView(context: $0) })
+[70/104] Compiling BonsaiSwiftUI NativeSlider.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/NativeSurface.swift:93:43: warning: will never be executed
+ 91 |       validateChildren: { _, count in
+ 92 |         guard count == 1 else { throw TreeError.invalidChildren }
+ 93 |       }, encodeEvent: { (event: Never) in switch event {} }, makeResource: { () },
+    |                       |                   `- warning: will never be executed
+    |                       `- note: 'event' is of type 'Never' which cannot be constructed because it is an enum with no cases
+ 94 |       dispose: { _ in },
+ 95 |       content: { NativeSurfaceView(context: $0) })
+[71/104] Compiling BonsaiSwiftUI NativeSurface.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/NativeSurface.swift:93:43: warning: will never be executed
+ 91 |       validateChildren: { _, count in
+ 92 |         guard count == 1 else { throw TreeError.invalidChildren }
+ 93 |       }, encodeEvent: { (event: Never) in switch event {} }, makeResource: { () },
+    |                       |                   `- warning: will never be executed
+    |                       `- note: 'event' is of type 'Never' which cannot be constructed because it is an enum with no cases
+ 94 |       dispose: { _ in },
+ 95 |       content: { NativeSurfaceView(context: $0) })
+[72/104] Compiling BonsaiSwiftUI NativeSymbolView.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/NativeSurface.swift:93:43: warning: will never be executed
+ 91 |       validateChildren: { _, count in
+ 92 |         guard count == 1 else { throw TreeError.invalidChildren }
+ 93 |       }, encodeEvent: { (event: Never) in switch event {} }, makeResource: { () },
+    |                       |                   `- warning: will never be executed
+    |                       `- note: 'event' is of type 'Never' which cannot be constructed because it is an enum with no cases
+ 94 |       dispose: { _ in },
+ 95 |       content: { NativeSurfaceView(context: $0) })
+[73/104] Compiling BonsaiSwiftUI NativeMenu.swift
+[74/104] Compiling BonsaiSwiftUI NativeMessageComposer.swift
+[75/104] Compiling BonsaiSwiftUI NativeNavigationSplit.swift
+[76/104] Compiling BonsaiSwiftUI NativeNodeGeometry.swift
+[77/104] Compiling BonsaiSwiftUI NativeNotices.swift
+[78/104] Compiling BonsaiSwiftUI NativePicker.swift
+[79/104] Compiling BonsaiSwiftUI HoverInput.swift
+[80/104] Compiling BonsaiSwiftUI HoverRouter.swift
+[81/104] Compiling BonsaiSwiftUI HoverWindowSources.swift
+[82/104] Compiling BonsaiSwiftUI MorphingSurface.swift
+[83/104] Compiling BonsaiSwiftUI NativeBadge.swift
+[84/104] Compiling BonsaiSwiftUI NativeBooleanControl.swift
+[85/104] Compiling BonsaiSwiftUI BonsaiApplicationView.swift
+[86/104] Compiling BonsaiSwiftUI BonsaiNativeViews.swift
+[87/104] Compiling BonsaiSwiftUI BonsaiSession.swift
+[88/104] Compiling BonsaiSwiftUI CivilDateDomain.swift
+[89/104] Compiling BonsaiSwiftUI CivilSelection.swift
+[90/104] Compiling BonsaiSwiftUI CollectionAnimation.swift
+[91/104] Compiling BonsaiSwiftUI NativeRemoval.swift
+[92/104] Compiling BonsaiSwiftUI NativeRichTextView.swift
+[93/104] Compiling BonsaiSwiftUI NativeRuntime.swift
+[94/104] Compiling BonsaiSwiftUI NativeSafeArea.swift
+[95/104] Compiling BonsaiSwiftUI NativeScroll.swift
+[96/104] Compiling BonsaiSwiftUI NativeScrollCommand.swift
+[97/104] Compiling BonsaiSwiftUI RemovalPan.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:97:20: warning: result of call to 'insert' is unused [#no-usage]
+ 95 |     var result: AccessibilityTraits = []
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:98:20: warning: result of call to 'insert' is unused [#no-usage]
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:99:20: warning: result of call to 'insert' is unused [#no-usage]
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:100:20: warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:101:20: warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+102 |     case 6: result.insert(.isStaticText)
+103 |     default: break
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:102:20: warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:105:45: warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+105 |     if properties.selected == true { result.insert(.isSelected) }
+    |                                             `- warning: result of call to 'insert' is unused [#no-usage]
+106 |     return result
+107 |   }
+[98/104] Compiling BonsaiSwiftUI RenderCollection.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:97:20: warning: result of call to 'insert' is unused [#no-usage]
+ 95 |     var result: AccessibilityTraits = []
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:98:20: warning: result of call to 'insert' is unused [#no-usage]
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:99:20: warning: result of call to 'insert' is unused [#no-usage]
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:100:20: warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:101:20: warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+102 |     case 6: result.insert(.isStaticText)
+103 |     default: break
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:102:20: warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:105:45: warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+105 |     if properties.selected == true { result.insert(.isSelected) }
+    |                                             `- warning: result of call to 'insert' is unused [#no-usage]
+106 |     return result
+107 |   }
+[99/104] Compiling BonsaiSwiftUI RenderTree.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:97:20: warning: result of call to 'insert' is unused [#no-usage]
+ 95 |     var result: AccessibilityTraits = []
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:98:20: warning: result of call to 'insert' is unused [#no-usage]
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:99:20: warning: result of call to 'insert' is unused [#no-usage]
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:100:20: warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:101:20: warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+102 |     case 6: result.insert(.isStaticText)
+103 |     default: break
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:102:20: warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:105:45: warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+105 |     if properties.selected == true { result.insert(.isSelected) }
+    |                                             `- warning: result of call to 'insert' is unused [#no-usage]
+106 |     return result
+107 |   }
+[100/104] Compiling BonsaiSwiftUI ScrollObservation.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:97:20: warning: result of call to 'insert' is unused [#no-usage]
+ 95 |     var result: AccessibilityTraits = []
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:98:20: warning: result of call to 'insert' is unused [#no-usage]
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:99:20: warning: result of call to 'insert' is unused [#no-usage]
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:100:20: warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:101:20: warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+102 |     case 6: result.insert(.isStaticText)
+103 |     default: break
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:102:20: warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:105:45: warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+105 |     if properties.selected == true { result.insert(.isSelected) }
+    |                                             `- warning: result of call to 'insert' is unused [#no-usage]
+106 |     return result
+107 |   }
+[101/104] Compiling BonsaiSwiftUI ScrollPositionRetention.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:97:20: warning: result of call to 'insert' is unused [#no-usage]
+ 95 |     var result: AccessibilityTraits = []
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:98:20: warning: result of call to 'insert' is unused [#no-usage]
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:99:20: warning: result of call to 'insert' is unused [#no-usage]
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:100:20: warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:101:20: warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+102 |     case 6: result.insert(.isStaticText)
+103 |     default: break
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:102:20: warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:105:45: warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+105 |     if properties.selected == true { result.insert(.isSelected) }
+    |                                             `- warning: result of call to 'insert' is unused [#no-usage]
+106 |     return result
+107 |   }
+[102/104] Compiling BonsaiSwiftUI Semantics.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:97:20: warning: result of call to 'insert' is unused [#no-usage]
+ 95 |     var result: AccessibilityTraits = []
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:98:20: warning: result of call to 'insert' is unused [#no-usage]
+ 96 |     switch properties.role {
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:99:20: warning: result of call to 'insert' is unused [#no-usage]
+ 97 |     case 1: result.insert(.isButton)
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:100:20: warning: result of call to 'insert' is unused [#no-usage]
+ 98 |     case 2: result.insert(.isLink)
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:101:20: warning: result of call to 'insert' is unused [#no-usage]
+ 99 |     case 3: result.insert(.isImage)
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+102 |     case 6: result.insert(.isStaticText)
+103 |     default: break
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:102:20: warning: result of call to 'insert' is unused [#no-usage]
+100 |     case 4: result.insert(.isHeader)
+101 |     case 5: result.insert(.isToggle)
+102 |     case 6: result.insert(.isStaticText)
+    |                    `- warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Sources/Semantics.swift:105:45: warning: result of call to 'insert' is unused [#no-usage]
+103 |     default: break
+104 |     }
+105 |     if properties.selected == true { result.insert(.isSelected) }
+    |                                             `- warning: result of call to 'insert' is unused [#no-usage]
+106 |     return result
+107 |   }
+[103/240] Compiling BonsaiSwiftUITests AnimatedOpacityTests.swift
+[104/240] Compiling BonsaiSwiftUITests AppBarCompositionTests.swift
+[105/240] Compiling BonsaiSwiftUITests AppKitHoverCaptureTests.swift
+[106/240] Compiling BonsaiSwiftUITests AppKitPointerDeviceTests.swift
+[107/240] Compiling BonsaiSwiftUITests ApplicationBridgeTests.swift
+[108/240] Compiling BonsaiSwiftUITests ApplicationTransportTests.swift
+[109/240] Compiling BonsaiSwiftUITests BadgeTests.swift
+[110/240] Compiling BonsaiSwiftUITests BonsaiSessionTests.swift
+[111/240] Compiling BonsaiSwiftUITests ButtonAutofocusTests.swift
+[112/248] Compiling BonsaiSwiftUITests FullGalleryTests.swift
+[113/248] Compiling BonsaiSwiftUITests GestureEventTests.swift
+[114/248] Compiling BonsaiSwiftUITests GroupBoxTests.swift
+[115/248] Compiling BonsaiSwiftUITests HapticServiceTests.swift
+[116/248] Compiling BonsaiSwiftUITests HelpTests.swift
+[117/248] Compiling BonsaiSwiftUITests HostCommandTests.swift
+[118/248] Compiling BonsaiSwiftUITests HostEnvironmentTests.swift
+[119/248] Compiling BonsaiSwiftUITests HostMenuServiceTests.swift
+[120/248] Compiling BonsaiSwiftUITests HostNavigationTests.swift
+[121/248] Compiling BonsaiSwiftUITests SafeAreaTests.swift
+[122/248] Compiling BonsaiSwiftUITests ScopedThemeTests.swift
+[123/248] Compiling BonsaiSwiftUITests ScrollEventQueueTests.swift
+[124/248] Compiling BonsaiSwiftUITests ScrollFillTests.swift
+[125/248] Compiling BonsaiSwiftUITests ScrollNodeTests.swift
+[126/248] Compiling BonsaiSwiftUITests ScrollObservationTests.swift
+[127/248] Compiling BonsaiSwiftUITests ScrollSectionsTests.swift
+[128/248] Compiling BonsaiSwiftUITests ScrollServiceTests.swift
+[129/248] Compiling BonsaiSwiftUITests ScrollTargetsTests.swift
+[130/248] Compiling BonsaiSwiftUITests HostPickerServiceTests.swift
+[131/248] Compiling BonsaiSwiftUITests HostServicesTests.swift
+[132/248] Compiling BonsaiSwiftUITests HoverInputTests.swift
+[133/248] Compiling BonsaiSwiftUITests HoverRegionTests.swift
+[134/248] Compiling BonsaiSwiftUITests HoverRouterTests.swift
+[135/248] Compiling BonsaiSwiftUITests HoverTransitionTests.swift
+[136/248] Compiling BonsaiSwiftUITests HoverWindowSourcesTests.swift
+[137/248] Compiling BonsaiSwiftUITests ImageLoadingTests.swift
+[138/248] Compiling BonsaiSwiftUITests ImageTests.swift
+[139/248] Compiling BonsaiSwiftUITests InitialScrollTests.swift
+[140/248] Compiling BonsaiSwiftUITests KeyboardEventTests.swift
+[141/248] Compiling BonsaiSwiftUITests KeyboardListenerTests.swift
+[142/248] Compiling BonsaiSwiftUITests KeyboardOcclusionTests.swift
+[143/248] Compiling BonsaiSwiftUITests KeyboardPressesTests.swift
+[144/248] Compiling BonsaiSwiftUITests KeyboardRouteTests.swift
+[145/248] Compiling BonsaiSwiftUITests LabelTests.swift
+[146/248] Compiling BonsaiSwiftUITests MeasuredCollectionTests.swift
+[147/248] Compiling BonsaiSwiftUITests MenuTests.swift
+[148/248] Compiling BonsaiSwiftUITests MixedCollectionTests.swift
+[149/248] Compiling BonsaiSwiftUITests ModifierTests.swift
+[150/248] Compiling BonsaiSwiftUITests MorphingSurfaceTests.swift
+[151/248] Compiling BonsaiSwiftUITests MultipleSelectionTests.swift
+[152/248] Compiling BonsaiSwiftUITests NativeEventQueueTests.swift
+[153/248] Compiling BonsaiSwiftUITests NativeKeyMappingTests.swift
+[154/248] Compiling BonsaiSwiftUITests NativeLayoutRequestsTests.swift
+[155/248] Compiling BonsaiSwiftUITests NativeListStyleTests.swift
+[156/248] Compiling BonsaiSwiftUITests NativeRuntimeTests.swift
+[157/248] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[158/248] Compiling BonsaiSwiftUITests ExpandableComposerTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[159/248] Compiling BonsaiSwiftUITests FileCommandTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[160/248] Compiling BonsaiSwiftUITests FileDialogTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[161/248] Compiling BonsaiSwiftUITests FileExportTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[162/248] Compiling BonsaiSwiftUITests FileImportTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[163/248] Compiling BonsaiSwiftUITests FileResultTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[164/248] Compiling BonsaiSwiftUITests FlowLayoutTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[165/248] Compiling BonsaiSwiftUITests FocusScopeTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[166/248] Compiling BonsaiSwiftUITests FrameTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[167/248] Compiling BonsaiSwiftUITests ButtonScopeTests.swift
+[168/248] Compiling BonsaiSwiftUITests CivilDateDomainTests.swift
+[169/248] Compiling BonsaiSwiftUITests CivilPickerTests.swift
+[170/248] Compiling BonsaiSwiftUITests CivilSelectionTests.swift
+[171/248] Compiling BonsaiSwiftUITests ClockTests.swift
+[172/248] Compiling BonsaiSwiftUITests CollectionAnimationTests.swift
+[173/248] Compiling BonsaiSwiftUITests CollectionEventTests.swift
+[174/248] Compiling BonsaiSwiftUITests CollectionGeometryTests.swift
+[175/248] Compiling BonsaiSwiftUITests CollectionNodeTests.swift
+[176/248] Compiling BonsaiSwiftUITests SelectionCatalogTests.swift
+[177/248] Compiling BonsaiSwiftUITests SemanticsNodeTests.swift
+[178/248] Compiling BonsaiSwiftUITests SharedDefaultsTests.swift
+[179/248] Compiling BonsaiSwiftUITests SheetTests.swift
+[180/248] Compiling BonsaiSwiftUITests ShutdownTests.swift
+[181/248] Compiling BonsaiSwiftUITests SidebarCompositionTests.swift
+[182/248] Compiling BonsaiSwiftUITests SliderFixture.swift
+[183/248] Compiling BonsaiSwiftUITests SliderTests.swift
+[184/248] Compiling BonsaiSwiftUITests StackTests.swift
+[185/248] Compiling BonsaiSwiftUITests CollectionViewportTests.swift
+[186/248] Compiling BonsaiSwiftUITests ComposerTests.swift
+[187/248] Compiling BonsaiSwiftUITests ContextualSelectionTests.swift
+[188/248] Compiling BonsaiSwiftUITests ControlSizeTests.swift
+[189/248] Compiling BonsaiSwiftUITests CoreNavigationLinkTests.swift
+[190/248] Compiling BonsaiSwiftUITests DisclosureTests.swift
+[191/248] Compiling BonsaiSwiftUITests DividerTests.swift
+[192/248] Compiling BonsaiSwiftUITests DropdownCompositionTests.swift
+[193/248] Compiling BonsaiSwiftUITests EventBatchTests.swift
+[194/248] Compiling BonsaiSwiftUITests NodeStoreTests.swift
+[195/248] Compiling BonsaiSwiftUITests NoticeServiceTests.swift
+[196/248] Compiling BonsaiSwiftUITests OverlayTests.swift
+[197/248] Compiling BonsaiSwiftUITests PageLayoutTests.swift
+[198/248] Compiling BonsaiSwiftUITests PickerTests.swift
+[199/248] Compiling BonsaiSwiftUITests PlatformInformationTests.swift
+[200/248] Compiling BonsaiSwiftUITests PointerContactInputTests.swift
+[201/248] Compiling BonsaiSwiftUITests PointerEventTests.swift
+[202/248] Compiling BonsaiSwiftUITests PopoverTests.swift
+[203/248] Compiling BonsaiSwiftUITests PresentationProbeTests.swift
+[204/248] Compiling BonsaiSwiftUITests ProgressTests.swift
+[205/248] Compiling BonsaiSwiftUITests ProjectionTests.swift
+[206/248] Compiling BonsaiSwiftUITests RefreshTests.swift
+[207/248] Compiling BonsaiSwiftUITests RemovalTests.swift
+[208/248] Compiling BonsaiSwiftUITests RenderTreeTests.swift
+[209/248] Compiling BonsaiSwiftUITests RenderedView.swift
+[210/248] Compiling BonsaiSwiftUITests RichTextTests.swift
+[211/248] Compiling BonsaiSwiftUITests SQLiteWorkerTests.swift
+[212/248] Compiling BonsaiSwiftUITests SurfaceTests.swift
+[213/248] Compiling BonsaiSwiftUITests SwiftInputFixtureTests.swift
+[214/248] Compiling BonsaiSwiftUITests SwipeActionsFixture.swift
+[215/248] Compiling BonsaiSwiftUITests SwipeActionsTests.swift
+[216/248] Compiling BonsaiSwiftUITests SymbolTests.swift
+[217/248] Compiling BonsaiSwiftUITests SystemControlsTests.swift
+[218/248] Compiling BonsaiSwiftUITests TableRuntimeTests.swift
+[219/248] Compiling BonsaiSwiftUITests TabsTests.swift
+[220/248] Compiling BonsaiSwiftUITests TagTests.swift
+[221/248] Compiling BonsaiSwiftUITests NativeTextEditorTests.swift
+[222/248] Compiling BonsaiSwiftUITests NativeViewTests.swift
+[223/248] Compiling BonsaiSwiftUITests NativeWindowHostTests.swift
+[224/248] Compiling BonsaiSwiftUITests NavigationLinkTests.swift
+[225/248] Compiling BonsaiSwiftUITests NavigationSplitTests.swift
+[226/248] Compiling BonsaiSwiftUITests NavigationStackTests.swift
+[227/248] Compiling BonsaiSwiftUITests NetworkTests.swift
+[228/248] Compiling BonsaiSwiftUITests NodeCommandTests.swift
+[229/248] Compiling BonsaiSwiftUITests NodeServiceTests.swift
+[230/248] Compiling BonsaiSwiftUITests TextEditorAutofocusTests.swift
+[231/248] Compiling BonsaiSwiftUITests TextEditorViewTests.swift
+[232/248] Compiling BonsaiSwiftUITests TextEventTests.swift
+[233/248] Compiling BonsaiSwiftUITests TextFieldTests.swift
+[234/248] Compiling BonsaiSwiftUITests TextFieldWireTests.swift
+[235/248] Compiling BonsaiSwiftUITests TextSessionTests.swift
+[236/248] Compiling BonsaiSwiftUITests TextTests.swift
+[237/248] Compiling BonsaiSwiftUITests TodoTests.swift
+[238/248] Compiling BonsaiSwiftUITests ToggleTests.swift
+[239/248] Compiling BonsaiSwiftUITests ToolbarTests.swift
+[240/248] Compiling BonsaiSwiftUITests TreeFixture.swift
+[241/248] Compiling BonsaiSwiftUITests URLHostServiceTests.swift
+[242/248] Compiling BonsaiSwiftUITests URLReceiverSupport.swift
+[243/248] Compiling BonsaiSwiftUITests ViewEnvironmentTests.swift
+[244/248] Compiling BonsaiSwiftUITests WeightedLayoutTests.swift
+[245/248] Compiling BonsaiSwiftUITests WireFrameTests.swift
+[246/248] Compiling BonsaiSwiftUITests WorkflowTests.swift
+[246/248] Write Objects.LinkFileList
+[247/248] Linking BonsaiSwiftUIPackageTests
+Build complete! (12.30s)
+Test Suite 'Selected tests' started at 2026-09-18 14:56:25.737.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 14:56:25.738.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 14:56:25.738.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 14:56:25.738.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite CoreNavigationLinkTests started.
+◇ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() started.
+✘ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() recorded an issue at CoreNavigationLinkTests.swift:12:5: Expectation failed: (stack → BonsaiSwiftUI.NavigationStackController).request(([value] → [BonsaiSwiftUI.NavigationRouteIdentity(node: BonsaiSwiftUI.RenderIdentity(epoch: 0, node: 0), key: 36 bytes, link: nil)]), emit: { _ in false })
+✘ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() recorded an issue at CoreNavigationLinkTests.swift:17:5: Expectation failed: (emitted.count → 0) == 1
+✘ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() recorded an issue at CoreNavigationLinkTests.swift:21:31: Expectation failed: (emitted → []).first → nil → nil
+✘ Test intentWaitsForReadinessAndSettlesOnlyItsExactEmission() failed after 0.001 seconds with 3 issues.
+◇ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() started.
+✘ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() recorded an issue at CoreNavigationLinkTests.swift:33:5: Expectation failed: (stack → BonsaiSwiftUI.NavigationStackController).request(([first] → [BonsaiSwiftUI.NavigationRouteIdentity(node: BonsaiSwiftUI.RenderIdentity(epoch: 0, node: 0), key: 36 bytes, link: nil)]), emit: { _ in false })
+✘ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() recorded an issue at CoreNavigationLinkTests.swift:34:5: Expectation failed: (stack → BonsaiSwiftUI.NavigationStackController).request(([second] → [BonsaiSwiftUI.NavigationRouteIdentity(node: BonsaiSwiftUI.RenderIdentity(epoch: 0, node: 0), key: 36 bytes, link: nil)]), emit: { _ in false })
+✘ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() recorded an issue at CoreNavigationLinkTests.swift:40:5: Expectation failed: (stack → BonsaiSwiftUI.NavigationStackController).request(([second] → [BonsaiSwiftUI.NavigationRouteIdentity(node: BonsaiSwiftUI.RenderIdentity(epoch: 0, node: 0), key: 36 bytes, link: nil)]), emit: { _ in false })
+✘ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() recorded an issue at CoreNavigationLinkTests.swift:41:5: Expectation failed: (emitted → []) == [2]
+± removed [2]
+✘ Test replacementSupersedesOnlyUndeliveredIntentAndInvalidationCancels() failed after 0.001 seconds with 4 issues.
+◇ Test expiredAndForeignIntentsNeverEmit() started.
+✘ Test expiredAndForeignIntentsNeverEmit() recorded an issue at CoreNavigationLinkTests.swift:53:5: Expectation failed: (stack → BonsaiSwiftUI.NavigationStackController).request(([value] → [BonsaiSwiftUI.NavigationRouteIdentity(node: BonsaiSwiftUI.RenderIdentity(epoch: 0, node: 0), key: 36 bytes, link: nil)]), emit: { _ in false })
+✘ Test expiredAndForeignIntentsNeverEmit() failed after 0.558 seconds with 1 issue.
+◇ Test transportRejectionDoesNotReplayOnReadinessNotifications() started.
+✘ Test transportRejectionDoesNotReplayOnReadinessNotifications() recorded an issue at CoreNavigationLinkTests.swift:66:5: Expectation failed: (count → 0) == 1
+✘ Test transportRejectionDoesNotReplayOnReadinessNotifications() recorded an issue at CoreNavigationLinkTests.swift:68:5: Expectation failed: (count → 0) == 2
+✘ Test transportRejectionDoesNotReplayOnReadinessNotifications() failed after 0.001 seconds with 2 issues.
+✘ Suite CoreNavigationLinkTests failed after 0.561 seconds with 10 issues.
+✘ Test run with 4 tests in 1 suite failed after 0.561 seconds with 10 issues.

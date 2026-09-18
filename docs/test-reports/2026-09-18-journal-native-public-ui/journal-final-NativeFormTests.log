@@ -1,0 +1,20 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:43:50.350.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:43:50.351.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:43:50.351.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:43:50.351.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeFormTests started.
+◇ Test sectionStructureSurvivesTheTypeErasedRenderer() started.
+✔ Test sectionStructureSurvivesTheTypeErasedRenderer() passed after 0.209 seconds.
+◇ Test nativeFormPreservesKeyedControlsAcrossReorderAndSelectionUpdates() started.
+✔ Test nativeFormPreservesKeyedControlsAcrossReorderAndSelectionUpdates() passed after 0.001 seconds.
+◇ Test malformedNativeSlotsCannotPublish() started.
+✔ Test malformedNativeSlotsCannotPublish() passed after 0.001 seconds.
+◇ Test hostedFormHasNativeSectionsSelectableValuesAndOrdinaryActions() started.
+✔ Test hostedFormHasNativeSectionsSelectableValuesAndOrdinaryActions() passed after 0.318 seconds.
+✔ Suite NativeFormTests passed after 0.529 seconds.
+✔ Test run with 4 tests in 1 suite passed after 0.529 seconds.

@@ -1,0 +1,92 @@
+dune exec protocol/generator/generate_fixtures.exe --
+python3 tool/generate_input_fixtures.py
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ld: warning: /opt/homebrew/Cellar/gmp/6.3.0/lib/libgmp.dylib, ignoring unexpected dylib file
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.tbd, ignoring unexpected dylib text stub file
+[0/1] Planning build
+Building for debugging...
+[0/4] Write sources
+[2/4] Write swift-version--58304C5D6DBC2206.txt
+[4/9] Compiling BonsaiSwiftUI NativeConfirmation.swift
+[5/9] Emitting module BonsaiSwiftUI
+[6/9] Compiling BonsaiSwiftUI NativeConfirmationView.swift
+[7/9] Compiling BonsaiSwiftUI RenderTree.swift
+[8/9] Compiling BonsaiSwiftUI BonsaiSession.swift
+[9/13] Compiling BonsaiSwiftUITests SwiftInputFixtureTests.swift
+[10/13] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[11/13] Compiling BonsaiSwiftUITests ConfirmationControllerTests.swift
+[11/13] Write Objects.LinkFileList
+[12/13] Linking BonsaiSwiftUIPackageTests
+Build complete! (6.55s)
+Test Suite 'Selected tests' started at 2026-09-18 19:25:09.616.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 19:25:09.617.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 19:25:09.617.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 19:25:09.617.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite SwiftInputFixtureTests started.
+◇ Test productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "confirmation_action" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "confirmation_dismissed" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "counter_press" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "host_response" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "text_edit_unicode" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "text_limit_reached" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "environment_changed" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "application_response" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "application_event" to productionEncodingMatchesCommittedFixture(name:) started.
+✔ Test productionEncodingMatchesCommittedFixture(name:) with 9 test cases passed after 0.003 seconds.
+◇ Test invalidEnvironmentSamplesLeaveAdmittedInputIntact() started.
+✔ Test invalidEnvironmentSamplesLeaveAdmittedInputIntact() passed after 0.001 seconds.
+✔ Suite SwiftInputFixtureTests passed after 0.004 seconds.
+✔ Test run with 2 tests in 1 suite passed after 0.004 seconds.

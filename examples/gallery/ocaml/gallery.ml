@@ -1970,36 +1970,52 @@ let swipe_component handlers graph =
       in
       let row name =
         let title = "Archive " ^ name in
-        Ui.View.Swipe_actions.create
-          ~key:(Ui.Key.string ("gallery-swipe-" ^ name))
-          ~enabled
-          ~allows_full_swipe:true
-          ~actions:
-            [ Ui.View.Swipe_actions.action
-                ~title
-                ~side:Start
-                ~enabled
-                ~background:(Ui.Style.Color.rgb ~red:38 ~green:120 ~blue:60)
-                ~on_press:archive
-                ()
-            ]
-          ~content:
-            (Ui.View.frame
-               ~width:320.
-               ~height:100.
-               (Ui.View.text ("Swipe " ^ name ^ " to archive")))
-          ()
+        let actions =
+          Ui.View.Swipe_actions.create
+            ~enabled
+            ~allows_full_swipe:true
+            ~actions:
+              [ Ui.View.Swipe_actions.action
+                  ~key:(Ui.Key.string "archive")
+                  ~title
+                  ~side:Start
+                  ~enabled
+                  ~background:(Ui.Style.Color.rgb ~red:38 ~green:120 ~blue:60)
+                  ~on_press:archive
+                  ()
+              ]
+            ()
+        in
+        Ui.View.Native_list.row
+          ~key:(Ui.Key.string name)
+          ~swipe_actions:actions
+          ~context_menu:
+            (Ui.View.Context_menu.create
+               ~enabled
+               ~actions:
+                 [ Ui.View.Context_menu.action
+                     ~key:(Ui.Key.string "archive")
+                     ~title
+                     ~symbol:"archivebox"
+                     ~enabled
+                     ~on_press:archive
+                     ()
+                 ]
+               ())
+          (Ui.View.frame
+             ~width:320.
+             ~height:100.
+             (Ui.View.text ("Swipe or open the context menu for " ^ name)))
       in
       Ui.View.column
         [ Ui.View.text (Printf.sprintf "Archived: %d" count)
         ; button (if enabled then "Disable actions" else "Enable actions") toggle
         ; button (if ignored then "Accept actions" else "Ignore actions") ignore
         ; Ui.View.Native_list.vertical
+            ~style:Plain
             [ Ui.View.Native_list.section
                 ~key:(Ui.Key.string "swipe-section")
-                [ Ui.View.Native_list.row ~key:(Ui.Key.string "first") (row "first")
-                ; Ui.View.Native_list.row ~key:(Ui.Key.string "second") (row "second")
-                ]
+                [ row "first"; row "second" ]
             ]
           |> Ui.View.Viewport.Vertical.with_height ~height:300.
         ])
@@ -2592,6 +2608,51 @@ let semantics_component handlers graph =
         ])
 ;;
 
+let native_form_section model handlers =
+  let keyed key = Ui.View.Keyed.create ~key:(Ui.Key.string key) in
+  let diagnostics =
+    Ui.View.Section.create
+      ~header:(Ui.View.text "Diagnostics")
+      ~footer:(Ui.View.text "Select and copy values; OCaml owns the state")
+      [ keyed
+          "count"
+          (Ui.View.labeled_content
+             ~label:(Ui.View.text "Actions")
+             ~value:
+               (Ui.View.text_selection
+                  ~enabled:true
+                  (Ui.View.text (string_of_int model.press_count)))
+             ())
+      ; keyed
+          "status"
+          (Ui.View.labeled_content
+             ~label:(Ui.View.text "Status")
+             ~value:
+               (Ui.View.text_selection
+                  ~enabled:true
+                  (Ui.View.text model.interaction_status))
+             ())
+      ]
+  in
+  let unavailable =
+    Ui.View.content_unavailable
+      ~label:
+        (Ui.View.label
+           ~title:(Ui.View.text "No journal entries")
+           ~icon:(Ui.View.symbol ~name:"book.closed" ())
+           ())
+      ~description:(Ui.View.text "A native action with an ordinary OCaml handler")
+      ~actions:
+        (Ui.View.button ~on_press:handlers.press ~child:(Ui.View.text "Create entry") ())
+      ()
+  in
+  section
+    "Native Form"
+    [ Ui.View.Form.vertical [ keyed "diagnostics" diagnostics; keyed "empty" unavailable ]
+      |> Ui.View.Viewport.Vertical.with_height ~height:420.
+    ]
+;;
+
 let view
       model
       handlers
@@ -2629,6 +2690,7 @@ let view
       ; rich_text_section ()
       ; text_section ()
       ; dividers_section ()
+      ; native_form_section model handlers
       ; images_section ()
       ; collection
       ; scrolls
@@ -3392,6 +3454,109 @@ let help_component handlers graph =
         ])
 ;;
 
+let confirmation_component handlers graph =
+  let state, set_state =
+    Bonsai_v017.state ~equal:( = ) (0L, None, 0, "none", false, 0) graph
+  in
+  let bind name update =
+    Driver.Handler.create
+      handlers
+      ~name
+      ~equal:( == )
+      set_state
+      ~f:(fun set_state payload -> set_state (update payload))
+  in
+  let bindings =
+    [ bind "confirmation-alert" (fun _ (token, _, count, result, ignore, background) ->
+        let token = Int64.succ token in
+        token, Some (token, 0), count, result, ignore, background)
+    ; bind "confirmation-dialog" (fun _ (token, _, count, result, ignore, background) ->
+        let token = Int64.succ token in
+        token, Some (token, 1), count, result, ignore, background)
+    ; bind
+        "confirmation-ignore"
+        (fun _ (token, request, count, result, ignore, background) ->
+           token, request, count, result, not ignore, background)
+    ; bind
+        "confirmation-background"
+        (fun _ (token, request, count, result, ignore, background) ->
+           token, request, count, result, ignore, background + 1)
+    ; bind
+        "confirmation-response"
+        (fun payload ((token, request, count, _, ignore, background) as state) ->
+           match payload, request with
+           | Ui.Event.Payload.Confirmation_response response, Some (presented, _)
+             when response.token = presented && not ignore ->
+             let result =
+               match response.result with
+               | Action key -> key
+               | Dismissed -> "dismissed"
+             in
+             token, None, count + 1, result, ignore, background
+           | _ -> state)
+    ; bind
+        "confirmation-dialog-no-cancel"
+        (fun _ (token, _, count, result, ignore, background) ->
+           let token = Int64.succ token in
+           token, Some (token, 2), count, result, ignore, background)
+    ]
+  in
+  Bonsai.Cont.map2
+    state
+    (Bonsai.Cont.all bindings)
+    ~f:(fun (_, current, count, result, ignore, background) bindings ->
+      let button title index =
+        Ui.View.button
+          ~key:(Ui.Key.string title)
+          ~on_press:(List.nth bindings index)
+          ~child:(Ui.View.text title)
+          ()
+      in
+      let content =
+        Ui.View.column
+          [ Ui.View.text (Printf.sprintf "Confirmation responses: %d" count)
+          ; Ui.View.text ("Confirmation result: " ^ result)
+          ; Ui.View.text (Printf.sprintf "Background actions: %d" background)
+          ; button "Show alert" 0
+          ; button "Show confirmation dialog" 1
+          ; button "Show dialog without cancel" 5
+          ; button
+              (if ignore
+               then "Accept confirmation response"
+               else "Ignore confirmation response")
+              2
+          ; button "Background action" 3
+          ]
+      in
+      let module C = Ui.View.Confirmation in
+      let request =
+        Option.map
+          (fun (token, style) ->
+             C.request
+               ~token
+               ~title:"Delete entry?"
+               ~message:"The application owns this decision."
+               ([ C.action ~key:"delete" ~title:"Delete entry" ~role:Destructive ()
+                ; C.action ~key:"disabled" ~title:"Unavailable action" ~enabled:false ()
+                ]
+                @
+                if style = 2
+                then []
+                else [ C.action ~key:"cancel" ~title:"Keep entry" ~role:Cancel () ]))
+          current
+      in
+      let create =
+        match current with
+        | Some (_, style) when style > 0 -> C.dialog
+        | _ -> C.alert
+      in
+      create
+        ~key:(Ui.Key.string "confirmation")
+        ~request
+        ~on_response:(List.nth bindings 4)
+        content)
+;;
+
 let popover_component handlers graph =
   let state, set_state =
     Bonsai_v017.state ~equal:( = ) (false, false, false, 0, 0) graph
@@ -3728,7 +3893,12 @@ let component registry graph =
           ; section "Expandable message composer" [ Ui.View.frame ~width:600. composer ]
           ])
   in
-  let sheets = Sheet_catalog.component registry graph in
+  let sheets =
+    Bonsai.Cont.map2
+      (Sheet_catalog.component registry graph)
+      (confirmation_component registry graph)
+      ~f:(fun sheets confirmations -> Ui.View.column [ sheets; confirmations ])
+  in
   let semantics =
     Bonsai.Cont.map2
       (Bonsai.Cont.map2

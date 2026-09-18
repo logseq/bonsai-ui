@@ -1,0 +1,18 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.15s)
+Test Suite 'Selected tests' started at 2026-09-18 17:29:31.654.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 17:29:31.655.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 17:29:31.655.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 17:29:31.655.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() started.
+✔ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() passed after 0.775 seconds.
+✔ Suite NativeRuntimeTests passed after 0.775 seconds.
+✔ Test run with 1 test in 1 suite passed after 0.775 seconds.

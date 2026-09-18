@@ -1,0 +1,311 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.15s)
+Test Suite 'All tests' started at 2026-09-18 19:39:46.126.
+Test Suite 'All tests' passed at 2026-09-18 19:39:46.127.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite AnimatedOpacityTests started.
+◇ Test initialMountUsesItsTargetWithoutChangingNativeLayout() started.
+✔ Test initialMountUsesItsTargetWithoutChangingNativeLayout() passed after 0.050 seconds.
+◇ Test invalidAnimationPropertiesAndBindingsRejectTheWholeTransaction() started.
+✔ Test invalidAnimationPropertiesAndBindingsRejectTheWholeTransaction() passed after 0.001 seconds.
+◇ Test saturatedEventQueueRetainsOnlyTheLatestUnadmittedCompletion() started.
+✔ Test saturatedEventQueueRetainsOnlyTheLatestUnadmittedCompletion() passed after 0.228 seconds.
+◇ Test cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) started.
+◇ Test case passing 1 argument reason → "reduceMotion" to cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) started.
+◇ Test case passing 1 argument reason → "reactivate" to cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) started.
+◇ Test case passing 1 argument reason → "repeat" to cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) started.
+◇ Test case passing 1 argument reason → "instant" to cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) started.
+◇ Test case passing 1 argument reason → "coalesced" to cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) started.
+✔ Test cancellationResetsNativeInterpolationBeforeTheOriginalDuration(reason:) with 5 test cases passed after 12.185 seconds.
+✔ Suite AnimatedOpacityTests passed after 12.465 seconds.
+◇ Suite AppKitHoverCaptureTests started.
+◇ Test nativeCoordinatesAndTrackingLifecycle() started.
+✔ Test nativeCoordinatesAndTrackingLifecycle() passed after 0.005 seconds.
+◇ Test normalizedCoordinatesRespectFlippedAndScaledAncestorsAndRejectForeignWindows() started.
+✔ Test normalizedCoordinatesRespectFlippedAndScaledAncestorsAndRejectForeignWindows() passed after 0.007 seconds.
+✔ Suite AppKitHoverCaptureTests passed after 0.013 seconds.
+◇ Suite AppKitPointerDeviceTests started.
+◇ Test actualNativePacketsPreserveDeviceIdentityAndProximityKindsAcrossWindows() started.
+✔ Test actualNativePacketsPreserveDeviceIdentityAndProximityKindsAcrossWindows() passed after 0.004 seconds.
+✔ Suite AppKitPointerDeviceTests passed after 0.004 seconds.
+◇ Suite ApplicationTransportTests started.
+◇ Test applicationRequestsStageAtomicallyWithIndependentIDOwnership() started.
+✔ Test applicationRequestsStageAtomicallyWithIndependentIDOwnership() passed after 0.001 seconds.
+◇ Test boundedOpaqueEventsOwnTheirBytesAndDoNotCoalesce() started.
+✔ Test boundedOpaqueEventsOwnTheirBytesAndDoNotCoalesce() passed after 0.001 seconds.
+◇ Test repliesDrainIndividuallyWithoutLosingBudgetOrSurroundingInput() started.
+✔ Test repliesDrainIndividuallyWithoutLosingBudgetOrSurroundingInput() passed after 0.001 seconds.
+✔ Suite ApplicationTransportTests passed after 0.002 seconds.
+◇ Suite BadgeTests started.
+◇ Test numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+◇ Test case passing 2 arguments rtl → false, alignment → 0 to numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+◇ Test case passing 2 arguments rtl → false, alignment → 1 to numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+◇ Test case passing 2 arguments rtl → false, alignment → 2 to numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+◇ Test case passing 2 arguments rtl → true, alignment → 0 to numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+◇ Test case passing 2 arguments rtl → true, alignment → 1 to numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+◇ Test case passing 2 arguments rtl → true, alignment → 2 to numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) started.
+✔ Test numericAndDotOverlaysFollowNativeAlignmentWithoutSizingContent(rtl:alignment:) with 6 test cases passed after 0.402 seconds.
+◇ Test hiddenDecorationLeavesContentVisibleAndMalformedUpdatesAreAtomic() started.
+✔ Test hiddenDecorationLeavesContentVisibleAndMalformedUpdatesAreAtomic() passed after 0.003 seconds.
+✔ Suite BadgeTests passed after 0.406 seconds.
+◇ Suite ButtonAutofocusTests started.
+◇ Test focusWaitsForPresentationActivatesSpaceOnceAndDoesNotStealEditingFocus() started.
+✔ Test focusWaitsForPresentationActivatesSpaceOnceAndDoesNotStealEditingFocus() passed after 0.962 seconds.
+◇ Test disabledFocusRequestRetriesWhenEnabledAndCannotActivateWhileInactive() started.
+✔ Test disabledFocusRequestRetriesWhenEnabledAndCannotActivateWhileInactive() passed after 0.400 seconds.
+◇ Test buttonFocusWireRejectsOldPayloadInvalidFlagsAndMalformedUpdates() started.
+✔ Test buttonFocusWireRejectsOldPayloadInvalidFlagsAndMalformedUpdates() passed after 0.001 seconds.
+✔ Suite ButtonAutofocusTests passed after 1.365 seconds.
+◇ Suite CivilDateDomainTests started.
+◇ Test continuousDomainRejectsUnsupportedHistoryAndInvalidBoundaries() started.
+✔ Test continuousDomainRejectsUnsupportedHistoryAndInvalidBoundaries() passed after 0.001 seconds.
+◇ Test pickerDatesRoundTripAcrossGregorianBoundariesWithoutLocalTimeZoneShifts() started.
+✔ Test pickerDatesRoundTripAcrossGregorianBoundariesWithoutLocalTimeZoneShifts() passed after 0.001 seconds.
+✔ Suite CivilDateDomainTests passed after 0.001 seconds.
+◇ Suite CivilPickerTests started.
+◇ Test dateBindingRejectsStaleDisabledAndUnadmittedSelections() started.
+✔ Test dateBindingRejectsStaleDisabledAndUnadmittedSelections() passed after 0.001 seconds.
+✔ Suite CivilPickerTests passed after 0.001 seconds.
+◇ Suite CivilSelectionTests started.
+◇ Test prolepticGregorianDatesRetainHistoricalDaysAndRejectInvalidComponents() started.
+✔ Test prolepticGregorianDatesRetainHistoricalDaysAndRejectInvalidComponents() passed after 0.001 seconds.
+◇ Test civilClockValuesCoverMidnightNoonAndTheFinalMinute() started.
+✔ Test civilClockValuesCoverMidnightNoonAndTheFinalMinute() passed after 0.001 seconds.
+◇ Test invalidCivilEventsAreRejectedBeforeQueueMutation() started.
+✔ Test invalidCivilEventsAreRejectedBeforeQueueMutation() passed after 0.001 seconds.
+◇ Test consecutiveSelectionsKeepTheFinalValueWithoutCrossingBindingBoundaries() started.
+✔ Test consecutiveSelectionsKeepTheFinalValueWithoutCrossingBindingBoundaries() passed after 0.001 seconds.
+◇ Test nativeTimeValuesRoundTripEveryMinuteAcrossDayBoundaries() started.
+✔ Test nativeTimeValuesRoundTripEveryMinuteAcrossDayBoundaries() passed after 0.002 seconds.
+◇ Test hourCycleOverridePreservesLanguageRegionAndNumberingSystem() started.
+✔ Test hourCycleOverridePreservesLanguageRegionAndNumberingSystem() passed after 0.001 seconds.
+✔ Suite CivilSelectionTests passed after 0.003 seconds.
+◇ Suite CollectionAnimationTests started.
+◇ Test sparseTransitionsInterpolateIndependentlyAndRetargetFromDisplayedHeights() started.
+✔ Test sparseTransitionsInterpolateIndependentlyAndRetargetFromDisplayedHeights() passed after 0.001 seconds.
+◇ Test zeroDurationUnchangedAndStructuralUpdatesResolveImmediately() started.
+✔ Test zeroDurationUnchangedAndStructuralUpdatesResolveImmediately() passed after 0.001 seconds.
+✔ Suite CollectionAnimationTests passed after 0.001 seconds.
+◇ Suite CollectionEventTests started.
+◇ Test visibleRangesCoalesceWithinTheirOwnerAndPreserveActionBarriers() started.
+✔ Test visibleRangesCoalesceWithinTheirOwnerAndPreserveActionBarriers() passed after 0.001 seconds.
+✔ Suite CollectionEventTests passed after 0.001 seconds.
+◇ Suite CollectionGeometryTests started.
+◇ Test sparseExtentsPreserveExactBoundariesAndBoundTheWindow() started.
+✔ Test sparseExtentsPreserveExactBoundariesAndBoundTheWindow() passed after 0.001 seconds.
+◇ Test metricChangesRestoreTheTopRowAndClampAfterRemoval() started.
+✔ Test metricChangesRestoreTheTopRowAndClampAfterRemoval() passed after 0.001 seconds.
+◇ Test rejectsMalformedAndUnrepresentableMetrics() started.
+✔ Test rejectsMalformedAndUnrepresentableMetrics() passed after 0.001 seconds.
+✔ Suite CollectionGeometryTests passed after 0.001 seconds.
+◇ Suite CollectionNodeTests started.
+◇ Test changingAxisRetainsLogicalAnchorAndRejectsRetiredMasks() started.
+✔ Test changingAxisRetainsLogicalAnchorAndRejectsRetiredMasks() passed after 0.001 seconds.
+◇ Test evictingVisibleContentRequestsTheUnfilledWindowAgain() started.
+✔ Test evictingVisibleContentRequestsTheUnfilledWindowAgain() passed after 0.256 seconds.
+◇ Test nativeMeasurementsDoNotRepeatAnUnchangedFulfilledRange(change:) started.
+◇ Test case passing 1 argument change → "overscan-content" to nativeMeasurementsDoNotRepeatAnUnchangedFulfilledRange(change:) started.
+◇ Test case passing 1 argument change → "measurement-context" to nativeMeasurementsDoNotRepeatAnUnchangedFulfilledRange(change:) started.
+✔ Test nativeMeasurementsDoNotRepeatAnUnchangedFulfilledRange(change:) with 2 test cases passed after 0.761 seconds.
+◇ Test catalogAndWindowValidateAtomicallyWithExactKeyIdentity() started.
+✔ Test catalogAndWindowValidateAtomicallyWithExactKeyIdentity() passed after 0.003 seconds.
+✔ Suite CollectionNodeTests passed after 1.022 seconds.
+◇ Suite CollectionViewportTests started.
+◇ Test windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (false, false), motion → (false, -6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (false, false), motion → (false, 6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (false, false), motion → (true, -6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (false, false), motion → (true, 6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, false), motion → (false, -6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, false), motion → (false, 6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, false), motion → (true, -6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, false), motion → (true, 6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, true), motion → (false, -6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, true), motion → (false, 6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, true), motion → (true, -6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+◇ Test case passing 2 arguments layout → (true, true), motion → (true, 6.0) to windowRemovalRetainsUnobservedNativeTravel(layout:motion:) started.
+✔ Test windowRemovalRetainsUnobservedNativeTravel(layout:motion:) with 12 test cases passed after 4.985 seconds.
+◇ Test directionReplacementPreservesAnimatingNativeTravel(rightToLeft:delta:) started.
+◇ Test case passing 2 arguments rightToLeft → false, delta → -6.0 to directionReplacementPreservesAnimatingNativeTravel(rightToLeft:delta:) started.
+◇ Test case passing 2 arguments rightToLeft → false, delta → 6.0 to directionReplacementPreservesAnimatingNativeTravel(rightToLeft:delta:) started.
+◇ Test case passing 2 arguments rightToLeft → true, delta → -6.0 to directionReplacementPreservesAnimatingNativeTravel(rightToLeft:delta:) started.
+◇ Test case passing 2 arguments rightToLeft → true, delta → 6.0 to directionReplacementPreservesAnimatingNativeTravel(rightToLeft:delta:) started.
+✔ Test directionReplacementPreservesAnimatingNativeTravel(rightToLeft:delta:) with 4 test cases passed after 4.833 seconds.
+◇ Test directionReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to directionReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to directionReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to directionReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to directionReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+✔ Test directionReplacementRetainsNativeAnchor(horizontal:rightToLeft:) with 4 test cases passed after 1.548 seconds.
+◇ Test replacedViewportCannotMoveItsFormerNativeList(horizontal:) started.
+◇ Test case passing 1 argument horizontal → false to replacedViewportCannotMoveItsFormerNativeList(horizontal:) started.
+◇ Test case passing 1 argument horizontal → true to replacedViewportCannotMoveItsFormerNativeList(horizontal:) started.
+✔ Test replacedViewportCannotMoveItsFormerNativeList(horizontal:) with 2 test cases passed after 1.251 seconds.
+◇ Test detachedViewportRetainsTravelAndRemountsAtItsAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to detachedViewportRetainsTravelAndRemountsAtItsAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to detachedViewportRetainsTravelAndRemountsAtItsAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to detachedViewportRetainsTravelAndRemountsAtItsAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to detachedViewportRetainsTravelAndRemountsAtItsAnchor(horizontal:rightToLeft:) started.
+✔ Test detachedViewportRetainsTravelAndRemountsAtItsAnchor(horizontal:rightToLeft:) with 4 test cases passed after 2.694 seconds.
+◇ Test firstMeasurementRetainsConfiguredInitialAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to firstMeasurementRetainsConfiguredInitialAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to firstMeasurementRetainsConfiguredInitialAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to firstMeasurementRetainsConfiguredInitialAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to firstMeasurementRetainsConfiguredInitialAnchor(horizontal:rightToLeft:) started.
+✔ Test firstMeasurementRetainsConfiguredInitialAnchor(horizontal:rightToLeft:) with 4 test cases passed after 0.571 seconds.
+◇ Test axisReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to axisReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to axisReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to axisReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to axisReplacementRetainsNativeAnchor(horizontal:rightToLeft:) started.
+✔ Test axisReplacementRetainsNativeAnchor(horizontal:rightToLeft:) with 4 test cases passed after 1.573 seconds.
+◇ Test extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → false, layout → (false, false, 40.0, 181.3) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → false, layout → (false, false, 426.0, 40.0) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → false, layout → (true, false, 40.0, 181.3) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → false, layout → (true, false, 426.0, 40.0) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → false, layout → (true, true, 40.0, 181.3) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → false, layout → (true, true, 426.0, 40.0) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → true, layout → (false, false, 40.0, 181.3) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → true, layout → (false, false, 426.0, 40.0) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → true, layout → (true, false, 40.0, 181.3) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → true, layout → (true, false, 426.0, 40.0) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → true, layout → (true, true, 40.0, 181.3) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+◇ Test case passing 2 arguments finishEarly → true, layout → (true, true, 426.0, 40.0) to extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) started.
+✔ Test extentAnimationKeepsTrailingEdgeWhenFinishing(finishEarly:layout:) with 12 test cases passed after 9.900 seconds.
+◇ Test extentAnimationRetainsStationaryFractionalAnchor(horizontal:) started.
+◇ Test case passing 1 argument horizontal → false to extentAnimationRetainsStationaryFractionalAnchor(horizontal:) started.
+◇ Test case passing 1 argument horizontal → true to extentAnimationRetainsStationaryFractionalAnchor(horizontal:) started.
+✔ Test extentAnimationRetainsStationaryFractionalAnchor(horizontal:) with 2 test cases passed after 3.993 seconds.
+◇ Test extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, false, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, true, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -0.5, layout → (false, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -0.5, layout → (false, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -0.5, layout → (true, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -0.5, layout → (true, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -0.5, layout → (false, false, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -0.5, layout → (true, true, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.0, layout → (false, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.0, layout → (false, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.0, layout → (true, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.0, layout → (true, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.0, layout → (false, false, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.0, layout → (true, true, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.5, layout → (false, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.5, layout → (false, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.5, layout → (true, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.5, layout → (true, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.5, layout → (false, false, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 0.5, layout → (true, true, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, false, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, true, 200.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, false, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, true, 600.0) to extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) started.
+✔ Test extentAnimationPreservesPhaseLessNativeScroll(delta:layout:) with 30 test cases passed after 37.099 seconds.
+◇ Test extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, false, 600.0) to extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, false, 600.0) to extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, true, 600.0) to extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, false, 600.0) to extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, false, 600.0) to extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, true, 600.0) to extentRetargetPreservesUnobservedNativeTravel(delta:layout:) started.
+✔ Test extentRetargetPreservesUnobservedNativeTravel(delta:layout:) with 6 test cases passed after 6.248 seconds.
+◇ Test measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, false, 600.0) to measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, false, 600.0) to measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, true, 600.0) to measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, false, 600.0) to measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, false, 600.0) to measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, true, 600.0) to measurementAfterAnimationPreservesNativeTravel(delta:layout:) started.
+✔ Test measurementAfterAnimationPreservesNativeTravel(delta:layout:) with 6 test cases passed after 5.819 seconds.
+◇ Test extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, false, 200.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (false, false, 600.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, true, 200.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → -6.0, layout → (true, true, 600.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, false, 200.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (false, false, 600.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, true, 200.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+◇ Test case passing 2 arguments delta → 6.0, layout → (true, true, 600.0) to extentAnimationPreservesNativeWheelScroll(delta:layout:) started.
+✔ Test extentAnimationPreservesNativeWheelScroll(delta:layout:) with 8 test cases passed after 9.923 seconds.
+◇ Test measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+◇ Test case passing 2 arguments change → "append", horizontal → false to measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+◇ Test case passing 2 arguments change → "append", horizontal → true to measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+◇ Test case passing 2 arguments change → "tail-measurement", horizontal → false to measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+◇ Test case passing 2 arguments change → "tail-measurement", horizontal → true to measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+◇ Test case passing 2 arguments change → "pending-correction", horizontal → false to measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+◇ Test case passing 2 arguments change → "pending-correction", horizontal → true to measuredReplacementAllowsNativeReturnToTop(change:horizontal:) started.
+✔ Test measuredReplacementAllowsNativeReturnToTop(change:horizontal:) with 6 test cases passed after 4.144 seconds.
+◇ Test rapidJumpRequestsOnlyVisibleRowsAndPlacesLoadedContentAtExactOffsets(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to rapidJumpRequestsOnlyVisibleRowsAndPlacesLoadedContentAtExactOffsets(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to rapidJumpRequestsOnlyVisibleRowsAndPlacesLoadedContentAtExactOffsets(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to rapidJumpRequestsOnlyVisibleRowsAndPlacesLoadedContentAtExactOffsets(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to rapidJumpRequestsOnlyVisibleRowsAndPlacesLoadedContentAtExactOffsets(horizontal:rightToLeft:) started.
+✔ Test rapidJumpRequestsOnlyVisibleRowsAndPlacesLoadedContentAtExactOffsets(horizontal:rightToLeft:) with 4 test cases passed after 1.463 seconds.
+◇ Test nativeExtentAnimationPreservesAnchorReversesAndHonorsReducedMotion(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to nativeExtentAnimationPreservesAnchorReversesAndHonorsReducedMotion(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to nativeExtentAnimationPreservesAnchorReversesAndHonorsReducedMotion(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to nativeExtentAnimationPreservesAnchorReversesAndHonorsReducedMotion(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to nativeExtentAnimationPreservesAnchorReversesAndHonorsReducedMotion(horizontal:rightToLeft:) started.
+✔ Test nativeExtentAnimationPreservesAnchorReversesAndHonorsReducedMotion(horizontal:rightToLeft:) with 4 test cases passed after 6.882 seconds.
+◇ Test expansionPagingResizeAndAnchorRelocationKeepTheViewportStable(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → false to expansionPagingResizeAndAnchorRelocationKeepTheViewportStable(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → false, rightToLeft → true to expansionPagingResizeAndAnchorRelocationKeepTheViewportStable(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → false to expansionPagingResizeAndAnchorRelocationKeepTheViewportStable(horizontal:rightToLeft:) started.
+◇ Test case passing 2 arguments horizontal → true, rightToLeft → true to expansionPagingResizeAndAnchorRelocationKeepTheViewportStable(horizontal:rightToLeft:) started.
+✔ Test expansionPagingResizeAndAnchorRelocationKeepTheViewportStable(horizontal:rightToLeft:) with 4 test cases passed after 3.760 seconds.
+✔ Suite CollectionViewportTests passed after 106.696 seconds.
+◇ Suite CollectionPositionRefinementTests started.
+◇ Test equalAnchorRefinementDoesNotIssueAnotherScrollCommand() started.
+✔ Test equalAnchorRefinementDoesNotIssueAnotherScrollCommand() passed after 0.001 seconds.
+✔ Suite CollectionPositionRefinementTests passed after 0.001 seconds.
+◇ Suite ConfirmationControllerTests started.
+◇ Test buttonWinsBothNativeCallbackOrders(dismissFirst:) started.
+◇ Test case passing 1 argument dismissFirst → false to buttonWinsBothNativeCallbackOrders(dismissFirst:) started.
+◇ Test case passing 1 argument dismissFirst → true to buttonWinsBothNativeCallbackOrders(dismissFirst:) started.
+✔ Test buttonWinsBothNativeCallbackOrders(dismissFirst:) with 2 test cases passed after 0.001 seconds.
+◇ Test dismissalSettlesOnceAndDisabledActionsDoNotConsumeIt() started.
+✔ Test dismissalSettlesOnceAndDisabledActionsDoNotConsumeIt() passed after 0.001 seconds.
+◇ Test retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "token" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "binding" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "hidden" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "configuration" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+◇ Test case passing 1 argument change → "disposed" to retainedCallbacksNeverTargetANewPresentation(change:) started.
+✔ Test retainedCallbacksNeverTargetANewPresentation(change:) with 5 test cases passed after 0.001 seconds.
+◇ Test rejectedAdmissionConsumesResponseWithoutReplayingDestructiveAction() started.
+✔ Test rejectedAdmissionConsumesResponseWithoutReplayingDestructiveAction() passed after 0.001 seconds.
+◇ Test oldSettlementCannotRestoreClearedOrReplaceNewToken() started.
+✔ Test oldSettlementCannotRestoreClearedOrReplaceNewToken() passed after 0.001 seconds.
+◇ Test freshTokensIncreaseWithinOnePresenter() started.
+✔ Test freshTokensIncreaseWithinOnePresenter() passed after 0.001 seconds.
+◇ Test confirmationWireRejectsMalformedPresentationAndPreservesTheBase() started.
+✔ Test confirmationWireRejectsMalformedPresentationAndPreservesTheBase() passed after 0.001 seconds.
+✔ Suite ConfirmationControllerTests passed after 0.004 seconds.
+◇ Suite ContextMenuTests started.
+◇ Test presentedActionsKeepTheirHandlerAndOneShotPresentationAcrossRebinding() started.
+✔ Test presentedActionsKeepTheirHandlerAndOneShotPresentationAcrossRebinding() passed after 0.001 seconds.
+◇ Test freshPresentationRevokesOlderClosuresAndDisabledOrForeignItems() started.
+✔ Test freshPresentationRevokesOlderClosuresAndDisabledOrForeignItems() passed after 0.001 seconds.
+◇ Test contextActionAndMenuIncarnationsCannotBeTransplantedBetweenOwners() started.
+✔ Test contextActionAndMenuIncarnationsCannotBeTransplantedBetweenOwners() passed after 0.001 seconds.
+◇ Test ordinaryContextModifierStagesOnlyOwnedUniqueActions() started.
+✔ Test ordinaryContextModifierStagesOnlyOwnedUniqueActions() passed after 0.001 seconds.
+◇ Test hostedNativeContextMenuUsesThePresentedActionSnapshot() started.
+✔ Test hostedNativeContextMenuUsesThePresentedActionSnapshot() passed after 0.614 seconds.
+✔ Suite ContextMenuTests passed after 0.616 seconds.
+◇ Suite ControlSizeTests started.
+◇ Test sizesMatchNativeControlsAndNestedScopesOverrideTheParent() started.
+Swift Testing did not complete successfully: no element found: line 3, column 0

@@ -1,0 +1,302 @@
+[0/1] Planning build
+Building for debugging...
+[0/4] Write sources
+[1/4] Write swift-version--58304C5D6DBC2206.txt
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+[3/6] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:6:51: error: cannot find type 'RenderConfirmation' in scope
+  4 | 
+  5 | @MainActor struct ConfirmationControllerTests {
+  6 |   private func properties(_ token: Int64? = 1) -> RenderConfirmation {
+    |                                                   `- error: cannot find type 'RenderConfirmation' in scope
+  7 |     RenderConfirmation(style: 0, request: token.map {
+  8 |       .init(token: $0, title: "Delete entry?", message: "This removes the entry.", actions: [
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[4/6] Compiling BonsaiSwiftUITests ConfirmationControllerTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:6:51: error: cannot find type 'RenderConfirmation' in scope
+  4 | 
+  5 | @MainActor struct ConfirmationControllerTests {
+  6 |   private func properties(_ token: Int64? = 1) -> RenderConfirmation {
+    |                                                   `- error: cannot find type 'RenderConfirmation' in scope
+  7 |     RenderConfirmation(style: 0, request: token.map {
+  8 |       .init(token: $0, title: "Delete entry?", message: "This removes the entry.", actions: [
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:18:22: error: cannot find 'ConfirmationController' in scope
+ 16 |   @Test(arguments: [false, true])
+ 17 |   func buttonWinsBothNativeCallbackOrders(dismissFirst: Bool) async throws {
+ 18 |     let controller = ConfirmationController(properties())
+    |                      `- error: cannot find 'ConfirmationController' in scope
+ 19 |     var responses: [ConfirmationController.Response] = []
+ 20 |     controller.setActive(true)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:19:21: error: cannot find type 'ConfirmationController' in scope
+ 17 |   func buttonWinsBothNativeCallbackOrders(dismissFirst: Bool) async throws {
+ 18 |     let controller = ConfirmationController(properties())
+ 19 |     var responses: [ConfirmationController.Response] = []
+    |                     `- error: cannot find type 'ConfirmationController' in scope
+ 20 |     controller.setActive(true)
+ 21 |     let opening = try #require(controller.opening(handler: 19) { responses.append($0); return true })
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:26:27: error: cannot infer key path type from context; consider explicitly specifying a root type
+ 24 |     if !dismissFirst { controller.dismissed(opening) }
+ 25 |     await nextTurn()
+ 26 |     #expect(responses.map(\.result) == [.action("delete")])
+    |                           `- error: cannot infer key path type from context; consider explicitly specifying a root type
+ 27 |     #expect(responses.map(\.token) == [1])
+ 28 |     #expect(responses.map(\.handler) == [19])
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:26:42: error: type 'Any' has no member 'action'
+ 24 |     if !dismissFirst { controller.dismissed(opening) }
+ 25 |     await nextTurn()
+ 26 |     #expect(responses.map(\.result) == [.action("delete")])
+    |                                          `- error: type 'Any' has no member 'action'
+ 27 |     #expect(responses.map(\.token) == [1])
+ 28 |     #expect(responses.map(\.handler) == [19])
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:27:27: error: cannot infer key path type from context; consider explicitly specifying a root type
+ 25 |     await nextTurn()
+ 26 |     #expect(responses.map(\.result) == [.action("delete")])
+ 27 |     #expect(responses.map(\.token) == [1])
+    |                           `- error: cannot infer key path type from context; consider explicitly specifying a root type
+ 28 |     #expect(responses.map(\.handler) == [19])
+ 29 |     let request = try #require(controller.pending)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:28:27: error: cannot infer key path type from context; consider explicitly specifying a root type
+ 26 |     #expect(responses.map(\.result) == [.action("delete")])
+ 27 |     #expect(responses.map(\.token) == [1])
+ 28 |     #expect(responses.map(\.handler) == [19])
+    |                           `- error: cannot infer key path type from context; consider explicitly specifying a root type
+ 29 |     let request = try #require(controller.pending)
+ 30 |     #expect(!controller.presented)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:21:19: warning: no calls to throwing functions occur within 'try' expression
+ 19 |     var responses: [ConfirmationController.Response] = []
+ 20 |     controller.setActive(true)
+ 21 |     let opening = try #require(controller.opening(handler: 19) { responses.append($0); return true })
+    |                   `- warning: no calls to throwing functions occur within 'try' expression
+ 22 |     if dismissFirst { controller.dismissed(opening) }
+ 23 |     controller.choose("delete", in: opening)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:29:19: warning: no calls to throwing functions occur within 'try' expression
+ 27 |     #expect(responses.map(\.token) == [1])
+ 28 |     #expect(responses.map(\.handler) == [19])
+ 29 |     let request = try #require(controller.pending)
+    |                   `- warning: no calls to throwing functions occur within 'try' expression
+ 30 |     #expect(!controller.presented)
+ 31 |     controller.resolve(request)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:40:22: error: cannot find 'ConfirmationController' in scope
+ 38 | 
+ 39 |   @Test func dismissalSettlesOnceAndDisabledActionsDoNotConsumeIt() async throws {
+ 40 |     let controller = ConfirmationController(properties())
+    |                      `- error: cannot find 'ConfirmationController' in scope
+ 41 |     var results: [ConfirmationController.Result] = []
+ 42 |     controller.setActive(true)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:41:19: error: cannot find type 'ConfirmationController' in scope
+ 39 |   @Test func dismissalSettlesOnceAndDisabledActionsDoNotConsumeIt() async throws {
+ 40 |     let controller = ConfirmationController(properties())
+ 41 |     var results: [ConfirmationController.Result] = []
+    |                   `- error: cannot find type 'ConfirmationController' in scope
+ 42 |     controller.setActive(true)
+ 43 |     let opening = try #require(controller.opening(handler: 3) { results.append($0.result); return true })
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:51:26: error: reference to member 'dismissed' cannot be resolved without a contextual type
+ 49 |     #expect(results.isEmpty)
+ 50 |     await nextTurn()
+ 51 |     #expect(results == [.dismissed])
+    |                          `- error: reference to member 'dismissed' cannot be resolved without a contextual type
+ 52 |   }
+ 53 | 
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:43:19: warning: no calls to throwing functions occur within 'try' expression
+ 41 |     var results: [ConfirmationController.Result] = []
+ 42 |     controller.setActive(true)
+ 43 |     let opening = try #require(controller.opening(handler: 3) { results.append($0.result); return true })
+    |                   `- warning: no calls to throwing functions occur within 'try' expression
+ 44 |     controller.choose("disabled", in: opening)
+ 45 |     controller.choose("missing", in: opening)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:56:22: error: cannot find 'ConfirmationController' in scope
+ 54 |   @Test(arguments: ["token", "binding", "hidden", "configuration", "disposed"])
+ 55 |   func retainedCallbacksNeverTargetANewPresentation(change: String) async throws {
+ 56 |     let controller = ConfirmationController(properties())
+    |                      `- error: cannot find 'ConfirmationController' in scope
+ 57 |     var old: [ConfirmationController.Response] = []
+ 58 |     var fresh: [ConfirmationController.Response] = []
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:57:15: error: cannot find type 'ConfirmationController' in scope
+ 55 |   func retainedCallbacksNeverTargetANewPresentation(change: String) async throws {
+ 56 |     let controller = ConfirmationController(properties())
+ 57 |     var old: [ConfirmationController.Response] = []
+    |               `- error: cannot find type 'ConfirmationController' in scope
+ 58 |     var fresh: [ConfirmationController.Response] = []
+ 59 |     controller.setActive(true)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:58:17: error: cannot find type 'ConfirmationController' in scope
+ 56 |     let controller = ConfirmationController(properties())
+ 57 |     var old: [ConfirmationController.Response] = []
+ 58 |     var fresh: [ConfirmationController.Response] = []
+    |                 `- error: cannot find type 'ConfirmationController' in scope
+ 59 |     controller.setActive(true)
+ 60 |     let opening = try #require(controller.opening(handler: 3) { old.append($0); return true })
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:80:25: error: cannot infer key path type from context; consider explicitly specifying a root type
+ 78 |       let replacement = try #require(controller.opening(handler: 4) { fresh.append($0); return true })
+ 79 |       controller.choose("cancel", in: replacement)
+ 80 |       #expect(fresh.map(\.handler) == [4])
+    |                         `- error: cannot infer key path type from context; consider explicitly specifying a root type
+ 81 |       #expect(fresh.map(\.token) == [change == "token" ? 2 : 1])
+ 82 |       #expect(fresh.map(\.result) == [.action("cancel")])
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:81:25: error: cannot infer key path type from context; consider explicitly specifying a root type
+ 79 |       controller.choose("cancel", in: replacement)
+ 80 |       #expect(fresh.map(\.handler) == [4])
+ 81 |       #expect(fresh.map(\.token) == [change == "token" ? 2 : 1])
+    |                         `- error: cannot infer key path type from context; consider explicitly specifying a root type
+ 82 |       #expect(fresh.map(\.result) == [.action("cancel")])
+ 83 |     }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:82:25: error: cannot infer key path type from context; consider explicitly specifying a root type
+ 80 |       #expect(fresh.map(\.handler) == [4])
+ 81 |       #expect(fresh.map(\.token) == [change == "token" ? 2 : 1])
+ 82 |       #expect(fresh.map(\.result) == [.action("cancel")])
+    |                         `- error: cannot infer key path type from context; consider explicitly specifying a root type
+ 83 |     }
+ 84 |   }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:82:40: error: type 'Any' has no member 'action'
+ 80 |       #expect(fresh.map(\.handler) == [4])
+ 81 |       #expect(fresh.map(\.token) == [change == "token" ? 2 : 1])
+ 82 |       #expect(fresh.map(\.result) == [.action("cancel")])
+    |                                        `- error: type 'Any' has no member 'action'
+ 83 |     }
+ 84 |   }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:60:19: warning: no calls to throwing functions occur within 'try' expression
+ 58 |     var fresh: [ConfirmationController.Response] = []
+ 59 |     controller.setActive(true)
+ 60 |     let opening = try #require(controller.opening(handler: 3) { old.append($0); return true })
+    |                   `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |     controller.dismissed(opening)
+ 62 |     switch change {
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:87:22: error: cannot find 'ConfirmationController' in scope
+ 85 | 
+ 86 |   @Test func rejectedAdmissionConsumesResponseWithoutReplayingDestructiveAction() async throws {
+ 87 |     let controller = ConfirmationController(properties())
+    |                      `- error: cannot find 'ConfirmationController' in scope
+ 88 |     var attempts = 0
+ 89 |     controller.setActive(true)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:90:19: warning: no calls to throwing functions occur within 'try' expression
+ 88 |     var attempts = 0
+ 89 |     controller.setActive(true)
+ 90 |     let opening = try #require(controller.opening(handler: 3) { _ in attempts += 1; return false })
+    |                   `- warning: no calls to throwing functions occur within 'try' expression
+ 91 |     controller.choose("delete", in: opening)
+ 92 |     controller.dismissed(opening)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:98:20: warning: no calls to throwing functions occur within 'try' expression
+ 96 |     #expect(controller.presented)
+ 97 |     controller.invalidateBinding()
+ 98 |     let restored = try #require(controller.opening(handler: 4) { _ in attempts += 1; return true })
+    |                    `- warning: no calls to throwing functions occur within 'try' expression
+ 99 |     controller.choose("delete", in: restored)
+100 |     controller.dismissed(restored)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:107:24: error: cannot find 'ConfirmationController' in scope
+105 |   @Test func OldSettlementCannotRestoreClearedOrReplaceNewToken() throws {
+106 |     for next: Int64? in [nil, 2] {
+107 |       let controller = ConfirmationController(properties())
+    |                        `- error: cannot find 'ConfirmationController' in scope
+108 |       controller.setActive(true)
+109 |       let opening = try #require(controller.opening(handler: 3) { _ in true })
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:109:21: warning: no calls to throwing functions occur within 'try' expression
+107 |       let controller = ConfirmationController(properties())
+108 |       controller.setActive(true)
+109 |       let opening = try #require(controller.opening(handler: 3) { _ in true })
+    |                     `- warning: no calls to throwing functions occur within 'try' expression
+110 |       controller.choose("delete", in: opening)
+111 |       let request = try #require(controller.pending)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:111:21: warning: no calls to throwing functions occur within 'try' expression
+109 |       let opening = try #require(controller.opening(handler: 3) { _ in true })
+110 |       controller.choose("delete", in: opening)
+111 |       let request = try #require(controller.pending)
+    |                     `- warning: no calls to throwing functions occur within 'try' expression
+112 |       controller.synchronize(properties(next))
+113 |       controller.resolve(request)
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:120:22: error: cannot find 'ConfirmationController' in scope
+118 | 
+119 |   @Test func FreshTokensIncreaseWithinOnePresenter() throws {
+120 |     let controller = ConfirmationController(properties())
+    |                      `- error: cannot find 'ConfirmationController' in scope
+121 |     #expect(throws: Never.self) { try controller.validate(properties()) }
+122 |     #expect(throws: Never.self) { try controller.validate(properties(2)) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:123:39: error: 'nil' requires a contextual type
+121 |     #expect(throws: Never.self) { try controller.validate(properties()) }
+122 |     #expect(throws: Never.self) { try controller.validate(properties(2)) }
+123 |     controller.synchronize(properties(nil))
+    |                                       `- error: 'nil' requires a contextual type
+124 |     #expect(throws: TreeError.self) { try controller.validate(properties()) }
+125 |     controller.synchronize(properties(2))
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ConfirmationControllerTests.swift:132:7: error: cannot find 'DispatchQueue' in scope
+130 |   private func nextTurn() async {
+131 |     await withCheckedContinuation { continuation in
+132 |       DispatchQueue.main.async { continuation.resume() }
+    |       `- error: cannot find 'DispatchQueue' in scope
+133 |     }
+134 |   }
+error: fatalError

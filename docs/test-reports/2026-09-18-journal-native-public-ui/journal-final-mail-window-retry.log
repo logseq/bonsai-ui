@@ -1,0 +1,10 @@
+test_mail_window (__main__.MailWindowTests.test_mail_window) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 24.445s
+
+OK
+PASS: actual Mail native window keeps its light palette and native appearance consistent, renders sidebar/inbox/detail, expands a card, and switches mailboxes after checking system row actions and dispatching Archive through OCaml
+
+PASS: actual Mail native window keeps its light palette and native appearance consistent, renders sidebar/inbox/detail, expands a card, and switches mailboxes after checking system row actions and dispatching Archive through OCaml
+

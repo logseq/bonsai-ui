@@ -1,0 +1,2 @@
+dune runtest
+tool/check_viewport_types.sh

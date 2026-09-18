@@ -1,46 +1,97 @@
 import SwiftUI
 
-struct RenderToolbar: Equatable, Sendable {
-  let placements: [Int]
+struct RenderToolbarEntry: Equatable, Sendable {
+  let key: String
+  let placement: Int
+  let kind: Int
+
   static func decode(_ reader: inout WireReader) throws -> Self {
-    let count = Int(try reader.integer(UInt16.self))
-    guard count <= 256 else { throw TreeError.invalidProperties }
-    var placements: [Int] = []
-    for _ in 0..<count { placements.append(try reader.choice(8)) }
-    guard placements.filter({ $0 == 1 }).count <= 1 else { throw TreeError.invalidProperties }
-    return Self(placements: placements)
+    try Self(key: reader.string(), placement: reader.choice(9), kind: reader.choice(3))
+  }
+
+  var nativePlacement: ToolbarItemPlacement {
+    switch placement {
+    case 0: return .automatic
+    case 1: return .principal
+    case 2: return .navigation
+    case 3: return .primaryAction
+    case 4: return .secondaryAction
+    case 5: return .status
+    case 6: return .confirmationAction
+    case 7: return .cancellationAction
+    case 8: return .destructiveAction
+    #if os(iOS)
+      case 9: return .bottomBar
+    #endif
+    default: preconditionFailure("Unsupported toolbar placement passed validation")
+    }
+  }
+}
+
+extension NodeProperties {
+  func sameToolbarOwner(as other: NodeProperties) -> Bool {
+    switch (self, other) {
+    case (.toolbar, .toolbar): return true
+    case (.toolbarEntry(let lhs), .toolbarEntry(let rhs)):
+      return Data(lhs.key.utf8) == Data(rhs.key.utf8) && lhs.kind == rhs.kind
+    case (.toolbarChild(let lhs), .toolbarChild(let rhs)):
+      return Data(lhs.utf8) == Data(rhs.utf8)
+    default: return false
+    }
+  }
+
+  var isToolbarStructure: Bool {
+    switch self {
+    case .toolbarEntry, .toolbarChild, .toolbarBody: return true
+    default: return false
+    }
+  }
+}
+
+private struct NativeToolbarEntries: ToolbarContent {
+  let entries: ArraySlice<RenderNodeState>
+  let focus: ToolbarFocusController
+  let activate: @MainActor (RenderNodeState) -> Void
+
+  var body: some ToolbarContent {
+    if let entry = entries.first, case .toolbarEntry(let properties) = entry.properties {
+      if properties.kind < 2 {
+        ToolbarItem(
+          id: "bonsai-\(entry.id.epoch)-\(entry.id.node)", placement: properties.nativePlacement
+        ) {
+          if properties.kind == 1 {
+            ControlGroup {
+              ForEach(entry.children) { item in
+                NativeNodeView(node: item.children[0], activate: activate)
+                  .environment(\.bonsaiToolbarFocus, focus).id(item.id)
+              }
+            }.id(entry.id)
+          } else {
+            NativeNodeView(node: entry.children[0], activate: activate)
+              .environment(\.bonsaiToolbarFocus, focus).id(entry.id)
+          }
+        }
+      } else {
+        ToolbarSpacer(
+          properties.kind == 2 ? .fixed : .flexible, placement: properties.nativePlacement)
+      }
+      // Every recursion level has the same concrete body type. Changing an
+      // erased payload's type at an existing level crashes SwiftUI's storage.
+      ToolbarContentBuilder.buildLimitedAvailability(
+        NativeToolbarEntries(entries: entries.dropFirst(), focus: focus, activate: activate))
+    }
   }
 }
 
 struct NativeToolbar: View {
   let node: RenderNodeState
-  let properties: RenderToolbar
   let activate: @MainActor (RenderNodeState) -> Void
 
-  private func group(_ value: Int, _ placement: ToolbarItemPlacement) -> some ToolbarContent {
-    ToolbarItemGroup(placement: placement) {
-      ForEach(
-        Array(node.children.dropFirst().enumerated()).filter {
-          properties.placements[$0.offset] == value
-        }.map(\.element)
-      ) { item in
-        NativeNodeView(node: item, activate: activate)
-      }
-    }
-  }
-
   var body: some View {
-    NativeNodeView(node: node.children[0], activate: activate)
+    NativeNodeView(node: node.children[0].children[0], activate: activate)
       .toolbar {
-        group(0, .automatic)
-        group(1, .principal)
-        group(2, .navigation)
-        group(3, .primaryAction)
-        group(4, .secondaryAction)
-        group(5, .status)
-        group(6, .confirmationAction)
-        group(7, .cancellationAction)
-        group(8, .destructiveAction)
+        NativeToolbarEntries(
+          entries: node.children.dropFirst(), focus: node.toolbarFocus!, activate: activate)
       }
   }
 }

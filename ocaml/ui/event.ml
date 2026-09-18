@@ -29,9 +29,11 @@ module Tag = struct
     | Radio_selected
     | Removal_requested
     | Removal_completed
+    | List_scroll_completed
     | Refresh_request
     | Scroll_position_changed
     | Menu_action
+    | Confirmation_response
     | Picker_selected
     | Slider_changed
     | Slider_change_end
@@ -73,9 +75,11 @@ module Tag = struct
     | Radio_selected -> "radio_selected"
     | Removal_requested -> "removal_requested"
     | Removal_completed -> "removal_completed"
+    | List_scroll_completed -> "list_scroll_completed"
     | Refresh_request -> "refresh_request"
     | Scroll_position_changed -> "scroll_position_changed"
     | Menu_action -> "menu_action"
+    | Confirmation_response -> "confirmation_response"
     | Picker_selected -> "picker_selected"
     | Slider_changed -> "slider_changed"
     | Slider_change_end -> "slider_change_end"
@@ -164,7 +168,17 @@ module Payload = struct
     ; modifiers : int
     }
 
+  type confirmation_result =
+    | Action of string
+    | Dismissed
+
+  type confirmation_response =
+    { token : int64
+    ; result : confirmation_result
+    }
+
   type t =
+    | Confirmation_response of confirmation_response
     | Unit
     | Bool of bool
     | Text of string

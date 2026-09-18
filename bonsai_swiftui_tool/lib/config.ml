@@ -147,7 +147,7 @@ let supported_ios_minimum value =
   match String.split_on_char '.' value with
   | [ major; minor ] ->
     (match component major, component minor with
-     | Some major, Some _ -> major >= 18
+     | Some major, Some _ -> major >= 26
      | _ -> false)
   | _ -> false
 ;;
@@ -201,7 +201,7 @@ let parse_platform scope minimum values =
 ;;
 
 let parse_macos = parse_platform "macos" "26.0"
-let parse_ios = parse_platform "ios" "18.0"
+let parse_ios = parse_platform "ios" "26.0"
 
 let valid_digits value =
   value <> ""

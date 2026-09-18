@@ -74,7 +74,7 @@ and shared schemes. The only architectures and deployment targets are:
 | Target | SDK | Architecture | Minimum |
 | --- | --- | --- | --- |
 | macOS | macosx | arm64 | 26.0 |
-| Physical iOS/iPadOS | iphoneos | arm64 | 18.0 |
+| Physical iOS/iPadOS | iphoneos | arm64 | 26.0 |
 
 Simulator, Intel Mac and Catalyst are unsupported. iOS supports iPhone and iPad,
 uses SwiftUI scenes and a system launch screen, and disables multiple scenes.
@@ -97,7 +97,7 @@ prevent Xcode from attempting Intel package compilation in Release. The supporte
 macOS destination is `platform=macOS,arch=arm64`. Apple describes the scheme-wide
 architecture override in the [Xcode 15.3 release notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-15_3-release-notes).
 
-A device build currently requires an already cross-compiled iOS 18 arm64 complete
+A device build currently requires an already cross-compiled iOS 26 arm64 complete
 object via `--native-object` and a `--development-team`. The helper rejects a
 macOS object before invoking the device build. It does not silently substitute a
 host object, install an old iOS SDK, create a Simulator toolchain, or select a

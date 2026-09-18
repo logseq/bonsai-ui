@@ -400,7 +400,16 @@ let read_payload reader event_tag =
     let id = Reader.i64 reader in
     let value = read_bool reader in
     Int64_bool { id; value })
-  else if event_tag = Generated_protocol.Event_tag.removal_requested
+  else if event_tag = Generated_protocol.Event_tag.confirmation_response
+  then (
+    let token = Reader.i64 reader in
+    let action_key = read_optional_string reader in
+    if token <= 0L || action_key = Some ""
+    then fail Invalid_payload "invalid confirmation response";
+    Confirmation_response { token; action_key })
+  else if
+    event_tag = Generated_protocol.Event_tag.removal_requested
+    || event_tag = Generated_protocol.Event_tag.list_scroll_completed
   then (
     let first = Reader.i64 reader in
     let second = Reader.i64 reader in
@@ -738,8 +747,18 @@ let write_payload writer event_tag payload =
     then fail Invalid_payload "int64-bool payload does not match event tag";
     Writer.u64 writer id;
     Writer.u8 writer (if value then 1 else 0)
+  | Confirmation_response { token; action_key } ->
+    if
+      event_tag <> Generated_protocol.Event_tag.confirmation_response
+      || token <= 0L
+      || action_key = Some ""
+    then fail Invalid_payload "invalid confirmation response";
+    Writer.u64 writer token;
+    write_optional_string writer action_key
   | Int64_pair { first; second } ->
-    if event_tag <> Generated_protocol.Event_tag.removal_requested
+    if
+      event_tag <> Generated_protocol.Event_tag.removal_requested
+      && event_tag <> Generated_protocol.Event_tag.list_scroll_completed
     then fail Invalid_payload "int64-pair payload does not match event tag";
     Writer.u64 writer first;
     Writer.u64 writer second

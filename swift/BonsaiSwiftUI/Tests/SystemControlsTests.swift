@@ -9,6 +9,8 @@ extension TreeFixture {
     operation(OperationId.createNode) {
       $0.integer(id)
       $0.integer(UInt16(80))
+      $0.integer(UInt8(0))
+      $0.integer(UInt8(0))
       $0.integer(UInt16(0))
     }
   }
@@ -19,23 +21,19 @@ extension TreeFixture {
       $0.integer(UInt8(1))
       $0.integer(UInt8(1))
       $0.integer(separator)
+      try! $0.string(String(id))
       $0.integer(UInt16(0))
     }
   }
   static func systemRow(_ id: UInt64, separator: UInt8 = 0) -> WireOperation {
-    operation(OperationId.createNode) {
-      $0.integer(id)
-      $0.integer(UInt16(82))
-      $0.integer(separator)
-      $0.integer(UInt16(0))
-    }
+    outlineRow(id, key: String(id), separator: separator)
   }
   static func systemListFrame() -> [WireOperation] {
     [
       systemList(), systemSection(2), text(3, "Header"), text(4, "Footer"),
       systemRow(5), text(6, "First row"), systemRow(7, separator: 2), text(8, "Second row"),
-      children(5, [6]), children(7, [8]), children(2, [3, 4, 5, 7]), children(1, [2]), root(1),
-    ]
+      children(2, [3, 4, 5, 7]), children(1, [2]), root(1),
+    ] + rowSlots(5, label: 6) + rowSlots(7, label: 8)
   }
 }
 

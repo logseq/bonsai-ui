@@ -1,0 +1,17 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.08s)
+Test Suite 'Selected tests' started at 2026-09-18 17:31:36.894.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 17:31:36.894.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 17:31:36.894.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 17:31:36.894.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test nativeOutlineScrollReportsHiddenThenRevealsAnOffscreenDescendant() started.
+✔ Test nativeOutlineScrollReportsHiddenThenRevealsAnOffscreenDescendant() passed after 0.442 seconds.
+✔ Suite NativeRuntimeTests passed after 0.443 seconds.
+✔ Test run with 1 test in 1 suite passed after 0.443 seconds.

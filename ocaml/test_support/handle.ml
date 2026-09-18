@@ -208,9 +208,11 @@ let protocol_tag =
   | Radio_selected -> Tag.radio_selected
   | Removal_requested -> Tag.removal_requested
   | Removal_completed -> Tag.removal_completed
+  | List_scroll_completed -> Tag.list_scroll_completed
   | Refresh_request -> Tag.refresh_request
   | Scroll_position_changed -> Tag.scroll_position_changed
   | Menu_action -> Tag.menu_action
+  | Confirmation_response -> Tag.confirmation_response
   | Picker_selected -> Tag.picker_selected
   | Slider_changed -> Tag.slider_changed
   | Slider_change_end -> Tag.slider_change_end

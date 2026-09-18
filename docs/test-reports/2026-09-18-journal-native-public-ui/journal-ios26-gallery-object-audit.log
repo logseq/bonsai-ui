@@ -1,0 +1,13 @@
+_build/ios/journal-ios26/default.ios/examples/gallery/ocaml/native_embed.exe.o: Mach-O 64-bit object arm64
+architectures arm64
+_build/ios/journal-ios26/default.ios/examples/gallery/ocaml/native_embed.exe.o:
+Load command 2
+      cmd LC_BUILD_VERSION
+  cmdsize 32
+ platform IOS
+    minos 26.0
+      sdk n/a
+   ntools 1
+     tool LD
+  version 956.6
+Mach-O verification passed: _build/ios/journal-ios26/default.ios/examples/gallery/ocaml/native_embed.exe.o

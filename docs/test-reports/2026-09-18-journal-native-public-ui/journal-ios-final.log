@@ -1,0 +1,8 @@
+test_physical_ios_and_apple_silicon_macos (__main__.PlatformTests.test_physical_ios_and_apple_silicon_macos) ... ok
+test_simulator_and_intel_macos_are_explicitly_rejected (__main__.PlatformTests.test_simulator_and_intel_macos_are_explicitly_rejected) ... ok
+test_swift_module_typechecks_for_physical_ios (__main__.PlatformTests.test_swift_module_typechecks_for_physical_ios) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 26.771s
+
+OK

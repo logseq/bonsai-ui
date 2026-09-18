@@ -1,0 +1,72 @@
+[
+  {
+    "test": "JournalNativeUITests/testAlertAndDialogReturnExactlyOneApplicationResponse()",
+    "file": "native-confirmation-dialog.png",
+    "attachment": "CDD8BF6C-A497-4339-AA97-D2AEC6494CBA.png",
+    "sha256": "cac9c24efd8f8dbca6314a2f54002055564c8c45223c142b3fbe72bb2ea3113b",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testAlertAndDialogReturnExactlyOneApplicationResponse()",
+    "file": "native-alert.png",
+    "attachment": "F0D5C572-7A8F-4901-8D5D-293DAE2920F2.png",
+    "sha256": "69c1aaf09c1c465aa7519793fe089bc73daa12e36840434c26d64f9059fa86d4",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testBottomToolbarGroupsAndCaptureWorkAfterInteractiveBack()",
+    "file": "native-bottom-toolbar-after-back.png",
+    "attachment": "21E0011A-220E-4861-BF6D-9F8B3FC698C6.png",
+    "sha256": "0ef75f0d775d7375ab80f58ff9e0e4a14aeeab55bc898b343a2d400e9edddcc1",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testBottomToolbarGroupsAndCaptureWorkAfterInteractiveBack()",
+    "file": "native-bottom-toolbar-groups.png",
+    "attachment": "742DE975-7882-40BC-9A3A-4F748831F4BD.png",
+    "sha256": "8eb3adcc084d1d8253dcaa58fe52e1443200dbc8035768d7031352c7d91fcf1d",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testNativeFormKeepsItsOrdinaryApplicationAction()",
+    "file": "native-form-unavailable.png",
+    "attachment": "30DB3871-94E1-44C1-B6F0-B29FDEA844A0.png",
+    "sha256": "80423666cfa63e4925c319bdce36a7397cfe223e9fe6e99808904fb9db126587",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testNativeListMovesToTheSameLogicalRowWithFreshTokens()",
+    "file": "native-list-target-80.png",
+    "attachment": "DD2A2F3C-B478-4AFD-AA82-845B82485A0C.png",
+    "sha256": "4cf65e1db2b4e737c685a288dd0962f27a3947cb93d3a845f2bd3c0a4e2105e2",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testNavigationRowMenuAndSwipeDoNotActivateTheLink()",
+    "file": "native-link-swipe.png",
+    "attachment": "588CD36C-2B11-4AB6-B2DE-C759499D7B53.png",
+    "sha256": "32e8d99898134fd2d1d9b5eb7b620535c6e8b37a48384b257d6a7a515a296efa",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testNavigationRowMenuAndSwipeDoNotActivateTheLink()",
+    "file": "native-link-context-menu.png",
+    "attachment": "16BD5114-CD7F-4AEB-B914-AF102A2F103F.png",
+    "sha256": "cc41ab29e1d2ed3aabbc0aa4455ba3de5957997f3750e59c964d277a18bbc152",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testOrdinaryContextMenuUsesThePresentedSheet()",
+    "file": "native-sheet-context-menu.png",
+    "attachment": "94EE02E2-DBA9-49DD-8763-C6DB3F89326F.png",
+    "sha256": "17fd228d54cc0a369a69e601c5f4703bf9b3120428dbb18cb6a31d7865aad7e6",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  },
+  {
+    "test": "JournalNativeUITests/testOutlineHiddenAndRevealedTargetsUseTheirOwnRows()",
+    "file": "native-outline-revealed-grandchild.png",
+    "attachment": "875028F3-4368-40FE-A54A-1C4AF9AA39D3.png",
+    "sha256": "a1deb64ab51b12e8b869f94ee202fd5969e16772116057dc229ac5d3bb32531f",
+    "result_bundle": "_build/ios/journal-device/native-final-12.xcresult"
+  }
+]

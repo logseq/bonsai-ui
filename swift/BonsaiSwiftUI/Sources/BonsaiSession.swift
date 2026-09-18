@@ -44,12 +44,37 @@ final class BonsaiSession {
       presentationDirty = false
       presentationReconciliationCount += 1
       updatePresentations()
+      updateConfirmations()
       updateNativeViewPresentation()
       updateOpacityPresentation()
       updateFieldFocus()
       updateHoverPresentation()
       updateFocusAndGesturePresentation()
       updateScrollPresentation()
+      updateListScrollPresentation()
+      updateRowActionPresentation()
+      updateCoreLinkPresentation()
+    }
+  }
+
+  private func updateRowActionPresentation() {
+    for node in tree.swipeNodes { node.swipeController?.setActive(isCurrentlyActive(node)) }
+    for node in tree.contextMenuNodes {
+      node.contextMenuController?.setActive(isCurrentlyActive(node))
+    }
+  }
+
+  private func updateCoreLinkPresentation() {
+    for node in tree.coreLinkNodes {
+      node.coreLinkEligible = coreLinkIsCurrentlyActive(node)
+      node.coreLinkReady = node.coreLinkEligible && (tree.onInteractionPermission?(node) == true)
+    }
+    for node in tree.navigationNodes {
+      if isInteractive {
+        node.navigationController?.retryCoreLink()
+      } else {
+        node.navigationController?.cancelUndeliveredCoreLink()
+      }
     }
   }
 
@@ -77,6 +102,26 @@ final class BonsaiSession {
           && mounted?.bindings == node.bindings
           && mounted?.children == node.children.map { $0.id.node }
           && isInActiveContent(node, controlsOwnInput: false))
+    }
+  }
+
+  private func updateListScrollPresentation() {
+    for node in tree.listNodes {
+      let mounted = displayed.tree.nodes[node.id.node]
+      let sameEpoch = displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
+      let token: Int64?
+      if sameEpoch, case .nativeList(let properties) = mounted?.properties {
+        token = properties.request?.token
+      } else {
+        token = nil
+      }
+      node.listScrollController?.setPresentation(
+        active: isCurrentlyActive(node),
+        ready: sameEpoch && mounted?.properties == node.properties
+          && mounted?.bindings == node.bindings
+          && mounted?.children == node.children.map { $0.id.node }
+          && isInActiveContent(node, controlsOwnInput: false),
+        acknowledgedToken: token)
     }
   }
 
@@ -152,6 +197,22 @@ final class BonsaiSession {
     }
   }
 
+  private func updateConfirmations() {
+    for node in tree.confirmationNodes {
+      guard let controller = node.confirmationController else { continue }
+      let mounted = displayed.tree.nodes[node.id.node]
+      let eligible =
+        isInteractive && displayedRevision > 0 && displayed.tree.epoch == node.id.epoch
+        && mounted?.properties == node.properties && mounted?.bindings == node.bindings
+        && mounted?.children == node.children.map(\.id.node)
+        && isInActiveContent(node)
+      controller.setActive(eligible)
+      if eligible, let handler = node.bindings[EventTagId.confirmationResponse] {
+        _ = controller.opening(handler: handler) { node.emit(.confirmationResponse($0)) }
+      }
+    }
+  }
+
   private func updatePresentations() {
     for node in tree.presentationNodes {
       guard let controller = node.presentationController, let current = node.properties.presentation
@@ -175,6 +236,11 @@ final class BonsaiSession {
   }
 
   private func updateFieldFocus() {
+    for node in tree.toolbarNodes {
+      if !isInteractive || !isInActiveContent(node, retainingNativeFocus: true) {
+        node.toolbarFocus?.cancel()
+      }
+    }
     for node in tree.fieldNodes {
       let contentActive = isInteractive && isInActiveContent(node)
       let retainingFocus = isInteractive && isInActiveContent(node, retainingNativeFocus: true)
@@ -275,7 +341,10 @@ final class BonsaiSession {
     }
     windowHost.hasModalContent = { [weak self] in
       guard let self else { return false }
-      return self.tree.nativeViewNodes.contains { $0.nativeView?.blocksBackgroundInput == true }
+      return self.tree.confirmationNodes.contains {
+        $0.confirmationController?.blocksBackground == true
+      }
+        || self.tree.nativeViewNodes.contains { $0.nativeView?.blocksBackgroundInput == true }
         || self.tree.presentationNodes.contains {
           $0.properties.presentation?.isModal == true
             && $0.presentationController?.presented == true
@@ -402,6 +471,14 @@ final class BonsaiSession {
       else { return nil }
       return (controller, request)
     }
+    let confirmationRequests = batchEvents.compactMap {
+      event -> (ConfirmationController, ConfirmationController.Response)? in
+      guard case .confirmationResponse(let response) = event.payload,
+        let controller = tree.nodes[event.nodeID]?.confirmationController,
+        controller.pending == response
+      else { return nil }
+      return (controller, response)
+    }
     let presentationRequests = batchEvents.compactMap {
       event -> (PresentationController, PresentationController.Request)? in
       guard case .valueChanged = event.payload,
@@ -442,8 +519,13 @@ final class BonsaiSession {
       }
       return emission
     }
+    let coreEmissions = batchEvents.compactMap { event -> UUID? in
+      if case .navigationActivation(let serial, _, _) = event.payload { return serial }
+      return nil
+    }
     let linkControllers =
-      linkEmissions.isEmpty ? [] : tree.nodes.values.compactMap(\.navigationController)
+      linkEmissions.isEmpty && coreEmissions.isEmpty
+      ? [] : tree.nodes.values.compactMap(\.navigationController)
     events.removePrefix(batchEvents.count)
     let output = try await runtime.pump(monotonicNanoseconds: now, events: batch)
     guard shutdownOperation == nil, sessionID == identity else { return false }
@@ -452,10 +534,12 @@ final class BonsaiSession {
       for node in navigationRequests { node.navigationController?.resolve() }
       for controller in linkControllers {
         for emission in linkEmissions { controller.resolveLink(emission) }
+        for serial in coreEmissions { controller.resolveCoreLink(serial) }
       }
       for (controller, state) in splitRequests { controller.resolve(state) }
       for (controller, request) in sliderRequests { controller.resolve(request) }
       for (controller, request) in booleanRequests { controller.resolve(request) }
+      for (controller, request) in confirmationRequests { controller.resolve(request) }
       for (controller, request) in presentationRequests { controller.resolve(request) }
       for (controller, request) in civilRequests { controller.resolve(request) }
       for (controller, request) in tableRequests { controller.resolve(request) }
@@ -532,6 +616,15 @@ final class BonsaiSession {
     else { return false }
     switch mounted.properties {
     case .button(enabled: true, role: _, style: _, autofocus: _): break
+    case .contextAction(let properties):
+      guard properties.enabled, node.properties == mounted.properties,
+        node.bindings == mounted.bindings,
+        let owner = node.contextActionOwner, owner.dispatching == node.id,
+        let currentParent = tree.nodes[owner.identity.node],
+        let previousParent = displayed.tree.nodes[owner.identity.node],
+        previousParent.properties == currentParent.properties,
+        previousParent.children == currentParent.children.map({ $0.id.node })
+      else { return false }
     case .swipeAction(let properties):
       guard properties.enabled, node.properties == mounted.properties,
         node.bindings == mounted.bindings,
@@ -550,7 +643,7 @@ final class BonsaiSession {
     for node in tree.listNodes {
       guard isVisible, isActive, node.id.epoch == displayed.tree.epoch,
         let visibility = node.listVisibility, let range = visibility.request,
-        let mounted = displayed.tree.nodes[node.id.node], mounted.properties == .nativeList,
+        let mounted = displayed.tree.nodes[node.id.node], mounted.kind == NodeKindId.nativeList,
         mounted.children == node.children.map({ $0.id.node }),
         let handler = mounted.bindings[EventTagId.visibleRangeChanged],
         node.bindings[EventTagId.visibleRangeChanged] == handler,
@@ -576,6 +669,42 @@ final class BonsaiSession {
   }
 
   private func input(_ node: RenderNodeState, payload: NativeEventPayload) -> Bool {
+    if case .confirmationResponse(let response) = payload {
+      guard isInteractive, displayedRevision > 0, displayed.tree.epoch == node.id.epoch,
+        tree.nodes[node.id.node] === node,
+        node.confirmationController?.dispatching == response,
+        node.bindings[EventTagId.confirmationResponse] == response.handler,
+        let mounted = displayed.tree.nodes[node.id.node], mounted.properties == node.properties,
+        mounted.bindings[EventTagId.confirmationResponse] == response.handler,
+        mounted.children == node.children.map(\.id.node)
+      else { return false }
+      return enqueue(node, handler: response.handler, payload: payload)
+    }
+    if case .listScrollCompleted(let completion) = payload {
+      guard shutdownOperation == nil, displayedRevision > 0,
+        displayed.tree.epoch == node.id.epoch, tree.nodes[node.id.node] === node,
+        displayed.tree.nodes[node.id.node]?.kind == NodeKindId.nativeList,
+        node.listScrollController?.delivering == completion,
+        sequence < UInt64(Int64.max),
+        events.append(
+          NativeEvent(
+            sequence: sequence + 1, displayedRevision: displayedRevision,
+            nodeID: node.id.node, handlerID: completion.handler, payload: payload))
+      else { return false }
+      sequence += 1
+      return true
+    }
+    if case .navigationActivation(_, let handler, let activation) = payload {
+      guard isInteractive, coreLinkIsCurrentlyActive(node),
+        node.coreLinkMounted, node.bindings[EventTagId.press] == handler,
+        node.properties
+          == .navigationLink(RenderNavigationLink(activation: activation, enabled: true)),
+        let mounted = displayed.tree.nodes[node.id.node], mounted.properties == node.properties,
+        mounted.bindings[EventTagId.press] == handler,
+        mounted.children == node.children.map({ $0.id.node })
+      else { return false }
+      return enqueue(node, handler: handler, payload: payload)
+    }
     guard shutdownOperation == nil else { return false }
     if case .key = payload {
       guard inputFailure == nil, isVisible, isActive, displayedRevision > 0,
@@ -779,8 +908,8 @@ final class BonsaiSession {
       guard shutdownOperation == nil, isVisible, isActive, displayedRevision > 0,
         displayed.tree.epoch == node.id.epoch,
         tree.nodes[node.id.node] === node, let mounted = displayed.tree.nodes[node.id.node],
-        case .booleanControl(let previous) = mounted.properties,
-        case .booleanControl(let current) = node.properties,
+        let previous = mounted.properties.booleanControlProperties,
+        let current = node.properties.booleanControlProperties,
         previous.enabled, current.enabled, previous.style == current.style,
         mounted.children == node.children.map({ $0.id.node }),
         let handler = mounted.bindings[payload.tag], node.bindings[payload.tag] == handler
@@ -870,7 +999,10 @@ final class BonsaiSession {
       let handler = mounted.bindings[payload.tag]
     else { return false }
     switch payload {
-    case .environmentChanged, .key, .tap, .doubleTap, .longPress, .nativeView, .tableSort,
+    case .confirmationResponse, .listScrollCompleted, .navigationActivation, .environmentChanged,
+      .key, .tap, .doubleTap,
+      .longPress,
+      .nativeView, .tableSort,
       .tableSelection, .scroll,
       .hostResponse, .applicationResponse, .applicationRequestError, .applicationEvent,
       .animationCompleted,
@@ -897,6 +1029,77 @@ final class BonsaiSession {
     return enqueue(node, handler: handler, payload: payload)
   }
 
+  private func coreLinkIsCurrentlyActive(_ node: RenderNodeState) -> Bool {
+    guard case .navigationLink(let properties) = node.properties, properties.enabled else {
+      return false
+    }
+    return isCurrentlyActive(node, requiringStack: true)
+  }
+
+  private func isCurrentlyActive(_ node: RenderNodeState, requiringStack: Bool = false) -> Bool {
+    guard isInteractive, !node.accessibilityHidden, tree.nodes[node.id.node] === node,
+      !windowHost.dialogs.blocksBackgroundInput
+    else { return false }
+    if tree.confirmationNodes.contains(where: {
+      $0 !== node && $0.confirmationController?.blocksBackground == true
+    }) {
+      return false
+    }
+    for owner in tree.presentationNodes {
+      guard owner.properties.presentation?.isModal == true,
+        owner.properties.presentation?.presented == true, let content = owner.children.last
+      else { continue }
+      var id: UInt64? = node.id.node
+      while let current = id, current != content.id.node { id = tree.parents[current] }
+      if id == nil { return false }
+    }
+    for owner in tree.nativeViewNodes where owner.nativeView?.blocksBackgroundInput == true {
+      var id: UInt64? = node.id.node
+      while let current = id, current != owner.id.node { id = tree.parents[current] }
+      if id == nil { return false }
+    }
+    var child = node
+    var hasStack = false
+    while let parentID = tree.parents[child.id.node], let parent = tree.nodes[parentID] {
+      if let navigation = parent.navigationController {
+        hasStack = true
+        guard child.id == (navigation.path.last?.node ?? parent.children.first?.id) else {
+          return false
+        }
+      }
+      if case .listRow(let row) = parent.properties,
+        parent.children.dropFirst(3).contains(where: { $0 === child }),
+        row.expanded != true || parent.booleanControlController?.value != true
+      {
+        return false
+      }
+      if let native = parent.nativeView, !native.isChildMounted(child.id) { return false }
+      if let presentation = parent.properties.presentation {
+        if parent.children.last === child && !presentation.presented { return false }
+        if parent.children.first === child && presentation.isModal && presentation.presented {
+          return false
+        }
+      }
+      if case .booleanControl(let control) = parent.properties {
+        guard control.style == .disclosure, parent.children.first !== child, control.value,
+          control.enabled
+        else { return false }
+      }
+      if case .tab(let tab) = child.properties,
+        case .tabs(let selected) = parent.properties, selected != tab.key
+      {
+        return false
+      }
+      if parent.removalController?.blocksContent == true { return false }
+      switch parent.properties {
+      case .menu, .picker, .swipeAction, .navigationLink, .button: return false
+      default: break
+      }
+      child = parent
+    }
+    return !requiringStack || hasStack
+  }
+
   private func isInActiveContent(
     _ node: RenderNodeState, controlsOwnInput: Bool = true,
     ignoringModalBlocking: Bool = false, retainingNativeFocus: Bool = false
@@ -918,6 +1121,11 @@ final class BonsaiSession {
   ) -> Bool {
     guard !windowHost.dialogs.blocksBackgroundInput else { return false }
     if !ignoringModalBlocking {
+      if tree.confirmationNodes.contains(where: {
+        $0 !== node && $0.confirmationController?.blocksBackground == true
+      }) {
+        return false
+      }
       for owner in tree.nativeViewNodes where owner.nativeView?.blocksBackgroundInput == true {
         var candidate: UInt64? = node.id.node
         while let id = candidate, id != owner.id.node { candidate = tree.parents[id] }
@@ -950,6 +1158,7 @@ final class BonsaiSession {
         }
       }
       if controlsOwnInput, case .swipeAction = parent.properties { return false }
+      if controlsOwnInput, case .navigationLink = parent.properties { return false }
       if let current = parent.properties.presentation, current.isModal,
         current.presented, parent.children.first === child
       {
@@ -971,6 +1180,15 @@ final class BonsaiSession {
             mounted.children == parent.children.map({ $0.id.node })
           else { return false }
         }
+      }
+      if case .listRow(let current) = parent.properties,
+        parent.children.dropFirst(3).contains(where: { $0 === child })
+      {
+        guard current.expanded == true, parent.booleanControlController?.value == true,
+          let mounted = displayed.tree.nodes[parentID],
+          case .listRow(let previous) = mounted.properties,
+          previous.expanded == true, mounted.children == parent.children.map({ $0.id.node })
+        else { return false }
       }
       if case .booleanControl(let current) = parent.properties {
         switch current.style {
@@ -1002,11 +1220,23 @@ final class BonsaiSession {
         }
       default: break
       }
-      if case .toolbar = parent.properties, parent.children.first !== child {
-        guard let mounted = displayed.tree.nodes[parentID],
-          mounted.properties == parent.properties,
-          mounted.children == parent.children.map({ $0.id.node })
-        else { return false }
+      let toolbarAncestor: Bool
+      switch parent.properties {
+      case .toolbar: toolbarAncestor = parent.children.first !== child
+      case .toolbarEntry, .toolbarChild: toolbarAncestor = true
+      default: toolbarAncestor = false
+      }
+      if toolbarAncestor {
+        guard let mounted = displayed.tree.nodes[parentID] else { return false }
+        if retainingNativeFocus {
+          guard mounted.children.contains(child.id.node),
+            mounted.properties.sameToolbarOwner(as: parent.properties)
+          else { return false }
+        } else {
+          guard mounted.properties == parent.properties,
+            mounted.children == parent.children.map({ $0.id.node })
+          else { return false }
+        }
       }
       if case .table(let properties) = parent.properties {
         guard let mounted = displayed.tree.nodes[parentID],

@@ -1,0 +1,20 @@
+Baseline source: /var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/journal-app-bars-baseline-qllsriz4
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ld: warning: /opt/homebrew/Cellar/gmp/6.3.0/lib/libgmp.dylib, ignoring unexpected dylib file
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.tbd, ignoring unexpected dylib text stub file
+test_native_app_bars_reach_actual_gallery (__main__.NavigationWindowTests.test_native_app_bars_reach_actual_gallery) ... FAIL
+
+======================================================================
+FAIL: test_native_app_bars_reach_actual_gallery (__main__.NavigationWindowTests.test_native_app_bars_reach_actual_gallery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/hg/17vhljys4xj_5q9flnswd0jm0000gn/T/journal-app-bars-baseline-qllsriz4/native/test/test_navigation_window.py", line 37, in test_native_app_bars_reach_actual_gallery
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : FAIL: Error Domain=AppBarsWindowTest Code=3 "Bottom resize lost scroll position" UserInfo={NSLocalizedDescription=Bottom resize lost scroll position}
+
+
+----------------------------------------------------------------------
+Ran 1 test in 42.258s
+
+FAILED (failures=1)

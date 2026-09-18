@@ -1,0 +1,25 @@
+test_macos_does_not_override_native_process_apis (__main__.ProcessIsolationTests.test_macos_does_not_override_native_process_apis) ... File "_none_", line 1:
+Error: Files /Users/rcmerci/.opam/bonsai-swiftui-ios/lib/ppxlib/astlib/astlib.cmxa
+       and /Users/rcmerci/.opam/bonsai-ui/lib/ocaml/compiler-libs/ocamlcommon.cmxa
+       make inconsistent assumptions over implementation Location
+ERROR
+test_physical_ios_complete_object_has_no_process_imports (__main__.ProcessIsolationTests.test_physical_ios_complete_object_has_no_process_imports) ... ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ok
+
+======================================================================
+ERROR: test_macos_does_not_override_native_process_apis (__main__.ProcessIsolationTests.test_macos_does_not_override_native_process_apis)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_ios_process_isolation.py", line 32, in test_macos_does_not_override_native_process_apis
+    subprocess.run(["dune", "build", TARGET], cwd=ROOT, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['dune', 'build', 'native/test/datascript_worker/datascript_worker_native_embed.exe.o']' returned non-zero exit status 1.
+
+----------------------------------------------------------------------
+Ran 2 tests in 6.404s
+
+FAILED (errors=1)

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "malformedMenuHierarchyCannotStage",
+    "status": 0
+  },
+  {
+    "name": "menuActionsRetainEveryRequestIncludingRepeatedSignedIds",
+    "status": 0
+  },
+  {
+    "name": "retainedMenuActionsCannotReachReplacedBindings",
+    "status": 0
+  },
+  {
+    "name": "retainedMenuRendersAfterAValidLabelReduction",
+    "status": 0
+  }
+]

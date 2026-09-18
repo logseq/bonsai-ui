@@ -1,0 +1,36 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:44:03.435.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:44:03.436.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:44:03.436.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:44:03.436.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeListScrollTests started.
+◇ Test requestUpdatesRetainTheNativeListAndRejectTokenReuseWithChangedPayload() started.
+✔ Test requestUpdatesRetainTheNativeListAndRejectTokenReuseWithChangedPayload() passed after 0.004 seconds.
+◇ Test requestTargetIdentityIsByteExact() started.
+✔ Test requestTargetIdentityIsByteExact() passed after 0.001 seconds.
+◇ Test malformedScrollRequestsFailBeforePublication() started.
+✔ Test malformedScrollRequestsFailBeforePublication() passed after 0.001 seconds.
+✔ Suite NativeListScrollTests passed after 0.005 seconds.
+◇ Suite NativeListPositioningTests started.
+◇ Test hostedListAlignsOffscreenRowsAndClampsBoundariesWithoutReplacingItsScrollView(style:) started.
+◇ Test case passing 1 argument style → 0 to hostedListAlignsOffscreenRowsAndClampsBoundariesWithoutReplacingItsScrollView(style:) started.
+◇ Test case passing 1 argument style → 1 to hostedListAlignsOffscreenRowsAndClampsBoundariesWithoutReplacingItsScrollView(style:) started.
+✔ Test hostedListAlignsOffscreenRowsAndClampsBoundariesWithoutReplacingItsScrollView(style:) with 2 test cases passed after 2.253 seconds.
+✔ Suite NativeListPositioningTests passed after 2.253 seconds.
+◇ Suite ListScrollLifecycleTests started.
+◇ Test offscreenMovementPrecedesRealizationAndRequiresStableAlignment() started.
+✔ Test offscreenMovementPrecedesRealizationAndRequiresStableAlignment() passed after 0.005 seconds.
+◇ Test requestsSnapshotTargetsAndHandlersAndNeverReplayMotionForDelivery() started.
+✔ Test requestsSnapshotTargetsAndHandlersAndNeverReplayMotionForDelivery() passed after 0.001 seconds.
+◇ Test missingHiddenCancellationTimeoutAndDisposalHaveDistinctTerminals() started.
+✔ Test missingHiddenCancellationTimeoutAndDisposalHaveDistinctTerminals() passed after 0.001 seconds.
+◇ Test nativeGeometrySupportsLargeRowsAndBoundaryClamping() started.
+✔ Test nativeGeometrySupportsLargeRowsAndBoundaryClamping() passed after 0.001 seconds.
+◇ Test reducedMotionAndEveryCancellationPathRetainOneOriginalTerminal() started.
+✔ Test reducedMotionAndEveryCancellationPathRetainOneOriginalTerminal() passed after 0.001 seconds.
+✔ Suite ListScrollLifecycleTests passed after 0.005 seconds.
+✔ Test run with 9 tests in 3 suites passed after 2.265 seconds.

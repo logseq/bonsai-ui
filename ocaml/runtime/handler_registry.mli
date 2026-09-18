@@ -12,6 +12,7 @@ module Frame : sig
 
   val revision : t -> Bonsai_swiftui_spec.Id.Runtime.renderer_revision
   val find : t -> Handler_id.t -> entry option
+  val find_list_scroll_completion : t -> Node_id.t -> entry option
 
   module Private : sig
     val create
@@ -82,3 +83,16 @@ val dispatch : t -> event -> (unit, Runtime_error.t) result
 val dispatch_batch : t -> event list -> (unit, Runtime_error.t) result
 val retained_frame_count : t -> int
 val clear : t -> unit
+
+(** Retain only the original callback for a newly displayed request token.
+    Repeating or clearing a token never rebinds it. Terminal events require this
+    exact snapshot, independently of ordinary revision-scoped input bindings. *)
+val retain_list_scroll_completion
+  :  t
+  -> revision:Bonsai_swiftui_spec.Id.Runtime.renderer_revision
+  -> token:int64
+  -> Frame.entry
+  -> unit
+
+val dispose_list_scroll_owner : t -> Node_id.t -> unit
+val clear_list_scroll_completions : t -> unit

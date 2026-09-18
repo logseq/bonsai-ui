@@ -75,12 +75,12 @@ sdk_version=$(xcrun --sdk iphoneos --show-sdk-version)
 dune_build="$build_root/dune"
 env -u OCAMLPATH \
   OPAMROOT="$opam_root" OCAMLFIND_CONF="$findlib_conf" \
-  SDK="$sdk_version" VER=18.0 \
+  SDK="$sdk_version" VER=26.0 \
   opam exec --switch="$switch" -- \
     dune build --root="$repository_root" --build-dir="$dune_build" \
       --profile=release -j4 -xios "$native_target"
 complete_object="$dune_build/default.ios/$native_target"
-"$script_directory/verify_complete_object.sh" "$complete_object" IOS 18.0 arm64
+"$script_directory/verify_complete_object.sh" "$complete_object" IOS 26.0 arm64
 
 python3 "$repository_root/tool/build_datascript_worker_probe.py" \
   --native-object "$complete_object" --build-root "$build_root" \

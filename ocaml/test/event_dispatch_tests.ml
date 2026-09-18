@@ -157,3 +157,124 @@ let () =
   test_text_edit_dispatch ();
   print_endline "event dispatch tests passed"
 ;;
+
+let test_list_scroll_terminal_ownership () =
+  let module H = Runtime.Handler_registry in
+  let revision n = ID.Runtime.Renderer_revision.of_int64 n in
+  let owner = Runtime.Node_id.Private.of_int64 40L in
+  let epoch = ID.Runtime.Epoch.of_int64 21L in
+  let original_calls = ref 0
+  and replacement_calls = ref 0 in
+  let entry id calls : H.Frame.entry =
+    { node_id = owner
+    ; event_tag = Ui.Event.Tag.List_scroll_completed
+    ; handler_id = Runtime.Handler_id.Private.of_int64 id
+    ; handler = Ui.Event.Handler.create (fun _ -> incr calls)
+    }
+  in
+  let original = entry 90L original_calls
+  and replacement = entry 91L replacement_calls in
+  let registry = H.create ~runtime_epoch:epoch in
+  let success = function
+    | Ok x -> x
+    | Error e -> fail "%s" (Runtime.Runtime_error.to_string e)
+  in
+  let rejected = function
+    | Error _ -> ()
+    | Ok _ -> fail "invalid terminal callback was admitted"
+  in
+  let current_revision = ref (revision 1L) in
+  let install n entries =
+    current_revision := revision n;
+    success (H.install registry (H.Frame.Private.create ~revision:(revision n) entries));
+    success (H.commit_displayed_revision registry ~revision:(revision n))
+  in
+  let own token binding =
+    H.retain_list_scroll_completion registry ~revision:!current_revision ~token binding
+  in
+  let event
+        ?(handler = original.handler_id)
+        ?(node = owner)
+        ?(epoch = epoch)
+        ?(displayed = 5L)
+        ?(outcome = 0L)
+        sequence
+        token
+    : H.event
+    =
+    { runtime_epoch = epoch
+    ; displayed_revision = revision displayed
+    ; node_id = node
+    ; event_tag = Ui.Event.Tag.List_scroll_completed
+    ; handler_id = handler
+    ; event_sequence = ID.Runtime.Event_sequence.of_int64 sequence
+    ; payload = Ui.Event.Payload.Int64_pair { first = token; second = outcome }
+    }
+  in
+  install 1L [ original ];
+  own 1L original;
+  List.iter
+    (fun n ->
+       install n [ replacement ];
+       own 1L replacement)
+    [ 2L; 3L; 4L; 5L ];
+  expect (H.retained_frame_count registry = 2) "terminal retention kept whole old frames";
+  rejected (H.dispatch registry (event ~handler:replacement.handler_id 1L 1L));
+  rejected
+    (H.dispatch registry (event ~node:(Runtime.Node_id.Private.of_int64 41L) 1L 1L));
+  rejected (H.dispatch registry (event ~epoch:(ID.Runtime.Epoch.of_int64 22L) 1L 1L));
+  rejected (H.dispatch registry (event ~displayed:6L 1L 1L));
+  rejected (H.dispatch registry (event ~outcome:6L 1L 1L));
+  rejected (H.dispatch registry { (event 1L 1L) with payload = Ui.Event.Payload.Unit });
+  rejected (H.dispatch_batch registry [ event 1L 1L; event 2L 1L ]);
+  expect (!original_calls = 0 && !replacement_calls = 0) "invalid batch invoked a handler";
+  success (H.dispatch registry (event 1L 1L));
+  expect
+    (!original_calls = 1 && !replacement_calls = 0)
+    "completion did not retain its original handler";
+  rejected (H.dispatch registry (event 2L 1L));
+  own 1L replacement;
+  rejected (H.dispatch registry (event ~handler:replacement.handler_id 2L 1L));
+  own 2L replacement;
+  rejected
+    (H.dispatch registry (event ~displayed:4L ~handler:replacement.handler_id 2L 2L));
+  install 6L [];
+  (* Clearing the request leaves its captured cancellation handler live. *)
+  success
+    (H.dispatch
+       registry
+       (event ~displayed:6L ~handler:replacement.handler_id ~outcome:3L 2L 2L));
+  expect (!replacement_calls = 1) "clearing a request lost its cancellation callback";
+  own 3L replacement;
+  H.dispose_list_scroll_owner registry owner;
+  rejected
+    (H.dispatch registry (event ~displayed:6L ~handler:replacement.handler_id 3L 3L));
+  rejected
+    (H.dispatch
+       registry
+       { (event ~displayed:1L 3L 1L) with event_tag = Ui.Event.Tag.Press });
+  install 7L [ replacement ];
+  own 4L replacement;
+  let validated =
+    success
+      (H.validate_batch
+         registry
+         [ event ~displayed:7L ~handler:replacement.handler_id 3L 4L ])
+  in
+  H.dispose_list_scroll_owner registry owner;
+  rejected (H.dispatch_validated registry validated);
+  own 5L replacement;
+  let validated =
+    success
+      (H.validate_batch
+         registry
+         [ event ~displayed:7L ~handler:replacement.handler_id 3L 5L ])
+  in
+  success (H.dispatch_validated registry validated);
+  rejected (H.dispatch_validated registry validated);
+  expect (!replacement_calls = 2) "disposed or consumed terminal snapshot was replayed";
+  H.clear registry;
+  rejected (H.dispatch registry (event ~displayed:6L 3L 1L))
+;;
+
+let () = test_list_scroll_terminal_ownership ()

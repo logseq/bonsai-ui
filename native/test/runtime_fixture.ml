@@ -1342,6 +1342,128 @@ let () =
 
 let () =
   Native_backend.embed
+    ~name:
+      (Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string
+         "native-journal-bottom-toolbar")
+    (App.create ~name:"Journal Bottom Toolbar" (fun handlers graph ->
+       let state, set_state =
+         Bonsai_v017.state ~equal:( = ) (0, "Journals", false) graph
+       in
+       let bind name update =
+         Driver.Handler.create handlers ~name ~equal:( == ) set_state ~f:(fun set _ ->
+           set update)
+       in
+       let capture =
+         bind "capture" (fun (count, page, open_) -> count + 1, page, open_)
+       in
+       let journals =
+         bind "journals" (fun (count, _, open_) -> count, "Journals", open_)
+       in
+       let favorites =
+         bind "favorites" (fun (count, _, open_) -> count, "Favorites", open_)
+       in
+       let open_entry = bind "entry" (fun (count, page, _) -> count, page, true) in
+       let back = bind "back" (fun (count, page, _) -> count, page, false) in
+       Bonsai.Cont.map2
+         state
+         (Bonsai.Cont.all [ capture; journals; favorites; open_entry; back ])
+         ~f:(fun (count, page, open_) bindings ->
+           let key = Ui.Key.string in
+           let button title handler =
+             Ui.View.button ~on_press:handler ~child:(Ui.View.text title) ()
+           in
+           let group name controls =
+             Ui.View.Toolbar.group
+               ~key:(key name)
+               ~placement:Bottom_bar
+               (List.map
+                  (fun (title, handler) ->
+                     Ui.View.Toolbar.child ~key:(key title) (button title handler))
+                  controls)
+           in
+           let items =
+             [ group
+                 "journal-navigation"
+                 [ "Journals", List.nth bindings 1; "Favorites", List.nth bindings 2 ]
+             ; Ui.View.Toolbar.spacer
+                 ~key:(key "capture-gap")
+                 ~placement:Bottom_bar
+                 Flexible
+             ; group "journal-capture" [ "Capture", List.nth bindings 0 ]
+             ]
+           in
+           let rows =
+             List.init 80 (fun index ->
+               let title = Printf.sprintf "Journal entry %d" index in
+               Ui.View.Native_list.row
+                 ~key:(Ui.Key.int index)
+                 ~swipe_actions:
+                   (Ui.View.Swipe_actions.create
+                      ~actions:
+                        [ Ui.View.Swipe_actions.action
+                            ~key:(key "archive")
+                            ~title:(Printf.sprintf "Archive entry %d" index)
+                            ~side:End
+                            ~background:(Ui.Style.Color.rgb ~red:220 ~green:30 ~blue:30)
+                            ~on_press:(List.nth bindings 0)
+                            ()
+                        ]
+                      ())
+                 ~context_menu:
+                   (Ui.View.Context_menu.create
+                      ~actions:
+                        [ Ui.View.Context_menu.action
+                            ~key:(key "inspect")
+                            ~title:(Printf.sprintf "Inspect entry %d" index)
+                            ~on_press:(List.nth bindings 0)
+                            ()
+                        ]
+                      ())
+                 (Ui.View.Navigation_link.create
+                    ~key:(key "open")
+                    ~activation_id:title
+                    ~on_activate:(List.nth bindings 3)
+                    ~label:(Ui.View.text title)
+                    ()))
+           in
+           let root =
+             Ui.View.Body.Vertical.create
+               [ Ui.View.Body.Vertical.fixed
+                   (Ui.View.column
+                      [ Ui.View.text (Printf.sprintf "%s captures: %d" page count)
+                      ; button "Open detail" (List.nth bindings 3)
+                      ])
+               ; Ui.View.Body.Vertical.fill
+                   (Ui.View.Native_list.vertical
+                      ~style:Plain
+                      [ Ui.View.Native_list.section ~key:(key "entries") rows ])
+               ]
+             |> Ui.View.Body.toolbar ~items
+           in
+           let path =
+             if open_
+             then
+               [ Ui.View.Navigation_stack.destination
+                   ~page_key:
+                     (Bonsai_swiftui_spec.Id.Navigation.Page_key.of_string "detail")
+                   ~title:"Journal detail"
+                   (Ui.View.Body.static (Ui.View.text "Journal detail content"))
+               ]
+             else []
+           in
+           App.View.create
+             ~theme:(Ui.Theme.create ())
+             ~body:
+               (Ui.View.Body.static
+                  (Ui.View.Navigation_stack.create
+                     ~title:page
+                     ~path
+                     ~on_path_change:(List.nth bindings 4)
+                     root)))))
+;;
+
+let () =
+  Native_backend.embed
     ~name:(Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-app-bars")
     (App.create ~name:"Gallery App Bars" (fun handlers graph ->
        Bonsai.Cont.map (App_bar_catalog.component handlers graph) ~f:(fun body ->
@@ -2936,4 +3058,478 @@ let () =
     ; "native-field-card", false, Some false
     ; "native-secure-card", false, Some true
     ]
+;;
+
+let () =
+  Native_backend.embed
+    ~name:(Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-form")
+    (App.create ~name:"Native Form" (fun handlers graph ->
+       let count, set_count = Bonsai_v017.state ~equal:Int.equal 0 graph in
+       let create =
+         Driver.Handler.create
+           handlers
+           ~name:"form-create"
+           ~equal:( == )
+           set_count
+           ~f:(fun set_count _ -> set_count (fun count -> count + 1))
+       in
+       Bonsai.Cont.map2 count create ~f:(fun count create ->
+         let keyed key = Ui.View.Keyed.create ~key:(Ui.Key.string key) in
+         let diagnostics =
+           Ui.View.Section.create
+             ~header:(Ui.View.text "Diagnostics")
+             ~footer:(Ui.View.text "Application-owned values")
+             [ keyed
+                 "revision"
+                 (Ui.View.labeled_content
+                    ~label:(Ui.View.text "Revision")
+                    ~value:
+                      (Ui.View.text_selection
+                         ~enabled:true
+                         (Ui.View.text (Printf.sprintf "Revision %d" count)))
+                    ())
+             ]
+         in
+         let unavailable =
+           Ui.View.content_unavailable
+             ~label:(Ui.View.text "No entries")
+             ~description:(Ui.View.text "Create your first entry")
+             ~actions:
+               (Ui.View.button
+                  ~enabled:(count = 0)
+                  ~on_press:create
+                  ~child:(Ui.View.text "Create entry")
+                  ())
+             ()
+         in
+         let rows =
+           [ keyed "diagnostics" diagnostics; keyed "unavailable" unavailable ]
+         in
+         let rows = if count = 0 then rows else List.rev rows in
+         App.View.create
+           ~theme:(Ui.Theme.create ())
+           ~body:
+             (Ui.View.Body.Vertical.create
+                [ Ui.View.Body.Vertical.fill (Ui.View.Form.vertical rows) ]))))
+;;
+
+let () =
+  Native_backend.embed
+    ~name:
+      (Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string
+         "core-navigation-link")
+    (App.create ~name:"Core Link" (fun handlers graph ->
+       let count, set_count = Bonsai_v017.state ~equal:Int.equal 0 graph in
+       let open_link =
+         Driver.Handler.create
+           handlers
+           ~name:"core-open"
+           ~equal:( == )
+           set_count
+           ~f:(fun set_count _ -> set_count (fun n -> n + 1))
+       in
+       let back =
+         Driver.Handler.create
+           handlers
+           ~name:"core-back"
+           ~equal:( == )
+           set_count
+           ~f:(fun set_count _ -> set_count (fun _ -> 0))
+       in
+       Bonsai.Cont.map2
+         count
+         (Bonsai.Cont.both open_link back)
+         ~f:(fun count (open_link, back) ->
+           let path =
+             if count < 2
+             then []
+             else
+               [ Ui.View.Navigation_stack.destination
+                   ~page_key:
+                     (Bonsai_swiftui_spec.Id.Navigation.Page_key.of_string "core-detail")
+                   ~title:"Detail"
+                   (Ui.View.Body.static (Ui.View.text "Core link opened"))
+               ]
+           in
+           let label = Ui.View.text (Printf.sprintf "Core open %d" count) in
+           let label =
+             if count mod 2 = 0 then Ui.View.column [ label ] else Ui.View.row [ label ]
+           in
+           App.View.create
+             ~theme:(Ui.Theme.create ())
+             ~body:
+               (Ui.View.Body.static
+                  (Ui.View.Navigation_stack.create
+                     ~title:"Core links"
+                     ~on_path_change:back
+                     ~path
+                     (Ui.View.Body.static
+                        (Ui.View.Navigation_link.create
+                           ~key:(Ui.Key.string "open")
+                           ~activation_id:"same-logical-entry"
+                           ~on_activate:open_link
+                           ~label
+                           ())))))))
+;;
+
+let () =
+  Native_backend.embed
+    ~name:
+      (Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-list-scroll")
+    (App.create ~name:"List Scroll" (fun handlers graph ->
+       let command, set_command = Bonsai_v017.state ~equal:( = ) (0, false) graph in
+       let revision, set_revision = Bonsai_v017.state ~equal:Int.equal 0 graph in
+       let result, set_result =
+         Bonsai_v017.state ~equal:String.equal "No completion" graph
+       in
+       let move =
+         Driver.Handler.create
+           handlers
+           ~name:"list-move"
+           ~equal:( == )
+           set_command
+           ~f:(fun set _ -> set (fun (token, _) -> token + 1, true))
+       in
+       let clear =
+         Driver.Handler.create
+           handlers
+           ~name:"list-clear"
+           ~equal:( == )
+           set_command
+           ~f:(fun set _ -> set (fun (token, _) -> token, false))
+       in
+       let rebind =
+         Driver.Handler.create
+           handlers
+           ~name:"list-rebind"
+           ~equal:( == )
+           set_revision
+           ~f:(fun set _ -> set (fun revision -> revision + 1))
+       in
+       let complete =
+         Driver.Handler.create
+           handlers
+           ~name:"list-complete"
+           ~equal:(fun (a, sa) (b, sb) -> a = b && sa == sb)
+           (Bonsai.Cont.both revision set_result)
+           ~f:(fun (revision, set_result) payload ->
+             match Ui.View.Native_list.completion_of_payload payload with
+             | None -> Bonsai.Effect.Ignore
+             | Some { token; outcome } ->
+               let outcome =
+                 match outcome with
+                 | Succeeded -> "succeeded"
+                 | Missing_target -> "missing"
+                 | Hidden_target -> "hidden"
+                 | Cancelled -> "cancelled"
+                 | Superseded -> "superseded"
+                 | Positioning_failed -> "failed"
+               in
+               set_result (fun _ ->
+                 Printf.sprintf "Result %Ld %s owner %d" token outcome revision))
+       in
+       Bonsai.Cont.map2
+         (Bonsai.Cont.both command (Bonsai.Cont.both revision result))
+         (Bonsai.Cont.both
+            complete
+            (Bonsai.Cont.both move (Bonsai.Cont.both clear rebind)))
+         ~f:
+           (fun
+             ((token, enabled), (revision, result)) (complete, (move, (clear, rebind))) ->
+           let key = Ui.Key.string in
+           let button text handler =
+             Ui.View.button ~on_press:handler ~child:(Ui.View.text text) ()
+           in
+           let scroll_request =
+             if enabled
+             then
+               Some
+                 (Ui.View.Native_list.scroll_request
+                    ~token:(Int64.of_int token)
+                    ~target:
+                      (Ui.View.Native_list.target
+                         ~section:(key "journal")
+                         ~row_path:[ key "entry80" ])
+                    ())
+             else None
+           in
+           let rows =
+             List.init 100 (fun index ->
+               Ui.View.Native_list.row
+                 ~key:(key (Printf.sprintf "entry%d" index))
+                 (Ui.View.text (Printf.sprintf "Entry %d" index)))
+           in
+           App.View.create
+             ~theme:(Ui.Theme.create ())
+             ~body:
+               (Ui.View.Body.Vertical.create
+                  [ Ui.View.Body.Vertical.fixed
+                      (Ui.View.row
+                         [ button "Move" move
+                         ; button "Clear" clear
+                         ; button "Rebind" rebind
+                         ])
+                  ; Ui.View.Body.Vertical.fixed
+                      (Ui.View.text (Printf.sprintf "Binding %d" revision))
+                  ; Ui.View.Body.Vertical.fixed (Ui.View.text result)
+                  ; Ui.View.Body.Vertical.fill
+                      (Ui.View.Native_list.vertical
+                         ~style:Plain
+                         ?scroll_request
+                         ~on_scroll_completed:complete
+                         [ Ui.View.Native_list.section ~key:(key "journal") rows ])
+                  ]))))
+;;
+
+module Journal_outline_fixture = struct
+  type state =
+    { parent : bool
+    ; branch : bool
+    ; moved : bool
+    ; reject : bool
+    ; generation : int
+    ; actions : int
+    ; selected : string
+    ; token : int64
+    ; completion : string
+    }
+
+  let app =
+    App.create ~name:"Native Outline" (fun handlers graph ->
+      let state, set_state =
+        Bonsai_v017.state
+          ~equal:( = )
+          { parent = true
+          ; branch = false
+          ; moved = false
+          ; reject = false
+          ; generation = 0
+          ; actions = 0
+          ; selected = "none"
+          ; token = 0L
+          ; completion = "none"
+          }
+          graph
+      in
+      let command name update =
+        Driver.Handler.create handlers ~name ~equal:( == ) set_state ~f:(fun set _ ->
+          set update)
+      in
+      let moved = command "outline-move" (fun s -> { s with moved = not s.moved }) in
+      let rebind =
+        command "outline-rebind" (fun s -> { s with generation = s.generation + 1 })
+      in
+      let reject = command "outline-reject" (fun s -> { s with reject = not s.reject }) in
+      let hidden =
+        command "outline-hidden" (fun s -> { s with token = Int64.succ s.token })
+      in
+      let reveal =
+        command "outline-reveal" (fun s ->
+          { s with parent = true; branch = true; token = Int64.succ s.token })
+      in
+      let expansion name update =
+        Driver.Handler.create
+          handlers
+          ~name
+          ~equal:( == )
+          set_state
+          ~f:(fun set payload ->
+            match payload with
+            | Ui.Event.Payload.Bool value ->
+              set (fun s -> if s.reject then s else update s value)
+            | _ -> Bonsai.Effect.Ignore)
+      in
+      let expand_parent =
+        expansion "outline-parent" (fun s parent -> { s with parent })
+      in
+      let expand_branch =
+        expansion "outline-branch" (fun s branch -> { s with branch })
+      in
+      let action name =
+        Driver.Handler.create
+          handlers
+          ~name
+          ~equal:(fun (a, sa) (b, sb) -> a = b && sa == sb)
+          (Bonsai.Cont.both (Bonsai.Cont.map state ~f:(fun s -> s.generation)) set_state)
+          ~f:(fun (generation, set) _ ->
+            set (fun s ->
+              { s with
+                actions = s.actions + 1
+              ; selected = Printf.sprintf "%s@%d" name generation
+              }))
+      in
+      let open_parent = action "Open parent"
+      and open_child = action "Open child" in
+      let delete_parent = action "Delete parent"
+      and delete_child = action "Delete child" in
+      let completed =
+        Driver.Handler.create
+          handlers
+          ~name:"outline-complete"
+          ~equal:( == )
+          set_state
+          ~f:(fun set payload ->
+            match Ui.View.Native_list.completion_of_payload payload with
+            | None -> Bonsai.Effect.Ignore
+            | Some { token; outcome } ->
+              let outcome =
+                match outcome with
+                | Succeeded -> "success"
+                | Hidden_target -> "hidden"
+                | Missing_target -> "missing"
+                | Cancelled -> "cancelled"
+                | Superseded -> "superseded"
+                | Positioning_failed -> "failed"
+              in
+              set (fun s -> { s with completion = Printf.sprintf "%Ld:%s" token outcome }))
+      in
+      let controls =
+        Bonsai.Cont.both
+          moved
+          (Bonsai.Cont.both
+             rebind
+             (Bonsai.Cont.both reject (Bonsai.Cont.both hidden reveal)))
+      in
+      let actions =
+        Bonsai.Cont.both
+          open_parent
+          (Bonsai.Cont.both open_child (Bonsai.Cont.both delete_parent delete_child))
+      in
+      Bonsai.Cont.map2
+        (Bonsai.Cont.both state controls)
+        (Bonsai.Cont.both
+           actions
+           (Bonsai.Cont.both completed (Bonsai.Cont.both expand_parent expand_branch)))
+        ~f:
+          (fun
+            (s, (moved, (rebind, (reject, (hidden, reveal)))))
+            ( (open_parent, (open_child, (delete_parent, delete_child)))
+            , (completed, (expand_parent, expand_branch)) ) ->
+          let key = Ui.Key.string in
+          let button title handler =
+            Ui.View.button ~style:Plain ~on_press:handler ~child:(Ui.View.text title) ()
+          in
+          let swipe title handler =
+            Ui.View.Swipe_actions.create
+              ~actions:
+                [ Ui.View.Swipe_actions.action
+                    ~key:(key "delete")
+                    ~title
+                    ~side:End
+                    ~role:Destructive
+                    ~background:(Ui.Style.Color.rgb ~red:220 ~green:30 ~blue:30)
+                    ~on_press:handler
+                    ()
+                ]
+              ()
+          in
+          let context title handler =
+            Ui.View.Context_menu.create
+              ~actions:
+                [ Ui.View.Context_menu.action
+                    ~key:(key "delete")
+                    ~title
+                    ~role:Destructive
+                    ~symbol:"trash"
+                    ~on_press:handler
+                    ()
+                ]
+              ()
+          in
+          let child =
+            Ui.View.Native_list.row
+              ~key:(key "child")
+              ~swipe_actions:(swipe "Delete child" delete_child)
+              ~context_menu:(context "Delete child" delete_child)
+              (button "Open child" open_child)
+          in
+          let branch =
+            Ui.View.Native_list.disclosure_row
+              ~key:(key "branch")
+              ~expanded:s.branch
+              ~on_expanded_changed:expand_branch
+              ~label:(Ui.View.text "Branch")
+              (List.init 20 (fun i ->
+                 Ui.View.Native_list.row
+                   ~key:(Ui.Key.int i)
+                   (Ui.View.frame
+                      ~height:40.
+                      (Ui.View.text (Printf.sprintf "Filler %d" i))))
+               @ [ Ui.View.Native_list.row
+                     ~key:(key "grandchild")
+                     (Ui.View.text "Grandchild")
+                 ])
+          in
+          let parent =
+            Ui.View.Native_list.disclosure_row
+              ~key:(key "parent")
+              ~expanded:s.parent
+              ~on_expanded_changed:expand_parent
+              ~swipe_actions:(swipe "Delete parent" delete_parent)
+              ~context_menu:(context "Delete parent" delete_parent)
+              ~label:(button "Open parent" open_parent)
+              ((if s.moved then [] else [ child ]) @ [ branch ])
+          in
+          let scroll_request =
+            if s.token = 0L
+            then None
+            else
+              Some
+                (Ui.View.Native_list.scroll_request
+                   ~token:s.token
+                   ~target:
+                     (Ui.View.Native_list.target
+                        ~section:(key "outline")
+                        ~row_path:(List.map key [ "parent"; "branch"; "grandchild" ]))
+                   ~anchor:Bottom
+                   ())
+          in
+          App.View.create
+            ~theme:(Ui.Theme.create ())
+            ~body:
+              (Ui.View.Body.Vertical.create
+                 [ Ui.View.Body.Vertical.fixed
+                     (Ui.View.row
+                        [ button "Move child" moved
+                        ; button "Rebind actions" rebind
+                        ; button "Reject expansion" reject
+                        ])
+                 ; Ui.View.Body.Vertical.fixed
+                     (Ui.View.row
+                        [ button "Target hidden" hidden
+                        ; button "Reveal grandchild" reveal
+                        ])
+                 ; Ui.View.Body.Vertical.fixed
+                     (Ui.View.text
+                        (Printf.sprintf
+                           "Actions %d %s; scroll %s"
+                           s.actions
+                           s.selected
+                           s.completion))
+                 ; Ui.View.Body.Vertical.fill
+                     (Ui.View.Native_list.vertical
+                        ~style:Plain
+                        ?scroll_request
+                        ~on_scroll_completed:completed
+                        [ Ui.View.Native_list.section
+                            ~key:(key "outline")
+                            (parent :: (if s.moved then [ child ] else []))
+                        ])
+                 ])))
+  ;;
+end
+
+let () =
+  Native_backend.embed
+    ~name:(Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-outline")
+    Journal_outline_fixture.app
+;;
+
+let () =
+  Native_backend.embed
+    ~name:
+      (Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string "native-confirmation")
+    (App.create ~name:"Native Confirmation" (fun handlers graph ->
+       Bonsai.Cont.map (Gallery.confirmation_component handlers graph) ~f:(fun body ->
+         App.View.create ~theme:(Ui.Theme.create ()) ~body:(Ui.View.Body.static body))))
 ;;

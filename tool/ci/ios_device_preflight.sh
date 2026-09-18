@@ -53,9 +53,9 @@ jq -e '
   and (.result.deviceProperties.osVersionNumber // ""
        | select(type == "string")
        | select(test("^[0-9]+(\\.[0-9]+){0,2}$"))
-       | split(".")[0] | tonumber >= 18)
+       | split(".")[0] | tonumber >= 26)
 ' "$device_details" >/dev/null ||
-  fail "the device must support physical iOS 18+ arm64, be paired and in Developer Mode, and have DDI services available"
+  fail "the device must support physical iOS 26+ arm64, be paired and in Developer Mode, and have DDI services available"
 
 # CoreDevice accepts names too; CI requires an exact UUID or hardware UDID.
 jq -e --arg device_id "$device_id" '

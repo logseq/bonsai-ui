@@ -1,0 +1,2 @@
+event dispatch tests passed
+Fatal error: exception Failure("invalid terminal callback was admitted")

@@ -31,9 +31,14 @@ import SwiftUI
     }
     guard session.displayedRevision > 0,
       let gesture = session.tree.nodes.values.first(where: { $0.kind == NodeKindId.gesture }),
-      let frame = gesture.layoutFrame, frame.width >= 320, frame.height >= 180,
       window.contentView != nil
     else { throw failure("Actual OCaml Gesture node was not rendered and presented") }
+    let frame = try await session.windowHost.layoutRequests.measure(gesture.layoutTarget) {
+      session.tree.nodes[gesture.id.node] === gesture && session.displayedRevision > 0
+    }
+    guard frame.width >= 320, frame.height >= 180 else {
+      throw failure("Actual OCaml Gesture node has an invalid measured extent")
+    }
     let global = CGPoint(x: frame.minX + 80, y: frame.minY + 40)
     let point = CGPoint(x: global.x, y: window.contentLayoutRect.maxY - global.y)
     let scenario = String((ProcessInfo.processInfo.arguments.last ?? "--recognition").dropFirst(2))

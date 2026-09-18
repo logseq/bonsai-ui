@@ -46,14 +46,14 @@ extension NativeRuntimeTests {
         if !output.bytes.isEmpty { store = try store.staging(WireFrame.decode(output.bytes)).tree }
       }
       func rows() throws -> [UInt64] {
-        let list = try #require(store.nodes.values.first { $0.properties == .nativeList })
+        let list = try #require(store.nodes.values.first { $0.kind == NodeKindId.nativeList })
         return list.children.flatMap { Array(store.nodes[$0]!.children.dropFirst(2)) }
       }
       let initial = try await runtime.pump(monotonicNanoseconds: 1)
       try apply(initial)
       let retained = try rows()
       #expect(retained.count == 20)
-      let list = try #require(store.nodes.values.first { $0.properties == .nativeList })
+      let list = try #require(store.nodes.values.first { $0.kind == NodeKindId.nativeList })
       let handler = try #require(list.bindings[EventTagId.visibleRangeChanged])
       try await runtime.acknowledge(initial, monotonicNanoseconds: 2)
       let nearEnd = NativeEvent(

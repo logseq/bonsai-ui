@@ -17,6 +17,14 @@ type navigation_split_state =
   ; selection_key : Bonsai_swiftui_spec.Id.Navigation.page_key option
   }
 
+type list_scroll_request =
+  { token : int64
+  ; section_key : string
+  ; row_path : string list
+  ; anchor : int
+  ; animated : bool
+  }
+
 type frame_kind =
   | Full_snapshot
   | Incremental_frame
@@ -38,6 +46,11 @@ type node_kind =
   | Native_list
   | List_section
   | List_row
+  | Confirmation
+  | Context_menu
+  | Context_action
+  | Context_menu_view
+  | List_row_label
   | Scroll_targets
   | Scroll
   | Flow
@@ -71,12 +84,20 @@ type node_kind =
   | Table
   | Divider
   | Label
+  | Form
+  | Section
+  | Labeled_content
+  | Content_unavailable
+  | Text_selection
   | Badge
   | Sheet
   | Popover
   | Scroll_sections
   | Scroll_section
   | Toolbar
+  | Toolbar_entry
+  | Toolbar_child
+  | Toolbar_body
   | Help
   | Group_box
   | Progress
@@ -89,6 +110,7 @@ type node_kind =
   | Tabs
   | Tab
   | Navigation_split
+  | Navigation_link
   | Navigation_stack
   | Navigation_destination
   | Ignores_safe_area
@@ -338,13 +360,38 @@ type props =
       ; title : string
       ; duration_ms : int
       }
-  | Native_list_props
+  | Native_list_props of
+      { style : int
+      ; scroll_request : list_scroll_request option
+      }
   | List_section_props of
       { has_header : bool
       ; has_footer : bool
       ; separator : int
+      ; section_key : string
       }
-  | List_row_props of { separator : int }
+  | List_row_props of
+      { separator : int
+      ; row_key : string
+      ; expanded : bool option
+      }
+  | Confirmation_props of
+      { style : int
+      ; request_token : int64 option
+      ; title : string
+      ; message : string option
+      ; actions : (string * string * bool * int) list
+      }
+  | Context_menu_props of { enabled : bool }
+  | Context_action_props of
+      { action_key : string
+      ; title : string
+      ; enabled : bool
+      ; role : int
+      ; symbol : string option
+      }
+  | Context_menu_view_props
+  | List_row_label_props
   | Refresh_props of
       { request_token : int64
       ; request_state : int
@@ -512,6 +559,14 @@ type props =
       }
   | Divider_props
   | Label_props
+  | Form_props
+  | Section_props of
+      { has_header : bool
+      ; has_footer : bool
+      }
+  | Labeled_content_props
+  | Content_unavailable_props
+  | Text_selection_props of { enabled : bool }
   | Badge_props of
       { count : int64 option
       ; alignment : int
@@ -545,7 +600,14 @@ type props =
       ; hero_height : float option
       ; stretch : bool
       }
-  | Toolbar_props of { placements : int list }
+  | Toolbar_props
+  | Toolbar_entry_props of
+      { entry_key : string
+      ; placement : int
+      ; kind : int
+      }
+  | Toolbar_child_props of { child_key : string }
+  | Toolbar_body_props
   | Help_props of { message : string }
   | Group_box_props of { has_label : bool }
   | Progress_props of
@@ -592,6 +654,10 @@ type props =
       ; sidebar_title : string
       ; content_title : string option
       ; detail_title : string
+      }
+  | Navigation_link_props of
+      { activation_id : string
+      ; enabled : bool
       }
   | Navigation_stack_props of { title : string }
   | Navigation_destination_props of

@@ -71,7 +71,7 @@ sys.exit(r.returncode)
         self.env = {**os.environ, 'PATH': str(self.bin)+os.pathsep+os.environ['PATH'], 'TRACE': str(self.trace), 'BONSAI_SWIFTUI_SOURCE_ROOT': str(ROOT)}
         self.cache = self.root / '_build/bonsai-swiftui/dependencies'
 
-    def command(self, platform='ios', profile='release', resolve=False, product='CacheFixture', framework=ROOT, minimum='18.0', version='1.0.0'):
+    def command(self, platform='ios', profile='release', resolve=False, product='CacheFixture', framework=ROOT, minimum='26.0', version='1.0.0'):
         return [sys.executable, str(GENERATOR), '--framework-root', str(framework), '--application-root', str(self.root), '--host-directory', str(self.root/'apple'), '--product-name', 'CacheApp', '--macos-bundle-identifier', 'org.example.cache', '--ios-bundle-identifier', 'org.example.cache.ios', '--ios-minimum-version', minimum, '--swift-package', 'fixture', self.repo.as_uri(), 'exact', version, '--swift-product', 'fixture', product, 'macos,ios', *(['--resolve-packages'] if resolve else ['--locked-preflight', '--platform', platform, '--profile', profile])]
 
     def run_probe(self, success=True, env=None, **kwargs):

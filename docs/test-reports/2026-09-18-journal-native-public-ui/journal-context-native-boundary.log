@@ -1,0 +1,281 @@
+Building for debugging...
+[0/4] Write sources
+[1/4] Write swift-version--58304C5D6DBC2206.txt
+[3/6] Emitting module BonsaiSwiftUI
+[4/6] Compiling BonsaiSwiftUI NativeContextMenuHost.swift
+[5/7] Compiling BonsaiSwiftUI NativeContextMenu.swift
+[6/146] Compiling BonsaiSwiftUITests HoverInputTests.swift
+[7/146] Compiling BonsaiSwiftUITests HoverRegionTests.swift
+[8/146] Compiling BonsaiSwiftUITests HoverRouterTests.swift
+[9/146] Compiling BonsaiSwiftUITests HoverTransitionTests.swift
+[10/146] Compiling BonsaiSwiftUITests HoverWindowSourcesTests.swift
+[11/146] Compiling BonsaiSwiftUITests ImageLoadingTests.swift
+[12/146] Compiling BonsaiSwiftUITests ImageTests.swift
+[13/146] Compiling BonsaiSwiftUITests InitialScrollTests.swift
+[14/146] Compiling BonsaiSwiftUITests KeyboardEventTests.swift
+[15/155] Compiling BonsaiSwiftUITests ContextMenuTests.swift
+[16/155] Compiling BonsaiSwiftUITests ContextualSelectionTests.swift
+[17/155] Compiling BonsaiSwiftUITests ControlSizeTests.swift
+[18/155] Compiling BonsaiSwiftUITests CoreNavigationLinkTests.swift
+[19/155] Compiling BonsaiSwiftUITests DisclosureTests.swift
+[20/155] Compiling BonsaiSwiftUITests DividerTests.swift
+[21/155] Compiling BonsaiSwiftUITests DropdownCompositionTests.swift
+[22/155] Compiling BonsaiSwiftUITests EventBatchTests.swift
+[23/155] Compiling BonsaiSwiftUITests ExpandableComposerTests.swift
+[24/155] Compiling BonsaiSwiftUITests FileCommandTests.swift
+[25/155] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[26/155] Compiling BonsaiSwiftUITests NodeServiceTests.swift
+[27/155] Compiling BonsaiSwiftUITests NodeStoreTests.swift
+[28/155] Compiling BonsaiSwiftUITests NoticeServiceTests.swift
+[29/155] Compiling BonsaiSwiftUITests OverlayTests.swift
+[30/155] Compiling BonsaiSwiftUITests PageLayoutTests.swift
+[31/155] Compiling BonsaiSwiftUITests PickerTests.swift
+[32/155] Compiling BonsaiSwiftUITests PlatformInformationTests.swift
+[33/155] Compiling BonsaiSwiftUITests PointerContactInputTests.swift
+[34/155] Compiling BonsaiSwiftUITests PointerEventTests.swift
+[35/155] Compiling BonsaiSwiftUITests GroupBoxTests.swift
+[36/155] Compiling BonsaiSwiftUITests HapticServiceTests.swift
+[37/155] Compiling BonsaiSwiftUITests HelpTests.swift
+[38/155] Compiling BonsaiSwiftUITests HostCommandTests.swift
+[39/155] Compiling BonsaiSwiftUITests HostEnvironmentTests.swift
+[40/155] Compiling BonsaiSwiftUITests HostMenuServiceTests.swift
+[41/155] Compiling BonsaiSwiftUITests HostNavigationTests.swift
+[42/155] Compiling BonsaiSwiftUITests HostPickerServiceTests.swift
+[43/155] Compiling BonsaiSwiftUITests HostServicesTests.swift
+[44/155] Compiling BonsaiSwiftUITests AnimatedOpacityTests.swift
+[45/155] Compiling BonsaiSwiftUITests AppBarCompositionTests.swift
+[46/155] Compiling BonsaiSwiftUITests AppKitHoverCaptureTests.swift
+[47/155] Compiling BonsaiSwiftUITests AppKitPointerDeviceTests.swift
+[48/155] Compiling BonsaiSwiftUITests ApplicationBridgeTests.swift
+[49/155] Compiling BonsaiSwiftUITests ApplicationTransportTests.swift
+[50/155] Compiling BonsaiSwiftUITests BadgeTests.swift
+[51/155] Compiling BonsaiSwiftUITests BonsaiSessionTests.swift
+[52/155] Compiling BonsaiSwiftUITests ButtonAutofocusTests.swift
+[53/155] Compiling BonsaiSwiftUITests ButtonScopeTests.swift
+[54/155] Compiling BonsaiSwiftUITests CivilDateDomainTests.swift
+[55/155] Compiling BonsaiSwiftUITests CivilPickerTests.swift
+[56/155] Compiling BonsaiSwiftUITests CivilSelectionTests.swift
+[57/155] Compiling BonsaiSwiftUITests ClockTests.swift
+[58/155] Compiling BonsaiSwiftUITests CollectionAnimationTests.swift
+[59/155] Compiling BonsaiSwiftUITests CollectionEventTests.swift
+[60/155] Compiling BonsaiSwiftUITests CollectionGeometryTests.swift
+[61/155] Compiling BonsaiSwiftUITests CollectionNodeTests.swift
+[62/155] Compiling BonsaiSwiftUITests CollectionViewportTests.swift
+[63/155] Compiling BonsaiSwiftUITests ComposerTests.swift
+[64/155] Compiling BonsaiSwiftUITests StackTests.swift
+[65/155] Compiling BonsaiSwiftUITests SurfaceTests.swift
+[66/155] Compiling BonsaiSwiftUITests SwiftInputFixtureTests.swift
+[67/155] Compiling BonsaiSwiftUITests SwipeActionsFixture.swift
+[68/155] Compiling BonsaiSwiftUITests SwipeActionsTests.swift
+[69/155] Compiling BonsaiSwiftUITests SymbolTests.swift
+[70/155] Compiling BonsaiSwiftUITests SystemControlsTests.swift
+[71/155] Compiling BonsaiSwiftUITests TableRuntimeTests.swift
+[72/155] Compiling BonsaiSwiftUITests TabsTests.swift
+[73/155] Compiling BonsaiSwiftUITests NativeRuntimeTests.swift
+[74/155] Compiling BonsaiSwiftUITests NativeTextEditorTests.swift
+[75/155] Compiling BonsaiSwiftUITests NativeViewTests.swift
+[76/155] Compiling BonsaiSwiftUITests NativeWindowHostTests.swift
+[77/155] Compiling BonsaiSwiftUITests NavigationLinkTests.swift
+[78/155] Compiling BonsaiSwiftUITests NavigationSplitTests.swift
+[79/155] Compiling BonsaiSwiftUITests NavigationStackTests.swift
+[80/155] Compiling BonsaiSwiftUITests NetworkTests.swift
+[81/155] Compiling BonsaiSwiftUITests NodeCommandTests.swift
+[82/155] Compiling BonsaiSwiftUITests FileDialogTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[83/155] Compiling BonsaiSwiftUITests FileExportTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[84/155] Compiling BonsaiSwiftUITests FileImportTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[85/155] Compiling BonsaiSwiftUITests FileResultTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[86/155] Compiling BonsaiSwiftUITests FlowLayoutTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[87/155] Compiling BonsaiSwiftUITests FocusScopeTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[88/155] Compiling BonsaiSwiftUITests FrameTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[89/155] Compiling BonsaiSwiftUITests FullGalleryTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[90/155] Compiling BonsaiSwiftUITests GestureEventTests.swift
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/FocusScopeTests.swift:222:36: warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+220 |         #expect(history("Inner: ") == inner)
+221 |       }
+222 |       try await focus(try #require(fields.first), outer: "+", inner: "+")
+    |                                    `- warning: '#require(_:_:)' is redundant because 'fields.first' never equals 'nil' (from macro 'require')
+223 |       try await focus(fields[1], outer: "+", inner: "+")
+224 |       try await focus(fields[2], outer: "+", inner: "+-")
+[91/155] Compiling BonsaiSwiftUITests KeyboardListenerTests.swift
+[92/155] Compiling BonsaiSwiftUITests KeyboardOcclusionTests.swift
+[93/155] Compiling BonsaiSwiftUITests KeyboardPressesTests.swift
+[94/155] Compiling BonsaiSwiftUITests KeyboardRouteTests.swift
+[95/155] Compiling BonsaiSwiftUITests LabelTests.swift
+[96/155] Compiling BonsaiSwiftUITests MeasuredCollectionTests.swift
+[97/155] Compiling BonsaiSwiftUITests MenuTests.swift
+[98/155] Compiling BonsaiSwiftUITests MixedCollectionTests.swift
+[99/155] Compiling BonsaiSwiftUITests ModifierTests.swift
+[100/155] Compiling BonsaiSwiftUITests TagTests.swift
+[101/155] Compiling BonsaiSwiftUITests TextEditorAutofocusTests.swift
+[102/155] Compiling BonsaiSwiftUITests TextEditorViewTests.swift
+[103/155] Compiling BonsaiSwiftUITests TextEventTests.swift
+[104/155] Compiling BonsaiSwiftUITests TextFieldTests.swift
+[105/155] Compiling BonsaiSwiftUITests TextFieldWireTests.swift
+[106/155] Compiling BonsaiSwiftUITests TextSessionTests.swift
+[107/155] Compiling BonsaiSwiftUITests TextTests.swift
+[108/155] Compiling BonsaiSwiftUITests TodoTests.swift
+[109/155] Compiling BonsaiSwiftUITests PopoverTests.swift
+[110/155] Compiling BonsaiSwiftUITests PresentationProbeTests.swift
+[111/155] Compiling BonsaiSwiftUITests ProgressTests.swift
+[112/155] Compiling BonsaiSwiftUITests ProjectionTests.swift
+[113/155] Compiling BonsaiSwiftUITests RefreshTests.swift
+[114/155] Compiling BonsaiSwiftUITests RemovalTests.swift
+[115/155] Compiling BonsaiSwiftUITests RenderTreeTests.swift
+[116/155] Compiling BonsaiSwiftUITests RenderedView.swift
+[117/155] Compiling BonsaiSwiftUITests RichTextTests.swift
+[118/155] Compiling BonsaiSwiftUITests ScrollTargetsTests.swift
+[119/155] Compiling BonsaiSwiftUITests SelectionCatalogTests.swift
+[120/155] Compiling BonsaiSwiftUITests SemanticsNodeTests.swift
+[121/155] Compiling BonsaiSwiftUITests SharedDefaultsTests.swift
+[122/155] Compiling BonsaiSwiftUITests SheetTests.swift
+[123/155] Compiling BonsaiSwiftUITests ShutdownTests.swift
+[124/155] Compiling BonsaiSwiftUITests SidebarCompositionTests.swift
+[125/155] Compiling BonsaiSwiftUITests SliderFixture.swift
+[126/155] Compiling BonsaiSwiftUITests SliderTests.swift
+[127/155] Compiling BonsaiSwiftUITests SQLiteWorkerTests.swift
+[128/155] Compiling BonsaiSwiftUITests SafeAreaTests.swift
+[129/155] Compiling BonsaiSwiftUITests ScopedThemeTests.swift
+[130/155] Compiling BonsaiSwiftUITests ScrollEventQueueTests.swift
+[131/155] Compiling BonsaiSwiftUITests ScrollFillTests.swift
+[132/155] Compiling BonsaiSwiftUITests ScrollNodeTests.swift
+[133/155] Compiling BonsaiSwiftUITests ScrollObservationTests.swift
+[134/155] Compiling BonsaiSwiftUITests ScrollSectionsTests.swift
+[135/155] Compiling BonsaiSwiftUITests ScrollServiceTests.swift
+[136/155] Compiling BonsaiSwiftUITests MorphingSurfaceTests.swift
+[137/155] Compiling BonsaiSwiftUITests MultipleSelectionTests.swift
+[138/155] Compiling BonsaiSwiftUITests NativeEventQueueTests.swift
+[139/155] Compiling BonsaiSwiftUITests NativeFormTests.swift
+[140/155] Compiling BonsaiSwiftUITests NativeKeyMappingTests.swift
+[141/155] Compiling BonsaiSwiftUITests NativeLayoutRequestsTests.swift
+[142/155] Compiling BonsaiSwiftUITests NativeListHierarchyTests.swift
+[143/155] Compiling BonsaiSwiftUITests NativeListScrollTests.swift
+[144/155] Compiling BonsaiSwiftUITests NativeListStyleTests.swift
+[145/155] Compiling BonsaiSwiftUITests ToggleTests.swift
+[146/155] Compiling BonsaiSwiftUITests ToolbarTests.swift
+[147/155] Compiling BonsaiSwiftUITests TreeFixture.swift
+[148/155] Compiling BonsaiSwiftUITests URLHostServiceTests.swift
+[149/155] Compiling BonsaiSwiftUITests URLReceiverSupport.swift
+[150/155] Compiling BonsaiSwiftUITests ViewEnvironmentTests.swift
+[151/155] Compiling BonsaiSwiftUITests WeightedLayoutTests.swift
+[152/155] Compiling BonsaiSwiftUITests WireFrameTests.swift
+[153/155] Compiling BonsaiSwiftUITests WorkflowTests.swift
+[153/155] Write Objects.LinkFileList
+[154/155] Linking BonsaiSwiftUIPackageTests
+Build complete! (11.69s)
+Test Suite 'Selected tests' started at 2026-09-18 17:26:07.171.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 17:26:07.171.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 17:26:07.171.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 17:26:07.171.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite ContextMenuTests started.
+◇ Test hostedNativeContextMenuUsesThePresentedActionSnapshot() started.
+✔ Test hostedNativeContextMenuUsesThePresentedActionSnapshot() passed after 0.560 seconds.
+✔ Suite ContextMenuTests passed after 0.560 seconds.
+✔ Test run with 1 test in 1 suite passed after 0.560 seconds.

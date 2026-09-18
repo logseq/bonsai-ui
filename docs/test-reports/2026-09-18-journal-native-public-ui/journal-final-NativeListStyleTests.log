@@ -1,0 +1,20 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:44:06.196.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:44:06.197.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:44:06.197.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:44:06.197.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeListStyleTests started.
+◇ Test supportedStylesPublishNativeList(style:) started.
+◇ Test case passing 1 argument style → 0 to supportedStylesPublishNativeList(style:) started.
+◇ Test case passing 1 argument style → 1 to supportedStylesPublishNativeList(style:) started.
+✔ Test supportedStylesPublishNativeList(style:) with 2 test cases passed after 0.001 seconds.
+◇ Test unavailableStyleFailsBeforePublicationWithCapabilityDiagnostic() started.
+✔ Test unavailableStyleFailsBeforePublicationWithCapabilityDiagnostic() passed after 0.001 seconds.
+◇ Test malformedStyleIsRejected() started.
+✔ Test malformedStyleIsRejected() passed after 0.001 seconds.
+✔ Suite NativeListStyleTests passed after 0.001 seconds.
+✔ Test run with 3 tests in 1 suite passed after 0.001 seconds.

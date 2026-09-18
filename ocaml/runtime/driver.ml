@@ -244,6 +244,11 @@ let wire_node_kind = function
   | K_removal -> Ok Removal
   | K_native_list -> Ok Native_list
   | K_list_section -> Ok List_section
+  | K_confirmation -> Ok Confirmation
+  | K_context_menu -> Ok Context_menu
+  | K_context_action -> Ok Context_action
+  | K_context_menu_view -> Ok Context_menu_view
+  | K_list_row_label -> Ok List_row_label
   | K_list_row -> Ok List_row
   | K_refresh -> Ok Refresh
   | K_scroll_targets -> Ok Scroll_targets
@@ -282,12 +287,20 @@ let wire_node_kind = function
   | K_table -> Ok Table
   | K_divider -> Ok Divider
   | K_label -> Ok Label
+  | K_form -> Ok Form
+  | K_section -> Ok Section
+  | K_labeled_content -> Ok Labeled_content
+  | K_content_unavailable -> Ok Content_unavailable
+  | K_text_selection -> Ok Text_selection
   | K_badge -> Ok Badge
   | K_sheet -> Ok Sheet
   | K_popover -> Ok Popover
   | K_scroll_sections -> Ok Scroll_sections
   | K_scroll_section -> Ok Scroll_section
   | K_toolbar -> Ok Toolbar
+  | K_toolbar_entry -> Ok Toolbar_entry
+  | K_toolbar_child -> Ok Toolbar_child
+  | K_toolbar_body -> Ok Toolbar_body
   | K_help -> Ok Help
   | K_group_box -> Ok Group_box
   | K_progress -> Ok Progress
@@ -300,6 +313,7 @@ let wire_node_kind = function
   | K_tabs -> Ok Tabs
   | K_tab -> Ok Tab
   | K_navigation_split -> Ok Navigation_split
+  | K_navigation_link -> Ok Navigation_link
   | K_navigation_stack -> Ok Navigation_stack
   | K_navigation_destination -> Ok Navigation_destination
   | K_ignores_safe_area -> Ok Ignores_safe_area
@@ -426,10 +440,25 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
     Ok
       (Removal_props
          { request_token; request_state; vertical; collapse_vertical; title; duration_ms })
-  | Native_list -> Ok Native_list_props
-  | List_section { has_header; has_footer; separator } ->
-    Ok (List_section_props { has_header; has_footer; separator })
-  | List_row { separator } -> Ok (List_row_props { separator })
+  | Native_list { style; scroll_request } ->
+    let scroll_request =
+      Option.map
+        (fun (token, section_key, row_path, anchor, animated) ->
+           Protocol.Wire_frame.{ token; section_key; row_path; anchor; animated })
+        scroll_request
+    in
+    Ok (Native_list_props { style; scroll_request })
+  | List_section { has_header; has_footer; separator; section_key } ->
+    Ok (List_section_props { has_header; has_footer; separator; section_key })
+  | Confirmation { style; request_token; title; message; actions } ->
+    Ok (Confirmation_props { style; request_token; title; message; actions })
+  | Context_menu { enabled } -> Ok (Context_menu_props { enabled })
+  | Context_action { action_key; title; enabled; role; symbol } ->
+    Ok (Context_action_props { action_key; title; enabled; role; symbol })
+  | Context_menu_view -> Ok Context_menu_view_props
+  | List_row_label -> Ok List_row_label_props
+  | List_row { separator; row_key; expanded } ->
+    Ok (List_row_props { separator; row_key; expanded })
   | Refresh { request_token; request_state; show_token } ->
     Ok (Refresh_props { request_token; request_state; show_token })
   | Scroll_targets
@@ -870,6 +899,11 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
          })
   | Divider -> Ok Divider_props
   | Label -> Ok Label_props
+  | Form -> Ok Form_props
+  | Section { has_header; has_footer } -> Ok (Section_props { has_header; has_footer })
+  | Labeled_content -> Ok Labeled_content_props
+  | Content_unavailable -> Ok Content_unavailable_props
+  | Text_selection { enabled } -> Ok (Text_selection_props { enabled })
   | Badge { count; alignment; visible } ->
     let alignment =
       match alignment with
@@ -907,7 +941,11 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
          { vertical; pin_headers; pin_footers; spacing; shows_indicators; initial_anchor })
   | Scroll_section { has_header; has_footer; hero_height; stretch } ->
     Ok (Scroll_section_props { has_header; has_footer; hero_height; stretch })
-  | Toolbar { placements } -> Ok (Toolbar_props { placements })
+  | Toolbar -> Ok Toolbar_props
+  | Toolbar_entry { entry_key; placement; kind } ->
+    Ok (Toolbar_entry_props { entry_key; placement; kind })
+  | Toolbar_child { child_key } -> Ok (Toolbar_child_props { child_key })
+  | Toolbar_body -> Ok Toolbar_body_props
   | Help { message } -> Ok (Help_props { message })
   | Group_box { has_label } -> Ok (Group_box_props { has_label })
   | Progress { value; style } ->
@@ -957,6 +995,8 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
          ; content_title
          ; detail_title
          })
+  | Navigation_link { activation_id; enabled } ->
+    Ok (Navigation_link_props { activation_id; enabled })
   | Navigation_stack { title } -> Ok (Navigation_stack_props { title })
   | Navigation_destination { page_key; title; can_pop } ->
     Ok (Navigation_destination_props { page_key; title; can_pop })
@@ -1015,9 +1055,11 @@ let wire_event_tag =
   | Radio_selected -> Tag.radio_selected
   | Removal_requested -> Tag.removal_requested
   | Removal_completed -> Tag.removal_completed
+  | List_scroll_completed -> Tag.list_scroll_completed
   | Refresh_request -> Tag.refresh_request
   | Scroll_position_changed -> Tag.scroll_position_changed
   | Menu_action -> Tag.menu_action
+  | Confirmation_response -> Tag.confirmation_response
   | Picker_selected -> Tag.picker_selected
   | Slider_changed -> Tag.slider_changed
   | Slider_change_end -> Tag.slider_change_end
@@ -1417,6 +1459,11 @@ let host_response_status_name = function
 ;;
 
 let payload_summary = function
+  | Protocol.Inbound_event.Confirmation_response { token; action_key } ->
+    Printf.sprintf
+      "confirmation_response(%Ld,%S)"
+      token
+      (Option.value action_key ~default:"dismissed")
   | Protocol.Inbound_event.Unit -> "unit"
   | Bool value -> Printf.sprintf "bool(%b)" value
   | Float value -> Printf.sprintf "float(%g)" value
@@ -2027,6 +2074,31 @@ let exact_pending t ~presentation_id ~renderer_revision =
     else Ok pending
 ;;
 
+let retain_list_scroll_snapshots handlers handler_frame patch =
+  let module H = Runtime.Handler_registry in
+  if Runtime.Frame_patch.kind patch = Runtime.Frame_patch.Full_snapshot
+  then H.clear_list_scroll_completions handlers;
+  List.iter
+    (function
+      | Runtime.Frame_patch.Operation.Drop_node id ->
+        H.dispose_list_scroll_owner handlers id
+      | Create_node { node_id; widget; _ } | Update_node { node_id; widget } ->
+        let (Av view) = Ui.View.Private.view widget in
+        (match view.node with
+         | Native_list { scroll_request = Some (token, _, _, _, _); _ } ->
+           (match H.Frame.find_list_scroll_completion handler_frame node_id with
+            | Some entry ->
+              H.retain_list_scroll_completion
+                handlers
+                ~revision:(H.Frame.revision handler_frame)
+                ~token
+                entry
+            | None -> invalid_arg "List scroll request has no completion binding")
+         | _ -> ())
+      | _ -> ())
+    (Runtime.Frame_patch.operations patch)
+;;
+
 let presentation_succeeded t ~presentation_id ~renderer_revision ~monotonic_now_ns =
   match active_error t with
   | Some error -> Error error
@@ -2063,7 +2135,7 @@ let presentation_succeeded t ~presentation_id ~renderer_revision ~monotonic_now_
                   match pending.emitted_frame, pending.candidate_handler_frame with
                   | None, None ->
                     Ok (t.displayed_revision, t.displayed_handler_frame, false)
-                  | Some _, Some handler_frame ->
+                  | Some frame, Some handler_frame ->
                     (match Runtime.Handler_registry.install t.handlers handler_frame with
                      | Error error -> Error (Runtime_error error)
                      | Ok () ->
@@ -2073,7 +2145,12 @@ let presentation_succeeded t ~presentation_id ~renderer_revision ~monotonic_now_
                             ~revision:renderer_revision
                         with
                         | Error error -> Error (Runtime_error error)
-                        | Ok () -> Ok (renderer_revision, Some handler_frame, true)))
+                        | Ok () ->
+                          retain_list_scroll_snapshots
+                            t.handlers
+                            handler_frame
+                            frame.frame_patch;
+                          Ok (renderer_revision, Some handler_frame, true)))
                   | None, Some _ | Some _, None ->
                     Error
                       (Invalid_state

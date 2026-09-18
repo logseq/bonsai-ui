@@ -38,7 +38,7 @@ python3 tool/build_swiftui_example.py host_effects
 open examples/host_effects/apple/DerivedData/Build/Products/Debug/BonsaiHostEffects.app
 ```
 
-The supported targets are macOS 26+ arm64 and physical iOS 18+ arm64. This helper
+The supported targets are macOS 26+ arm64 and physical iOS 26+ arm64. This helper
 builds an ad-hoc signed macOS application. The example's native program and SwiftUI
 entrypoint have also built as a signed iOS Release App; see
 [example build evidence](../../docs/swiftui-example-builds.md). Device clipboard
@@ -89,7 +89,7 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.
 

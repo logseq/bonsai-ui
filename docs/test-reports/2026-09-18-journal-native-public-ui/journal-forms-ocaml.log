@@ -1,0 +1,158 @@
+dune runtest
+cross-language fixture tests passed
+protocol tests passed
+ok - native navigation properties preserve identity and reject empty keys
+ok - SwiftUI button semantics
+ok - button is a typed core widget
+ok - initial mount is a full snapshot
+ok - physical equality emits no patch
+ok - unchanged reconciliation allocations do not scale with tree size
+ok - unchanged reconciliation preserves validation fences
+ok - one text change is one prop update
+ok - keyed reorder preserves identity
+ok - keyed insert and delete are incremental
+ok - virtual window shift preserves keyed overlap
+ok - virtual list duplicate item keys are rejected
+ok - kind replacement remounts
+ok - duplicate keys fail without consuming IDs
+ok - nested duplicate keys fail
+ok - existing duplicate key formatting
+ok - mixed siblings detect duplicates
+ok - single-child ancestor still validates nested duplicates
+ok - optimized key validation matches reference
+ok - mixed keyed and unkeyed children match by index
+ok - nested removal drops complete subtree
+ok - persistent handler frame derivation
+ok - handler deltas avoid full-tree collection
+ok - handler delta add replace remove and drop
+ok - handler change gets a new ID and one-revision grace
+ok - unchanged handler reuses ID
+ok - handler registry validates epoch, sequence, and binding
+ok - handler exception is structured
+ok - handler retirement is separate from presentation marking
+ok - node IDs are never reused
+ok - 10,000 keyed children reverse in linear shape
+ok - randomized patch invariant
+ok - layout, Material, and semantics widgets update incrementally
+ok - frame reconciles optional maximum transitions
+ok - linear progress indicator reconciles value and kind
+ok - text input props and typed edit are incremental
+ok - Native text field UTF-8 limit contract
+event dispatch tests passed
+Testing `SwiftUI native build'.
+This run has ID `7ZAI5926'.
+
+  [OK]          native          0   direct object, profiles, incremental source.
+  [OK]          native          1   actual Counter staging without aliases.
+  [OK]          native          2   iPhoneOS application deployment target.
+  [OK]          native          3   direct target validation.
+
+Full test results in `~/gh-repos/bonsai-ui/_build/default/bonsai_swiftui_tool/test/_build/_tests/SwiftUI native build'.
+Test Successful in 3.383s. 4 tests run.
+PASS: cleared search rejects delayed edits
+PASS: initial document and light appearance
+PASS: templates search, empty, clear and native dismissal
+PASS: selection, close, and seed isolation
+PASS: independent disclosures retain identity
+PASS: editing, Unicode, reopening and fresh template
+PASS: themes, insertion and named mock actions
+Testing `network example'.
+This run has ID `B35SYZ3H'.
+
+  [OK]          Configuration          0   renders the verified public smoke ...
+  [OK]          HTTPS                  0   renders initial state, success, ca...
+  [OK]          WebSocket              0   preserves revisions and bounds gen...
+
+Full test results in `~/gh-repos/bonsai-ui/_build/default/examples/network/test/_build/_tests/network example'.
+Test Successful in 0.017s. 3 tests run.
+tool/check_viewport_types.sh
+python3 tool/generate_ui_defaults.py --check
+dune exec protocol/generator/generate.exe -- --check
+dune exec protocol/generator/generate_fixtures.exe -- --check
+python3 tool/generate_input_fixtures.py --check
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/usr/lib/libsqlite3.tbd, ignoring unexpected dylib text stub file
+ld: warning: /opt/homebrew/Cellar/gmp/6.3.0/lib/libgmp.dylib, ignoring unexpected dylib file
+ld: warning: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libSystem.tbd, ignoring unexpected dylib text stub file
+[0/1] Planning build
+Building for debugging...
+[0/4] Write sources
+[2/4] Write swift-version--58304C5D6DBC2206.txt
+[4/8] Compiling BonsaiSwiftUI NodeStore.swift
+[5/8] Compiling BonsaiSwiftUI NativeForm.swift
+[6/8] Emitting module BonsaiSwiftUI
+[7/8] Compiling BonsaiSwiftUI RenderTree.swift
+[8/11] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[9/11] Compiling BonsaiSwiftUITests NativeFormTests.swift
+[9/11] Write Objects.LinkFileList
+[10/11] Linking BonsaiSwiftUIPackageTests
+Build complete! (5.90s)
+Test Suite 'Selected tests' started at 2026-09-18 15:27:46.137.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 15:27:46.138.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 15:27:46.138.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 15:27:46.138.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite SwiftInputFixtureTests started.
+◇ Test productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "counter_press" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "host_response" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "text_edit_unicode" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "text_limit_reached" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "environment_changed" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "application_response" to productionEncodingMatchesCommittedFixture(name:) started.
+◇ Test case passing 1 argument name → "application_event" to productionEncodingMatchesCommittedFixture(name:) started.
+✔ Test productionEncodingMatchesCommittedFixture(name:) with 7 test cases passed after 0.003 seconds.
+◇ Test invalidEnvironmentSamplesLeaveAdmittedInputIntact() started.
+✔ Test invalidEnvironmentSamplesLeaveAdmittedInputIntact() passed after 0.001 seconds.
+✔ Suite SwiftInputFixtureTests passed after 0.003 seconds.
+✔ Test run with 2 tests in 1 suite passed after 0.004 seconds.

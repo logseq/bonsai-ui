@@ -1,5 +1,9 @@
 # Gallery
 
+The Native Form sample uses a deliberately bounded 420pt grouped Form with keyed
+diagnostic rows, selectable LabeledContent values, and ContentUnavailableView
+actions dispatched to ordinary OCaml handlers. See [the public form API](../../docs/swiftui-form.md).
+
 ## SwiftUI migration status
 
 Gallery now owns a schema-3 configuration, SwiftUI App entrypoint, native card
@@ -9,12 +13,11 @@ The standalone macOS App builds through the public CLI and its PNG/GIF resources
 are verified in the resulting bundle. The old Flutter host is removed from the
 source tree.
 
-The combined page is still **not a runnable complete Gallery**. A new regression
-loads the actual complete OCaml component into `BonsaiSession`, requires the full
-tree to stage, then dispatches the real toolbar counter action. It currently
-fails at unsupported KeyboardListener node 53. FocusScope node 51 also remains
-unimplemented. Neither is hidden or replaced with a placeholder. The test stays
-failing until complete-page admission and the action round trip work.
+The complete-page regression loads the actual OCaml component into
+`BonsaiSession`, stages its tree, and dispatches the real toolbar counter action.
+`actualCompleteGalleryStartsAndDispatches` passes in the 2026-09-18 native Form
+checkpoint, including the added form sample. This is native runtime evidence;
+physical iPhone interaction still requires separate verification.
 
 Material Button/FAB samples now use native Button styles, Label and ControlSize
 composition. The old EnvironmentBoundary API and wire node are removed: its
@@ -135,5 +138,5 @@ and Button/FAB constructors are removed. This does not establish every native
 control's layout, custom-card behavior, accessibility or physical interaction.
 Physical Button keyboard acceptance, UIKit KeyboardListener and full-page
 acceptance remain unfinished. See [Gallery verification](../../docs/swiftui-gallery.md).
-The target platforms remain physical iOS 18+ arm64 and macOS 26+ arm64;
+The target platforms remain physical iOS 26+ arm64 and macOS 26+ arm64;
 Simulator is unsupported.

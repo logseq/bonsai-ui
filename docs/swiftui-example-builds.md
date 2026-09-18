@@ -141,7 +141,7 @@ Cross-build all available Swift App examples from the repository root:
 
 ```sh
 OPAMROOT="$PWD/_build/ios/opam-root" \
-  SDK="$(xcrun --sdk iphoneos --show-sdk-version)" VER=18.0 \
+  SDK="$(xcrun --sdk iphoneos --show-sdk-version)" VER=26.0 \
   opam exec --switch="$PWD/_build/ios/switches/iphoneos" -- \
   dune build --build-dir="$PWD/_build/ios/swiftui-framework" \
     --profile=release -j 4 -x ios \

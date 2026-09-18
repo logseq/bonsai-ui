@@ -2,7 +2,7 @@
 
 Bonsai Mail is a fictional, local-only mail reader. OCaml/Bonsai owns its data,
 paging, mailbox selection, inline previews, detail selection and application
-tabs. SwiftUI is the only target, on physical iOS 18+ arm64 and macOS 26+ arm64.
+tabs. SwiftUI is the only target, on physical iOS 26+ arm64 and macOS 26+ arm64.
 Simulator is unsupported.
 
 Mail uses a fixed light palette and explicitly requests `Theme.Light` at the
@@ -108,18 +108,18 @@ xcodebuild -project examples/mail/apple/BonsaiMail.xcodeproj \
 `apple-tests/MailRuntimeTests.swift` opens the actual Mail entrypoint, observes
 the first message frame, acknowledges presentation, pumps and repeats startup
 in a separate XCTest process. The iOS Release test target now builds and signs
-successfully for physical iOS 18 arm64. An earlier source checkpoint passed
+successfully for physical iOS 26 arm64. An earlier source checkpoint passed
 startup/presentation/restart on iPhone 13. The current Release App has since
 been installed and launched there, and a fresh Inbox capture confirms the light
 appearance. Expanded/detail/swipe UI scenarios still require XCTest passcode
 authorization on the device. See
 [Xcode host details](../../docs/swiftui-xcode-host.md).
 
-The physical iOS 18 Release App now cross-compiles, links with the real OCaml
+The physical iOS 26 Release App now cross-compiles, links with the real OCaml
 Mail complete object, and builds with development signing. Its bundle passes
 deep/strict signature verification and contains a provisioning profile:
 `apple/DerivedData/Build/Products/Release-iphoneos/BonsaiMail.app`.
-The final executable is iPhoneOS arm64 with minimum 18.0. Current-device installation and Inbox appearance are now recorded in the
+The final executable is iPhoneOS arm64 with minimum 26.0. Current-device installation and Inbox appearance are now recorded in the
 [September 14 captures](../../docs/screenshots/swiftui-mail/current/README.md).
 Remaining physical interaction screenshots and final release provenance stay open.
 See [toolchain and cross-build instructions](../../docs/swiftui-ios-toolchain.md).
@@ -140,6 +140,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

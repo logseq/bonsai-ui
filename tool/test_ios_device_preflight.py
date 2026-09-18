@@ -29,7 +29,7 @@ DETAILS = {
         },
         "connectionProperties": {"pairingState": "paired"},
         "deviceProperties": {
-            "osVersionNumber": "18.0", "developerModeStatus": "enabled",
+            "osVersionNumber": "26.0", "developerModeStatus": "enabled",
             "ddiServicesAvailable": True,
         },
     },

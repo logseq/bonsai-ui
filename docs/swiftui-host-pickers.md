@@ -1,5 +1,7 @@
 # SwiftUI civil picker services
 
+Historical iOS 18 validation below records earlier runs. The current framework minimum is iOS 26; that evidence does not validate the new baseline.
+
 `Host_effect.pick_date`, `pick_date_range`, and `pick_time` now use the owned
 SwiftUI application window. A shared `NativeHostDialogs` presenter serializes
 menus and civil pickers through one sheet lifecycle. File dialogs and existing

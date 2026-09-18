@@ -880,12 +880,25 @@ let node_kind_id = function
   | Table -> Generated_protocol.Node_kind.table
   | Divider -> Generated_protocol.Node_kind.divider
   | Label -> Generated_protocol.Node_kind.label
+  | Confirmation -> Generated_protocol.Node_kind.confirmation
+  | Context_menu -> Generated_protocol.Node_kind.context_menu
+  | Context_action -> Generated_protocol.Node_kind.context_action
+  | Context_menu_view -> Generated_protocol.Node_kind.context_menu_view
+  | List_row_label -> Generated_protocol.Node_kind.list_row_label
+  | Form -> Generated_protocol.Node_kind.form
+  | Section -> Generated_protocol.Node_kind.section
+  | Labeled_content -> Generated_protocol.Node_kind.labeled_content
+  | Content_unavailable -> Generated_protocol.Node_kind.content_unavailable
+  | Text_selection -> Generated_protocol.Node_kind.text_selection
   | Badge -> Generated_protocol.Node_kind.badge
   | Sheet -> Generated_protocol.Node_kind.sheet
   | Popover -> Generated_protocol.Node_kind.popover
   | Scroll_sections -> Generated_protocol.Node_kind.scroll_sections
   | Scroll_section -> Generated_protocol.Node_kind.scroll_section
   | Toolbar -> Generated_protocol.Node_kind.toolbar
+  | Toolbar_entry -> Generated_protocol.Node_kind.toolbar_entry
+  | Toolbar_child -> Generated_protocol.Node_kind.toolbar_child
+  | Toolbar_body -> Generated_protocol.Node_kind.toolbar_body
   | Help -> Generated_protocol.Node_kind.help
   | Group_box -> Generated_protocol.Node_kind.group_box
   | Progress -> Generated_protocol.Node_kind.progress
@@ -898,6 +911,7 @@ let node_kind_id = function
   | Tabs -> Generated_protocol.Node_kind.tabs
   | Tab -> Generated_protocol.Node_kind.tab
   | Navigation_split -> Generated_protocol.Node_kind.navigation_split
+  | Navigation_link -> Generated_protocol.Node_kind.navigation_link
   | Navigation_stack -> Generated_protocol.Node_kind.navigation_stack
   | Navigation_destination -> Generated_protocol.Node_kind.navigation_destination
   | Ignores_safe_area -> Generated_protocol.Node_kind.ignores_safe_area
@@ -943,18 +957,12 @@ let write_scroll_section writer ~has_header ~has_footer ~hero_height ~stretch =
   write_bool writer stretch
 ;;
 
-let check_toolbar placements =
-  if
-    List.length placements > 256
-    || List.exists (fun p -> p < 0 || p > 8) placements
-    || List.length (List.filter (Int.equal 1) placements) > 1
-  then fail Invalid_props "invalid native toolbar placements"
-;;
-
-let write_toolbar writer placements =
-  check_toolbar placements;
-  Writer.u16 writer (List.length placements);
-  List.iter (Writer.u8 writer) placements
+let write_toolbar_entry writer entry_key placement kind =
+  if placement < 0 || placement > 9 || kind < 0 || kind > 3
+  then fail Invalid_props "invalid native toolbar entry";
+  write_string writer entry_key;
+  Writer.u8 writer placement;
+  Writer.u8 writer kind
 ;;
 
 let write_i64_list writer label values =
@@ -1280,6 +1288,48 @@ let write_time_picker writer ~value ~format ~label ~enabled =
   write_bool writer enabled
 ;;
 
+let validate_confirmation style request_token title message actions =
+  if style < 0 || style > 1 then fail Invalid_props "invalid confirmation style";
+  match request_token with
+  | None ->
+    if title <> "" || message <> None || actions <> []
+    then fail Invalid_props "closed confirmation has presentation content"
+  | Some token ->
+    let keys = List.map (fun (key, _, _, _) -> key) actions in
+    if
+      token <= 0L
+      || String.trim title = ""
+      || actions = []
+      || List.length actions > 64
+      || List.length (List.sort_uniq String.compare keys) <> List.length keys
+      || List.length (List.filter (fun (_, _, _, role) -> role = 1) actions) > 1
+      || List.exists
+           (fun (key, title, _, role) ->
+              key = "" || String.trim title = "" || role < 0 || role > 2)
+           actions
+    then fail Invalid_props "invalid confirmation request"
+;;
+
+let write_confirmation writer style request_token title message actions =
+  validate_confirmation style request_token title message actions;
+  Writer.u8 writer style;
+  (match request_token with
+   | None -> write_bool writer false
+   | Some token ->
+     write_bool writer true;
+     Writer.u64 writer token);
+  write_string writer title;
+  write_optional_string writer message;
+  Writer.u16 writer (List.length actions);
+  List.iter
+    (fun (key, title, enabled, role) ->
+       write_string writer key;
+       write_string writer title;
+       write_bool writer enabled;
+       Writer.u8 writer role)
+    actions
+;;
+
 let validate_menu items =
   let count = List.length items in
   if count = 0 || count > 1024 then fail Invalid_props "menu requires 1..1024 entries";
@@ -1338,6 +1388,31 @@ let write_menu writer ~items ~enabled =
   write_bool writer enabled
 ;;
 
+let validate_list_scroll_request (request : Wire_frame.list_scroll_request) =
+  if
+    request.token <= 0L
+    || request.section_key = ""
+    || request.row_path = []
+    || List.length request.row_path > 256
+    || List.exists (( = ) "") request.row_path
+    || request.anchor < 0
+    || request.anchor > 2
+  then fail Invalid_props "invalid List scroll request"
+;;
+
+let write_list_scroll_request writer = function
+  | None -> write_bool writer false
+  | Some request ->
+    validate_list_scroll_request request;
+    write_bool writer true;
+    Writer.u64 writer request.token;
+    write_string writer request.section_key;
+    Writer.u16 writer (List.length request.row_path);
+    List.iter (write_string writer) request.row_path;
+    Writer.u8 writer request.anchor;
+    write_bool writer request.animated
+;;
+
 let write_props writer kind props =
   match kind, props with
   | Wire_frame.Empty, Empty_props -> ()
@@ -1383,12 +1458,18 @@ let write_props writer kind props =
       ~collapse_vertical
       ~title
       ~duration_ms
-  | Native_list, Native_list_props -> ()
-  | List_section, List_section_props { has_header; has_footer; separator } ->
+  | Native_list, Native_list_props { style; scroll_request } ->
+    write_separator writer style;
+    write_list_scroll_request writer scroll_request
+  | List_section, List_section_props { has_header; has_footer; separator; section_key } ->
     write_bool writer has_header;
     write_bool writer has_footer;
-    write_separator writer separator
-  | List_row, List_row_props { separator } -> write_separator writer separator
+    write_separator writer separator;
+    write_string writer section_key
+  | List_row, List_row_props { separator; row_key; expanded } ->
+    write_separator writer separator;
+    write_string writer row_key;
+    write_optional_bool writer expanded
   | Refresh, Refresh_props { request_token; request_state; show_token } ->
     write_refresh writer ~request_token ~request_state ~show_token
   | ( Scroll_targets
@@ -1586,6 +1667,26 @@ let write_props writer kind props =
   | Table, (Table_props _ as props) -> write_table_props writer props
   | Divider, Divider_props -> ()
   | Label, Label_props -> ()
+  | Confirmation, Confirmation_props { style; request_token; title; message; actions } ->
+    write_confirmation writer style request_token title message actions
+  | Context_menu, Context_menu_props { enabled } -> write_bool writer enabled
+  | Context_action, Context_action_props { action_key; title; enabled; role; symbol } ->
+    if String.trim title = "" || role < 0 || role > 1 || symbol = Some ""
+    then fail Invalid_props "invalid context action";
+    write_string writer action_key;
+    write_string writer title;
+    write_bool writer enabled;
+    Writer.u8 writer role;
+    write_optional_string writer symbol
+  | Context_menu_view, Context_menu_view_props
+  | List_row_label, List_row_label_props
+  | Form, Form_props
+  | Labeled_content, Labeled_content_props
+  | Content_unavailable, Content_unavailable_props -> ()
+  | Section, Section_props { has_header; has_footer } ->
+    write_bool writer has_header;
+    write_bool writer has_footer
+  | Text_selection, Text_selection_props { enabled } -> write_bool writer enabled
   | Badge, Badge_props { count; alignment; visible } ->
     write_badge writer count alignment visible
   | ( Sheet
@@ -1633,7 +1734,10 @@ let write_props writer kind props =
       ~initial_anchor
   | Scroll_section, Scroll_section_props { has_header; has_footer; hero_height; stretch }
     -> write_scroll_section writer ~has_header ~has_footer ~hero_height ~stretch
-  | Toolbar, Toolbar_props { placements } -> write_toolbar writer placements
+  | Toolbar, Toolbar_props | Toolbar_body, Toolbar_body_props -> ()
+  | Toolbar_entry, Toolbar_entry_props { entry_key; placement; kind } ->
+    write_toolbar_entry writer entry_key placement kind
+  | Toolbar_child, Toolbar_child_props { child_key } -> write_string writer child_key
   | Help, Help_props { message } ->
     if String.trim message = "" then fail Invalid_props "help message must not be empty";
     write_string writer message
@@ -1688,6 +1792,10 @@ let write_props writer kind props =
     write_string writer sidebar_title;
     write_optional_string writer content_title;
     write_string writer detail_title
+  | Navigation_link, Navigation_link_props { activation_id; enabled } ->
+    if activation_id = "" then fail Invalid_props "empty activation identity";
+    write_string writer activation_id;
+    write_bool writer enabled
   | Navigation_stack, Navigation_stack_props { title } -> write_string writer title
   | Navigation_destination, Navigation_destination_props { page_key; title; can_pop } ->
     let key = ID.Navigation.Page_key.to_string page_key in
@@ -1732,7 +1840,7 @@ let props_kind_id = function
   | Collection_catalog_props _ -> Generated_protocol.Node_kind.collection_catalog
   | Collection_window_props _ -> Generated_protocol.Node_kind.collection_window
   | Removal_props _ -> Generated_protocol.Node_kind.removal
-  | Native_list_props -> Generated_protocol.Node_kind.native_list
+  | Native_list_props _ -> Generated_protocol.Node_kind.native_list
   | List_section_props _ -> Generated_protocol.Node_kind.list_section
   | List_row_props _ -> Generated_protocol.Node_kind.list_row
   | Refresh_props _ -> Generated_protocol.Node_kind.refresh
@@ -1775,12 +1883,25 @@ let props_kind_id = function
   | Table_props _ -> Generated_protocol.Node_kind.table
   | Divider_props -> Generated_protocol.Node_kind.divider
   | Label_props -> Generated_protocol.Node_kind.label
+  | Confirmation_props _ -> Generated_protocol.Node_kind.confirmation
+  | Context_menu_props _ -> Generated_protocol.Node_kind.context_menu
+  | Context_action_props _ -> Generated_protocol.Node_kind.context_action
+  | Context_menu_view_props -> Generated_protocol.Node_kind.context_menu_view
+  | List_row_label_props -> Generated_protocol.Node_kind.list_row_label
+  | Form_props -> Generated_protocol.Node_kind.form
+  | Section_props _ -> Generated_protocol.Node_kind.section
+  | Labeled_content_props -> Generated_protocol.Node_kind.labeled_content
+  | Content_unavailable_props -> Generated_protocol.Node_kind.content_unavailable
+  | Text_selection_props _ -> Generated_protocol.Node_kind.text_selection
   | Badge_props _ -> Generated_protocol.Node_kind.badge
   | Sheet_props _ -> Generated_protocol.Node_kind.sheet
   | Popover_props _ -> Generated_protocol.Node_kind.popover
   | Scroll_sections_props _ -> Generated_protocol.Node_kind.scroll_sections
   | Scroll_section_props _ -> Generated_protocol.Node_kind.scroll_section
-  | Toolbar_props _ -> Generated_protocol.Node_kind.toolbar
+  | Toolbar_props -> Generated_protocol.Node_kind.toolbar
+  | Toolbar_entry_props _ -> Generated_protocol.Node_kind.toolbar_entry
+  | Toolbar_child_props _ -> Generated_protocol.Node_kind.toolbar_child
+  | Toolbar_body_props -> Generated_protocol.Node_kind.toolbar_body
   | Help_props _ -> Generated_protocol.Node_kind.help
   | Group_box_props _ -> Generated_protocol.Node_kind.group_box
   | Progress_props _ -> Generated_protocol.Node_kind.progress
@@ -1793,6 +1914,7 @@ let props_kind_id = function
   | Tabs_props _ -> Generated_protocol.Node_kind.tabs
   | Tab_props _ -> Generated_protocol.Node_kind.tab
   | Navigation_split_props _ -> Generated_protocol.Node_kind.navigation_split
+  | Navigation_link_props _ -> Generated_protocol.Node_kind.navigation_link
   | Navigation_stack_props _ -> Generated_protocol.Node_kind.navigation_stack
   | Navigation_destination_props _ -> Generated_protocol.Node_kind.navigation_destination
   | Ignores_safe_area_props _ -> Generated_protocol.Node_kind.ignores_safe_area
@@ -1875,9 +1997,9 @@ let changed_fields = function
   | Collection_catalog_props _ -> 1023L
   | Collection_window_props _ -> 3L
   | Removal_props _ -> 63L
-  | Native_list_props -> 0L
-  | List_section_props _ -> 7L
-  | List_row_props _ -> 1L
+  | Native_list_props _ -> 3L
+  | List_section_props _ -> 15L
+  | List_row_props _ -> 7L
   | Refresh_props _ -> 7L
   | Scroll_targets_props _ -> 511L
   | Scroll_props _ -> 15L
@@ -1974,12 +2096,24 @@ let changed_fields = function
     List.fold_left Int64.logor 0L (List.init 7 (fun index -> Int64.shift_left 1L index))
   | Divider_props -> 0L
   | Label_props -> 0L
+  | Confirmation_props _ -> 31L
+  | Context_menu_props _ -> 1L
+  | Context_action_props _ -> 31L
+  | Context_menu_view_props
+  | List_row_label_props
+  | Form_props
+  | Labeled_content_props
+  | Content_unavailable_props -> 0L
+  | Section_props _ -> 3L
+  | Text_selection_props _ -> 1L
   | Badge_props _ -> 7L
   | Sheet_props _ -> 255L
   | Popover_props _ -> 3L
   | Scroll_sections_props _ -> 63L
   | Scroll_section_props _ -> 15L
-  | Toolbar_props _ -> 1L
+  | Toolbar_props | Toolbar_body_props -> 0L
+  | Toolbar_entry_props _ -> 7L
+  | Toolbar_child_props _ -> 1L
   | Help_props _ -> field_mask Generated_protocol.Help_prop.message
   | Group_box_props _ -> field_mask Generated_protocol.Group_box_prop.has_label
   | Progress_props _ ->
@@ -1995,6 +2129,7 @@ let changed_fields = function
   | Tabs_props _ -> 1L
   | Tab_props _ -> 31L
   | Navigation_split_props _ -> 63L
+  | Navigation_link_props _ -> 3L
   | Navigation_stack_props _ -> 1L
   | Navigation_destination_props _ -> 7L
   | Control_size_props _ -> 1L
@@ -2060,12 +2195,18 @@ let write_update_props writer props =
       ~collapse_vertical
       ~title
       ~duration_ms
-  | Native_list_props -> ()
-  | List_section_props { has_header; has_footer; separator } ->
+  | Native_list_props { style; scroll_request } ->
+    write_separator writer style;
+    write_list_scroll_request writer scroll_request
+  | List_section_props { has_header; has_footer; separator; section_key } ->
     write_bool writer has_header;
     write_bool writer has_footer;
-    write_separator writer separator
-  | List_row_props { separator } -> write_separator writer separator
+    write_separator writer separator;
+    write_string writer section_key
+  | List_row_props { separator; row_key; expanded } ->
+    write_separator writer separator;
+    write_string writer row_key;
+    write_optional_bool writer expanded
   | Refresh_props { request_token; request_state; show_token } ->
     write_refresh writer ~request_token ~request_state ~show_token
   | Scroll_targets_props
@@ -2250,6 +2391,26 @@ let write_update_props writer props =
   | Table_props _ as props -> write_table_props writer props
   | Divider_props -> ()
   | Label_props -> ()
+  | Confirmation_props { style; request_token; title; message; actions } ->
+    write_confirmation writer style request_token title message actions
+  | Context_menu_props { enabled } -> write_bool writer enabled
+  | Context_action_props { action_key; title; enabled; role; symbol } ->
+    if String.trim title = "" || role < 0 || role > 1 || symbol = Some ""
+    then fail Invalid_props "invalid context action";
+    write_string writer action_key;
+    write_string writer title;
+    write_bool writer enabled;
+    Writer.u8 writer role;
+    write_optional_string writer symbol
+  | Context_menu_view_props
+  | List_row_label_props
+  | Form_props
+  | Labeled_content_props
+  | Content_unavailable_props -> ()
+  | Section_props { has_header; has_footer } ->
+    write_bool writer has_header;
+    write_bool writer has_footer
+  | Text_selection_props { enabled } -> write_bool writer enabled
   | Badge_props { count; alignment; visible } ->
     write_badge writer count alignment visible
   | Sheet_props
@@ -2294,7 +2455,10 @@ let write_update_props writer props =
       ~initial_anchor
   | Scroll_section_props { has_header; has_footer; hero_height; stretch } ->
     write_scroll_section writer ~has_header ~has_footer ~hero_height ~stretch
-  | Toolbar_props { placements } -> write_toolbar writer placements
+  | Toolbar_props | Toolbar_body_props -> ()
+  | Toolbar_entry_props { entry_key; placement; kind } ->
+    write_toolbar_entry writer entry_key placement kind
+  | Toolbar_child_props { child_key } -> write_string writer child_key
   | Help_props { message } ->
     if String.trim message = "" then fail Invalid_props "help message must not be empty";
     write_string writer message
@@ -2347,6 +2511,10 @@ let write_update_props writer props =
     write_string writer sidebar_title;
     write_optional_string writer content_title;
     write_string writer detail_title
+  | Navigation_link_props { activation_id; enabled } ->
+    if activation_id = "" then fail Invalid_props "empty activation identity";
+    write_string writer activation_id;
+    write_bool writer enabled
   | Navigation_stack_props { title } -> write_string writer title
   | Navigation_destination_props { page_key; title; can_pop } ->
     let key = ID.Navigation.Page_key.to_string page_key in
@@ -3186,6 +3354,11 @@ let read_node_kind reader =
   | value when value = Generated_protocol.Node_kind.removal -> Removal
   | value when value = Generated_protocol.Node_kind.native_list -> Native_list
   | value when value = Generated_protocol.Node_kind.list_section -> List_section
+  | value when value = Generated_protocol.Node_kind.confirmation -> Confirmation
+  | value when value = Generated_protocol.Node_kind.context_menu -> Context_menu
+  | value when value = Generated_protocol.Node_kind.context_action -> Context_action
+  | value when value = Generated_protocol.Node_kind.context_menu_view -> Context_menu_view
+  | value when value = Generated_protocol.Node_kind.list_row_label -> List_row_label
   | value when value = Generated_protocol.Node_kind.list_row -> List_row
   | value when value = Generated_protocol.Node_kind.refresh -> Refresh
   | value when value = Generated_protocol.Node_kind.scroll_targets -> Scroll_targets
@@ -3225,12 +3398,21 @@ let read_node_kind reader =
   | value when value = Generated_protocol.Node_kind.table -> Table
   | value when value = Generated_protocol.Node_kind.divider -> Divider
   | value when value = Generated_protocol.Node_kind.label -> Label
+  | value when value = Generated_protocol.Node_kind.form -> Form
+  | value when value = Generated_protocol.Node_kind.section -> Section
+  | value when value = Generated_protocol.Node_kind.labeled_content -> Labeled_content
+  | value when value = Generated_protocol.Node_kind.content_unavailable ->
+    Content_unavailable
+  | value when value = Generated_protocol.Node_kind.text_selection -> Text_selection
   | value when value = Generated_protocol.Node_kind.badge -> Badge
   | value when value = Generated_protocol.Node_kind.sheet -> Sheet
   | value when value = Generated_protocol.Node_kind.popover -> Popover
   | value when value = Generated_protocol.Node_kind.scroll_sections -> Scroll_sections
   | value when value = Generated_protocol.Node_kind.scroll_section -> Scroll_section
   | value when value = Generated_protocol.Node_kind.toolbar -> Toolbar
+  | value when value = Generated_protocol.Node_kind.toolbar_entry -> Toolbar_entry
+  | value when value = Generated_protocol.Node_kind.toolbar_child -> Toolbar_child
+  | value when value = Generated_protocol.Node_kind.toolbar_body -> Toolbar_body
   | value when value = Generated_protocol.Node_kind.help -> Help
   | value when value = Generated_protocol.Node_kind.group_box -> Group_box
   | value when value = Generated_protocol.Node_kind.progress -> Progress
@@ -3243,6 +3425,7 @@ let read_node_kind reader =
   | value when value = Generated_protocol.Node_kind.tabs -> Tabs
   | value when value = Generated_protocol.Node_kind.tab -> Tab
   | value when value = Generated_protocol.Node_kind.navigation_split -> Navigation_split
+  | value when value = Generated_protocol.Node_kind.navigation_link -> Navigation_link
   | value when value = Generated_protocol.Node_kind.navigation_stack -> Navigation_stack
   | value when value = Generated_protocol.Node_kind.navigation_destination ->
     Navigation_destination
@@ -3309,6 +3492,22 @@ let read_civil_time reader =
   Wire_frame.{ hour; minute }
 ;;
 
+let read_list_scroll_request reader =
+  if not (read_bool reader)
+  then None
+  else (
+    let token = Reader.u64 reader in
+    let section_key = read_string reader in
+    let count = Reader.u16 reader in
+    if count = 0 || count > 256 then fail Invalid_props "invalid List row path";
+    let row_path = List.init count (fun _ -> read_string reader) in
+    let anchor = Reader.u8 reader in
+    let animated = read_bool reader in
+    let request = Wire_frame.{ token; section_key; row_path; anchor; animated } in
+    validate_list_scroll_request request;
+    Some request)
+;;
+
 let read_props reader kind =
   match kind with
   | Wire_frame.Empty -> Empty_props
@@ -3356,17 +3555,26 @@ let read_props reader kind =
     then fail Invalid_props "invalid removal properties";
     Removal_props
       { request_token; request_state; vertical; collapse_vertical; title; duration_ms }
-  | Native_list -> Native_list_props
+  | Native_list ->
+    let style = Reader.u8 reader in
+    if style > 2 then fail Invalid_props "invalid native list style";
+    let scroll_request = read_list_scroll_request reader in
+    Native_list_props { style; scroll_request }
   | List_section ->
     let has_header = read_bool reader in
     let has_footer = read_bool reader in
     let separator = Reader.u8 reader in
     if separator > 2 then fail Invalid_props "invalid list separator";
-    List_section_props { has_header; has_footer; separator }
+    let section_key = read_string reader in
+    if section_key = "" then fail Invalid_props "empty List section key";
+    List_section_props { has_header; has_footer; separator; section_key }
   | List_row ->
     let separator = Reader.u8 reader in
     if separator > 2 then fail Invalid_props "invalid list separator";
-    List_row_props { separator }
+    let row_key = read_string reader in
+    if row_key = "" then fail Invalid_props "empty List row key";
+    let expanded = read_optional_bool reader in
+    List_row_props { separator; row_key; expanded }
   | Refresh ->
     let request_token = Reader.u64 reader in
     let request_state = Reader.u8 reader in
@@ -3831,6 +4039,43 @@ let read_props reader kind =
       }
   | Divider -> Divider_props
   | Label -> Label_props
+  | Confirmation ->
+    let style = Reader.u8 reader in
+    let request_token = if read_bool reader then Some (Reader.u64 reader) else None in
+    let title = read_string reader in
+    let message = if read_bool reader then Some (read_string reader) else None in
+    let count = Reader.u16 reader in
+    if count > 64 then fail Invalid_props "too many confirmation actions";
+    let actions =
+      List.init count (fun _ ->
+        let key = read_string reader in
+        let title = read_string reader in
+        let enabled = read_bool reader in
+        let role = Reader.u8 reader in
+        key, title, enabled, role)
+    in
+    validate_confirmation style request_token title message actions;
+    Confirmation_props { style; request_token; title; message; actions }
+  | Context_menu -> Context_menu_props { enabled = read_bool reader }
+  | Context_action ->
+    let action_key = read_string reader in
+    let title = read_string reader in
+    let enabled = read_bool reader in
+    let role = Reader.u8 reader in
+    let symbol = if read_bool reader then Some (read_string reader) else None in
+    if String.trim title = "" || role > 1 || symbol = Some ""
+    then fail Invalid_props "invalid context action";
+    Context_action_props { action_key; title; enabled; role; symbol }
+  | Context_menu_view -> Context_menu_view_props
+  | List_row_label -> List_row_label_props
+  | Form -> Form_props
+  | Labeled_content -> Labeled_content_props
+  | Content_unavailable -> Content_unavailable_props
+  | Section ->
+    let has_header = read_bool reader in
+    let has_footer = read_bool reader in
+    Section_props { has_header; has_footer }
+  | Text_selection -> Text_selection_props { enabled = read_bool reader }
   | Badge ->
     let count = if read_bool reader then Some (Reader.u64 reader) else None in
     let alignment = Reader.u8 reader in
@@ -3887,12 +4132,15 @@ let read_props reader kind =
     let stretch = read_bool reader in
     check_scroll_section ~has_header ~has_footer ~hero_height ~stretch;
     Scroll_section_props { has_header; has_footer; hero_height; stretch }
-  | Toolbar ->
-    let count = Reader.u16 reader in
-    if count > 256 then fail Invalid_props "too many native toolbar items";
-    let placements = List.init count (fun _ -> Reader.u8 reader) in
-    check_toolbar placements;
-    Toolbar_props { placements }
+  | Toolbar -> Toolbar_props
+  | Toolbar_body -> Toolbar_body_props
+  | Toolbar_child -> Toolbar_child_props { child_key = read_string reader }
+  | Toolbar_entry ->
+    let entry_key = read_string reader in
+    let placement = Reader.u8 reader in
+    let kind = Reader.u8 reader in
+    if placement > 9 || kind > 3 then fail Invalid_props "invalid native toolbar entry";
+    Toolbar_entry_props { entry_key; placement; kind }
   | Help ->
     let message = read_string reader in
     if String.trim message = "" then fail Invalid_props "help message must not be empty";
@@ -3976,6 +4224,11 @@ let read_props reader kind =
     then fail Invalid_props "two-column split cannot prefer Content";
     let detail_title = read_string reader in
     Navigation_split_props { state; sidebar_title; content_title; detail_title }
+  | Navigation_link ->
+    let activation_id = read_string reader in
+    if activation_id = "" then fail Invalid_props "empty activation identity";
+    let enabled = read_bool reader in
+    Navigation_link_props { activation_id; enabled }
   | Navigation_stack -> Navigation_stack_props { title = read_string reader }
   | Navigation_destination ->
     let key = read_string reader in

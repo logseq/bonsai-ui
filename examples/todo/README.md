@@ -1,7 +1,7 @@
 # Todo
 
 Todo keeps its keyed items, selected item, edits, insertion, completion, deletion
-and reversal in OCaml. SwiftUI is the sole host, targeting physical iOS 18+ arm64
+and reversal in OCaml. SwiftUI is the sole host, targeting physical iOS 26+ arm64
 and macOS 26+ arm64; Simulator is unsupported.
 
 Each title uses `View.text_field` with a stable application key and text session.
@@ -48,6 +48,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

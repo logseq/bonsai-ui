@@ -87,5 +87,5 @@ application-local evidence does not establish physical pointer/keyboard use,
 VoiceOver, text-editor focus/IME behavior inside presentations, every arrow-edge
 geometry, compact iOS adaptation or physical iOS execution. Those checks remain
 outstanding along with the complete standalone Gallery and Mail screenshots.
-Supported targets remain physical iOS 18+ arm64 and macOS 26+ arm64, with no
+Supported targets remain physical iOS 26+ arm64 and macOS 26+ arm64, with no
 Simulator support.

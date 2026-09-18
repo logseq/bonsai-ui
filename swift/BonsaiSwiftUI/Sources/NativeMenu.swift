@@ -187,10 +187,6 @@ struct NativeMenu: View {
     }.disabled(!properties.enabled)
   }
   var body: some View {
-    #if os(macOS)
-      menu.menuStyle(.borderlessButton).menuIndicator(.hidden)
-    #else
-      menu
-    #endif
+    menu
   }
 }

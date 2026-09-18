@@ -16,6 +16,18 @@ let vertical =
 
 let horizontal = Ui.View.Scroll.horizontal row
 
+let form =
+  Ui.View.Form.vertical
+    [ Ui.View.Keyed.create
+        ~key:(Ui.Key.string "diagnostics")
+        (Ui.View.Section.create ~header:(Ui.View.text "Diagnostics") [ keyed_row ])
+    ]
+;;
+
+let (_ : Ui.View.Body.t) =
+  Ui.View.Body.Vertical.create [ Ui.View.Body.Vertical.fill form ]
+;;
+
 let keyed_collection =
   let catalog =
     Ui.View.Collection.Catalog.create ~keys:[ Ui.Key.string "row" ] ~default_extent:48. ()

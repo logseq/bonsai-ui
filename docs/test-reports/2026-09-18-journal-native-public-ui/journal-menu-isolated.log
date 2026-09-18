@@ -1,0 +1,17 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.08s)
+Test Suite 'Selected tests' started at 2026-09-18 15:34:22.102.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 15:34:22.103.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 15:34:22.103.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 15:34:22.103.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuTests started.
+◇ Test retainedMenuRendersAfterAValidLabelReduction() started.
+✔ Test retainedMenuRendersAfterAValidLabelReduction() passed after 0.202 seconds.
+◇ Test menuActionsRetainEveryRequestIncludingRepeatedSignedIds() started.
+Swift Testing did not complete successfully: no element found: line 3, column 0

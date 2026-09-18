@@ -1,0 +1,2 @@
+protocol tests passed
+ok - native navigation properties preserve identity and reject empty keys

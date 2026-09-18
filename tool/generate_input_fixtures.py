@@ -12,6 +12,7 @@ from run_swift_tests import run_swift_tests
 
 ROOT = Path(__file__).resolve().parents[1]
 NAMES = {f"swift_{name}.hex" for name in (
+    "confirmation_action", "confirmation_dismissed",
     "counter_press", "host_response", "text_edit_unicode", "text_limit_reached",
     "environment_changed", "application_response", "application_event",
 )}

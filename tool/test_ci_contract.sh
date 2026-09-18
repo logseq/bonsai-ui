@@ -89,7 +89,7 @@ assert_consumer_root() {
   require_text "$config" '(lang 3)' "$root config"
   require_text "$config" "(name $1)" "$root application identity"
   require_text "$config" '(native_target ocaml/native_embed.exe.o)' "$root config"
-  require_text "$config" '(ios (minimum_version 18.0) (architectures arm64))' "$root physical iOS target"
+  require_text "$config" '(ios (minimum_version 26.0) (architectures arm64))' "$root physical iOS target"
   require_text "$config" '(macos (minimum_version 26.0) (architectures arm64))' "$root macOS target"
   require_text "$config" "(features$feature)" "$root capabilities"
   test ! -e "$root/bonsai-flutter.sexp" || fail "$root contains an obsolete configuration"

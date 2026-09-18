@@ -333,7 +333,7 @@ let init_command =
     Arg.(value & opt string "26.0" & info [ "macos-minimum-version" ] ~docv:"VERSION")
   in
   let ios =
-    Arg.(value & opt string "18.0" & info [ "ios-deployment-target" ] ~docv:"VERSION")
+    Arg.(value & opt string "26.0" & info [ "ios-deployment-target" ] ~docv:"VERSION")
   in
   let adopt =
     Arg.(

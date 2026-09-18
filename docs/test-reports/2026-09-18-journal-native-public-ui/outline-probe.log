@@ -1,0 +1,6 @@
+2026-09-18 16:24:17.042 journal-outline-probe[56628:1996091] WARNING: Application performed a reentrant operation in its NSTableView delegate. This warning will become an assert in the future.
+parent0 tableRows=26 index=1 row=(0.0, 28.0, 383.0, 48.0) viewport=(0.0, 0.0, 383.0, 300.0)
+child0-0 tableRows=26 index=2 row=(0.0, 76.0, 383.0, 48.0) viewport=(0.0, 0.0, 383.0, 300.0)
+parent3 tableRows=26 index=16 row=(0.0, 604.0, 383.0, 48.0) viewport=(0.0, 604.0, 383.0, 300.0)
+child3-2 tableRows=26 index=19 row=(0.0, 748.0, 383.0, 48.0) viewport=(0.0, 748.0, 383.0, 300.0)
+parent1 tableRows=26 index=6 row=(0.0, 268.0, 383.0, 48.0) viewport=(0.0, 268.0, 383.0, 300.0)

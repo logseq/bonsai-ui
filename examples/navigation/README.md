@@ -14,7 +14,7 @@ open examples/navigation/apple/DerivedData/Build/Products/Debug/BonsaiNavigation
 
 The development helper links the actual OCaml complete object and local Swift
 module and verifies the ad-hoc signature. The Swift entrypoint also defines
-an iOS scene; physical iOS 18+ packaging and device validation remain unfinished.
+an iOS scene; physical iOS 26+ packaging and device validation remain unfinished.
 Simulator is unsupported.
 
 `make swift-test` includes a separate SwiftUI App test that opens the actual
@@ -38,6 +38,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

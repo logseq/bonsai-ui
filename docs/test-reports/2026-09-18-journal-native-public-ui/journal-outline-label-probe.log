@@ -1,0 +1,25 @@
+NATIVE BUTTONS [("NSButton", "", 0, (2.0, 0.0, 12.0, 32.0))]
+before wrap=false style=0 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=false style=1 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=false style=2 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=false style=3 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=true style=0 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=true style=1 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=true style=2 roles=["AXButton"]
+press true
+after expanded=false actions=1
+before wrap=true style=3 roles=["AXButton"]
+press true
+after expanded=false actions=1

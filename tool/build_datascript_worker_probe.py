@@ -21,7 +21,7 @@ def main():
     args = parser.parse_args()
     subprocess.run([
         "sh", ROOT / "tool/ios/verify_complete_object.sh", args.native_object,
-        "IOS", "18.0", "arm64",
+        "IOS", "26.0", "arm64",
     ], check=True)
     build = args.build_root.resolve()
     application = build / "application"

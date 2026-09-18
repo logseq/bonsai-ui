@@ -1,0 +1,20 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:56:54.389.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:56:54.390.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:56:54.390.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:56:54.390.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() started.
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() recorded an issue at SidebarCompositionTests.swift:56:9: Expectation failed: session.activate(try button(title))
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() recorded an issue at SidebarCompositionTests.swift:53:9: Expectation failed: predicate()
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() recorded an issue at SidebarCompositionTests.swift:56:9: Expectation failed: session.activate(try button(title))
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() recorded an issue at SidebarCompositionTests.swift:151:7: Expectation failed: contains("Detail count: 1")
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() recorded an issue at SidebarCompositionTests.swift:56:9: Expectation failed: session.activate(try button(title))
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() recorded an issue at SidebarCompositionTests.swift:155:7: Expectation failed: (contains("Selected destination: Archive") → false) && (contains("Sidebar actions: 3") → <not evaluated>)
+✘ Test actualSidebarOwnsGroupedSelectionActionsAndModalPresentation() failed after 9.739 seconds with 6 issues.
+✘ Suite NativeRuntimeTests failed after 9.739 seconds with 6 issues.
+✘ Test run with 1 test in 1 suite failed after 9.739 seconds with 6 issues.

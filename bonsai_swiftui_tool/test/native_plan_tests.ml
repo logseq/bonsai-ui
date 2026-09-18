@@ -20,7 +20,7 @@ let config native_target : Config.t =
   ; ios =
       { bundle_identifier = "org.example.native-plan.ios"
       ; entitlements = []
-      ; minimum_version = "18.0"
+      ; minimum_version = "26.0"
       ; architectures = [ "arm64" ]
       }
   }
@@ -223,7 +223,7 @@ let test_iphoneos_artifact_minimum () =
           ; "iphoneos"
           ; "clang"
           ; "-target"
-          ; "arm64-apple-ios18.0"
+          ; "arm64-apple-ios26.0"
           ; "-isysroot"
           ; sdk_root
           ; "-c"

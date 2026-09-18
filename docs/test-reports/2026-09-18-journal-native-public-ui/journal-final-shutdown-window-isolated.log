@@ -1,0 +1,22 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:55:43.642.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:55:43.643.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:55:43.643.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:55:43.643.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test shutdownActualNativeWindow(mode:) started.
+◇ Test case passing 1 argument mode → "visible" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=visible hidden=false active=false minimized=false elapsed=0.036831 seconds
+◇ Test case passing 1 argument mode → "hidden" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=hidden hidden=true active=false minimized=false elapsed=0.032648667 seconds
+◇ Test case passing 1 argument mode → "inactive" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=inactive hidden=false active=false minimized=false elapsed=0.03372825 seconds
+◇ Test case passing 1 argument mode → "minimized" to shutdownActualNativeWindow(mode:) started.
+SHUTDOWN_WINDOW mode=minimized hidden=false active=false minimized=true elapsed=0.036918833 seconds
+✔ Test shutdownActualNativeWindow(mode:) with 4 test cases passed after 1.332 seconds.
+✔ Suite NativeRuntimeTests passed after 1.332 seconds.
+✔ Test run with 1 test in 1 suite passed after 1.332 seconds.

@@ -1,6 +1,6 @@
 # Testing SwiftUI on a physical iOS device
 
-The supported target is physical iOS/iPadOS 18.0+ arm64. Use Xcode and the
+The supported target is physical iOS/iPadOS 26.0+ arm64. Use Xcode and the
 OCaml 5.1.1 toolchain pinned in `tool/ios/toolchain.lock`. There is no Simulator,
 Catalyst or Intel test lane. The application links its real OCaml complete
 object into a native SwiftUI Xcode host.
@@ -25,7 +25,7 @@ repository root:
 tool/ci/ios_device_preflight.sh "$IOS_DEVICE_ID"
 ```
 
-This uses CoreDevice to validate physical iOS 18+ arm64, pairing, Developer
+This uses CoreDevice to validate physical iOS 26+ arm64, pairing, Developer
 Mode, developer services and unlock state. It does not install or run an app.
 Do not loop this command while the device is unavailable.
 
@@ -58,7 +58,7 @@ BONSAI_SWIFTUI_SOURCE_ROOT="$REPOSITORY_ROOT" \
 ```
 
 This builds a signed generic iPhoneOS application without operating a device.
-The object must already pass the iOS 18 arm64 and ABI checks. A macOS object
+The object must already pass the iOS 26 arm64 and ABI checks. A macOS object
 cannot be reused. The generated Mail project is
 `examples/mail/apple/BonsaiMail.xcodeproj`; products are under that host's
 `DerivedData` directory.

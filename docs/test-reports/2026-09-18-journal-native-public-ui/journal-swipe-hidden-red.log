@@ -1,0 +1,20 @@
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.09s)
+Test Suite 'Selected tests' started at 2026-09-18 17:26:28.855.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 17:26:28.856.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 17:26:28.856.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 17:26:28.856.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() started.
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:286:7: Expectation failed: !((owner → BonsaiSwiftUI.SwipeActionsController).perform((action → BonsaiSwiftUI.RenderNodeState), expected: (properties → RenderSwipeAction(title: "Delete child", side: 1, enabled: true, role: 2, background: 4292615710, symbol: nil)), generation: (capturedGeneration → 1)) → true)
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:291:7: Expectation failed: (texts(root) → ["Move child", "Rebind actions", "Reject expansion", "Target hidden", "Reveal grandchild", "Actions 5 Delete child@1; scroll none", "Open parent", "Open child", "Branch", "Filler 0", "Filler 1", "Filler 2", "Filler 3", "Filler 4", "Filler 5", "Filler 6", "Filler 7", "Filler 8", "Filler 9", "Filler 10", "Filler 11", "Filler 12", "Filler 13", "Filler 14", "Filler 15", "Filler 16", "Filler 17", "Filler 18", "Filler 19", "Grandchild"]).contains("Actions 4 Delete child@1; scroll none")
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() recorded an issue at NativeListHierarchyTests.swift:303:7: Expectation failed: (texts(root) → ["Move child", "Rebind actions", "Reject expansion", "Target hidden", "Reveal grandchild", "Actions 6 Delete child@1; scroll none", "Open parent", "Branch", "Filler 0", "Filler 1", "Filler 2", "Filler 3", "Filler 4", "Filler 5", "Filler 6", "Filler 7", "Filler 8", "Filler 9", "Filler 10", "Filler 11", "Filler 12", "Filler 13", "Filler 14", "Filler 15", "Filler 16", "Filler 17", "Filler 18", "Filler 19", "Grandchild", "Open child"]).contains("Actions 5 Delete child@1; scroll none")
+✘ Test nativeOutlineSeparatesLabelExpansionAndActionOwnershipAcrossReparenting() failed after 0.784 seconds with 3 issues.
+✘ Suite NativeRuntimeTests failed after 0.784 seconds with 3 issues.
+✘ Test run with 1 test in 1 suite failed after 0.784 seconds with 3 issues.

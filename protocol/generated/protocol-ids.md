@@ -2,7 +2,7 @@
 
 # Protocol IDs
 
-Protocol version: `9.0`
+Protocol version: `10.0`
 
 ## Frame kind
 
@@ -50,6 +50,12 @@ Protocol version: `9.0`
 | `ignores_safe_area` | 11 |
 | `safe_area_padding` | 12 |
 | `navigation_stack` | 13 |
+| `navigation_link` | 134 |
+| `form` | 140 |
+| `section` | 141 |
+| `labeled_content` | 142 |
+| `content_unavailable` | 143 |
+| `text_selection` | 144 |
 | `navigation_destination` | 14 |
 | `navigation_split` | 15 |
 | `flow` | 56 |
@@ -63,6 +69,14 @@ Protocol version: `9.0`
 | `native_list` | 80 |
 | `list_section` | 81 |
 | `list_row` | 82 |
+| `list_row_label` | 145 |
+| `context_menu` | 146 |
+| `context_action` | 147 |
+| `context_menu_view` | 148 |
+| `toolbar_entry` | 149 |
+| `toolbar_child` | 150 |
+| `toolbar_body` | 151 |
+| `confirmation` | 152 |
 | `scroll_targets` | 62 |
 | `help` | 63 |
 | `popover` | 72 |
@@ -148,6 +162,8 @@ Protocol version: `9.0`
 | `refresh_request` | 56 |
 | `removal_requested` | 57 |
 | `removal_completed` | 58 |
+| `list_scroll_completed` | 59 |
+| `confirmation_response` | 60 |
 | `slider_changed` | 30 |
 | `slider_change_end` | 31 |
 | `range_slider_changed` | 32 |
@@ -211,6 +227,15 @@ Protocol version: `9.0`
 
 | Name | ID | Encoding |
 |---|---:|---|
+| `style` | 1 | `enum_u8` |
+| `scroll_request` | 2 | `optional_list_scroll_request` |
+
+## Navigation link properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `activation_id` | 1 | `string` |
+| `enabled` | 2 | `bool` |
 
 ## List section properties
 
@@ -219,12 +244,41 @@ Protocol version: `9.0`
 | `has_header` | 1 | `bool` |
 | `has_footer` | 2 | `bool` |
 | `separator` | 3 | `enum_u8` |
+| `section_key` | 4 | `string` |
 
 ## List row properties
 
 | Name | ID | Encoding |
 |---|---:|---|
 | `separator` | 1 | `enum_u8` |
+| `row_key` | 2 | `string` |
+| `expanded` | 3 | `optional_bool` |
+
+## List row label properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+
+## Context menu properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `enabled` | 1 | `bool` |
+
+## Context action properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `action_key` | 1 | `string` |
+| `title` | 2 | `string` |
+| `enabled` | 3 | `bool` |
+| `role` | 4 | `u8` |
+| `symbol` | 5 | `optional_string` |
+
+## Context menu view properties
+
+| Name | ID | Encoding |
+|---|---:|---|
 
 ## Scroll sections properties
 
@@ -250,7 +304,35 @@ Protocol version: `9.0`
 
 | Name | ID | Encoding |
 |---|---:|---|
-| `placements` | 1 | `toolbar_placements` |
+
+## Toolbar entry properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `entry_key` | 1 | `string` |
+| `placement` | 2 | `u8` |
+| `kind` | 3 | `u8` |
+
+## Toolbar child properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `child_key` | 1 | `string` |
+
+## Toolbar body properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+
+## Confirmation properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `style` | 1 | `u8` |
+| `request_token` | 2 | `optional_i64` |
+| `title` | 3 | `string` |
+| `message` | 4 | `optional_string` |
+| `actions` | 5 | `confirmation_actions` |
 
 ## Sheet properties
 
@@ -719,6 +801,34 @@ Protocol version: `9.0`
 
 | Name | ID | Encoding |
 |---|---:|---|
+
+## Form properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+
+## Section properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `has_header` | 1 | `bool` |
+| `has_footer` | 2 | `bool` |
+
+## Labeled content properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+
+## Content unavailable properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+
+## Text selection properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `enabled` | 1 | `bool` |
 
 ## Date picker properties
 

@@ -23,6 +23,7 @@ compile "$fixtures/valid.ml"
 
 for source_file in \
   "$fixtures/vertical_in_column.ml" \
+  "$fixtures/form_in_scroll.ml" \
   "$fixtures/horizontal_in_row.ml" \
   "$fixtures/viewport_in_weighted_fixed.ml" \
   "$fixtures/body_axis_mismatch.ml"

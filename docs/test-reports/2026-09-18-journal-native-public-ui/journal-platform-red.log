@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_application_ios_minimum_reaches_all_host_targets (tool.test_swiftui_xcode_host.HostConfigurationTests.test_application_ios_minimum_reaches_all_host_targets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_swiftui_xcode_host.py", line 76, in test_application_ios_minimum_reaches_all_host_targets
+    self.assertNotEqual(result.returncode, 0)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.207s
+
+FAILED (failures=1)

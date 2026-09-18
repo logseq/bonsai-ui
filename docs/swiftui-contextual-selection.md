@@ -65,4 +65,4 @@ selectors, not the Bonsai controller's request method.
 
 These results do not establish physical iOS touch, keyboard navigation, VoiceOver,
 actual toolbar overflow or visual acceptance. The supported matrix remains
-physical iOS 18+ arm64 and macOS 26+ arm64, without Simulator support.
+physical iOS 26+ arm64 and macOS 26+ arm64, without Simulator support.

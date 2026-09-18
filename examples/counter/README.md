@@ -17,7 +17,7 @@ complete object with the local Swift package into an ad-hoc-signed application. 
 Dune workspace and installed dependencies, without publishing or pinning
 the unfinished framework SDK.
 
-The project also defines a physical-iOS target. iOS 18+ cross-compilation,
+The project also defines a physical-iOS target. iOS 26+ cross-compilation,
 provisioning and device validation remain in progress; an iOS build requires
 an explicit verified device complete object and a development team. Simulator is unsupported. See the repository's
 `docs/swiftui-implementation.md` for the remaining migration work.
@@ -38,6 +38,6 @@ then run from this example directory:
 The CLI builds this example's `ocaml/native_embed.exe.o` as an independent Dune
 project and generates the `apple/` Xcode host. Swift and OCaml sources remain
 application-owned. See the [CLI guide](../../docs/swiftui-cli.md) for optimized
-configurations, signing and physical-iOS builds with an explicit iOS 18 object.
+configurations, signing and physical-iOS builds with an explicit iOS 26 object.
 The old OCaml package identifiers and installed SDK publication remain part of
 the unfinished repository migration.

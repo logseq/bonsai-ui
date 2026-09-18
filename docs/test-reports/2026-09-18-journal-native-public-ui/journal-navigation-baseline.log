@@ -1,0 +1,32 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.19s)
+Test Suite 'Selected tests' started at 2026-09-18 14:43:41.252.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 14:43:41.253.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 14:43:41.253.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 14:43:41.253.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test nativeLinkSettlementAllowsRetryAndExpiresOldPresentation() started.
+✔ Test nativeLinkSettlementAllowsRetryAndExpiresOldPresentation() passed after 0.879 seconds.
+✔ Suite NativeRuntimeTests passed after 0.879 seconds.
+◇ Suite NavigationLinkRequestTests started.
+◇ Test linkAdmissionWaitsForExactSettlementAndKeepsTheCommittedPath() started.
+✔ Test linkAdmissionWaitsForExactSettlementAndKeepsTheCommittedPath() passed after 0.001 seconds.
+◇ Test deniedStaleForeignDisposedAndMalformedLinkRequestsDoNotNavigate() started.
+✔ Test deniedStaleForeignDisposedAndMalformedLinkRequestsDoNotNavigate() passed after 0.001 seconds.
+◇ Test committedDestinationReplacesIntentAndNativeBackStillWorks() started.
+✔ Test committedDestinationReplacesIntentAndNativeBackStillWorks() passed after 0.001 seconds.
+✔ Suite NavigationLinkRequestTests passed after 0.001 seconds.
+◇ Suite HostedNavigationLinkTests started.
+◇ Test registeredViewLinkOpensCommittedDestinationInTheExistingStack(admit:) started.
+◇ Test case passing 1 argument admit → true to registeredViewLinkOpensCommittedDestinationInTheExistingStack(admit:) started.
+◇ Test case passing 1 argument admit → false to registeredViewLinkOpensCommittedDestinationInTheExistingStack(admit:) started.
+✔ Test registeredViewLinkOpensCommittedDestinationInTheExistingStack(admit:) with 2 test cases passed after 1.334 seconds.
+✔ Suite HostedNavigationLinkTests passed after 1.334 seconds.
+✔ Test run with 5 tests in 3 suites passed after 2.216 seconds.

@@ -1,5 +1,7 @@
 # SwiftUI Backend Implementation Ledger
 
+Historical iOS 18 validation below records earlier runs. The current framework minimum is iOS 26; that evidence does not validate the new baseline.
+
 The governing decision is
 [SwiftUI-Only Backend for iOS and macOS](agent-guide/proposed/architecture/2026-09-11-swiftui-only-apple-backend.md).
 The full replacement is in progress. This ledger records measured progress,

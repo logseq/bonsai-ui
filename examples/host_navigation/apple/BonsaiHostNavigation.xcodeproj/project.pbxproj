@@ -23,7 +23,7 @@
 				"GCC_OPTIMIZATION_LEVEL" = "s";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"INFOPLIST_FILE" = "Info-macOS.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
 				"LD_RUNPATH_SEARCH_PATHS" = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -100,7 +100,7 @@
 				"GCC_OPTIMIZATION_LEVEL" = "s";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"INFOPLIST_FILE" = "Info-iOS.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
 				"LD_RUNPATH_SEARCH_PATHS" = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -161,7 +161,7 @@
 				"GCC_OPTIMIZATION_LEVEL" = "0";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"INFOPLIST_FILE" = "Info-macOS.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
 				"LD_RUNPATH_SEARCH_PATHS" = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -335,7 +335,7 @@
 				"GCC_OPTIMIZATION_LEVEL" = "0";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"INFOPLIST_FILE" = "Info-iOS.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
 				"LD_RUNPATH_SEARCH_PATHS" = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -393,7 +393,7 @@
 				"GCC_OPTIMIZATION_LEVEL" = "s";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"INFOPLIST_FILE" = "Info-macOS.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
 				"LD_RUNPATH_SEARCH_PATHS" = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -476,7 +476,7 @@
 				"GCC_OPTIMIZATION_LEVEL" = "s";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"INFOPLIST_FILE" = "Info-iOS.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
 				"LD_RUNPATH_SEARCH_PATHS" = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -549,7 +549,7 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = "0";
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\" IOS 18.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\" IOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
 		};
 		"D5B02EAEA9328A2BCBACD7CE" = {
 			"buildConfigurationList" = "3DBDECE050EDE882FD0647AF";

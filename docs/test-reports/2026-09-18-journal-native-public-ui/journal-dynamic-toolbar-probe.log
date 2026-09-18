@@ -1,0 +1,89 @@
+/tmp/journal-dynamic-toolbar-probe.swift:45:38: warning: main actor-isolated property 'items' can not be referenced from a nonisolated context
+43 |       try? await Task.sleep(for: .milliseconds(200))
+44 |       func dump(_ phase: String) {
+45 |         print(phase, window.toolbar?.items.map { ($0.itemIdentifier.rawValue, $0.label, ($0 as? NSToolbarItemGroup)?.subitems.map(\.itemIdentifier.rawValue) ?? []) } ?? [])
+   |                                      `- warning: main actor-isolated property 'items' can not be referenced from a nonisolated context
+46 |       }
+47 |       dump("Before")
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSToolbar.h:146:63: note: property declared here
+144 |  Allows you to access all current items in the toolbar.
+145 |  */
+146 | @property (readonly, copy) NSArray<__kindof NSToolbarItem *> *items;
+    |                                                               `- note: property declared here
+147 | 
+148 | /**
+
+/tmp/journal-dynamic-toolbar-probe.swift:45:29: warning: main actor-isolated property 'toolbar' can not be referenced from a nonisolated context
+43 |       try? await Task.sleep(for: .milliseconds(200))
+44 |       func dump(_ phase: String) {
+45 |         print(phase, window.toolbar?.items.map { ($0.itemIdentifier.rawValue, $0.label, ($0 as? NSToolbarItemGroup)?.subitems.map(\.itemIdentifier.rawValue) ?? []) } ?? [])
+   |                             `- warning: main actor-isolated property 'toolbar' can not be referenced from a nonisolated context
+46 |       }
+47 |       dump("Before")
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSWindow.h:679:41: note: property declared here
+ 677 | #pragma mark - Toolbar Support
+ 678 | 
+ 679 | @property (nullable, strong) NSToolbar *toolbar;
+     |                                         `- note: property declared here
+ 680 | - (void)toggleToolbarShown:(nullable id)sender;
+ 681 | - (void)runToolbarCustomizationPalette:(nullable id)sender;
+
+/tmp/journal-dynamic-toolbar-probe.swift:45:54: warning: main actor-isolated property 'itemIdentifier' can not be referenced from a nonisolated context
+43 |       try? await Task.sleep(for: .milliseconds(200))
+44 |       func dump(_ phase: String) {
+45 |         print(phase, window.toolbar?.items.map { ($0.itemIdentifier.rawValue, $0.label, ($0 as? NSToolbarItemGroup)?.subitems.map(\.itemIdentifier.rawValue) ?? []) } ?? [])
+   |                                                      `- warning: main actor-isolated property 'itemIdentifier' can not be referenced from a nonisolated context
+46 |       }
+47 |       dump("Before")
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSToolbarItem.h:48:52: note: property declared here
+ 46 |  */
+ 47 | - (instancetype)initWithItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier NS_DESIGNATED_INITIALIZER;
+ 48 | @property (readonly, copy) NSToolbarItemIdentifier itemIdentifier;
+    |                                                    `- note: property declared here
+ 49 | 
+ 50 | /**
+
+/tmp/journal-dynamic-toolbar-probe.swift:45:82: warning: main actor-isolated property 'label' can not be referenced from a nonisolated context
+43 |       try? await Task.sleep(for: .milliseconds(200))
+44 |       func dump(_ phase: String) {
+45 |         print(phase, window.toolbar?.items.map { ($0.itemIdentifier.rawValue, $0.label, ($0 as? NSToolbarItemGroup)?.subitems.map(\.itemIdentifier.rawValue) ?? []) } ?? [])
+   |                                                                                  `- warning: main actor-isolated property 'label' can not be referenced from a nonisolated context
+46 |       }
+47 |       dump("Before")
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSToolbarItem.h:63:28: note: property declared here
+ 61 |  Also, developers should make sure the length of the label is appropriate and not too long.
+ 62 |  */
+ 63 | @property (copy) NSString *label;
+    |                            `- note: property declared here
+ 64 | 
+ 65 | /**
+
+/tmp/journal-dynamic-toolbar-probe.swift:45:118: warning: main actor-isolated property 'subitems' can not be referenced from a nonisolated context
+43 |       try? await Task.sleep(for: .milliseconds(200))
+44 |       func dump(_ phase: String) {
+45 |         print(phase, window.toolbar?.items.map { ($0.itemIdentifier.rawValue, $0.label, ($0 as? NSToolbarItemGroup)?.subitems.map(\.itemIdentifier.rawValue) ?? []) } ?? [])
+   |                                                                                                                      `- warning: main actor-isolated property 'subitems' can not be referenced from a nonisolated context
+46 |       }
+47 |       dump("Before")
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSToolbarItemGroup.h:60:53: note: property declared here
+58 |  `NSToolbarItemGroups` may not contain other `NSToolbarItemGroups` as subitems.
+59 | */
+60 | @property (copy) NSArray<__kindof NSToolbarItem *> *subitems;
+   |                                                     `- note: property declared here
+61 | 
+62 | /**
+
+/tmp/journal-dynamic-toolbar-probe.swift:45:133: warning: cannot form key path to main actor-isolated property 'itemIdentifier'; this is an error in the Swift 6 language mode
+43 |       try? await Task.sleep(for: .milliseconds(200))
+44 |       func dump(_ phase: String) {
+45 |         print(phase, window.toolbar?.items.map { ($0.itemIdentifier.rawValue, $0.label, ($0 as? NSToolbarItemGroup)?.subitems.map(\.itemIdentifier.rawValue) ?? []) } ?? [])
+   |                                                                                                                                     `- warning: cannot form key path to main actor-isolated property 'itemIdentifier'; this is an error in the Swift 6 language mode
+46 |       }
+47 |       dump("Before")
+Before [("56D14BF7-7ADA-42DE-AA71-55B0445FA6B9", "", []), ("ED283085-BB56-4BAE-964C-737F609DB568", "", [])]
+Reordered [("801217B8-94E3-4D8D-9773-3F7E32F6357E", "", []), ("8C6CE90B-AA28-4793-8AEB-4EA254789864", "", [])]

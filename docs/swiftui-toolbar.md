@@ -28,7 +28,7 @@ shared action event. Commands, controlled selected state and destructive roles
 belong to their individual controls. A single-choice action group can use Picker;
 a Boolean command uses Toggle.
 
-There are nine cross-platform semantic placements:
+There are nine cross-platform semantic placements and an iOS bottom bar:
 
 | OCaml placement | SwiftUI placement |
 | --- | --- |
@@ -41,13 +41,32 @@ There are nine cross-platform semantic placements:
 | Confirmation_action | confirmationAction |
 | Cancellation_action | cancellationAction |
 | Destructive_action | destructiveAction |
+| Bottom_bar | bottomBar (iOS only; explicitly rejected on macOS) |
 
-The renderer uses a ToolbarItemGroup for each placement and keyed ForEach views
-inside it. This structure supports physical iOS 18, without relying on newer
-ForEach-of-ToolbarContent APIs. The native host determines ordering between
-placements, system insets, grouping and overflow; source order applies within
-each placement. See Apple's [toolbar placements](https://developer.apple.com/documentation/swiftui/toolbaritemplacement)
-and [toolbar presentation guidance](https://developer.apple.com/videos/play/wwdc2022/110343/).
+Entries form an ordered list of independently keyed `item`, `group`, and `spacer`
+descriptors. A group owns an ordered list of `Toolbar.child ~key` ordinary views.
+Entry keys are unique across a toolbar; child keys are unique within their group.
+Distinct groups sharing a placement remain distinct native groups. The host
+controls ordering between semantic placements.
+
+```ocaml
+let open View.Toolbar in
+let items =
+  [ group ~key:(Key.string "journal-navigation") ~placement:Bottom_bar
+      [ child ~key:(Key.string "journals") journals_button
+      ; child ~key:(Key.string "favorites") favorites_button ]
+  ; spacer ~key:(Key.string "capture-gap") ~placement:Bottom_bar Flexible
+  ; group ~key:(Key.string "journal-capture") ~placement:Bottom_bar
+      [ child ~key:(Key.string "capture") capture_button ] ]
+in
+create ~items page_content
+```
+
+`Fixed` and `Flexible` use genuine SwiftUI `ToolbarSpacer` values. Fixed spacing
+is system-defined, with no pixel-width parameter. On macOS use supported
+placements such as Navigation and Primary_action. Native ToolbarItem/ControlGroup
+composition owns group materials, sizing and overflow; this API does not draw a
+custom bar. iOS interaction and group appearance require device verification.
 
 The old Material.Toolbar API, component 19 and its seven-icon enum are removed.
 Use SF Symbols through ordinary Labels. Primary actions, including the former
@@ -60,33 +79,40 @@ state and DisclosureGroup or Sheet, rather than by an alternate toolbar renderer
 
 ## Identity and validation
 
-Empty item lists remove the toolbar's controls while preserving its content.
-The limit is 256 items, with unique keys and at most one Principal item. These
-constraints are checked before constructing the OCaml view. Item subtrees retain
-their render identity through reorder and placement changes. Removing an item
-retires its node and handler; reintroducing the same application key after removal
-does not revive old callbacks.
+Empty entry lists remove the toolbar controls while preserving its body.
+There may be at most 256 entries, 256 children per group, and one Principal entry.
+The body has an independent structural slot. Unchanged group and child keys
+retain their render and native content owners through reorder, placement, and
+ordinary content updates. Moving a child to a different group creates a new
+owner; old callbacks remain invalid after removal or reintroduction.
 
-Node 74 has one property, `placements`, mask 1. Its encoding is a u16 count and
-one u8 value in 0..8 per item. Its children are the page content followed by the
-item subtrees in matching order. It has no event bindings. The Swift boundary
-requires exactly count+1 children, rejects duplicate Principal placements,
-unknown values, excessive counts and truncated updates before publication.
-OCaml encoding and decoding validate the same placement rules. The retired
-component-19 encoding is rejected in both directions.
+Node 74 now has empty properties and contains body slot 151 followed by entry
+nodes 149. An entry encodes its key string, placement u8 (0..9), and kind u8
+(0 item, 1 group, 2 fixed spacer, 3 flexible spacer). An item owns one ordinary
+view; a group owns keyed child slots 150, each containing one ordinary view;
+spacers have no children. Child slots encode their key string. All structural
+nodes have no event bindings. Swift validates scopes, bounds, native capability,
+structural parents and child counts atomically before publication. The obsolete
+placement-list encoding has been removed.
 
-Toolbar command input requires current and presented toolbar properties and
-child ordering to match. This fences callbacks while a placement/reorder/removal
-update awaits presentation. Body content continues to use its normal input
-rules. Ancestor tab, navigation, modal and session visibility gates also apply.
-There is no new parallel action dispatcher or compatibility event adapter.
+Ordinary command input requires current and displayed toolbar entry/child
+structure to match. Body input retains its normal rules. Eligible focused inputs
+can retain their existing owner while a structural update awaits presentation;
+this does not admit other callbacks early. Controls remain direct SwiftUI content,
+so the native toolbar can discover their command semantics before mounting them,
+including when a window first appears with overflow. Text field and editor
+controllers retain their native input views; lightweight representable mounts
+transfer those views only when a new mount belongs to a window. An owner-scoped
+focus transfer ends on native remount or after 500 ms, and is revoked by
+ownership/session replacement, disabled/hidden content, disposal or a different
+focus owner.
 
 ## Verification
 
 `Toolbar_catalog.component` is shared by Gallery and the actual native runtime
 fixture `native-toolbar`. It composes a principal label, action Button, controlled
 Pin Toggle and a secondary Menu with an unavailable action. Body controls reverse
-items, move the action, enable/disable it and remove/restore all items. OCaml owns
+items, move or reparent the action, enable/disable it and remove/restore all items. OCaml owns
 the action count and selected state independently of toolbar lifetime.
 
 The native runtime regression covers repeated actions, retained identity,

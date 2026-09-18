@@ -280,15 +280,68 @@ import SwiftUI
   }
 }
 
+@MainActor private final class ToolbarMenuObserver: NSObject {
+  var menu: NSMenu?
+  @objc func opened(_ notification: Notification) { menu = notification.object as? NSMenu }
+}
+
+@MainActor private func openToolbarNativeMenu(in window: NSWindow) async throws -> NSMenu {
+  if let content = window.contentView { try await settleAccessibility(content) }
+  func buttons(_ view: NSView) -> [NSPopUpButton] {
+    (view as? NSPopUpButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+  }
+  guard let root = window.contentView?.superview, let button = buttons(root).first else {
+    throw NSError(domain: "ToolbarWindowTest", code: 6)
+  }
+  let observer = ToolbarMenuObserver()
+  NotificationCenter.default.addObserver(
+    observer, selector: #selector(ToolbarMenuObserver.opened(_:)),
+    name: NSMenu.didBeginTrackingNotification, object: nil)
+  let cancellation = Timer(timeInterval: 0.05, repeats: true) { _ in
+    MainActor.assumeIsolated { observer.menu?.cancelTrackingWithoutAnimation() }
+  }
+  RunLoop.main.add(cancellation, forMode: .eventTracking)
+  defer {
+    cancellation.invalidate()
+    NotificationCenter.default.removeObserver(observer)
+  }
+  await withCheckedContinuation { continuation in
+    DispatchQueue.main.async {
+      button.performClick(nil)
+      continuation.resume()
+    }
+  }
+  guard let menu = observer.menu else { throw NSError(domain: "ToolbarWindowTest", code: 7) }
+  return menu
+}
+
 @MainActor private func verifyToolbarWindow() async {
   do {
     guard let window = NSApp.windows.first(where: { $0.contentView != nil }) else {
       throw NSError(domain: "ToolbarWindowTest", code: 1)
     }
+    func toolbarElements() -> [AccessibilityElement] {
+      guard let toolbar = accessibilityElements(window).first(where: { $0.role == "AXToolbar" })
+      else { return [] }
+      return accessibilityElements(toolbar.object)
+    }
+    func toolbarButton(_ title: String) async throws -> AccessibilityElement {
+      for _ in 0..<100 {
+        if let content = window.contentView { try await settleAccessibility(content) }
+        if let button = toolbarElements().first(where: {
+          $0.role == "AXButton" && $0.enabled && $0.label == title
+        }) {
+          return button
+        }
+      }
+      throw NSError(
+        domain: "ToolbarWindowTest", code: 5,
+        userInfo: [NSLocalizedDescriptionKey: "Missing grouped toolbar button: \(title)"])
+    }
     window.setContentSize(NSSize(width: 1000, height: 600))
     try await waitForText("Toolbar actions: 0", in: window)
     let toolbarControls =
-      window.toolbar?.items.compactMap(\.view).flatMap { accessibilityElements($0) } ?? []
+      toolbarElements()
     guard
       let pin = toolbarControls.first(where: {
         $0.label == "Pin toolbar" && $0.enabled
@@ -307,20 +360,20 @@ import SwiftUI
     _ = pin.press()
     try await waitForText("Toolbar unpinned", in: window)
     for count in 1...2 {
-      let action = try await waitForButton("Toolbar action", in: window, toolbar: true)
+      let action = try await toolbarButton("Toolbar action")
       _ = action.press()
       try await waitForText("Toolbar actions: \(count)", in: window)
     }
     let reverse = try await waitForButton("Reverse toolbar", in: window)
     _ = reverse.press()
     try await waitForText("Toolbar order: reversed", in: window)
-    let action = try await waitForButton("Toolbar action", in: window, toolbar: true)
+    let action = try await toolbarButton("Toolbar action")
     _ = action.press()
     try await waitForText("Toolbar actions: 3", in: window)
     _ = try await waitForButton("Disable toolbar action", in: window).press()
     _ = try await waitForButton("Enable toolbar action", in: window)
     let entries =
-      window.toolbar?.items.compactMap(\.view).flatMap { accessibilityElements($0) } ?? []
+      toolbarElements()
     guard entries.contains(where: { $0.label == "Toolbar action" && !$0.enabled }) else {
       throw NSError(
         domain: "ToolbarWindowTest", code: 2,
@@ -331,17 +384,39 @@ import SwiftUI
     _ = try await waitForButton("Show toolbar", in: window)
     if let content = window.contentView { try await settleAccessibility(content) }
     let hidden =
-      window.toolbar?.items.compactMap(\.view).flatMap { accessibilityElements($0) } ?? []
+      toolbarElements()
     guard !hidden.contains(where: { $0.label == "Toolbar action" }) else {
       throw NSError(domain: "ToolbarWindowTest", code: 3)
     }
     _ = action.press()
     try await waitForText("Toolbar actions: 3", in: window)
     _ = try await waitForButton("Show toolbar", in: window).press()
-    _ = try await waitForButton("Toolbar action", in: window, toolbar: true).press()
+    _ = try await toolbarButton("Toolbar action").press()
     try await waitForText("Toolbar actions: 4", in: window)
+    let originalMenu = try await openToolbarNativeMenu(in: window)
+    guard let item = originalMenu.items.firstIndex(where: { $0.title == "Additional action" }),
+      originalMenu.items.contains(where: { $0.title == "Unavailable action" && !$0.isEnabled })
+    else { throw NSError(domain: "ToolbarWindowTest", code: 8) }
+    originalMenu.performActionForItem(at: item)
+    try await waitForText("Toolbar actions: 5", in: window)
+    _ = try await waitForButton("Reverse toolbar", in: window).press()
+    try await waitForText("Toolbar order: original", in: window)
+    originalMenu.performActionForItem(at: item)
+    try await waitForText("Toolbar actions: 6", in: window)
+    _ = try await waitForButton("Hide toolbar", in: window).press()
+    _ = try await waitForButton("Show toolbar", in: window).press()
+    let replacementMenu = try await openToolbarNativeMenu(in: window)
+    originalMenu.performActionForItem(at: item)
+    try await waitForText("Toolbar actions: 6", in: window)
+    guard
+      let replacementItem = replacementMenu.items.firstIndex(where: {
+        $0.title == "Additional action"
+      })
+    else { throw NSError(domain: "ToolbarWindowTest", code: 9) }
+    replacementMenu.performActionForItem(at: replacementItem)
+    try await waitForText("Toolbar actions: 7", in: window)
     window.setContentSize(NSSize(width: 520, height: 450))
-    try await waitForText("Toolbar actions: 4", in: window)
+    try await waitForText("Toolbar actions: 7", in: window)
     print("PASS: actual Gallery native toolbar commands reach OCaml and respect removal")
     fflush(stdout)
     exit(0)
@@ -409,7 +484,8 @@ import SwiftUI
       abs(originalSize.height - viewport.contentView.bounds.height - 40) < 1,
       "Bottom content did not reduce the scroll viewport")
     try require(
-      abs(viewport.documentVisibleRect.minY - 400) < 1, "Bottom resize lost scroll position")
+      abs(viewport.documentVisibleRect.minY - 400) < 1,
+      "Bottom resize lost scroll position: \(viewport.documentVisibleRect.minY)")
     window.setContentSize(NSSize(width: 1100, height: 700))
     try await waitForText("Bottom height: 100", in: window)
     try require(

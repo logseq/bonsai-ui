@@ -5,6 +5,22 @@ let check condition message = if not condition then failwith message
 let handler = Ui.Event.Handler.create (fun _ -> ())
 let child = Ui.View.text "child"
 
+let test_native_form_keys () =
+  let row = Ui.View.Keyed.create ~key:(Ui.Key.string "duplicate") child in
+  List.iter
+    (fun create ->
+       match create () with
+       | _ -> failwith "native form accepted duplicate sibling keys"
+       | exception Invalid_argument _ -> ())
+    [ (fun () -> ignore (Ui.View.Form.vertical [ row; row ]))
+    ; (fun () -> ignore (Ui.View.Section.create [ row; row ]))
+    ];
+  ignore (Ui.View.Form.vertical []);
+  ignore (Ui.View.Section.create [])
+;;
+
+let () = test_native_form_keys ()
+
 let widgets =
   [ Ui.View.badge ~count:3 child
   ; Ui.View.label ~title:(Ui.View.text "Inbox") ~icon:child ()
@@ -871,4 +887,223 @@ let () =
           (text (Ui.Style.Text_style.create ()))
           (text (Ui.Style.Text_style.create ~role:Body ~italic:false ()))))
     "omitted typography must remain distinguishable from explicit Body/nonitalic"
+;;
+
+let () =
+  let module L = Ui.View.Native_list in
+  let section = Ui.Key.string "journal" in
+  let target = L.target ~section ~row_path:[ Ui.Key.string "entry" ] in
+  List.iter
+    (fun create ->
+       match create () with
+       | () -> failwith "invalid List scroll request accepted"
+       | exception Invalid_argument _ -> ())
+    [ (fun () -> ignore (L.target ~section ~row_path:[]))
+    ; (fun () -> ignore (L.target ~section ~row_path:(List.init 257 (fun _ -> section))))
+    ; (fun () -> ignore (L.scroll_request ~token:0L ~target ()))
+    ; (fun () -> ignore (L.scroll_request ~token:(-1L) ~target ()))
+    ; (fun () ->
+        ignore
+          (L.vertical
+             ~style:Plain
+             ~scroll_request:(L.scroll_request ~token:1L ~target ())
+             []))
+    ];
+  let list anchor =
+    L.vertical
+      ~style:Plain
+      ~on_scroll_completed:handler
+      ~scroll_request:(L.scroll_request ~token:1L ~target ~anchor ())
+      []
+    |> Ui.View.Viewport.Vertical.with_height ~height:100.
+    |> fun bounded ->
+    let (Av frame) = Ui.View.Private.view bounded in
+    frame.children.(0)
+  in
+  check
+    (not (Ui.View.Private.node_equal_widgets (list Top) (list Bottom)))
+    "List request anchor did not participate in property identity";
+  List.iteri
+    (fun code outcome ->
+       check
+         (L.completion_of_payload
+            (Ui.Event.Payload.Int64_pair { first = 7L; second = Int64.of_int code })
+          = Some { L.token = 7L; outcome })
+         "List completion decoder lost an outcome")
+    [ L.Succeeded
+    ; Missing_target
+    ; Hidden_target
+    ; Cancelled
+    ; Superseded
+    ; Positioning_failed
+    ];
+  List.iter
+    (fun payload ->
+       check (L.completion_of_payload payload = None) "invalid List completion decoded")
+    [ Ui.Event.Payload.Unit
+    ; Int64_pair { first = 0L; second = 0L }
+    ; Int64_pair { first = 1L; second = 6L }
+    ]
+;;
+
+let () =
+  let key = Ui.Key.string in
+  let leaf = Ui.View.Native_list.row ~key:(key "child") child in
+  let parent rows =
+    Ui.View.Native_list.disclosure_row
+      ~key:(key "parent")
+      ~expanded:false
+      ~on_expanded_changed:handler
+      ~label:(Ui.View.text ~key:(key "child") "Parent")
+      rows
+  in
+  ignore (parent [ leaf ]);
+  (match parent [ leaf; leaf ] with
+   | _ -> failwith "disclosure row accepted duplicate sibling keys"
+   | exception Invalid_argument _ -> ());
+  let action =
+    Ui.View.Swipe_actions.action
+      ~key:(key "delete")
+      ~title:"Delete"
+      ~side:End
+      ~background:(Ui.Style.Color.rgb ~red:220 ~green:20 ~blue:20)
+      ~on_press:handler
+      ()
+  in
+  (match Ui.View.Swipe_actions.create ~actions:[ action; action ] () with
+   | _ -> failwith "swipe descriptor accepted duplicate action keys"
+   | exception Invalid_argument _ -> ());
+  let owned =
+    Ui.View.Native_list.row
+      ~key:(key "owned")
+      ~swipe_actions:(Ui.View.Swipe_actions.create ~actions:[ action ] ())
+      child
+  in
+  let list =
+    Ui.View.Native_list.vertical
+      ~style:Plain
+      [ Ui.View.Native_list.section ~key:(key "section") [ parent [ leaf ]; owned ] ]
+    |> Ui.View.Viewport.Vertical.with_height ~height:200.
+  in
+  let (Av frame) = Ui.View.Private.view list in
+  let (Av list) = Ui.View.Private.view frame.children.(0) in
+  let (Av section) = Ui.View.Private.view list.children.(0) in
+  let (Av parent) = Ui.View.Private.view section.children.(2) in
+  check
+    (Array.length parent.children = 4)
+    "disclosure lost separate label, actions, or child slots";
+  let (Av owned) = Ui.View.Private.view section.children.(3) in
+  let (Av actions) = Ui.View.Private.view owned.children.(1) in
+  check
+    (Array.length actions.children = 1)
+    "swipe slot still contains ordinary row content"
+;;
+
+let () =
+  let module C = Ui.View.Context_menu in
+  let action =
+    C.action
+      ~key:(Ui.Key.string "delete")
+      ~title:"Delete"
+      ~role:Destructive
+      ~symbol:"trash"
+      ~on_press:handler
+      ()
+  in
+  (match C.create ~actions:[ action; action ] () with
+   | _ -> failwith "context menu accepted duplicate action keys"
+   | exception Invalid_argument _ -> ());
+  let menu = C.create ~actions:[ action ] () in
+  let view = C.attach ~key:(Ui.Key.string "context") menu child in
+  let (Av view) = Ui.View.Private.view view in
+  check (Array.length view.children = 2) "context modifier lost its owned action slot";
+  let row = Ui.View.Native_list.row ~key:(Ui.Key.string "row") ~context_menu:menu child in
+  let list =
+    Ui.View.Native_list.vertical
+      ~style:Plain
+      [ Ui.View.Native_list.section ~key:(Ui.Key.string "section") [ row ] ]
+    |> Ui.View.Viewport.Vertical.with_height ~height:200.
+  in
+  let (Av frame) = Ui.View.Private.view list in
+  let (Av list) = Ui.View.Private.view frame.children.(0) in
+  let (Av section) = Ui.View.Private.view list.children.(0) in
+  let (Av row) = Ui.View.Private.view section.children.(2) in
+  let (Av menu) = Ui.View.Private.view row.children.(2) in
+  check (Array.length menu.children = 1) "row context slot lost its action"
+;;
+
+let () =
+  let module T = Ui.View.Toolbar in
+  let key = Ui.Key.string in
+  let item = T.child ~key:(key "action") child in
+  (match T.group ~key:(key "group") [ item; item ] with
+   | _ -> failwith "toolbar accepted duplicate child keys"
+   | exception Invalid_argument _ -> ());
+  let group = T.group ~key:(key "group") ~placement:Bottom_bar [ item ] in
+  (match T.create ~items:[ group; group ] child with
+   | _ -> failwith "toolbar accepted duplicate entry keys"
+   | exception Invalid_argument _ -> ());
+  let toolbar =
+    T.create
+      ~items:
+        [ group
+        ; T.spacer ~key:(key "gap") ~placement:Bottom_bar Flexible
+        ; T.group ~key:(key "second") ~placement:Bottom_bar [ item ]
+        ; T.item ~key:(key "ordinary") child
+        ]
+      child
+  in
+  let (Av toolbar) = Ui.View.Private.view toolbar in
+  check (Array.length toolbar.children = 5) "toolbar lost ordered entries or body slot";
+  let (Av body) = Ui.View.Private.view toolbar.children.(0) in
+  check (Array.length body.children = 1) "toolbar body was not isolated from entry keys";
+  let (Av group) = Ui.View.Private.view toolbar.children.(1) in
+  let (Av item) = Ui.View.Private.view group.children.(0) in
+  check (Array.length item.children = 1) "toolbar group lost its keyed child slot"
+;;
+
+let () =
+  let module C = Ui.View.Confirmation in
+  let delete = C.action ~key:"delete" ~title:"Delete" ~role:Destructive () in
+  let cancel = C.action ~key:"cancel" ~title:"Cancel" ~role:Cancel () in
+  let request =
+    C.request ~token:1L ~title:"Delete entry?" ~message:"Cannot undo." [ delete; cancel ]
+  in
+  List.iter
+    (fun build ->
+       match build () with
+       | _ -> failwith "confirmation accepted an invalid request"
+       | exception Invalid_argument _ -> ())
+    [ (fun () -> C.request ~token:0L ~title:"Delete?" [ delete ])
+    ; (fun () -> C.request ~token:1L ~title:" " [ delete ])
+    ; (fun () -> C.request ~token:1L ~title:"Delete?" [])
+    ; (fun () -> C.request ~token:1L ~title:"Delete?" [ delete; delete ])
+    ; (fun () ->
+        C.request
+          ~token:1L
+          ~title:"Delete?"
+          [ cancel; C.action ~key:"other" ~title:"Other" ~role:Cancel () ])
+    ];
+  List.iter
+    (fun build ->
+       let shown = build ~request:(Some request) ~on_response:handler child in
+       let hidden = build ~request:None ~on_response:handler child in
+       check
+         (Ui.View.For_testing.kind_name shown = "Confirmation")
+         "confirmation has wrong node kind";
+       let (Av shown) = Ui.View.Private.view shown in
+       let (Av hidden) = Ui.View.Private.view hidden in
+       check
+         (Array.length shown.children = 1 && Array.length hidden.children = 1)
+         "confirmation base child is unstable";
+       check
+         (Array.length shown.event_bindings = 1 && Array.length hidden.event_bindings = 0)
+         "confirmation response binding ignores presentation")
+    [ C.alert ?key:None; C.dialog ?key:None ];
+  let result : Ui.Event.Payload.confirmation_response =
+    { token = 1L; result = Action "delete" }
+  in
+  match Ui.Event.Payload.Confirmation_response result with
+  | Confirmation_response { token = 1L; result = Action "delete" } -> ()
+  | _ -> failwith "confirmation response is not typed"
 ;;

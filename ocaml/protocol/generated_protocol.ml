@@ -2,7 +2,7 @@
 
 module ID = Bonsai_swiftui_spec.Id
 
-let protocol_major = 9
+let protocol_major = 10
 let protocol_minor = 0
 
 module Limits = struct
@@ -80,6 +80,12 @@ module Node_kind = struct
   let ignores_safe_area = ID.Protocol.Node_kind.of_int 11
   let safe_area_padding = ID.Protocol.Node_kind.of_int 12
   let navigation_stack = ID.Protocol.Node_kind.of_int 13
+  let navigation_link = ID.Protocol.Node_kind.of_int 134
+  let form = ID.Protocol.Node_kind.of_int 140
+  let section = ID.Protocol.Node_kind.of_int 141
+  let labeled_content = ID.Protocol.Node_kind.of_int 142
+  let content_unavailable = ID.Protocol.Node_kind.of_int 143
+  let text_selection = ID.Protocol.Node_kind.of_int 144
   let navigation_destination = ID.Protocol.Node_kind.of_int 14
   let navigation_split = ID.Protocol.Node_kind.of_int 15
   let flow = ID.Protocol.Node_kind.of_int 56
@@ -93,6 +99,14 @@ module Node_kind = struct
   let native_list = ID.Protocol.Node_kind.of_int 80
   let list_section = ID.Protocol.Node_kind.of_int 81
   let list_row = ID.Protocol.Node_kind.of_int 82
+  let list_row_label = ID.Protocol.Node_kind.of_int 145
+  let context_menu = ID.Protocol.Node_kind.of_int 146
+  let context_action = ID.Protocol.Node_kind.of_int 147
+  let context_menu_view = ID.Protocol.Node_kind.of_int 148
+  let toolbar_entry = ID.Protocol.Node_kind.of_int 149
+  let toolbar_child = ID.Protocol.Node_kind.of_int 150
+  let toolbar_body = ID.Protocol.Node_kind.of_int 151
+  let confirmation = ID.Protocol.Node_kind.of_int 152
   let scroll_targets = ID.Protocol.Node_kind.of_int 62
   let help = ID.Protocol.Node_kind.of_int 63
   let popover = ID.Protocol.Node_kind.of_int 72
@@ -157,6 +171,12 @@ module Node_kind = struct
     | 11 -> Some "ignores_safe_area"
     | 12 -> Some "safe_area_padding"
     | 13 -> Some "navigation_stack"
+    | 134 -> Some "navigation_link"
+    | 140 -> Some "form"
+    | 141 -> Some "section"
+    | 142 -> Some "labeled_content"
+    | 143 -> Some "content_unavailable"
+    | 144 -> Some "text_selection"
     | 14 -> Some "navigation_destination"
     | 15 -> Some "navigation_split"
     | 56 -> Some "flow"
@@ -170,6 +190,14 @@ module Node_kind = struct
     | 80 -> Some "native_list"
     | 81 -> Some "list_section"
     | 82 -> Some "list_row"
+    | 145 -> Some "list_row_label"
+    | 146 -> Some "context_menu"
+    | 147 -> Some "context_action"
+    | 148 -> Some "context_menu_view"
+    | 149 -> Some "toolbar_entry"
+    | 150 -> Some "toolbar_child"
+    | 151 -> Some "toolbar_body"
+    | 152 -> Some "confirmation"
     | 62 -> Some "scroll_targets"
     | 63 -> Some "help"
     | 72 -> Some "popover"
@@ -255,6 +283,8 @@ module Event_tag = struct
   let refresh_request = ID.Protocol.Event_tag.of_int 56
   let removal_requested = ID.Protocol.Event_tag.of_int 57
   let removal_completed = ID.Protocol.Event_tag.of_int 58
+  let list_scroll_completed = ID.Protocol.Event_tag.of_int 59
+  let confirmation_response = ID.Protocol.Event_tag.of_int 60
   let slider_changed = ID.Protocol.Event_tag.of_int 30
   let slider_change_end = ID.Protocol.Event_tag.of_int 31
   let range_slider_changed = ID.Protocol.Event_tag.of_int 32
@@ -303,6 +333,8 @@ module Event_tag = struct
     | 56 -> Some "refresh_request"
     | 57 -> Some "removal_requested"
     | 58 -> Some "removal_completed"
+    | 59 -> Some "list_scroll_completed"
+    | 60 -> Some "confirmation_response"
     | 30 -> Some "slider_changed"
     | 31 -> Some "slider_change_end"
     | 32 -> Some "range_slider_changed"
@@ -407,8 +439,25 @@ module Common_prop = struct
 end
 
 module Native_list_prop = struct
+  let style = ID.Protocol.Property.of_int 1
+  let scroll_request = ID.Protocol.Property.of_int 2
+
   let debug_name id =
     match ID.Protocol.Property.to_int id with
+    | 1 -> Some "style"
+    | 2 -> Some "scroll_request"
+    | _ -> None
+  ;;
+end
+
+module Navigation_link_prop = struct
+  let activation_id = ID.Protocol.Property.of_int 1
+  let enabled = ID.Protocol.Property.of_int 2
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "activation_id"
+    | 2 -> Some "enabled"
     | _ -> None
   ;;
 end
@@ -417,22 +466,70 @@ module List_section_prop = struct
   let has_header = ID.Protocol.Property.of_int 1
   let has_footer = ID.Protocol.Property.of_int 2
   let separator = ID.Protocol.Property.of_int 3
+  let section_key = ID.Protocol.Property.of_int 4
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
     | 1 -> Some "has_header"
     | 2 -> Some "has_footer"
     | 3 -> Some "separator"
+    | 4 -> Some "section_key"
     | _ -> None
   ;;
 end
 
 module List_row_prop = struct
   let separator = ID.Protocol.Property.of_int 1
+  let row_key = ID.Protocol.Property.of_int 2
+  let expanded = ID.Protocol.Property.of_int 3
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
     | 1 -> Some "separator"
+    | 2 -> Some "row_key"
+    | 3 -> Some "expanded"
+    | _ -> None
+  ;;
+end
+
+module List_row_label_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Context_menu_prop = struct
+  let enabled = ID.Protocol.Property.of_int 1
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "enabled"
+    | _ -> None
+  ;;
+end
+
+module Context_action_prop = struct
+  let action_key = ID.Protocol.Property.of_int 1
+  let title = ID.Protocol.Property.of_int 2
+  let enabled = ID.Protocol.Property.of_int 3
+  let role = ID.Protocol.Property.of_int 4
+  let symbol = ID.Protocol.Property.of_int 5
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "action_key"
+    | 2 -> Some "title"
+    | 3 -> Some "enabled"
+    | 4 -> Some "role"
+    | 5 -> Some "symbol"
+    | _ -> None
+  ;;
+end
+
+module Context_menu_view_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
     | _ -> None
   ;;
 end
@@ -474,11 +571,57 @@ module Scroll_section_prop = struct
 end
 
 module Toolbar_prop = struct
-  let placements = ID.Protocol.Property.of_int 1
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Toolbar_entry_prop = struct
+  let entry_key = ID.Protocol.Property.of_int 1
+  let placement = ID.Protocol.Property.of_int 2
+  let kind = ID.Protocol.Property.of_int 3
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
-    | 1 -> Some "placements"
+    | 1 -> Some "entry_key"
+    | 2 -> Some "placement"
+    | 3 -> Some "kind"
+    | _ -> None
+  ;;
+end
+
+module Toolbar_child_prop = struct
+  let child_key = ID.Protocol.Property.of_int 1
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "child_key"
+    | _ -> None
+  ;;
+end
+
+module Toolbar_body_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Confirmation_prop = struct
+  let style = ID.Protocol.Property.of_int 1
+  let request_token = ID.Protocol.Property.of_int 2
+  let title = ID.Protocol.Property.of_int 3
+  let message = ID.Protocol.Property.of_int 4
+  let actions = ID.Protocol.Property.of_int 5
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "style"
+    | 2 -> Some "request_token"
+    | 3 -> Some "title"
+    | 4 -> Some "message"
+    | 5 -> Some "actions"
     | _ -> None
   ;;
 end
@@ -1309,6 +1452,49 @@ end
 module Label_prop = struct
   let debug_name id =
     match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Form_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Section_prop = struct
+  let has_header = ID.Protocol.Property.of_int 1
+  let has_footer = ID.Protocol.Property.of_int 2
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "has_header"
+    | 2 -> Some "has_footer"
+    | _ -> None
+  ;;
+end
+
+module Labeled_content_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Content_unavailable_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module Text_selection_prop = struct
+  let enabled = ID.Protocol.Property.of_int 1
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "enabled"
     | _ -> None
   ;;
 end

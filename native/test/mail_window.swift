@@ -100,7 +100,7 @@ import SwiftUI
     guard systemActions.map(\.title) == ["Archive", "Trash"] else {
       throw failure("Expanded row lost its native swipe action identity")
     }
-    let swipe = try require(retainedRow.children.first?.swipeController)
+    let swipe = try require(retainedRow.children[1].swipeController)
     let archive = try require(swipe.actions.first)
     guard case .swipeAction(let properties) = archive.properties,
       properties.title == "Archive",

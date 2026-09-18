@@ -11,7 +11,7 @@ does not assert that an untested toolchain release is compatible.
 | Xcode | 26.1.1 | Selected Apple SDKs and build system |
 | Swift | 6.2.1 | SwiftUI renderer and application hosts |
 | macOS target | arm64, macOS 26.0 | Native Swift package and complete objects |
-| iOS target | arm64, iOS 18.0 | Physical iPhone/iPad only |
+| iOS target | arm64, iOS 26.0 | Physical iPhone/iPad only |
 
 ## Jane Street release line
 
@@ -51,7 +51,7 @@ re-encoded by OCaml. See [input fixtures](swiftui-input-fixtures.md).
 ## Physical-iOS cross-build baseline
 
 The isolated compiler and dependency closure use the locked opam-cross-ios
-source revision, the repository-owned OCaml 5.1.1 recipe and an actual iOS 18
+source revision, the repository-owned OCaml 5.1.1 recipe and an actual iOS 26
 runtime rebuild. The compiler wrapper supplies arm64, the iPhoneOS sysroot and
 minimum-version flags to C stubs as well as OCaml complete objects. Host PPX
 executables remain macOS processes. Simulator, Intel and Catalyst are excluded.

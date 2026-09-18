@@ -1,0 +1,119 @@
+Building for debugging...
+[0/4] Write sources
+[2/4] Write swift-version--58304C5D6DBC2206.txt
+[4/7] Emitting module BonsaiSwiftUI
+[5/7] Compiling BonsaiSwiftUI NativeToolbar.swift
+[6/7] Compiling BonsaiSwiftUI NativeToolbarContent.swift
+[7/11] Emitting module BonsaiSwiftUITests
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/PageLayoutTests.swift:34:9: warning: no calls to throwing functions occur within 'try' expression
+ 32 |       }
+ 33 |       func element(_ title: String) throws -> AccessibilityElement {
+ 34 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 35 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == title })
+ 36 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollFillTests.swift:41:9: warning: no calls to throwing functions occur within 'try' expression
+ 39 |       }
+ 40 |       func button(_ label: String) throws -> AccessibilityElement {
+ 41 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 42 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+ 43 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:149:9: warning: no calls to throwing functions occur within 'try' expression
+147 |       }
+148 |       func element(_ label: String) throws -> AccessibilityElement {
+149 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+150 |           accessibilityElements(host).first { $0.role == "AXButton" && $0.label == label })
+151 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/ScrollSectionsTests.swift:178:9: warning: no calls to throwing functions occur within 'try' expression
+176 |       }
+177 |       func button(_ label: String) throws -> RenderNodeState {
+178 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+179 |           session.tree.nodes.values.first { $0.kind == NodeKindId.button && hasLabel($0, label) })
+180 |       }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:40:9: warning: no calls to throwing functions occur within 'try' expression
+ 38 |       }
+ 39 |       func button(_ title: String) throws -> RenderNodeState {
+ 40 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 41 |           session.tree.nodes.values.first {
+ 42 |             if case .button = $0.properties { return texts($0).contains(title) }
+
+/Users/rcmerci/gh-repos/bonsai-ui/swift/BonsaiSwiftUI/Tests/SidebarCompositionTests.swift:60:9: warning: no calls to throwing functions occur within 'try' expression
+ 58 |       }
+ 59 |       func element(_ title: String) throws -> AccessibilityElement {
+ 60 |         try #require(
+    |         `- warning: no calls to throwing functions occur within 'try' expression
+ 61 |           accessibilityElements(host).first {
+ 62 |             $0.role == "AXButton" && $0.label == title
+[8/11] Compiling BonsaiSwiftUITests ToolbarIdentityTests.swift
+[9/11] Compiling BonsaiSwiftUITests ToolbarTests.swift
+[9/11] Write Objects.LinkFileList
+[10/11] Linking BonsaiSwiftUIPackageTests
+Build complete! (5.88s)
+Test Suite 'Selected tests' started at 2026-09-18 18:25:02.793.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 18:25:02.794.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 18:25:02.794.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 18:25:02.794.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite NativeRuntimeTests started.
+◇ Test actualToolbarRetainsCommandsAndRejectsStaleInput() started.
+✔ Test actualToolbarRetainsCommandsAndRejectsStaleInput() passed after 0.092 seconds.
+◇ Test actualToolbarGroupsExposeNativeControls() started.
+✔ Test actualToolbarGroupsExposeNativeControls() passed after 0.311 seconds.
+✔ Suite NativeRuntimeTests passed after 0.405 seconds.
+◇ Suite NativeTextEditorTests started.
+◇ Test appKitMarkedTextSurvivesAckAndRejectsStaleCorrections() started.
+✔ Test appKitMarkedTextSurvivesAckAndRejectsStaleCorrections() passed after 0.023 seconds.
+◇ Test nativeByteLimitReadOnlySelectionAndDisposalPreserveTheLastValidValue() started.
+✔ Test nativeByteLimitReadOnlySelectionAndDisposalPreserveTheLastValidValue() passed after 0.001 seconds.
+◇ Test movingNativeSelectionOutsideCompositionCommitsBeforeEmitting() started.
+✔ Test movingNativeSelectionOutsideCompositionCommitsBeforeEmitting() passed after 0.001 seconds.
+◇ Test contradictoryRemoteSelectionIsRejectedBeforeNativeMutation() started.
+✔ Test contradictoryRemoteSelectionIsRejectedBeforeNativeMutation() passed after 0.001 seconds.
+◇ Test nativeReturnSubmitsOnlyOutsideCompositionAndFocusIsReported() started.
+✔ Test nativeReturnSubmitsOnlyOutsideCompositionAndFocusIsReported() passed after 0.004 seconds.
+✔ Suite NativeTextEditorTests passed after 0.031 seconds.
+◇ Suite TextFieldTests started.
+◇ Test nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test case passing 1 argument secure → false to nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+◇ Test case passing 1 argument secure → true to nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) started.
+✔ Test nativeFieldEditsAcknowledgeCorrectAndSubmit(secure:) with 2 test cases passed after 0.792 seconds.
+◇ Test nativeFieldPreservesMarkedTextAndSelectionAcrossAcknowledgment() started.
+✔ Test nativeFieldPreservesMarkedTextAndSelectionAcrossAcknowledgment() passed after 0.261 seconds.
+◇ Test fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test case passing 1 argument secure → false to fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+◇ Test case passing 1 argument secure → true to fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) started.
+✔ Test fieldRejectsUnadmittedAndOversizeEditsAndReleasesFocusOnDisposal(secure:) with 2 test cases passed after 0.980 seconds.
+◇ Test autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test case passing 1 argument secure → false to autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+◇ Test case passing 1 argument secure → true to autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) started.
+✔ Test autofocusWaitsForPresentationAndDoesNotStealFocusAfterFirstUse(secure:) with 2 test cases passed after 1.694 seconds.
+✔ Suite TextFieldTests passed after 3.727 seconds.
+◇ Suite ToolbarIdentityTests started.
+◇ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 2, composing → false to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 2, composing → true to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 3, composing → false to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 3, composing → true to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 4, composing → false to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+◇ Test case passing 2 arguments focused → 4, composing → true to nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) started.
+✔ Test nativeFrameworkFieldsRetainFocusAcrossKeyedGroupMoves(focused:composing:) with 6 test cases passed after 7.670 seconds.
+✔ Suite ToolbarIdentityTests passed after 7.670 seconds.
+◇ Suite ToolbarTests started.
+◇ Test toolbarPlacementChangesAndReorderingRetainContent() started.
+✔ Test toolbarPlacementChangesAndReorderingRetainContent() passed after 0.008 seconds.
+◇ Test malformedToolbarUpdatesLeavePublishedTreeUntouched() started.
+✔ Test malformedToolbarUpdatesLeavePublishedTreeUntouched() passed after 0.001 seconds.
+✔ Suite ToolbarTests passed after 0.009 seconds.
+✔ Test run with 14 tests in 5 suites passed after 11.844 seconds.

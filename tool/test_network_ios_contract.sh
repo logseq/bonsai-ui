@@ -60,7 +60,7 @@ done
 network_config=$(cat examples/network/bonsai-swiftui.sexp 2>/dev/null || true)
 require_text "$network_config" '(lang 3)' "network consumer config"
 require_text "$network_config" '(features network)' "network consumer config"
-require_text "$network_config" '(ios (minimum_version 18.0) (architectures arm64))' "physical iOS config"
+require_text "$network_config" '(ios (minimum_version 26.0) (architectures arm64))' "physical iOS config"
 require_text "$network_config" '(macos (minimum_version 26.0) (architectures arm64))' "macOS config"
 require_file examples/network/bonsai_swiftui_network_example.opam.locked
 

@@ -1,0 +1,4 @@
+File "ocaml/test/core_surface_tests.ml", line 1066, characters 17-37:
+1066 |   let module C = Ui.View.Confirmation in
+                        ^^^^^^^^^^^^^^^^^^^^
+Error: Unbound module Ui.View.Confirmation

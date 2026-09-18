@@ -141,7 +141,17 @@ let component handlers graph =
            ; Ui.View.text title
            ; Ui.View.divider ()
            ; Ui.View.text "Review the details before continuing."
-           ; button "Sheet action" action
+           ; Ui.View.Context_menu.attach
+               (Ui.View.Context_menu.create
+                  ~actions:
+                    [ Ui.View.Context_menu.action
+                        ~key:(Ui.Key.string "sheet-action")
+                        ~title:"Sheet context action"
+                        ~on_press:action
+                        ()
+                    ]
+                  ())
+               (button "Sheet action" action)
            ]
            @ (if s.variant = 1
               then

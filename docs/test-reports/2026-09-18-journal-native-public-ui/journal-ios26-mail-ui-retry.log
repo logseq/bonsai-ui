@@ -1,0 +1,152 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project _build/ios/journal-device/mail/BonsaiMail.xcodeproj -scheme BonsaiMail-iOS -configuration Release -destination platform=iOS,id=00008110-000A71C414BB801E -derivedDataPath _build/ios/journal-device/mail/DerivedData -resultBundlePath _build/ios/journal-device/mail-ui-acceptance-2.xcresult "-only-testing:BonsaiMail-iOSUITests" DEVELOPMENT_TEAM=K378MFWK59 test-without-building
+
+Build settings from command line:
+    DEVELOPMENT_TEAM = K378MFWK59
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  BonsaiSwiftUI: /Users/rcmerci/gh-repos/bonsai-ui @ local
+
+Writing result bundle at path:
+	/Users/rcmerci/gh-repos/bonsai-ui/_build/ios/journal-device/mail-ui-acceptance-2.xcresult
+
+Resolve Package Graph
+
+2026-09-18 19:45:32.383 xcodebuild[9936:2385932] [MT] DVTDevice: Error locating DeviceSupport directory using Optional("arm64") or Optional("arm64e"): nilError
+2026-09-18 19:45:32.710953+0800 BonsaiMail-iOSUITests-Runner[8415:657964] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'All tests' started at 2026-09-18 19:45:35.332.
+Test Suite 'BonsaiMail-iOSUITests.xctest' started at 2026-09-18 19:45:35.333.
+Test Suite 'MailUITests' started at 2026-09-18 19:45:35.333.
+Test Case '-[BonsaiMail_iOSUITests.MailUITests testInboxExpansionAndAttachmentDetail]' started.
+    t =     0.00s Start Test at 2026-09-18 19:45:35.334
+    t =     0.09s Set Up
+    t =     0.09s     Open org.bonsai-swiftui.example.mail
+    t =     0.09s         Launch org.bonsai-swiftui.example.mail
+Resolve Package Graph
+
+2026-09-18 19:45:37.187 xcodebuild[9936:2385932] [MT] DVTDevice: Error locating DeviceSupport directory using Optional("arm64") or Optional("arm64e"): nilError
+    t =     2.20s             Setting up automation session
+    t =     3.10s             Wait for org.bonsai-swiftui.example.mail to idle
+    t =     4.30s     Waiting 15.0s for Button (First Match) to exist
+    t =     5.31s         Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+    t =     5.31s             Checking existence of `Button (First Match)`
+    t =     5.66s Added attachment named 'mail-ios-inbox'
+    t =     5.66s Tap Button (First Match)
+    t =     5.66s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     5.66s     Find the Button (First Match)
+    t =     5.73s     Check for interrupting elements affecting "Unread message from Mara Vale" Button
+    t =     5.82s     Synthesize event
+    t =     6.23s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     6.94s Waiting 10.0s for "Collapse message from Mara Vale" Button to exist
+    t =     7.96s     Checking `Expect predicate `existsNoRetry == 1` for object "Collapse message from Mara Vale" Button`
+    t =     7.97s         Checking existence of `"Collapse message from Mara Vale" Button`
+    t =     8.07s Waiting 10.0s for StaticText (First Match) to exist
+    t =     9.08s     Checking `Expect predicate `existsNoRetry == 1` for object StaticText (First Match)`
+    t =     9.08s         Checking existence of `StaticText (First Match)`
+    t =     9.31s Added attachment named 'mail-ios-expanded'
+    t =     9.31s Tap "Collapse message from Mara Vale" Button
+    t =     9.31s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     9.31s     Find the "Collapse message from Mara Vale" Button
+    t =     9.38s     Check for interrupting elements affecting "Collapse message from Mara Vale" Button
+    t =     9.42s     Synthesize event
+    t =     9.70s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    10.71s Find the Button (First Match)
+    t =    10.82s Tap "Unread message from Juniper Works" Button
+    t =    10.82s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    10.83s     Find the "Unread message from Juniper Works" Button
+    t =    10.88s     Check for interrupting elements affecting "Unread message from Juniper Works" Button
+    t =    10.93s     Synthesize event
+    t =    11.22s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    11.73s Waiting 10.0s for "Open message from Juniper Works" Button to exist
+    t =    12.73s     Checking `Expect predicate `existsNoRetry == 1` for object "Open message from Juniper Works" Button`
+    t =    12.73s         Checking existence of `"Open message from Juniper Works" Button`
+    t =    12.84s Find the "Open message from Juniper Works" Button
+    t =    12.91s Swipe up Target Application 'org.bonsai-swiftui.example.mail'
+    t =    12.91s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    12.92s     Find the Target Application 'org.bonsai-swiftui.example.mail'
+    t =    12.95s     Check for interrupting elements affecting "BonsaiMail" Application
+    t =    12.99s     Synthesize event
+    t =    13.42s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    15.52s Find the "Open message from Juniper Works" Button
+    t =    15.76s Tap "Open message from Juniper Works" Button
+    t =    15.76s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    15.77s     Find the "Open message from Juniper Works" Button
+    t =    15.85s     Check for interrupting elements affecting "Open message from Juniper Works" Button
+    t =    15.91s     Synthesize event
+    t =    16.21s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =    16.60s Waiting 10.0s for Any (First Match) to exist
+    t =    17.62s     Checking `Expect predicate `existsNoRetry == 1` for object Any (First Match)`
+    t =    17.62s         Checking existence of `Any (First Match)`
+    t =    17.71s Find the Any (First Match)
+    t =    17.90s Added attachment named 'mail-ios-detail-attachment'
+    t =    17.90s Checking existence of `"Archive" Button`
+    t =    17.96s Tear Down
+    t =    17.96s     Terminate org.bonsai-swiftui.example.mail:8416
+Test Case '-[BonsaiMail_iOSUITests.MailUITests testInboxExpansionAndAttachmentDetail]' passed (19.112 seconds).
+Test Case '-[BonsaiMail_iOSUITests.MailUITests testSwipeActionsArchiveMessage]' started.
+    t =     0.00s Start Test at 2026-09-18 19:45:54.450
+    t =     0.06s Set Up
+    t =     0.06s     Open org.bonsai-swiftui.example.mail
+    t =     0.06s         Launch org.bonsai-swiftui.example.mail
+2026-09-18 19:45:54.534 xcodebuild[9936:2385932] [MT] DVTDevice: Error locating DeviceSupport directory using Optional("arm64") or Optional("arm64e"): nilError
+    t =     0.28s             Setting up automation session
+    t =     0.56s             Wait for org.bonsai-swiftui.example.mail to idle
+    t =     1.60s     Waiting 15.0s for Button (First Match) to exist
+Resolve Package Graph
+
+    t =     2.63s         Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+    t =     2.63s             Checking existence of `Button (First Match)`
+    t =     2.76s Get number of matches for: Elements matching predicate '"Archive" IN identifiers'
+    t =     2.81s Press Button (First Match)[0.25, 0.50] for 0.1 seconds, then drag to Button (First Match)[0.67, 0.50] with velocity of 500.00 pixels per second, and then hold for 0.0 seconds 
+    t =     2.81s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     2.82s     Find the Button (First Match)
+    t =     2.87s     Check for interrupting elements affecting "Unread message from Mara Vale" Button
+    t =     2.92s     Synthesize event
+    t =     2.92s         Find the "Unread message from Mara Vale" Button
+    t =     2.97s         Find the "Unread message from Mara Vale" Button
+    t =     3.13s         Find the "Unread message from Mara Vale" Button
+    t =     3.20s         Find the "Unread message from Mara Vale" Button
+    t =     3.25s         Find the "Unread message from Mara Vale" Button
+    t =     3.93s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     4.47s Waiting 10.0s for "Archive" Button to exist
+    t =     5.50s     Checking `Expect predicate `existsNoRetry == 1` for object "Archive" Button`
+    t =     5.51s         Checking existence of `"Archive" Button`
+    t =     5.60s Get all elements bound by index for: Elements matching predicate '"Archive" IN identifiers'
+    t =     5.66s Find the "Archive" Button
+    t =     5.73s Get all elements bound by index for: Elements matching predicate '"Trash" IN identifiers'
+    t =     5.77s Find the "Trash" Button
+    t =     5.96s Added attachment named 'mail-ios-swipe-actions'
+    t =     5.97s Tap "archivebox" Button
+    t =     5.97s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     5.97s     Find the "archivebox" Button
+    t =     6.03s     Check for interrupting elements affecting "archivebox" Button
+    t =     6.07s     Synthesize event
+    t =     6.35s     Wait for org.bonsai-swiftui.example.mail to idle
+    t =     8.35s Checking `Expect predicate `exists == 0` for object "Unread message from Mara Vale" Button`
+    t =     8.36s     Checking existence of `"Unread message from Mara Vale" Button`
+    t =     8.46s Checking existence of `Button (First Match)`
+    t =     8.50s Get number of matches for: Elements matching predicate '"Archive" IN identifiers'
+    t =     8.54s Tear Down
+    t =     8.54s     Terminate org.bonsai-swiftui.example.mail:8419
+Test Case '-[BonsaiMail_iOSUITests.MailUITests testSwipeActionsArchiveMessage]' passed (9.690 seconds).
+Test Suite 'MailUITests' passed at 2026-09-18 19:46:04.139.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 28.801 (28.806) seconds
+Test Suite 'BonsaiMail-iOSUITests.xctest' passed at 2026-09-18 19:46:04.143.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 28.801 (28.810) seconds
+Test Suite 'All tests' passed at 2026-09-18 19:46:04.146.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 28.801 (28.814) seconds
+Resolve Package Graph
+2026-09-18 19:46:04.452 xcodebuild[9936:2385932] [MT] IDETestOperationsObserverDebug: 34.676 elapsed -- Testing started completed.
+2026-09-18 19:46:04.452 xcodebuild[9936:2385932] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-18 19:46:04.452 xcodebuild[9936:2385932] [MT] IDETestOperationsObserverDebug: 34.676 sec, +34.676 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/rcmerci/gh-repos/bonsai-ui/_build/ios/journal-device/mail-ui-acceptance-2.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

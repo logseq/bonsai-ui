@@ -1,0 +1,7 @@
+Before [("group-1", "", ["8FCAA660-C4E5-4807-9349-1B496F731415"]), ("group-2", "", ["AC0C6756-66EA-4B04-B6AA-86B60B987F8E"])]
+Fields before [(ObjectIdentifier(0x0000000ab2431800), "Value 2"), (ObjectIdentifier(0x0000000ab2431000), "Value 1")]
+Focus accepted true
+Reordered [("group-2", "", ["86100E03-DE35-4656-8804-8F29A401EF25"]), ("group-1", "", ["8FCAA660-C4E5-4807-9349-1B496F731415"])]
+Fields after [(ObjectIdentifier(0x0000000ab2431000), "Value 1"), (ObjectIdentifier(0x0000000ab2433c00), "Value 2")]
+Original editor retained false
+Original views retained false

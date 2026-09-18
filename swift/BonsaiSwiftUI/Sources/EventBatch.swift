@@ -5,6 +5,9 @@ enum NativeEventPayload: Equatable, Sendable {
   case civilDate(CivilDate)
   case civilTime(CivilTime)
   case press
+  case confirmationResponse(ConfirmationController.Response)
+  case listScrollCompleted(ListScrollCompletion)
+  case navigationActivation(serial: UUID, handler: UInt64, activation: String)
   case key(NativeKey)
   case environmentChanged(NativeHostEnvironment)
   case tap(NativeTap)
@@ -120,7 +123,9 @@ enum NativeEventPayload: Equatable, Sendable {
     case .tap: EventTagId.tap
     case .doubleTap: EventTagId.doubleTap
     case .longPress: EventTagId.longPress
-    case .press: EventTagId.press
+    case .confirmationResponse: EventTagId.confirmationResponse
+    case .listScrollCompleted: EventTagId.listScrollCompleted
+    case .press, .navigationActivation: EventTagId.press
     case .key: EventTagId.key
     case .environmentChanged: EventTagId.environmentChanged
     case .hostResponse: EventTagId.hostResponse
@@ -294,11 +299,25 @@ enum EventBatch {
       case .semanticsAction(let id):
         guard id > 0, id <= UInt64(Int64.max) else { throw WireError.invalidHeader }
         record.integer(id)
+      case .confirmationResponse(let response):
+        guard response.token > 0 else { throw WireError.invalidHeader }
+        record.integer(response.token)
+        switch response.result {
+        case .dismissed: record.integer(UInt8(0))
+        case .action(let key):
+          guard !key.isEmpty else { throw WireError.invalidHeader }
+          record.integer(UInt8(1))
+          try record.string(key)
+        }
+      case .listScrollCompleted(let result):
+        guard result.token > 0 else { throw WireError.invalidHeader }
+        record.integer(result.token)
+        record.integer(result.outcome.rawValue)
       case .visibleRange(let range):
         guard range.lowerBound >= 0 else { throw WireError.invalidHeader }
         record.integer(UInt64(range.lowerBound))
         record.integer(UInt64(range.upperBound))
-      case .press, .longPress, .textLimitReached: break
+      case .press, .navigationActivation, .longPress, .textLimitReached: break
       case .valueChanged(let value): record.integer(UInt8(value ? 1 : 0))
       case .focusChanged(let focused): record.integer(UInt8(focused ? 1 : 0))
       case .textSubmit(let text): try record.string(text)

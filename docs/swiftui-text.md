@@ -1,5 +1,10 @@
 # Native Text Layout
 
+For native read-only selection, wrap text with
+`View.text_selection ~enabled:true`. A nearer `~enabled:false` disables selection.
+This preserves OCaml ownership of the value and does not create an editable
+field. See [Native forms and diagnostic content](swiftui-form.md).
+
 `View.text` renders literal Unicode through SwiftUI Text. Its layout properties
 use the native paragraph model:
 

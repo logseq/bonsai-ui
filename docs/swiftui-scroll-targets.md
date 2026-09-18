@@ -91,7 +91,7 @@ These are application-local viewport and accessibility actions. They do not
 establish physical mouse/trackpad gesture behavior, momentum/snapping physics,
 iOS device behavior, VoiceOver, visual acceptance or maximum-size performance.
 Those checks and the complete standalone Gallery remain outstanding. The iOS
-build target is physical iOS 18+ arm64; Simulator is unsupported.
+build target is physical iOS 26+ arm64; Simulator is unsupported.
 
 Optional `on_scroll` observes native movement independently from the controlled
 item-position binding. See [ordered observations](swiftui-scroll.md#ordered-scroll-observations).

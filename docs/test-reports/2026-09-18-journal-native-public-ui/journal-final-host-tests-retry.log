@@ -1,0 +1,8 @@
+test_ios_runtime_tests_build_with_an_isolated_application_host (__main__.XcodeHostTests.test_ios_runtime_tests_build_with_an_isolated_application_host) ... ok
+test_ios_ui_tests_build_separate_from_the_application_runtime (__main__.XcodeHostTests.test_ios_ui_tests_build_separate_from_the_application_runtime) ... ok
+test_system_sqlite_linkage_follows_the_native_object (__main__.XcodeHostTests.test_system_sqlite_linkage_follows_the_native_object) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 272.498s
+
+OK

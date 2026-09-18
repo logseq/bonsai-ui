@@ -1,0 +1,18 @@
+test_all_concrete_virtual_modules_have_ios26_native_artifacts (__main__.VirtualLibraryTests.test_all_concrete_virtual_modules_have_ios26_native_artifacts) ... ERROR
+
+======================================================================
+ERROR: test_all_concrete_virtual_modules_have_ios26_native_artifacts (__main__.VirtualLibraryTests.test_all_concrete_virtual_modules_have_ios26_native_artifacts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_ios_virtual_library.py", line 15, in test_all_concrete_virtual_modules_have_ios26_native_artifacts
+    expected = sorted(path.name for path in host.iterdir() if path.suffix in (".cmx", ".o"))
+                                            ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 575, in iterdir
+    with os.scandir(root_dir) as scandir_it:
+         ~~~~~~~~~~^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/rcmerci/gh-repos/bonsai-ui/_build/ios/switches/iphoneos/_opam/lib/datascript_ocaml'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)

@@ -90,12 +90,12 @@ class SdkRepositoryTests(unittest.TestCase):
         self.assertEqual((framework / "opam").read_text(), self.locked_opam)
         self.assertIn(self.revision, (framework / "url").read_text())
         sdk = next((self.output / "packages/bonsai_swiftui_ios_sdk").glob("*/files"))
-        self.assertIn("(minimum_deployment_target 18.0)", (sdk / "manifest.sexp").read_text())
-        self.assertIn("18.0", (sdk / "build-installed-framework.sh").read_text())
+        self.assertIn("(minimum_deployment_target 26.0)", (sdk / "manifest.sexp").read_text())
+        self.assertIn("26.0", (sdk / "build-installed-framework.sh").read_text())
         compiler = self.output / "packages/ocaml-ios64/ocaml-ios64.5.1.1"
         self.assertIn("physical iOS arm64", (compiler / "opam").read_text())
         conf = self.output / "packages/conf-ios/conf-ios.4/opam"
-        self.assertIn("-miphoneos-version-min=18.0", conf.read_text())
+        self.assertIn("-miphoneos-version-min=26.0", conf.read_text())
         universe = (self.output / "package-universe.lock").read_text()
         self.assertIn("bonsai_swiftui|0.1.0~dev|local|", universe)
         self.assertIn("conf-ios|4|local|", universe)

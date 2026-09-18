@@ -103,6 +103,7 @@ struct RenderTextField: Equatable, Sendable {
 
   @MainActor final class NativeTextFieldController: NSObject, NSTextFieldDelegate {
     let field: NSTextField
+    lazy var attachment = NativeControlAttachment(field)
     private(set) var session: TextSession
     private var configuration: TextEditorConfiguration
     private var emit: (NativeEventPayload) -> Bool
@@ -113,6 +114,7 @@ struct RenderTextField: Equatable, Sendable {
     private var applying = false
     private var disposed = false
     private var focused = false
+    private var toolbarFocusTransfer = false
     private var traits = TextFieldTraits()
     private var presentationActive = false
     private var autofocusPending = false
@@ -149,7 +151,9 @@ struct RenderTextField: Equatable, Sendable {
 
     @discardableResult func apply(_ snapshot: TextSnapshot) throws -> Bool {
       guard !disposed else { return false }
+      let sessionChanged = snapshot.sessionID != session.sessionID
       let replace = try session.apply(snapshot)
+      if sessionChanged { endToolbarFocusTransfer() }
       if replace { replaceNativeValue() }
       return replace
     }
@@ -192,7 +196,9 @@ struct RenderTextField: Equatable, Sendable {
       field.setAccessibilityLabel(label)
     }
     func setContentActive(_ active: Bool, retainingFocus: Bool = false) {
-      guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else { return }
+      guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else {
+        return
+      }
       contentActive = active
       self.retainingFocus = retainingFocus
       updateAvailability()
@@ -213,7 +219,10 @@ struct RenderTextField: Equatable, Sendable {
       if field.isEnabled != enabled { field.isEnabled = enabled }
       if field.isEditable != editable { field.isEditable = editable }
       if field.isSelectable != enabled { field.isSelectable = enabled }
-      if !enabled { releaseFocus() }
+      if !enabled {
+        endToolbarFocusTransfer()
+        releaseFocus()
+      }
       attemptAutofocus()
     }
     private func releaseFocus() {
@@ -224,6 +233,7 @@ struct RenderTextField: Equatable, Sendable {
     func dispose() {
       guard !disposed else { return }
       disposed = true
+      toolbarFocusTransfer = false
       captureTask?.cancel()
       captureTask = nil
       releaseFocus()
@@ -233,6 +243,7 @@ struct RenderTextField: Equatable, Sendable {
       (field as? SecureField)?.attached = nil
       (field as? PlainField)?.focused = nil
       (field as? SecureField)?.focused = nil
+      attachment.dispose()
       field.isEnabled = false
       emit = { _ in false }
       failed = { _ in }
@@ -268,6 +279,9 @@ struct RenderTextField: Equatable, Sendable {
     }
     private func capture() {
       guard !disposed, !applying else { return }
+      if toolbarFocusTransfer && (editor == nil || field.window?.firstResponder !== editor) {
+        return
+      }
       do {
         let text = editor?.string ?? field.stringValue
         let range =
@@ -317,7 +331,20 @@ struct RenderTextField: Equatable, Sendable {
         current.setSelectedRange(value.selection)
       }
     }
+    var hasToolbarFocusTransfer: Bool { toolbarFocusTransfer && !disposed && acceptsEdits }
+    func beginToolbarFocusTransfer() -> Bool {
+      guard focused, acceptsEdits else { return false }
+      capture()
+      toolbarFocusTransfer = true
+      return true
+    }
+    func endToolbarFocusTransfer() {
+      toolbarFocusTransfer = false
+      focus(field.currentEditor().map { field.window?.firstResponder === $0 } ?? false)
+    }
     private func focus(_ value: Bool) {
+      if !value && toolbarFocusTransfer { return }
+
       guard !disposed, value != focused else { return }
       focused = value
       _ = emit(.focusChanged(value))
@@ -328,7 +355,7 @@ struct RenderTextField: Equatable, Sendable {
     }
     func controlTextDidChange(_ notification: Notification) { scheduleCapture() }
     func controlTextDidEndEditing(_ notification: Notification) {
-      capture()
+      if !toolbarFocusTransfer { capture() }
       focus(false)
     }
     func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool
@@ -345,21 +372,26 @@ struct RenderTextField: Equatable, Sendable {
 
   struct NativeTextFieldView: NSViewRepresentable {
     let controller: NativeTextFieldController
+    @Environment(\.bonsaiToolbarFocus) private var toolbarFocus
     @Environment(\.isEnabled) private var enabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
     @Environment(\.bonsaiDefaults) private var defaults
     @Environment(\.controlSize) private var controlSize
-    func makeNSView(context: Context) -> NSTextField { controller.field }
-    func updateNSView(_ view: NSTextField, context: Context) {
+    func makeNSView(context: Context) -> NativeControlMount { controller.attachment.makeMount() }
+    func updateNSView(_ mount: NativeControlMount, context: Context) {
+      mount.onMounted = toolbarFocus?.mounted
+      controller.attachment.attach(mount)
+      let view = controller.field
       controller.setHostEnabled(enabled)
       view.font = defaults.bodyFont(
         family: fontFamily, legibility: context.environment.legibilityWeight)
       view.textColor = NSColor(defaults.color(defaults.defaultForeground()))
     }
-    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSTextField, context: Context)
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NativeControlMount, context: Context)
       -> CGSize?
     {
-      CGSize(width: proposal.width ?? 240, height: max(28, nsView.intrinsicContentSize.height))
+      CGSize(
+        width: proposal.width ?? 240, height: max(28, controller.field.intrinsicContentSize.height))
     }
   }
 #else
@@ -412,6 +444,7 @@ struct RenderTextField: Equatable, Sendable {
   @MainActor final class NativeTextFieldController: NSObject, UITextFieldDelegate {
     private let input = EditingField()
     var field: UITextField { input }
+    lazy var attachment = NativeControlAttachment(field)
     private(set) var session: TextSession
     private var configuration: TextEditorConfiguration
     private var emit: (NativeEventPayload) -> Bool
@@ -422,6 +455,7 @@ struct RenderTextField: Equatable, Sendable {
     private var applying = false
     private var disposed = false
     private var focused = false
+    private var toolbarFocusTransfer = false
     private var traits = TextFieldTraits()
     private var presentationActive = false
     private var autofocusPending = false
@@ -459,7 +493,9 @@ struct RenderTextField: Equatable, Sendable {
     }
     @discardableResult func apply(_ snapshot: TextSnapshot) throws -> Bool {
       guard !disposed else { return false }
+      let sessionChanged = snapshot.sessionID != session.sessionID
       let replace = try session.apply(snapshot)
+      if sessionChanged { endToolbarFocusTransfer() }
       if replace { replaceNativeValue() }
       return replace
     }
@@ -516,7 +552,9 @@ struct RenderTextField: Equatable, Sendable {
       input.accessibilityLabel = label
     }
     func setContentActive(_ active: Bool, retainingFocus: Bool = false) {
-      guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else { return }
+      guard !disposed, active != contentActive || retainingFocus != self.retainingFocus else {
+        return
+      }
       contentActive = active
       self.retainingFocus = retainingFocus
       updateAvailability()
@@ -539,12 +577,16 @@ struct RenderTextField: Equatable, Sendable {
         input.inputView = keyboard
         if input.isFirstResponder { input.reloadInputViews() }
       }
-      if !input.isEnabled { input.resignFirstResponder() }
+      if !input.isEnabled {
+        endToolbarFocusTransfer()
+        input.resignFirstResponder()
+      }
       attemptAutofocus()
     }
     func dispose() {
       guard !disposed else { return }
       disposed = true
+      toolbarFocusTransfer = false
       captureTask?.cancel()
       captureTask = nil
       input.resignFirstResponder()
@@ -554,6 +596,7 @@ struct RenderTextField: Equatable, Sendable {
       input.changed = nil
       input.focusChanged = nil
       input.acceptsInput = nil
+      attachment.dispose()
       input.isEnabled = false
       emit = { _ in false }
       failed = { _ in }
@@ -580,6 +623,7 @@ struct RenderTextField: Equatable, Sendable {
     }
     private func capture() {
       guard !disposed, !applying else { return }
+      if toolbarFocusTransfer && !input.isFirstResponder { return }
       do {
         let text = input.text ?? ""
         let value = try TextValue(
@@ -620,14 +664,27 @@ struct RenderTextField: Equatable, Sendable {
       }
       input.selectedTextRange = textRange(value.selection)
     }
+    var hasToolbarFocusTransfer: Bool { toolbarFocusTransfer && !disposed && acceptsEdits }
+    func beginToolbarFocusTransfer() -> Bool {
+      guard focused, acceptsEdits else { return false }
+      capture()
+      toolbarFocusTransfer = true
+      return true
+    }
+    func endToolbarFocusTransfer() {
+      toolbarFocusTransfer = false
+      focus(input.isFirstResponder)
+    }
     private func focus(_ value: Bool) {
+      if !value && toolbarFocusTransfer { return }
+
       guard !disposed, value != focused else { return }
       focused = value
       _ = emit(.focusChanged(value))
     }
     func textFieldDidChangeSelection(_ textField: UITextField) { scheduleCapture() }
     func textFieldDidEndEditing(_ textField: UITextField) {
-      capture()
+      if !toolbarFocusTransfer { capture() }
       focus(false)
     }
     func textField(
@@ -660,12 +717,16 @@ struct RenderTextField: Equatable, Sendable {
 
   struct NativeTextFieldView: UIViewRepresentable {
     let controller: NativeTextFieldController
+    @Environment(\.bonsaiToolbarFocus) private var toolbarFocus
     @Environment(\.isEnabled) private var enabled
     @Environment(\.bonsaiFontFamily) private var fontFamily
     @Environment(\.bonsaiDefaults) private var defaults
     @Environment(\.controlSize) private var controlSize
-    func makeUIView(context: Context) -> UITextField { controller.field }
-    func updateUIView(_ view: UITextField, context: Context) {
+    func makeUIView(context: Context) -> NativeControlMount { controller.attachment.makeMount() }
+    func updateUIView(_ mount: NativeControlMount, context: Context) {
+      mount.onMounted = toolbarFocus?.mounted
+      controller.attachment.attach(mount)
+      let view = controller.field
       controller.setHostEnabled(enabled)
       view.font = defaults.bodyFont(
         family: fontFamily, legibility: context.environment.legibilityWeight,
@@ -673,14 +734,14 @@ struct RenderTextField: Equatable, Sendable {
       view.adjustsFontForContentSizeCategory = true
       view.textColor = UIColor(defaults.color(defaults.defaultForeground()))
     }
-    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextField, context: Context)
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: NativeControlMount, context: Context)
       -> CGSize?
     {
       CGSize(
         width: proposal.width ?? 240,
         height: max(
           controlSize == .mini || controlSize == .small ? 0 : defaults.metric(2),
-          uiView.intrinsicContentSize.height))
+          controller.field.intrinsicContentSize.height))
     }
   }
 #endif

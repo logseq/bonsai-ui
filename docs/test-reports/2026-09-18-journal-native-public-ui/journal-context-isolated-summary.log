@@ -1,0 +1,7 @@
+context-unit 0 /tmp/journal-context-unit-verified.log
+context-native 0 /tmp/journal-context-native-verified.log
+context-outline 0 /tmp/journal-context-outline-verified.log
+hierarchy 0 /tmp/journal-hierarchy-verified.log
+hierarchy-runtime 0 /tmp/journal-hierarchy-runtime-verified.log
+hierarchy-scroll 0 /tmp/journal-hierarchy-scroll-verified.log
+list-related 0 /tmp/journal-list-related-verified.log

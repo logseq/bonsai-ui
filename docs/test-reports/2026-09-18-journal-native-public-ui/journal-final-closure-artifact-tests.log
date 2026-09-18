@@ -1,0 +1,29 @@
+test_interface_only_virtual_library_is_accepted (__main__.ClosureArtifactTests.test_interface_only_virtual_library_is_accepted) ... FAIL
+test_ios26_loose_objects_and_archives_are_accepted (__main__.ClosureArtifactTests.test_ios26_loose_objects_and_archives_are_accepted) ... ok
+test_missing_declared_native_artifact_is_rejected (__main__.ClosureArtifactTests.test_missing_declared_native_artifact_is_rejected) ... ok
+test_missing_one_concrete_virtual_module_is_rejected (__main__.ClosureArtifactTests.test_missing_one_concrete_virtual_module_is_rejected) ... FAIL
+test_wrong_platform_or_minimum_inside_archive_is_rejected (__main__.ClosureArtifactTests.test_wrong_platform_or_minimum_inside_archive_is_rejected) ... ok
+
+======================================================================
+FAIL: test_interface_only_virtual_library_is_accepted (__main__.ClosureArtifactTests.test_interface_only_virtual_library_is_accepted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_ios_closure_artifacts.py", line 89, in test_interface_only_virtual_library_is_accepted
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : iOS runtime closure verification failure: missing virtual component inventory: digestif
+
+
+======================================================================
+FAIL: test_missing_one_concrete_virtual_module_is_rejected (__main__.ClosureArtifactTests.test_missing_one_concrete_virtual_module_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rcmerci/gh-repos/bonsai-ui/tool/test_ios_closure_artifacts.py", line 99, in test_missing_one_concrete_virtual_module_is_rejected
+    self.assertIn("datascript__Query.cmx", result.stdout + result.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'datascript__Query.cmx' not found in 'iOS runtime closure verification failure: missing virtual component inventory: datascript_ocaml\n'
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.528s
+
+FAILED (failures=2)

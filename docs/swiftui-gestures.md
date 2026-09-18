@@ -1,7 +1,7 @@
 # SwiftUI gesture migration
 
 Generic Gesture now stages and renders through native SwiftUI recognizer
-representables on macOS 26 and iOS 18. The actual OCaml window regression passes
+representables on macOS 26 and iOS 26. The actual OCaml window regression passes
 single/double click, long press, primary pointer transitions and lifecycle
 scenarios on macOS. Physical iOS interaction, multiple simultaneous contacts,
 scroll-view competition and the combined Gallery remain unfinished.
@@ -34,7 +34,7 @@ The bridge uses Apple's
 [NSGestureRecognizerRepresentable](https://developer.apple.com/documentation/swiftui/nsgesturerecognizerrepresentable)
 on macOS 26 and
 [UIGestureRecognizerRepresentable](https://developer.apple.com/documentation/swiftui/uigesturerecognizerrepresentable)
-on iOS 18. These APIs attach native recognizers to SwiftUI gestures and provide
+on iOS 26. These APIs attach native recognizers to SwiftUI gestures and provide
 coordinate-space conversion. Their declarations are present in the installed
 Xcode 26.1.1 SDK. Do not replace system single/double-click timing with an
 application timer without evidence that the system recognizers cannot satisfy
@@ -108,7 +108,7 @@ recognition acceptance.
 
 
 All three platform checks pass (`/tmp/gesture-platforms.log`, 18.478 seconds),
-including physical iOS 18 module/example compilation and explicit unsupported
+including physical iOS 26 module/example compilation and explicit unsupported
 target rejection. The protected spec tree is unchanged. No new Mail screenshot,
 source commit/push or generated SDK publication was produced at this checkpoint.
 
@@ -141,7 +141,7 @@ by the App-owned named coordinate space.
 
 All three platform checks pass in 22.384 seconds
 (`/tmp/swiftui-gesture-platforms.log`), including full module and retained
-example compilation for physical iOS 18 arm64, and unsupported Simulator/Intel
+example compilation for physical iOS 26 arm64, and unsupported Simulator/Intel
 rejection. These builds do not prove device gesture behavior. The native
 window command is included in `make swift-test` and requires a usable macOS
 foreground session. The complete Swift regression passes all 410 tests in 90 suites with explicit
@@ -233,7 +233,7 @@ two contacts' four queued edges through the actual native OCaml runtime and
 checks its complete history. These are input-processing and transport tests,
 not a recording of UIKit receiving physical touches. Three platform checks pass
 in 20.028 seconds (`/tmp/swiftui-contact-platforms.log`), including the complete
-Swift module and retained example entrypoints for physical iOS 18 arm64.
+Swift module and retained example entrypoints for physical iOS 26 arm64.
 
 The full serial regression passes 416 tests in 92 suites in 409.270 seconds
 (`/tmp/swiftui-contact-full.log`). Strict formatting and all ten test-report

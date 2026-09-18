@@ -71,7 +71,7 @@ class HostConfigurationTests(unittest.TestCase):
         changed = command[:-1] + ["26.1"]
         self.assertNotEqual(subprocess.run(changed + ["--check"], capture_output=True).returncode, 0)
         self.assertEqual(before, self.snapshot())
-        for invalid in ["17.9", "26", "26.x", "26.0.1", "026.0"]:
+        for invalid in ["17.9", "18.0", "25.9", "26", "26.x", "26.0.1", "026.0"]:
             result = subprocess.run(command[:-1] + [invalid], capture_output=True)
             self.assertNotEqual(result.returncode, 0)
             self.assertEqual(before, self.snapshot())
@@ -205,7 +205,7 @@ class XcodeHostTests(unittest.TestCase):
             self.assertTrue((host / "user-notes.txt").is_file())
             for target, sdk, minimum_key, minimum in [
                 ("BonsaiMail-macOS", "macosx", "MACOSX_DEPLOYMENT_TARGET", "26.0"),
-                ("BonsaiMail-iOS", "iphoneos", "IPHONEOS_DEPLOYMENT_TARGET", "18.0"),
+                ("BonsaiMail-iOS", "iphoneos", "IPHONEOS_DEPLOYMENT_TARGET", "26.0"),
             ]:
                 for configuration in ("Debug", "Profile", "Release"):
                     with self.subTest(target=target, configuration=configuration):
@@ -347,7 +347,7 @@ class XcodeHostTests(unittest.TestCase):
             self.assertNotIn("_bs_runtime_create", symbols,
                              "The empty host must not link a second OCaml runtime")
             self.assertNotIn("_caml_startup", symbols)
-            self.assertEqual(metadata["MinimumOSVersion"], "18.0")
+            self.assertEqual(metadata["MinimumOSVersion"], "26.0")
             self.assertEqual(metadata["UIDeviceFamily"], [1, 2])
             self.assertEqual(self.command("xcrun", "lipo", "-archs", executable).stdout.strip(), "arm64")
 

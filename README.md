@@ -4,7 +4,7 @@ Source repository: [logseq/bonsai-ui](https://github.com/logseq/bonsai-ui).
 Report issues in the [project issue tracker](https://github.com/logseq/bonsai-ui/issues).
 
 BonsaiSwiftUI renders OCaml/Bonsai applications with SwiftUI on macOS 26.0+
-Apple Silicon and physical iOS/iPadOS 18.0+ arm64 devices. Simulator, Intel Mac,
+Apple Silicon and physical iOS/iPadOS 26.0+ arm64 devices. Simulator, Intel Mac,
 Catalyst and non-Apple platforms are unsupported.
 
 The SwiftUI replacement is in progress and is not production ready. The runtime,
@@ -37,6 +37,7 @@ adapters supply capabilities such as revisioned native text editing.
 See [application bodies](docs/swiftui-application-body.md),
 [layout](docs/swiftui-layout.md), [text input](docs/swiftui-text-input.md),
 [collections](docs/swiftui-collections.md), [native List](docs/swiftui-native-list.md),
+[context menus](docs/swiftui-context-menu.md),
 [navigation](docs/swiftui-navigation-stack.md) and
 [host services](docs/swiftui-host-services.md).
 
@@ -60,7 +61,7 @@ and dependency closure are also installed in the global `bonsai-swiftui-ios`
 switch and verified by an independent App build. Public SDK publication remains
 unfinished. See the
 [iOS toolchain evidence](docs/swiftui-ios-toolchain.md). An old iOS 15 SDK does
-not satisfy the iOS 18 object checks.
+not satisfy the iOS 26 object checks.
 
 ## Install and use from another repository
 
@@ -127,7 +128,7 @@ open examples/mail/apple/DerivedData/Build/Products/Debug/BonsaiMail.app
 
 The helper builds Mail's actual OCaml complete object and links it into the
 SwiftUI App. It also supports Profile/Release and physical-iOS builds using an
-explicit iOS 18 complete object. See [Xcode host commands](docs/swiftui-xcode-host.md).
+explicit iOS 26 complete object. See [Xcode host commands](docs/swiftui-xcode-host.md).
 The examples' generated Xcode hosts can already be built through this helper;
 all eleven examples own native CLI configurations and renamed OCaml packages.
 

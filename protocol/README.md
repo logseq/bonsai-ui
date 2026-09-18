@@ -75,3 +75,10 @@ Explicit values equal to the baseline remain explicit and override the Theme.
 
 The existing standard Surface native widget now uses version 3, documented in
 [Native decorative surfaces](../docs/swiftui-surfaces.md).
+
+## Protocol 10 native Journal UI
+
+Protocol 10 adds an explicit style byte to native List properties. Native links
+have a dedicated core node kind with an activation identity and enabled state.
+All producers, the C ABI protocol declaration, consumers, and fixtures use major
+10. Older List encodings are rejected; there is no legacy decoder.

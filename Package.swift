@@ -8,7 +8,7 @@ let nativeTestDirectory = URL(fileURLWithPath: #filePath)
 
 let package = Package(
   name: "BonsaiSwiftUI",
-  platforms: [.iOS(.v18), .macOS(.v26)],
+  platforms: [.iOS(.v26), .macOS(.v26)],
   products: [.library(name: "BonsaiSwiftUI", targets: ["BonsaiSwiftUI"])],
   targets: [
     .systemLibrary(name: "CBonsaiSwiftUI", path: "native/src"),

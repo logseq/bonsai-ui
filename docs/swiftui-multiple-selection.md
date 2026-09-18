@@ -59,5 +59,5 @@ the set. SF Symbol/text labels are included in the native scenario.
 
 Physical iOS interaction and complete visual/VoiceOver acceptance remain open.
 The physical-iOS Swift module typecheck does not establish device behavior.
-The supported targets remain physical iOS 18+ arm64 and macOS 26+ arm64, with no
+The supported targets remain physical iOS 26+ arm64 and macOS 26+ arm64, with no
 Simulator support.

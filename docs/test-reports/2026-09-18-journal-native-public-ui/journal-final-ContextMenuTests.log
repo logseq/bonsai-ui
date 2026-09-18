@@ -1,0 +1,22 @@
+Test Suite 'Selected tests' started at 2026-09-18 20:42:56.834.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' started at 2026-09-18 20:42:56.835.
+Test Suite 'BonsaiSwiftUIPackageTests.xctest' passed at 2026-09-18 20:42:56.835.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-09-18 20:42:56.835.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1400
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite ContextMenuTests started.
+◇ Test presentedActionsKeepTheirHandlerAndOneShotPresentationAcrossRebinding() started.
+✔ Test presentedActionsKeepTheirHandlerAndOneShotPresentationAcrossRebinding() passed after 0.004 seconds.
+◇ Test freshPresentationRevokesOlderClosuresAndDisabledOrForeignItems() started.
+✔ Test freshPresentationRevokesOlderClosuresAndDisabledOrForeignItems() passed after 0.001 seconds.
+◇ Test contextActionAndMenuIncarnationsCannotBeTransplantedBetweenOwners() started.
+✔ Test contextActionAndMenuIncarnationsCannotBeTransplantedBetweenOwners() passed after 0.001 seconds.
+◇ Test ordinaryContextModifierStagesOnlyOwnedUniqueActions() started.
+✔ Test ordinaryContextModifierStagesOnlyOwnedUniqueActions() passed after 0.001 seconds.
+◇ Test hostedNativeContextMenuUsesThePresentedActionSnapshot() started.
+✔ Test hostedNativeContextMenuUsesThePresentedActionSnapshot() passed after 0.687 seconds.
+✔ Suite ContextMenuTests passed after 0.693 seconds.
+✔ Test run with 5 tests in 1 suite passed after 0.693 seconds.
