@@ -139,7 +139,7 @@ let test_retired_scroll_header_nodes_are_rejected () =
        | Error error ->
          fail "retired scroll header failed for wrong reason: %s" error.message
        | Ok _ -> fail "retired scroll header node was accepted")
-    [ {|42 53 46 52 08 00 00 00 30 00 03 00
+    [ {|42 53 46 52 09 00 00 00 30 00 03 00
 07 00 00 00 00 00 00 00 01 00 00 00
 00 00 00 00 02 00 00 00 00 00 00 00
 77 00 00 00 00 00 00 00 00 00 00 00
@@ -153,7 +153,7 @@ ff 01 ef cd ab ff 02 00 00 00 01 01
 00 00 00 00 c0 4f 40 01 01 01 00 00
 00 00 00 a0 47 40 01 01 01 00 00 00
 00 00 00 11 40 00 0a 00 00 00 00|}
-    ; {|4253465208000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
+    ; {|4253465209000000300003005a00000000000000010000000000000002000000000000002900000000000000000000000100000000031a0000000100000000000000270001000000000000000000000000c04a400a00000000|}
     ]
 ;;
 
@@ -161,7 +161,7 @@ let test_retired_navigation_bar_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-4253465208000000300003005a00000000000000010000000000000002000000
+4253465209000000300003005a00000000000000010000000000000002000000
 000000007b00000000000000000000000100000000036c000000010000000000
 00007300ff0f00000000000000000000020004000000486f6d65010107000000
 000110000000486f6d652064657374696e6174696f6e0800000053657474696e
@@ -179,7 +179,7 @@ let test_retired_route_wire_is_rejected () =
   let bytes =
     bytes_of_hex
       {|
-42 53 46 52 08 00 00 00 30 00 03 00
+42 53 46 52 09 00 00 00 30 00 03 00
 49 00 00 00 00 00 00 00 04 00 00 00
 00 00 00 00 05 00 00 00 00 00 00 00
 a8 00 00 00 00 00 00 00 00 00 00 00
@@ -1633,13 +1633,9 @@ let test_complete_native_protocol_round_trip () =
     ; Disclosure_group_props { expanded = true; enabled = true }
     ; Disclosure_group_props { expanded = false; enabled = false }
     ; Date_picker_props
-        { selected = { year = 1582; month = 10; day = 10 }
-        ; first = { year = 1; month = 1; day = 1 }
+        { selected = { year = 1582; month = 10; day = 15 }
+        ; first = { year = 1582; month = 10; day = 15 }
         ; last = { year = 9999; month = 12; day = 31 }
-        ; selectable_dates =
-            [ { year = 1582; month = 10; day = 10 }
-            ; { year = 2000; month = 2; day = 29 }
-            ]
         ; label = "Historical date"
         ; enabled = true
         }
@@ -1725,7 +1721,7 @@ let test_complete_native_protocol_round_trip () =
     ; Group_box_props { has_label = false }
     ; Group_box_props { has_label = true }
     ; Divider_props
-    ; Progress_props { value = Some 0.5; circular = false }
+    ; Progress_props { value = Some 0.5; style = 2 }
     ]
   in
   let operations =
@@ -1770,7 +1766,7 @@ let test_complete_native_protocol_round_trip () =
 ;;
 
 let test_linear_progress_protocol_boundaries () =
-  let props value = Wire_frame.Progress_props { value; circular = false } in
+  let props value = Wire_frame.Progress_props { value; style = 2 } in
   List.iter
     (fun value ->
        expect_frame_round_trip
@@ -2172,7 +2168,7 @@ let () =
   match
     Binary_codec.decode
       (bytes_of_hex
-         "4253465208000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
+         "4253465209000000300003005a0000000000000001000000000000000200000000000000210000000000000000000000010000000003120000000100000000000000220000000000000000000a00000000")
   with
   | Error { code = Binary_codec.Unknown_node_kind; _ } -> ()
   | Error error -> fail "retired fill failed for wrong reason: %s" error.message
@@ -2228,9 +2224,9 @@ let () =
 let () =
   let open Wire_frame in
   let date year month day : civil_date = { year; month; day } in
-  let first = date 1 1 1 in
+  let first = date 1582 10 15 in
   let last = date 9999 12 31 in
-  let selected = date 1582 10 10 in
+  let selected = date 1582 10 16 in
   let frame payload =
     { runtime_epoch = epoch 1L
     ; base_revision = revision 1L

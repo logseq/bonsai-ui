@@ -303,8 +303,7 @@ extension MorphingSurfaceTests {
 }
 
 extension NativeRuntimeTests {
-  @Test @MainActor func actualMailCoordinatesSurfaceExtentsAndRemovesCollapsedDetails() async throws
-  {
+  @Test @MainActor func actualMailRetainsNativeRowsAndRemovesCollapsedDetails() async throws {
     initializeAccessibilityApplication()
     let session = BonsaiSession()
     session.isVisible = true
@@ -339,20 +338,27 @@ extension NativeRuntimeTests {
           })
       }
       try await settle()
-      let initial = session.tree.nodes.count
       let shared = try header()
+      var row = shared
+      while row.kind != NodeKindId.listRow {
+        row = try #require(session.tree.parents[row.id.node].flatMap { session.tree.nodes[$0] })
+      }
+      func descendants(_ node: RenderNodeState) -> [RenderNodeState] {
+        [node] + node.children.flatMap(descendants)
+      }
+      let initial = descendants(row).count
       for _ in 0..<3 {
         #expect(session.activate(try header()))
         try await settle(3)
-        #expect(session.tree.nodes.count > initial)
+        #expect(descendants(row).count > initial)
         #expect(try header() === shared)
-        let surfaces = session.tree.nodes.values.filter { $0.morphingSurfaceController != nil }
+        let surfaces = descendants(row).filter { $0.morphingSurfaceController != nil }
         #expect(!surfaces.isEmpty)
         #expect(surfaces.allSatisfy { $0.children.count == 1 })
-        #expect(surfaces.allSatisfy { $0.morphingSurfaceController?.displayedExtent == nil })
         #expect(session.activate(try header()))
         try await settle()
-        #expect(session.tree.nodes.count == initial)
+        #expect(descendants(row).count == initial)
+        #expect(session.tree.nodes[row.id.node] === row)
         #expect(try header() === shared)
       }
       await session.close()

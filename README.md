@@ -36,7 +36,7 @@ adapters supply capabilities such as revisioned native text editing.
 
 See [application bodies](docs/swiftui-application-body.md),
 [layout](docs/swiftui-layout.md), [text input](docs/swiftui-text-input.md),
-[collections](docs/swiftui-collections.md),
+[collections](docs/swiftui-collections.md), [native List](docs/swiftui-native-list.md),
 [navigation](docs/swiftui-navigation-stack.md) and
 [host services](docs/swiftui-host-services.md).
 

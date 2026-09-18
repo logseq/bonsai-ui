@@ -878,6 +878,8 @@ let validate_date_bounds context ~first ~last ?initial () =
   in
   validate_value first;
   validate_value last;
+  if compare_civil_date first (civil_date ~year:1582 ~month:10 ~day:15) < 0
+  then invalid_arg (context ^ ": system dates start at 1582-10-15");
   if compare_civil_date first last > 0 then invalid_arg (context ^ ": bounds are reversed");
   let validate label value =
     validate_value value;

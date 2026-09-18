@@ -263,7 +263,8 @@ val show_notice
   -> unit
   -> (notice_close_reason, error) result Bonsai.Effect.t
 
-(** Present civil Gregorian year/month/day controls. Bounds are inclusive.
+(** Present a system DatePicker for Gregorian year/month/day values. Bounds are
+    inclusive and must be within 1582-10-15 through 9999-12-31.
     Omitted initial selection uses [first]. Save returns [Some date]; native
     dismissal or Cancel returns [None]. Invalid values raise [Invalid_argument].
     Requests share one modal slot with date-range, time, menu and file dialogs. *)
@@ -276,7 +277,8 @@ val pick_date
   -> unit
   -> (civil_date option, error) result Bonsai.Effect.t
 
-(** Select an inclusive date range. Omitted initial selection is [first, first].
+(** Select an inclusive date range with the same bounds as [pick_date].
+    Omitted initial selection is [first, first].
     Moving the start beyond the end advances the end; end choices start at the
     selected start. An initial reversed range is invalid. *)
 val pick_date_range

@@ -215,18 +215,15 @@ module Expandable_message_composer : sig
     | Extended
     | Compact
 
-  type button_position =
-    | Leading
-    | Trailing
+  type button_role =
+    | Action
+    | Confirmation
+    | Cancellation
 
   type button_visibility =
     | Always
     | When_empty
     | When_non_empty
-
-  type button_style =
-    | Plain
-    | Filled
 
   type button
 
@@ -246,9 +243,8 @@ module Expandable_message_composer : sig
   val button
     :  id:int
     -> tooltip:string
-    -> ?position:button_position
+    -> ?role:button_role
     -> ?visibility:button_visibility
-    -> ?style:button_style
     -> ?enabled:bool
     -> child:View.t
     -> unit
@@ -260,7 +256,7 @@ module Expandable_message_composer : sig
       request focus again. The duration and curve animate the launcher; Sheet
       transitions use native behavior. Zero duration and Reduce Motion suppress
       explicit launcher animation. Place the launcher with Body/overlay
-      composition. The standard registration uses kind 7, version 2. *)
+      composition. The standard registration uses kind 7, version 3. *)
   val create
     :  ?key:Key.t
     -> ?enabled:bool
@@ -299,9 +295,8 @@ module Expandable_message_composer : sig
     type button_props =
       { id : int
       ; tooltip : string
-      ; position : button_position
+      ; role : button_role
       ; visibility : button_visibility
-      ; style : button_style
       ; enabled : bool
       }
 

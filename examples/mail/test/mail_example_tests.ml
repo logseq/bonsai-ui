@@ -112,7 +112,7 @@ let native_visible_range handle ~first_index ~last_exclusive =
   Test.Handle.present handle;
   Test.Handle.visible_range
     handle
-    (Test.Query.kind "Collection_catalog")
+    (Test.Query.kind "Native_list")
     ~first_index:(Int64.of_int first_index)
     ~last_exclusive:(Int64.of_int last_exclusive)
 ;;
@@ -502,32 +502,21 @@ let test_detail_star_attachment_and_reply_notice () =
       "reply scope notice has the wrong content")
 ;;
 
-let collection_catalog_node handle =
-  require_node
-    handle
-    (Test.Query.kind "Collection_catalog")
-    "mail collection catalog is missing"
+let native_list_node handle =
+  require_node handle (Test.Query.kind "Native_list") "native Mail list is missing"
 ;;
 
-let collection_window_node handle =
-  require_node
-    handle
-    (Test.Query.kind "Collection_window")
-    "mail collection window is missing"
-;;
-
-let collection_first_index handle =
-  let window = collection_window_node handle in
-  let (Av view) = Ui.View.Private.view window.widget in
-  match view.node with
-  | Ui.View.Private.Collection_window { first_index; _ } -> first_index
-  | _ -> fail "mail materialization has no collection window"
+let native_rows handle =
+  let list = native_list_node handle in
+  let section = (Ui.View.For_testing.children list.widget).(0) in
+  let children = Ui.View.For_testing.children section in
+  Array.sub children 2 (Array.length children - 2)
 ;;
 
 let test_painted_ranges_keep_the_paging_handler_until_behavior_changes () =
   with_handle (fun handle ->
     let handler () =
-      let node = collection_catalog_node handle in
+      let node = native_list_node handle in
       let (Av view) = Ui.View.Private.view node.widget in
       require (Array.length view.event_bindings = 1) "collection has ambiguous handlers";
       view.event_bindings.(0).handler
@@ -556,7 +545,7 @@ let test_painted_ranges_keep_the_paging_handler_until_behavior_changes () =
     require (handler () != loading) "page completion retained the loading handler")
 ;;
 
-let test_initial_virtual_inbox_has_twenty_unique_button_rows () =
+let test_initial_native_inbox_has_twenty_unique_button_rows () =
   with_handle (fun handle ->
     require
       (List.length Mail.For_testing.initial_inbox_ids = 20)
@@ -571,15 +560,9 @@ let test_initial_virtual_inbox_has_twenty_unique_button_rows () =
            (Test.Query.test_id (Printf.sprintf "mail-button-%d" id))
            (Printf.sprintf "initial button row %d is missing" id))
       Mail.For_testing.initial_inbox_ids;
-    let catalog = collection_catalog_node handle in
-    let (Av view) = Ui.View.Private.view catalog.widget in
-    match view.node with
-    | Ui.View.Private.Collection_catalog { keys; _ } ->
-      require (Array.length keys = 20) "initial logical mail count is not twenty";
-      require
-        (Array.length (collection_window_node handle).children <= 24)
-        "initial virtual window exceeds the supplied bound"
-    | _ -> fail "mail virtual list has no collection catalog")
+    require
+      (Array.length (native_rows handle) = 20)
+      "initial native row count is not twenty")
 ;;
 
 let test_three_sequential_pages_load_once_and_preserve_overlap_identity () =
@@ -591,9 +574,6 @@ let test_three_sequential_pages_load_once_and_preserve_overlap_identity () =
         "overlap row is missing before pagination"
     in
     native_visible_range handle ~first_index:12 ~last_exclusive:20;
-    require
-      (collection_first_index handle = 8)
-      "visible range did not expand through the shared overscan window policy";
     require_present
       handle
       (Test.Query.test_id "mail-loading-more")
@@ -616,12 +596,9 @@ let test_three_sequential_pages_load_once_and_preserve_overlap_identity () =
       handle
       (Test.Query.test_id "mail-button-41")
       "duplicate tail notifications appended more than one page";
-    let first_page_catalog = collection_catalog_node handle in
-    let (Av fp_view) = Ui.View.Private.view first_page_catalog.widget in
-    (match fp_view.node with
-     | Ui.View.Private.Collection_catalog { keys; _ } ->
-       require (Array.length keys = 40) "first cursor appended more than one page"
-     | _ -> fail "mail virtual list has no collection catalog");
+    require
+      (Array.length (native_rows handle) = 40)
+      "first cursor appended more than one page";
     let overlap_after =
       require_node
         handle
@@ -648,10 +625,9 @@ let test_three_sequential_pages_load_once_and_preserve_overlap_identity () =
       handle
       (Test.Query.test_id "mail-loading-more")
       "the feed stopped offering another page after three appends";
-    let final_window = collection_window_node handle in
     require
-      (Array.length final_window.children <= 24)
-      "rendered mail window grew with loaded session data")
+      (Array.length (native_rows handle) = 81)
+      "loaded rows and pending indicator are missing")
 ;;
 
 let test_sidebar_mailboxes_settings_and_native_column_state () =
@@ -820,58 +796,19 @@ let test_rapid_activation_does_not_duplicate_expansion_or_detail () =
       "Open created duplicate detail pages")
 ;;
 
-type collection_props =
-  { keys : string array
-  ; default_extent : float
-  ; overrides : (int * float) list
-  }
-
-let collection_props handle =
-  let catalog = collection_catalog_node handle in
-  let (Av view) = Ui.View.Private.view catalog.widget in
-  match view.node with
-  | Ui.View.Private.Collection_catalog
-      { keys
-      ; default_extent
-      ; overrides
-      ; overscan
-      ; expand_duration_ms
-      ; collapse_duration_ms
-      ; vertical
-      ; _
-      } ->
-    require vertical "mail collection must remain vertical";
-    require (overscan = 4) "mail collection changed its overscan policy";
-    require
-      (expand_duration_ms = 240 && collapse_duration_ms = 190)
-      "mail collection lost expansion/collapse timing";
-    { keys; default_extent; overrides }
-  | _ -> fail "expected a collection catalog"
-;;
-
-let test_collection_catalog_and_window_share_exact_ordered_keys () =
+let test_native_list_retains_keyed_row_order () =
   with_handle (fun handle ->
-    let check_window () =
-      let catalog = collection_props handle in
-      let window = collection_window_node handle in
-      let (Av view) = Ui.View.Private.view window.widget in
-      match view.node with
-      | Ui.View.Private.Collection_window { first_index; keys } ->
-        require
-          (keys = Array.sub catalog.keys first_index (Array.length keys))
-          "mail window keys differ from catalog order";
-        require
-          (Array.length keys = Array.length window.children)
-          "mail window does not have one child per key"
-      | _ -> fail "expected collection window"
+    let keys () =
+      Array.map (fun node -> Ui.View.For_testing.key node) (native_rows handle)
     in
-    check_window ();
-    native_visible_range handle ~first_index:12 ~last_exclusive:20;
-    check_window ();
-    advance_logical_time handle 800_000_010L;
-    check_window ();
-    swipe_action handle 16 1;
-    check_window ())
+    let initial = keys () in
+    require
+      (initial = Array.init 20 (fun index -> Some (Ui.Key.int (index + 1))))
+      "native row keys differ from message order";
+    press handle 1;
+    require (keys () = initial) "expansion reordered native rows";
+    press handle 2;
+    require (keys () = initial) "accordion reordered native rows")
 ;;
 
 let test_detail_uses_native_scroll_content () =
@@ -948,20 +885,7 @@ let test_active_surface_tree_and_shared_header_identity () =
 
 let test_expansion_accordion_outline_and_collapse () =
   with_handle (fun handle ->
-    let initial_props = collection_props handle in
-    require
-      (initial_props.overrides = [])
-      "initial mail list contains a stale extent override";
     press handle 1;
-    let expanded_props = collection_props handle in
-    require
-      (List.length expanded_props.overrides = 1)
-      "expansion did not publish exactly one extent override";
-    let index, height = List.hd expanded_props.overrides in
-    require (index = 0) "expanded message override has the wrong logical index";
-    require
-      (Float.compare height expanded_props.default_extent > 0)
-      "expanded message override is not taller than a compact row";
     List.iter
       (fun test_id ->
          require_present
@@ -992,19 +916,12 @@ let test_expansion_accordion_outline_and_collapse () =
       handle
       (Test.Query.test_id "mail-card-2")
       "accordion did not expand the newly activated row";
-    let second_props = collection_props handle in
-    require
-      (List.map fst second_props.overrides = [ 1 ])
-      "accordion did not atomically replace the extent override";
     Test.Handle.present handle;
     Test.Handle.click handle (Test.Query.test_id "mail-card-collapse-2");
     require_absent
       handle
       (Test.Query.test_id "mail-card-2")
-      "expanded header did not collapse the card";
-    require
-      ((collection_props handle).overrides = [])
-      "collapse left an extent override behind")
+      "expanded header did not collapse the card")
 ;;
 
 let test_expanded_nested_actions_are_isolated () =
@@ -1043,10 +960,7 @@ let test_expanded_nested_actions_are_isolated () =
       (Runtime.Node_id.equal swipe_before.node_id swipe_after.node_id)
       "expanded state update replaced the keyed swipe host";
     swipe_action handle 1 1;
-    require_absent handle (Test.Query.test_id "mail-card-1") "archive retained the card";
-    require
-      ((collection_props handle).overrides = [])
-      "archive left the expanded extent override")
+    require_absent handle (Test.Query.test_id "mail-card-1") "archive retained the card")
 ;;
 
 let test_filter_cleanup_and_retained_app_destination () =
@@ -1067,48 +981,11 @@ let test_filter_cleanup_and_retained_app_destination () =
     require_absent
       handle
       (Test.Query.test_id "mail-card-2")
-      "mailbox change retained an expanded card";
-    require
-      ((collection_props handle).overrides = [])
-      "mailbox change retained a stale extent override")
+      "mailbox change retained an expanded card")
 ;;
 
-let test_measurement_revision_tracks_sizing_not_star_or_append () =
+let test_accessibility_type_reflows_subjects () =
   with_handle (fun handle ->
-    let revision () =
-      let node = collection_catalog_node handle in
-      let (Av view) = Ui.View.Private.view node.widget in
-      match view.node with
-      | Ui.View.Private.Collection_catalog { measurement_revision; _ } ->
-        measurement_revision
-      | _ -> fail "missing collection catalog"
-    in
-    let initial = revision () in
-    Test.Handle.present handle;
-    Test.Handle.click handle (Test.Query.test_id "mail-star-2");
-    require (revision () = initial) "star appearance invalidated unchanged row sizing";
-    native_visible_range handle ~first_index:12 ~last_exclusive:20;
-    advance_logical_time handle 750_000_010L;
-    require (revision () = initial) "append invalidated existing row extents";
-    native_visible_range handle ~first_index:0 ~last_exclusive:8;
-    swipe_action handle 1 3;
-    require (revision () <> initial) "font-weight change reused stale extents";
-    let before_expansion = revision () in
-    press handle 1;
-    require (revision () <> before_expansion) "expansion reused stale offscreen sizing")
-;;
-
-let test_accessibility_type_reflows_subjects_and_invalidates_measurements () =
-  with_handle (fun handle ->
-    let revision () =
-      let node = collection_catalog_node handle in
-      let (Av view) = Ui.View.Private.view node.widget in
-      match view.node with
-      | Ui.View.Private.Collection_catalog { measurement_revision; _ } ->
-        measurement_revision
-      | _ -> fail "missing collection catalog"
-    in
-    let initial_revision = revision () in
     let environment = Environment.Private.current (Environment.Private.create ()) in
     Test.Handle.present handle;
     Test.Handle.set_environment handle { environment with text_scale = 2.35 };
@@ -1123,21 +1000,18 @@ let test_accessibility_type_reflows_subjects_and_invalidates_measurements () =
      | Ui.View.Private.Text { line_limit; _ } ->
        require (line_limit = Some 2) "large Mail subjects still truncate after one line"
      | _ -> fail "Mail subject is not text");
-    require
-      (revision () <> initial_revision)
-      "adaptive row structure retained old measurements")
+    require (Array.length (native_rows handle) = 20) "large text removed native rows")
 ;;
 
 let () =
-  test_measurement_revision_tracks_sizing_not_star_or_append ();
   test_painted_ranges_keep_the_paging_handler_until_behavior_changes ();
-  test_accessibility_type_reflows_subjects_and_invalidates_measurements ();
+  test_accessibility_type_reflows_subjects ();
   test_mail_app_disables_trace_by_default ();
-  test_collection_catalog_and_window_share_exact_ordered_keys ();
+  test_native_list_retains_keyed_row_order ();
   test_initial_inbox_and_semantics ();
   test_detail_uses_native_scroll_content ();
   test_mail_uses_native_buttons_in_list_preview_and_detail ();
-  test_initial_virtual_inbox_has_twenty_unique_button_rows ();
+  test_initial_native_inbox_has_twenty_unique_button_rows ();
   test_star_preserves_keyed_row_identity ();
   test_expand_open_and_platform_pop_preserve_state ();
   test_active_surface_tree_and_shared_header_identity ();

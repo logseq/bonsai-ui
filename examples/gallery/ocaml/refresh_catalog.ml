@@ -6,26 +6,13 @@ type state =
   ; phase : V.Refresh.request_state
   ; show : int64 option
   ; requests : int
-  ; first : int
-  ; last : int
-  ; position : int64 option
   }
 
-let component ?(kind = 0) handlers graph =
-  let catalog =
-    V.Collection.Catalog.create ~keys:(List.init 100 Ui.Key.int) ~default_extent:40. ()
-  in
+let component handlers graph =
   let state, set_state =
     Bonsai_v017.state
       ~equal:( = )
-      { token = 1L
-      ; phase = Ready
-      ; show = None
-      ; requests = 0
-      ; first = 0
-      ; last = 0
-      ; position = Some 0L
-      }
+      { token = 1L; phase = Ready; show = None; requests = 0 }
       graph
   in
   let bind name f =
@@ -54,59 +41,20 @@ let component ?(kind = 0) handlers graph =
     bind "refresh-show" (fun _ state ->
       { state with show = Some (Int64.succ (Option.value state.show ~default:0L)) })
   in
-  let range =
-    bind "refresh-range" (fun payload state ->
-      match V.Collection.visible_range_of_payload payload with
-      | None -> state
-      | Some range ->
-        let window =
-          V.Collection.Window.create
-            ~catalog
-            ~visible_first_index:(Int64.to_int range.first_index)
-            ~visible_last_exclusive:(Int64.to_int range.last_exclusive)
-        in
-        { state with first = window.first_index; last = window.last_exclusive })
-  in
-  let position =
-    bind "refresh-position" (fun payload state ->
-      match payload with
-      | Ui.Event.Payload.Int64 position -> { state with position = Some position }
-      | _ -> state)
-  in
   Bonsai.Cont.map2
     state
-    (Bonsai.Cont.all [ request; complete; next; show; range; position ])
+    (Bonsai.Cont.all [ request; complete; next; show ])
     ~f:(fun state bindings ->
       let row index =
         V.frame ~height:40. (V.text (Printf.sprintf "Refresh row %d" index))
       in
       let viewport =
-        match kind with
-        | 0 -> V.Scroll.vertical (V.column ~spacing:0. (List.init 100 row))
-        | 1 ->
-          V.Scroll_sections.vertical
-            ~spacing:0.
-            [ V.Scroll_sections.section
-                ~key:(Ui.Key.int 0)
-                (List.init 100 (fun index ->
-                   V.Keyed.create ~key:(Ui.Key.int index) (row index)))
-            ]
-        | 2 ->
-          V.Collection.vertical
-            ~catalog
-            ~first_index:state.first
-            ~items:
-              (List.init (state.last - state.first) (fun i ->
-                 let index = state.first + i in
-                 V.Keyed.create ~key:(Ui.Key.int index) (row index)))
-            ~on_visible_range:(List.nth bindings 4)
-            ()
-        | _ ->
-          V.Scroll_targets.vertical
-            ~position:state.position
-            ~on_position_changed:(List.nth bindings 5)
-            (List.init 100 (fun index ->
-               V.Scroll_targets.item ~id:(Int64.of_int index) (row index)))
+        V.Native_list.vertical
+          [ V.Native_list.section
+              ~key:(Ui.Key.string "refresh-rows")
+              (List.init 100 (fun index ->
+                 V.Native_list.row ~key:(Ui.Key.int index) (row index)))
+          ]
       in
       let viewport =
         V.Refresh.vertical

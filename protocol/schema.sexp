@@ -1,6 +1,6 @@
 ((protocol
   (name bonsai_swiftui)
-  (major 8)
+  (major 9)
   (minor 0)
   (endianness little)
   (header_bytes 48)
@@ -57,6 +57,9 @@
    (menu 61)
    (removal 78)
    (refresh 77)
+   (native_list 80)
+   (list_section 81)
+   (list_row 82)
    (scroll_targets 62)
    (help 63)
    (popover 72)
@@ -111,15 +114,18 @@
    (semantics 2 optional_semantics)))
 
  (kind_props
-  ((scroll_sections ((vertical 1 bool) (pin_headers 2 bool) (pin_footers 3 bool) (spacing 4 f64) (shows_indicators 5 bool) (initial_anchor 6 enum_u8)))
+  ((native_list ())
+   (list_section ((has_header 1 bool) (has_footer 2 bool) (separator 3 enum_u8)))
+   (list_row ((separator 1 enum_u8)))
+   (scroll_sections ((vertical 1 bool) (pin_headers 2 bool) (pin_footers 3 bool) (spacing 4 f64) (shows_indicators 5 bool) (initial_anchor 6 enum_u8)))
    (scroll_section ((has_header 1 bool) (has_footer 2 bool) (hero_height 3 optional_f64) (stretch 4 bool)))
    (toolbar ((placements 1 toolbar_placements)))
    (sheet ((presented 1 bool) (fullscreen 2 bool) (detents 3 u8) (initial 4 enum_u8) (interactive 5 bool) (indicator 6 bool) (sizing 7 enum_u8) (fraction 8 f64)))
    (popover ((presented 1 bool) (edge 2 enum_u8)))
    (help ((message 1 string)))
    (toggle ((value 1 bool) (enabled 2 bool) (style 3 enum_u8)))
-   (swipe_actions ((enabled 1 bool) (vertical 2 bool) (close_on_scroll 3 bool) (group 4 optional_string) (close_when_opened 5 bool) (close_when_tapped 6 bool)))
-   (swipe_action ((title 1 string) (side 2 enum_u8) (enabled 3 bool) (role 4 enum_u8) (extent 5 f64) (background 6 u32) (auto_close 7 bool) (full_swipe 8 bool)))
+   (swipe_actions ((enabled 1 bool) (allows_full_swipe 2 bool)))
+   (swipe_action ((title 1 string) (side 2 enum_u8) (enabled 3 bool) (role 4 enum_u8) (background 5 u32) (symbol 6 optional_string)))
    (morphing_surface ((expanded 1 bool) (expand_duration_ms 2 u32) (collapse_duration_ms 3 u32)))
    (tabs ((selection 1 string)))
    (tab ((page_key 1 string) (title 2 string) (symbol 3 string) (badge 4 optional_string) (accessibility_label 5 optional_string)))
@@ -253,14 +259,14 @@
    (divider ())
    (label ())
    (date_picker ((selected 1 civil_date) (first 2 civil_date) (last 3 civil_date)
-     (selectable_dates 4 civil_dates) (label 5 string) (enabled 6 bool)))
+     (label 4 string) (enabled 5 bool)))
    (time_picker ((value 1 civil_time) (format 2 u8) (label 3 string) (enabled 4 bool)))
    (badge ((count 1 optional_u64) (alignment 2 u8) (visible 3 bool)))
    (group_box
     ((has_label 1 bool)))
    (progress
     ((value 1 optional_f64)
-     (circular 2 bool)))
+     (style 2 enum_u8)))
 
    (table
     ((columns 1 table_columns)

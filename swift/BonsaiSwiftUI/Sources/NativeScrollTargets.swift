@@ -253,8 +253,6 @@ struct NativeScrollTargets: View {
         }
       }
       .scrollDisabled(!properties.enabled)
-      .modifier(RefreshScrollModifier())
-      .modifier(SwipeScrollActivity())
     }
   }
   var body: some View {

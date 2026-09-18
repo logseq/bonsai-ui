@@ -1,4 +1,4 @@
 src:
-  "https://github.com/logseq/bonsai-ui/archive/d8be5273407e8137e1d1a073f732ef4e702509e3.tar.gz"
+  "file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-17-system-controls-source/bonsai-swiftui-0.1.0~dev.tar.gz"
 checksum:
-  "sha256=9acfb3a7a26c5c7d68cea47d91b762eea7a7bcf417917d315f22e28e2bd65489"
+  "sha256=9d8d35b013c89300bc4171bc054a471530062411f533f6b050bf6f56550f917a"

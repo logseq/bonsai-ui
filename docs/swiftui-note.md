@@ -253,7 +253,7 @@ Note now uses the shared Theme/Style configuration and Surface recipes. See
 [Shared UI defaults acceptance](shared-ui-defaults-acceptance.md) for the current
 validation, physical/macOS comparisons and the measured reduction in local
 configuration. The earlier validation sections above describe their respective
-source snapshots; the current wire protocol is 8 and the Surface schema is 3.
+source snapshots; the current wire protocol is 9 and the Surface schema is 3.
 
 The subsequent [Theme-owned defaults update](theme-owned-defaults-acceptance.md)
 moves baseline declarations to OCaml and retains scoped inheritance.

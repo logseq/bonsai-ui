@@ -10,10 +10,10 @@ acceptance.
 | --- | --- | --- |
 | Generic Extension/Capability helpers | Typed OCaml schema and `BonsaiNativeViews` registration | Exact kind/version and capability checks remain; Swift owns resources and native content. |
 | Morphing_surface | Core `View.Morphing_surface` | Remove opaque kind/payload and no-op handler; OCaml supplies active content and Swift animates its surface. |
-| Slidable and auto-close wrapper | Core `View.Swipe_actions` | Independent Unit Press handlers replace the extension event union; group/closure policy belongs to each container. |
+| Slidable and auto-close wrapper | Core `View.Swipe_actions` | Independent Unit Press handlers replace the extension event union; native List owns reveal and closing; obsolete group policies are removed. |
 | Navigation_shell | Native split columns and keyed Tabs | Complete split-state requests and stable page keys replace drawer Boolean and selected index. |
 | Message_composer | Standard SwiftUI kind 6/version 1 | Preserve typed text/action observations and an explicitly ephemeral native draft. |
-| Expandable_message_composer | Standard SwiftUI kind 7/version 2 | Native launcher and Sheet share one retained editor; remove Scaffold placement and old schema decoding. |
+| Expandable_message_composer | Standard SwiftUI kind 7/version 3 | Native launcher and Sheet share one retained editor; remove Scaffold placement and old schema decoding. |
 
 The removed extension kind and event constants have no numeric aliases. A
 full-swipe action invokes an ordinary OCaml handler, which decides whether to

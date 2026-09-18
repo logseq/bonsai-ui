@@ -1,4 +1,4 @@
-"""Exercise native swipe recognition inside a standalone SwiftUI App."""
+"""Verify system List row actions and native refresh toolbar activation."""
 from pathlib import Path
 import os
 import plistlib
@@ -28,12 +28,12 @@ class SwipeWindowTests(unittest.TestCase):
             str(ROOT / "native/test/swipe_window.swift"), "-o", str(executable)],
             cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(build.returncode, 0, build.stdout + build.stderr)
-        for args in [[], ["--rtl"], ["--vertical"]]:
+        for args in [[], ["--rtl"], ["--refresh"]]:
             with self.subTest(arguments=args):
                 result = subprocess.run([str(executable), *args], cwd=ROOT, env=os.environ,
                                         capture_output=True, text=True, timeout=30)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertIn("PASS: native swipe axis arbitration", result.stdout)
+                self.assertIn("PASS: native List swipe actions", result.stdout)
                 print(result.stdout)
 
 if __name__ == "__main__":

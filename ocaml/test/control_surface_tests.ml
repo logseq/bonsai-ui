@@ -135,7 +135,7 @@ let widgets =
       ()
   ; Ui.View.divider ()
   ; Ui.View.group_box ~label:(text "Title") (text "Card")
-  ; Ui.View.progress ~style:Ui.View.Progress_style.Circular ~value:0.5 ()
+  ; Ui.View.progress ~style:Ui.View.Progress_style.Automatic ~value:0.5 ()
   ; Ui.View.progress ~value:0.5 ()
   ; Ui.View.progress ()
   ; Ui.View.toggle
@@ -326,7 +326,7 @@ let test_linear_progress_identity_includes_kind_and_value () =
   in
   let indeterminate = Ui.View.progress () in
   let determinate = Ui.View.progress ~value:0.5 () in
-  let circular = Ui.View.progress ~style:Ui.View.Progress_style.Circular ~value:0.5 () in
+  let circular = Ui.View.progress ~style:Ui.View.Progress_style.Circular () in
   expect
     (not (Ui.View.Private.node_equal_widgets indeterminate determinate))
     "linear progress value was omitted from logical equality";

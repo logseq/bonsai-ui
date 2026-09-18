@@ -792,7 +792,7 @@ let controls_section model handlers =
         ]
     ; Ui.View.divider ()
     ; Ui.View.row
-        [ Ui.View.progress ~style:Ui.View.Progress_style.Circular ~value:0.68 ()
+        [ Ui.View.progress ~style:Ui.View.Progress_style.Automatic ~value:0.68 ()
         ; Ui.View.button
             ~style:Ui.View.Button_style.Plain
             ~on_press:handlers.press
@@ -1198,15 +1198,10 @@ let civil_picker_component handlers graph =
             ~label:"Delivery date"
             ~selected:date
             ~first:initial_date
-            ~last:(Ui.View.Date.create ~year:2025 ~month:3 ~day:10)
-            ~selectable_dates:
+            ~last:
               (if restricted
-               then
-                 [ initial_date
-                 ; Ui.View.Date.create ~year:2025 ~month:1 ~day:2
-                 ; Ui.View.Date.create ~year:2025 ~month:3 ~day:10
-                 ]
-               else [])
+               then initial_date
+               else Ui.View.Date.create ~year:2025 ~month:3 ~day:10)
             ~enabled
             ~on_select:on_change
             ()
@@ -1973,22 +1968,19 @@ let swipe_component handlers graph =
       let button label handler =
         Ui.View.button ~on_press:handler ~child:(Ui.View.text label) ()
       in
-      let row name axis =
+      let row name =
         let title = "Archive " ^ name in
         Ui.View.Swipe_actions.create
           ~key:(Ui.Key.string ("gallery-swipe-" ^ name))
-          ~axis
           ~enabled
-          ~group:"gallery-swipe"
+          ~allows_full_swipe:true
           ~actions:
             [ Ui.View.Swipe_actions.action
                 ~title
                 ~side:Start
                 ~enabled
                 ~background:(Ui.Style.Color.rgb ~red:38 ~green:120 ~blue:60)
-                ~full_swipe:true
                 ~on_press:archive
-                ~child:(Ui.View.text title)
                 ()
             ]
           ~content:
@@ -2002,8 +1994,14 @@ let swipe_component handlers graph =
         [ Ui.View.text (Printf.sprintf "Archived: %d" count)
         ; button (if enabled then "Disable actions" else "Enable actions") toggle
         ; button (if ignored then "Accept actions" else "Ignore actions") ignore
-        ; row "horizontal" Horizontal
-        ; row "vertical" Vertical
+        ; Ui.View.Native_list.vertical
+            [ Ui.View.Native_list.section
+                ~key:(Ui.Key.string "swipe-section")
+                [ Ui.View.Native_list.row ~key:(Ui.Key.string "first") (row "first")
+                ; Ui.View.Native_list.row ~key:(Ui.Key.string "second") (row "second")
+                ]
+            ]
+          |> Ui.View.Viewport.Vertical.with_height ~height:300.
         ])
 ;;
 
@@ -2349,8 +2347,8 @@ let progress_component handlers graph =
       ~spacing:16.
       [ Ui.View.frame
           ~width:240.
-          (progress Ui.View.Progress_style.Linear "progress-linear")
-      ; progress Ui.View.Progress_style.Circular "progress-circular"
+          (progress Ui.View.Progress_style.Automatic "progress-linear")
+      ; progress Ui.View.Progress_style.Automatic "progress-automatic"
       ; Ui.View.button ~on_press:advance ~child:(Ui.View.text "Advance progress") ()
         |> Ui.View.semantics
              ~properties:(Ui.Semantics.create ~identifier:"progress-advance" ())
@@ -3660,10 +3658,7 @@ let component registry graph =
       Ui.View.column
         (scrolls :: List.map (Ui.View.Body.with_size ~width:700. ~height:300.) initial))
   in
-  let refreshes =
-    List.map (fun kind -> Refresh_catalog.component ~kind registry graph) [ 0; 1; 2; 3 ]
-    |> Bonsai.Cont.all
-  in
+  let refreshes = [ Refresh_catalog.component registry graph ] |> Bonsai.Cont.all in
   let scrolls =
     Bonsai.Cont.map2 scrolls refreshes ~f:(fun scrolls refreshes ->
       Ui.View.column

@@ -80,7 +80,7 @@ import SwiftUI
     }
     try press("Send", sheet: true)
     try await wait("raw action") { contains("Last action: 3:" + draft) }
-    try press("Close composer", sheet: true)
+    try press("Close", sheet: true)
     try await wait("close button") { window.sheets.isEmpty }
     try press("Background action")
     try await wait("background restored") { contains("Background: 1") }

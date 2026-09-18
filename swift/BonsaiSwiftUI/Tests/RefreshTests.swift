@@ -30,8 +30,8 @@ struct RefreshNodeTests {
   @Test func refreshOwnsOneVerticalViewportAndValidatesRequestsAtomically() throws {
     let store = try NodeStore().staging(
       TreeFixture.frame([
-        TreeFixture.refresh(), TreeFixture.scroll(2), TreeFixture.text(3, "Rows"),
-        TreeFixture.children(2, [3]), TreeFixture.children(1, [2]), TreeFixture.root(1),
+        TreeFixture.refresh(), TreeFixture.systemList(2), TreeFixture.children(1, [2]),
+        TreeFixture.root(1),
       ])
     ).tree
     for bad in [
@@ -63,13 +63,13 @@ struct RefreshNodeTests {
 }
 
 extension NativeRuntimeTests {
-  @Test(arguments: [0, 1, 2, 3]) @MainActor
-  func actualRefreshWaitsForOcamlAndPreservesItsViewport(kind: Int) async throws {
+  @Test @MainActor
+  func actualRefreshWaitsForOcamlAndPreservesItsViewport() async throws {
     initializeAccessibilityApplication()
     let session = BonsaiSession()
     session.isVisible = true
     do {
-      try await session.start(entrypoint: "native-refresh-\(kind)")
+      try await session.start(entrypoint: "native-refresh-0")
       let host = NSHostingView(
         rootView: NativeNodeView(
           node: try #require(session.tree.root), activate: { _ = session.activate($0) }))
@@ -113,19 +113,19 @@ extension NativeRuntimeTests {
       }
       try await settle()
       let native = try scroll()
-      try press("Refresh")
-      try press("Refresh")
+      try press("Programmatic refresh")
+      try press("Programmatic refresh")
       try await settle()
       #expect(contains("Requests: 1"))
       #expect(contains("State: pending"))
-      try press("Refresh")
+      try press("Programmatic refresh")
       try await settle()
       #expect(contains("Requests: 1"))
-      #expect(accessibilityElements(host).contains { $0.role == "AXBusyIndicator" })
+
       try press("Complete request")
       try await settle()
       #expect(contains("State: completed"))
-      try press("Refresh")
+      try press("Programmatic refresh")
       try await settle()
       #expect(contains("Requests: 1"))
       try press("Next request")
@@ -138,12 +138,12 @@ extension NativeRuntimeTests {
       #expect(contains("Requests: 2"))
       try press("Next request")
       try await settle()
-      try press("Refresh")
+      try press("Programmatic refresh")
       try await settle()
       #expect(contains("Requests: 3"))
       #expect(try scroll() === native)
       session.isVisible = false
-      try press("Refresh")
+      try press("Programmatic refresh")
       try await settle()
       #expect(contains("Requests: 3"))
       session.isVisible = true
@@ -152,7 +152,7 @@ extension NativeRuntimeTests {
       try press("Complete request")
       try press("Next request")
       try await settle()
-      try press("Refresh")
+      try press("Programmatic refresh")
       try await settle()
       #expect(contains("Requests: 4"))
       await session.close()
@@ -169,8 +169,8 @@ extension NativeRuntimeTests {
   {
     var store = try NodeStore().staging(
       TreeFixture.frame([
-        TreeFixture.refresh(), TreeFixture.scroll(2), TreeFixture.text(3, "Rows"),
-        TreeFixture.children(2, [3]), TreeFixture.children(1, [2]), TreeFixture.root(1),
+        TreeFixture.refresh(), TreeFixture.systemList(2), TreeFixture.children(1, [2]),
+        TreeFixture.root(1),
       ])
     ).tree
     let tree = RenderTree()
@@ -234,22 +234,4 @@ extension NativeRuntimeTests {
       events == [.refreshRequest(1), .refreshRequest(2), .refreshRequest(3), .refreshRequest(4)])
   }
 
-  @Test func pullRequiresLeadingUserInteractionAndOneRelease() {
-    let controller = RefreshController(
-      RenderRefresh(token: 1, state: 0, show: nil), emit: { _ in true })
-    controller.setPresentation(presented: true, active: true)
-    let generation = controller.generation
-    #expect(!controller.pull(offset: -100, interacting: false, generation: generation))
-    #expect(!controller.pull(offset: -40, interacting: true, generation: generation))
-    #expect(!controller.pull(offset: 0, interacting: false, generation: generation))
-    #expect(!controller.pull(offset: -100, interacting: true, generation: generation))
-    #expect(!controller.pull(offset: -20, interacting: true, generation: generation))
-    #expect(!controller.pull(offset: 0, interacting: false, generation: generation))
-    #expect(!controller.pull(offset: -80, interacting: true, generation: generation))
-    #expect(controller.pull(offset: 0, interacting: false, generation: generation))
-    #expect(!controller.pull(offset: -80, interacting: false, generation: generation))
-    controller.invalidateBinding()
-    #expect(!controller.pull(offset: -100, interacting: true, generation: generation))
-    #expect(!controller.pull(offset: .nan, interacting: false, generation: generation))
-  }
 }

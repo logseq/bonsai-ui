@@ -74,10 +74,7 @@ enum RenderCivilPicker: Equatable, Sendable {
       let selected = try readDate(&reader)
       let first = try readDate(&reader)
       let last = try readDate(&reader)
-      let count = Int(try reader.integer(UInt16.self))
-      var allowed: [CivilDate] = []
-      for _ in 0..<count { allowed.append(try readDate(&reader)) }
-      let domain = try CivilDateDomain(first: first, last: last, allowed: allowed)
+      let domain = try CivilDateDomain(first: first, last: last)
       guard domain.contains(selected) else { throw TreeError.invalidProperties }
       result = .date(
         selection: selected, domain: domain, label: try reader.string(), enabled: try reader.flag())
@@ -97,7 +94,6 @@ enum RenderCivilPicker: Equatable, Sendable {
 }
 
 @MainActor @Observable final class CivilPickerController {
-  enum Field { case year, month, day }
   struct Request: Equatable {
     let serial: UInt64
     let value: CivilSelection
@@ -145,29 +141,20 @@ enum RenderCivilPicker: Equatable, Sendable {
     var generation: UInt64
     init(_ generation: UInt64) { self.generation = generation }
   }
-  func dateBinding(_ field: Field, emit: @escaping (NativeEventPayload) -> Bool) -> Binding<Int> {
+  func dateBinding(emit: @escaping (NativeEventPayload) -> Bool) -> Binding<Date> {
     let read = BindingRead(generation)
     return Binding(
       get: {
         read.generation = self.generation
-        guard case .date(let value) = self.selection else { return 0 }
-        switch field {
-        case .year: return value.year
-        case .month: return value.month
-        case .day: return value.day
+        guard case .date(let value) = self.selection else {
+          preconditionFailure("Date binding on a time control")
         }
+        return try! value.dateForPicker()
       },
-      set: { component in
-        guard read.generation == self.generation,
-          case .date(let value) = self.selection, case .date(_, let domain, _, _) = self.properties
+      set: { date in
+        guard read.generation == self.generation, let value = try? CivilDate.fromPickerDate(date)
         else { return }
-        let next: CivilDate?
-        switch field {
-        case .year: next = domain.selectingYear(component, from: value)
-        case .month: next = domain.selectingMonth(component, from: value)
-        case .day: next = domain.selectingDay(component, from: value)
-        }
-        if let next { self.request(.date(next), emit: emit) }
+        self.request(.date(value), emit: emit)
       })
   }
   func timeBinding(emit: @escaping (NativeEventPayload) -> Bool) -> Binding<Date> {
@@ -206,24 +193,13 @@ struct NativeCivilPicker: View {
   @ViewBuilder var body: some View {
     switch properties {
     case .date(_, let domain, let label, let enabled):
-      if case .date(let value) = controller.selection {
-        VStack(alignment: .leading) {
-          Text(label)
-          HStack {
-            Picker("Year", selection: controller.dateBinding(.year, emit: node.emit)) {
-              ForEach(domain.years, id: \.self) { Text(String($0)).tag($0) }
-            }
-            Picker("Month", selection: controller.dateBinding(.month, emit: node.emit)) {
-              ForEach(domain.months(in: value.year), id: \.self) { Text(String($0)).tag($0) }
-            }
-            Picker("Day", selection: controller.dateBinding(.day, emit: node.emit)) {
-              ForEach(domain.days(in: value.year, month: value.month), id: \.self) {
-                Text(String($0)).tag($0)
-              }
-            }
-          }.pickerStyle(.menu).modifier(NativeInteractiveBounds())
-        }.disabled(!enabled)
-      }
+      DatePicker(
+        label, selection: controller.dateBinding(emit: node.emit),
+        in: domain.pickerRange, displayedComponents: .date
+      )
+      .environment(\.calendar, CivilDate.pickerCalendar)
+      .environment(\.timeZone, .gmt)
+      .disabled(!enabled)
     case .time(_, let format, let label, let enabled):
       DatePicker(
         label, selection: controller.timeBinding(emit: node.emit),

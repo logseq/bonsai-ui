@@ -95,7 +95,8 @@ struct RenderTextEditor: Equatable, Sendable {
     func updateUIView(_ view: NativeEditingTextView, context: Context) {
       controller.setHostEnabled(isEnabled)
       view.font = defaults.bodyFont(
-        family: fontFamily, legibility: context.environment.legibilityWeight)
+        family: fontFamily, legibility: context.environment.legibilityWeight,
+        dynamicTypeSize: context.environment.dynamicTypeSize)
       view.adjustsFontForContentSizeCategory = true
       view.textColor = UIColor(defaults.color(defaults.defaultForeground()))
     }

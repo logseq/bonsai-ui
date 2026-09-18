@@ -30,7 +30,8 @@ struct RenderExpandableComposer: Equatable {
       return string
     }
     guard !strings[0].isEmpty, !strings[1].isEmpty else { throw TreeError.invalidProperties }
-    let actions = try RenderComposer.decodeActions(&reader, count: count, trimTooltip: false)
+    let actions = try RenderComposer.decodeActions(
+      &reader, count: count, trimTooltip: false, sheet: true)
     guard reader.remaining == 0 else { throw TreeError.invalidProperties }
     return Self(
       composer: RenderComposer(
@@ -83,9 +84,9 @@ struct RenderExpandableComposer: Equatable {
     let blocked = blocksBackgroundInput
     defer { if blocked != blocksBackgroundInput { onPresentationChange?() } }
     guard !disposed, requested, generation == token else { return }
+    composer.suspend()
     requested = false
     closing = true
-    composer.suspend()
   }
   func disappeared(_ token: UInt64) {
     let blocked = blocksBackgroundInput
@@ -126,7 +127,7 @@ struct RenderExpandableComposer: Equatable {
 @MainActor enum NativeExpandableComposer {
   static var definition: NativeViewDefinition {
     BonsaiNativeViews.definition(
-      version: 2, capabilities: [.stateful, .semantics], decode: RenderExpandableComposer.decode,
+      version: 3, capabilities: [.stateful, .semantics], decode: RenderExpandableComposer.decode,
       validateChildren: { properties, count in
         guard properties.composer.actions.count + 1 == count else {
           throw TreeError.invalidChildren
@@ -155,10 +156,14 @@ private struct NativeExpandableComposerView: View {
         guard let request = context.makeNavigationEvent(event) else { return nil }
         return (request.0, { controller.accepts(token) && request.1() })
       })
-    return NativeMessageComposerView(context: nested, closeSheet: { controller.close(token) })
-      .onAppear { controller.appeared(token) }
-      .onDisappear { controller.disappeared(token) }
-      .id(token)
+    return NavigationStack {
+      NativeMessageComposerView(context: nested, closeSheet: { controller.close(token) })
+        .sheetContent
+        .navigationTitle(context.properties.label)
+    }
+    .onAppear { controller.appeared(token) }
+    .onDisappear { controller.disappeared(token) }
+    .id(token)
   }
 
   var body: some View {

@@ -13,7 +13,7 @@ that embeds the corresponding real Gallery component.
 | Multiple segmented selection | Keyed Toggles bound to one OCaml set | Each requested Bool updates membership; the selection-array callback is removed. |
 | Slider and range slider | `View.Slider` | Domain-unit step replaces divisions; axis replaces vertical visual variants. Continuous and final requests remain distinct. |
 | Chips and tags | Button, Toggle and sibling removal Button | Selection requests carry Bool; removal remains a separate Unit action. |
-| Progress and loading | `View.progress` | Optional fraction distinguishes determinate and indeterminate progress; Linear/Circular select shape. |
+| Progress and loading | `View.progress` | Automatic preserves an optional fraction; Linear requires a fraction and Circular requires activity. Unsupported combinations reject. |
 | Button groups | Stack/flow, Picker, Toggle, Scroll and Menu composition | Selection mode is represented by the chosen control instead of a group flag. |
 
 Disabled controls publish no input binding. Picker selection can be absent;

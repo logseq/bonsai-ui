@@ -38,6 +38,7 @@ final class RenderNodeState: Identifiable, Equatable {
   let presentationController: PresentationController?
   let civilPickerController: CivilPickerController?
   let removalController: RemovalController?
+  let listVisibility: ListVisibility?
   let refreshController: RefreshController?
   let scrollObserver: ScrollObserver?
   let scrollCommand: NativeScrollCommand?
@@ -60,7 +61,6 @@ final class RenderNodeState: Identifiable, Equatable {
     navigationController?.onPresentationChange = changed
     tableController?.onPresentationChange = changed
     removalController?.onPresentationChange = changed
-    swipeController?.onPresentationChange = changed
   }
 
   init(
@@ -81,6 +81,7 @@ final class RenderNodeState: Identifiable, Equatable {
     } else {
       removalController = nil
     }
+    listVisibility = node.properties == .nativeList ? ListVisibility() : nil
     if case .refresh(let properties) = node.properties {
       refreshController = RefreshController(properties, emit: { input(identity, $0) })
     } else {
@@ -244,6 +245,7 @@ final class RenderTree {
   private(set) var nativeViewNodes: [RenderNodeState] = []
   private(set) var presentationNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var fieldNodes: [RenderNodeState] = []
+  @ObservationIgnored private(set) var listNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var collectionNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var focusAndGestureNodes: [RenderNodeState] = []
   @ObservationIgnored private(set) var scrollNodes: [RenderNodeState] = []
@@ -278,24 +280,6 @@ final class RenderTree {
     hoverHost = NativeHoverHost(router: hoverRouter)
     self.imageLoader = imageLoader
     self.imageClock = imageClock
-  }
-
-  func closeSwipePeers(_ source: SwipeActionsController, opened: Bool) {
-    guard let group = source.properties.group,
-      opened ? source.properties.closeWhenOpened : source.properties.closeWhenTapped
-    else { return }
-    for node in nodes.values {
-      if let peer = node.swipeController, peer !== source, peer.properties.group == group {
-        peer.close()
-      }
-    }
-  }
-  func swipeContentTapped(_ node: RenderNodeState) {
-    var child = node
-    while let id = parents[child.id.node], let parent = nodes[id] {
-      if let controller = parent.swipeController { closeSwipePeers(controller, opened: false) }
-      child = parent
-    }
   }
 
   func validate(_ store: NodeStore) throws {
@@ -443,7 +427,6 @@ final class RenderTree {
       {
         controller.synchronize(properties, actions: Array(state.children.dropFirst()))
         for action in state.children.dropFirst() { action.swipeActionOwner = controller }
-        controller.onOpen = { [weak self] source in self?.closeSwipePeers(source, opened: true) }
       }
       if case .tabs(let selection) = state.properties {
         state.tabsController?.synchronize(selection, children: state.children)
@@ -454,6 +437,9 @@ final class RenderTree {
       if case .removal(let properties) = state.properties {
         state.removalController?.synchronize(properties)
       }
+      state.listVisibility?.synchronize(
+        state.children.flatMap { Array($0.children.dropFirst(2)).map(\.id) },
+        handler: state.bindings[EventTagId.visibleRangeChanged])
       if case .refresh(let properties) = state.properties {
         state.refreshController?.synchronize(properties)
       }
@@ -526,6 +512,7 @@ final class RenderTree {
     nativeViewNodes = []
     presentationNodes = []
     fieldNodes = []
+    listNodes = []
     collectionNodes = []
     focusAndGestureNodes = []
     scrollNodes = []
@@ -555,6 +542,7 @@ final class RenderTree {
         if node.nativeView != nil { nativeViewNodes.append(node) }
         if node.presentationController != nil { presentationNodes.append(node) }
         if node.fieldController != nil || node.textController != nil { fieldNodes.append(node) }
+        if node.listVisibility != nil { listNodes.append(node) }
         if node.collectionController != nil { collectionNodes.append(node) }
         if node.focusController != nil || node.keyboardController != nil
           || node.gestureController != nil
@@ -568,9 +556,7 @@ final class RenderTree {
         }
         if node.hoverController != nil { hoverNodes.append(node) }
         if node.opacityController != nil { opacityNodes.append(node) }
-        if node.collectionController != nil || node.morphingSurfaceController != nil
-          || node.kind == NodeKindId.progress
-        {
+        if node.collectionController != nil || node.morphingSurfaceController != nil {
           animationNodes.append(node)
         }
         starts[node.id] = order
@@ -601,7 +587,8 @@ struct NativeNodeView: View {
     // only where native view state needs ownership: IDView introduces a layout
     // boundary that otherwise changes Spacer behavior inside modifiers.
     switch node.properties {
-    case .table, .removal, .refresh, .scrollSections, .sheet, .popover, .scrollTargets, .menu,
+    case .nativeList, .listSection, .listRow, .table, .removal, .refresh, .scrollSections, .sheet,
+      .popover, .scrollTargets, .menu,
       .civilPicker,
       .picker,
       .slider,
@@ -657,6 +644,12 @@ struct NativeNodeView: View {
         preconditionFailure("Missing hover controller")
       }
       return AnyView(child.background(NativeHoverRegion(controller: controller).id(node.id)))
+    case .nativeList:
+      return AnyView(NativeList(node: node, activate: activate))
+    case .listRow:
+      return AnyView(NativeNodeView(node: node.children[0], activate: activate))
+    case .listSection:
+      return AnyView(EmptyView())
     case .swipeActions:
       guard let controller = node.swipeController else {
         preconditionFailure("Missing swipe controller")
@@ -708,7 +701,7 @@ struct NativeNodeView: View {
             bottom: CGFloat(bottom), trailing: CGFloat(trailing))))
     case .progress(let properties):
       return AnyView(
-        NativeProgressView(properties: properties, animationsActive: node.progressAnimationsActive))
+        NativeProgressView(properties: properties))
     case .semantics(let properties):
       return AnyView(
         child.modifier(NativeSemanticsModifier(properties: properties, emit: node.emit)))

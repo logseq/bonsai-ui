@@ -415,8 +415,6 @@ private struct CollectionViewportContent<Content: View>: View {
             viewport: viewport, vertical: vertical, rightToLeft: direction == .rightToLeft,
             id: attachmentID))
       }
-      .modifier(RefreshScrollModifier())
-      .modifier(SwipeScrollActivity())
       .modifier(ScrollObservationModifier(observer: observation))
       .scrollPosition(
         Binding(

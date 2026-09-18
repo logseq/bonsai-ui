@@ -242,6 +242,9 @@ let wire_node_kind = function
   | K_collection_catalog -> Ok Collection_catalog
   | K_collection_window -> Ok Collection_window
   | K_removal -> Ok Removal
+  | K_native_list -> Ok Native_list
+  | K_list_section -> Ok List_section
+  | K_list_row -> Ok List_row
   | K_refresh -> Ok Refresh
   | K_scroll_targets -> Ok Scroll_targets
   | K_scroll -> Ok Scroll
@@ -423,6 +426,10 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
     Ok
       (Removal_props
          { request_token; request_state; vertical; collapse_vertical; title; duration_ms })
+  | Native_list -> Ok Native_list_props
+  | List_section { has_header; has_footer; separator } ->
+    Ok (List_section_props { has_header; has_footer; separator })
+  | List_row { separator } -> Ok (List_row_props { separator })
   | Refresh { request_token; request_state; show_token } ->
     Ok (Refresh_props { request_token; request_state; show_token })
   | Scroll_targets
@@ -756,7 +763,7 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
                properties.actions
          })
   | Theme data -> Ok (Theme_props (wire_theme data))
-  | Date_picker { selected; first; last; selectable_dates; label; enabled } ->
+  | Date_picker { selected; first; last; label; enabled } ->
     let date (date : Ui.View.Date.t) : Protocol.Wire_frame.civil_date =
       { year = date.year; month = date.month; day = date.day }
     in
@@ -765,7 +772,6 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
          { selected = date selected
          ; first = date first
          ; last = date last
-         ; selectable_dates = List.map date selectable_dates
          ; label
          ; enabled
          })
@@ -905,7 +911,15 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
   | Help { message } -> Ok (Help_props { message })
   | Group_box { has_label } -> Ok (Group_box_props { has_label })
   | Progress { value; style } ->
-    Ok (Progress_props { value; circular = style = Ui.View.Progress_style.Circular })
+    Ok
+      (Progress_props
+         { value
+         ; style =
+             (match style with
+              | Ui.View.Progress_style.Linear -> 0
+              | Circular -> 1
+              | Automatic -> 2)
+         })
   | Overlay { alignment } ->
     let alignment =
       match alignment with
@@ -923,23 +937,10 @@ let wire_node_props (type k) (node : k Ui.View.Private.node) =
   | Disclosure_group { expanded; enabled } ->
     Ok (Disclosure_group_props { expanded; enabled })
   | Toggle { value; enabled; style } -> Ok (Toggle_props { value; enabled; style })
-  | Swipe_actions
-      { enabled; vertical; close_on_scroll; group; close_when_opened; close_when_tapped }
-    ->
-    Ok
-      (Swipe_actions_props
-         { enabled
-         ; vertical
-         ; close_on_scroll
-         ; group
-         ; close_when_opened
-         ; close_when_tapped
-         })
-  | Swipe_action
-      { title; side; enabled; role; extent; background; auto_close; full_swipe } ->
-    Ok
-      (Swipe_action_props
-         { title; side; enabled; role; extent; background; auto_close; full_swipe })
+  | Swipe_actions { enabled; allows_full_swipe } ->
+    Ok (Swipe_actions_props { enabled; allows_full_swipe })
+  | Swipe_action { title; side; enabled; role; background; symbol } ->
+    Ok (Swipe_action_props { title; side; enabled; role; background; symbol })
   | Morphing_surface { expanded; expand_duration_ms; collapse_duration_ms } ->
     Ok (Morphing_surface_props { expanded; expand_duration_ms; collapse_duration_ms })
   | Tabs { selection } -> Ok (Tabs_props { selection })

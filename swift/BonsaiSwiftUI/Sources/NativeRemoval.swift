@@ -280,7 +280,7 @@ struct NativeRemoval: View {
         .overlay { if controller.busy { ProgressView().accessibilityLabel("Waiting for removal") } }
     }
     .clipped().contentShape(Rectangle())
-    .gesture(NativeSwipePan(controller: controller))
+    .gesture(NativeRemovalPan(controller: controller))
     .accessibilityElement(children: .contain)
     .accessibilityHidden(properties.state == 2)
     .accessibilityActions {

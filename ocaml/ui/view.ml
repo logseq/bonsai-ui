@@ -64,6 +64,7 @@ end
 
 module Progress_style = struct
   type t =
+    | Automatic
     | Linear
     | Circular
 end
@@ -106,6 +107,9 @@ type kind_tag =
   | K_collection_window
   | K_removal
   | K_refresh
+  | K_native_list
+  | K_list_section
+  | K_list_row
   | K_scroll_targets
   | K_scroll
   | K_flow
@@ -177,6 +181,9 @@ let kind_tag_to_string = function
   | K_collection_catalog -> "Collection_catalog"
   | K_collection_window -> "Collection_window"
   | K_removal -> "Removal"
+  | K_native_list -> "Native_list"
+  | K_list_section -> "List_section"
+  | K_list_row -> "List_row"
   | K_refresh -> "Refresh"
   | K_scroll_targets -> "Scroll_targets"
   | K_scroll -> "Scroll"
@@ -311,6 +318,14 @@ module Private_types = struct
         ; duration_ms : int
         }
         -> [ `Removal ] node
+    | Native_list : [ `Native_list ] node
+    | List_section :
+        { has_header : bool
+        ; has_footer : bool
+        ; separator : int
+        }
+        -> [ `List_section ] node
+    | List_row : { separator : int } -> [ `List_row ] node
     | Refresh :
         { request_token : int64
         ; request_state : int
@@ -484,7 +499,6 @@ module Private_types = struct
         { selected : Date.t
         ; first : Date.t
         ; last : Date.t
-        ; selectable_dates : Date.t list
         ; label : string
         ; enabled : bool
         }
@@ -605,11 +619,7 @@ module Private_types = struct
         -> [ `Toggle ] node
     | Swipe_actions :
         { enabled : bool
-        ; vertical : bool
-        ; close_on_scroll : bool
-        ; group : string option
-        ; close_when_opened : bool
-        ; close_when_tapped : bool
+        ; allows_full_swipe : bool
         }
         -> [ `Swipe_actions ] node
     | Swipe_action :
@@ -617,10 +627,8 @@ module Private_types = struct
         ; side : int
         ; enabled : bool
         ; role : int
-        ; extent : float
         ; background : int
-        ; auto_close : bool
-        ; full_swipe : bool
+        ; symbol : string option
         }
         -> [ `Swipe_action ] node
     | Morphing_surface :
@@ -706,6 +714,9 @@ let node_kind_tag (type k) (n : k node) : kind_tag =
   | Collection_catalog _ -> K_collection_catalog
   | Collection_window _ -> K_collection_window
   | Removal _ -> K_removal
+  | Native_list -> K_native_list
+  | List_section _ -> K_list_section
+  | List_row _ -> K_list_row
   | Refresh _ -> K_refresh
   | Scroll_targets _ -> K_scroll_targets
   | Scroll _ -> K_scroll
@@ -806,6 +817,12 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     && x.collapse_vertical = y.collapse_vertical
     && x.title = y.title
     && x.duration_ms = y.duration_ms
+  | Native_list, Native_list -> true
+  | List_section x, List_section y ->
+    x.has_header = y.has_header
+    && x.has_footer = y.has_footer
+    && x.separator = y.separator
+  | List_row x, List_row y -> x.separator = y.separator
   | Refresh x, Refresh y ->
     x.request_token = y.request_token
     && x.request_state = y.request_state
@@ -908,7 +925,6 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     x.selected = y.selected
     && x.first = y.first
     && x.last = y.last
-    && x.selectable_dates = y.selectable_dates
     && x.label = y.label
     && x.enabled = y.enabled
   | Time_picker x, Time_picker y ->
@@ -992,21 +1008,14 @@ let node_equal (type k1 k2) (a : k1 node) (b : k2 node) : bool =
     x.expanded = y.expanded && x.enabled = y.enabled
   | Toggle x, Toggle y -> x.value = y.value && x.enabled = y.enabled && x.style = y.style
   | Swipe_actions x, Swipe_actions y ->
-    x.enabled = y.enabled
-    && x.vertical = y.vertical
-    && x.close_on_scroll = y.close_on_scroll
-    && x.group = y.group
-    && x.close_when_opened = y.close_when_opened
-    && x.close_when_tapped = y.close_when_tapped
+    x.enabled = y.enabled && x.allows_full_swipe = y.allows_full_swipe
   | Swipe_action x, Swipe_action y ->
     x.title = y.title
     && x.side = y.side
     && x.enabled = y.enabled
     && x.role = y.role
-    && Float.equal x.extent y.extent
     && x.background = y.background
-    && x.auto_close = y.auto_close
-    && x.full_swipe = y.full_swipe
+    && x.symbol = y.symbol
   | Morphing_surface x, Morphing_surface y ->
     Bool.equal x.expanded y.expanded
     && Int.equal x.expand_duration_ms y.expand_duration_ms
@@ -1681,33 +1690,19 @@ let picker ?key ~selected_id ~label ~style ~enabled ~options ~children ~on_selec
 ;;
 
 module Date_picker = struct
-  let create
-        ?key
-        ?(label = "Date")
-        ?(enabled = true)
-        ?(selectable_dates = [])
-        ~selected
-        ~first
-        ~last
-        ~on_select
-        ()
+  let create ?key ?(label = "Date") ?(enabled = true) ~selected ~first ~last ~on_select ()
     =
     if String.trim label = "" then invalid_arg "View.Date_picker.create: empty label";
-    if List.length selectable_dates > 65535
-    then invalid_arg "View.Date_picker.create: too many selectable dates";
-    if Date.compare first last > 0
-    then invalid_arg "View.Date_picker.create: reversed bounds";
-    let bounded date = Date.compare first date <= 0 && Date.compare date last <= 0 in
-    if not (bounded selected)
-    then invalid_arg "View.Date_picker.create: selected date outside bounds";
-    if not (List.for_all bounded selectable_dates)
-    then invalid_arg "View.Date_picker.create: selectable date outside bounds";
-    let selectable_dates = List.sort_uniq Date.compare selectable_dates in
-    if selectable_dates <> [] && not (List.mem selected selectable_dates)
-    then invalid_arg "View.Date_picker.create: selected date is not selectable";
+    if Date.compare first (Date.create ~year:1582 ~month:10 ~day:15) < 0
+    then invalid_arg "View.Date_picker: system dates start at 1582-10-15";
+    if
+      Date.compare first last > 0
+      || Date.compare selected first < 0
+      || Date.compare selected last > 0
+    then invalid_arg "View.Date_picker: selection outside range";
     create_typed
       ~key
-      ~node:(Date_picker { selected; first; last; selectable_dates; label; enabled })
+      ~node:(Date_picker { selected; first; last; label; enabled })
       ~event_bindings:
         (if enabled
          then [| { tag = Event.Tag.Civil_date_changed; handler = on_select } |]
@@ -2137,7 +2132,12 @@ let group_box ?key ?label content =
     ~children:(plain_children (content :: Option.to_list label))
 ;;
 
-let progress ?key ?value ?(style = Progress_style.Linear) () =
+let progress ?key ?value ?(style = Progress_style.Automatic) () =
+  (match style, value with
+   | Progress_style.Linear, None | Circular, Some _ ->
+     invalid_arg
+       "View.progress: linear requires a value; circular requires indeterminate activity"
+   | _ -> ());
   Option.iter
     (fun value ->
        if (not (Float.is_finite value)) || value < 0. || value > 1.
@@ -2522,6 +2522,75 @@ module Removal = struct
   ;;
 end
 
+module Native_list = struct
+  type separator =
+    | Automatic
+    | Hidden
+    | Visible
+
+  type row = t
+  type section = t
+
+  let unique label nodes =
+    let keys = List.map (fun (T view) -> view.key) nodes in
+    if
+      List.exists Option.is_none keys
+      || List.length (List.sort_uniq Stdlib.compare keys) <> List.length keys
+    then invalid_arg ("View.Native_list: duplicate or missing " ^ label ^ " key")
+  ;;
+
+  let row ~key ?(separator = Automatic) content =
+    create_typed
+      ~key:(Some key)
+      ~node:
+        (List_row
+           { separator =
+               (match separator with
+                | Automatic -> 0
+                | Hidden -> 1
+                | Visible -> 2)
+           })
+      ~event_bindings:[||]
+      ~children:[| content |]
+  ;;
+
+  let section ~key ?header ?footer ?(separator = Automatic) rows =
+    unique "row" rows;
+    create_typed
+      ~key:(Some key)
+      ~node:
+        (List_section
+           { has_header = Option.is_some header
+           ; has_footer = Option.is_some footer
+           ; separator =
+               (match separator with
+                | Automatic -> 0
+                | Hidden -> 1
+                | Visible -> 2)
+           })
+      ~event_bindings:[||]
+      ~children:
+        (plain_children
+           (Option.value header ~default:(empty ())
+            :: Option.value footer ~default:(empty ())
+            :: rows))
+  ;;
+
+  let vertical ?key ?on_visible_range sections =
+    unique "section" sections;
+    create_typed
+      ~key
+      ~node:Native_list
+      ~event_bindings:
+        (Array.of_list
+           (List.map
+              (fun handler -> { tag = Event.Tag.Visible_range_changed; handler })
+              (Option.to_list on_visible_range)))
+      ~children:(plain_children sections)
+    |> vertical_viewport
+  ;;
+end
+
 module Refresh = struct
   type request_state =
     | Ready
@@ -2532,9 +2601,8 @@ module Refresh = struct
     let child = Viewport.Vertical.widget viewport in
     let (T child_view) = child in
     (match node_kind_tag child_view.node with
-     | K_scroll | K_scroll_sections | K_collection_catalog | K_scroll_targets -> ()
-     | _ ->
-       invalid_arg "View.Refresh: wrap the native vertical container before decorating it");
+     | K_native_list -> ()
+     | _ -> invalid_arg "View.Refresh: requires an undecorated Native_list");
     create_typed
       ~key
       ~node:
@@ -3467,92 +3535,45 @@ module Swipe_actions = struct
         ?key
         ?(enabled = true)
         ?(role = Button_role.Normal)
-        ?(extent = 80.)
-        ?(auto_close = true)
-        ?(full_swipe = false)
+        ?symbol
         ~side
         ~title
         ~background
         ~on_press
-        ~child
         ()
     =
-    if
-      String.length title = 0
-      || (not (Float.is_finite extent))
-      || extent < 44.
-      || extent > 4096.
-    then invalid_arg "View.Swipe_actions.action: invalid title or extent";
-    let side =
-      match side with
-      | Start -> 0
-      | End -> 1
-    in
-    let role =
-      match role with
-      | Button_role.Normal -> 0
-      | Cancel -> 1
-      | Destructive -> 2
-    in
+    if String.trim title = "" || symbol = Some ""
+    then invalid_arg "View.Swipe_actions.action: empty label or symbol";
     create_typed
       ~key
       ~node:
         (Swipe_action
            { title
-           ; side
+           ; side =
+               (match side with
+                | Start -> 0
+                | End -> 1)
            ; enabled
-           ; role
-           ; extent
+           ; role =
+               (match role with
+                | Button_role.Normal -> 0
+                | Cancel -> 1
+                | Destructive -> 2)
            ; background =
                Int32.to_int (Style.Color.Private.to_argb32 background) land 0xffff_ffff
-           ; auto_close
-           ; full_swipe
+           ; symbol
            })
       ~event_bindings:
         (if enabled then [| { tag = Event.Tag.Press; handler = on_press } |] else [||])
-      ~children:(plain_children [ child ])
+      ~children:[||]
   ;;
 
-  let create
-        ~key
-        ?(enabled = true)
-        ?(axis = Layout.Axis.Horizontal)
-        ?(close_on_scroll = true)
-        ?group
-        ?(close_when_opened = true)
-        ?(close_when_tapped = true)
-        ~actions
-        ~content
-        ()
-    =
-    if group = Some "" || List.length actions > 64
-    then invalid_arg "View.Swipe_actions.create: invalid group or action count";
-    let full = Array.make 2 false in
-    List.iter
-      (fun action ->
-         let (T view) = action in
-         match view.node with
-         | Swipe_action p ->
-           if p.full_swipe
-           then (
-             if full.(p.side)
-             then
-               invalid_arg
-                 "View.Swipe_actions.create: multiple full-swipe actions on one side";
-             full.(p.side) <- true)
-         | _ -> invalid_arg "View.Swipe_actions.create: invalid action")
-      actions;
+  let create ~key ?(enabled = true) ?(allows_full_swipe = false) ~actions ~content () =
+    if List.length actions > 64
+    then invalid_arg "View.Swipe_actions.create: too many actions";
     create_typed
       ~key:(Some key)
-      ~node:
-        (Swipe_actions
-           { enabled
-           ; vertical = axis = Layout.Axis.Vertical
-           ; close_on_scroll
-           ; group
-           ; close_when_opened
-           ; close_when_tapped
-           })
+      ~node:(Swipe_actions { enabled; allows_full_swipe })
       ~event_bindings:[||]
       ~children:(plain_children (content :: actions))
   ;;
@@ -3674,6 +3695,9 @@ module Private = struct
     | K_collection_window
     | K_removal
     | K_refresh
+    | K_native_list
+    | K_list_section
+    | K_list_row
     | K_scroll_targets
     | K_scroll
     | K_flow

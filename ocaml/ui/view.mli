@@ -44,6 +44,7 @@ end
 
 module Progress_style : sig
   type t =
+    | Automatic
     | Linear
     | Circular
 end
@@ -84,7 +85,9 @@ val with_test_id : Test_id.t -> t -> t
 val empty : ?key:Key.t -> unit -> t
 
 (** Native progress. Omit [value] for indeterminate activity; a supplied value
-    must be finite and between zero and one. Style changes retain node identity. *)
+    must be finite and between zero and one. Automatic is the default. Linear
+    requires a value; Circular requires no value. Unsupported combinations raise
+    [Invalid_argument] instead of silently losing determinate progress. *)
 val progress : ?key:Key.t -> ?value:float -> ?style:Progress_style.t -> unit -> t
 
 (** Literal native Text. The optional line limit must be positive; omission
@@ -553,7 +556,35 @@ module Removal : sig
     -> t
 end
 
-(** Attach refresh before other viewport decorations. Each new request uses a
+(** Intrinsically sized native List rows and sections. Stable keys are required
+    and unique among siblings. Data loading and pagination remain application-owned. *)
+module Native_list : sig
+  type separator =
+    | Automatic
+    | Hidden
+    | Visible
+
+  type row
+  type section
+
+  val row : key:Key.t -> ?separator:separator -> t -> row
+
+  val section
+    :  key:Key.t
+    -> ?header:t
+    -> ?footer:t
+    -> ?separator:separator
+    -> row list
+    -> section
+
+  val vertical
+    :  ?key:Key.t
+    -> ?on_visible_range:Event.Handler.t
+    -> section list
+    -> Viewport.Vertical.t
+end
+
+(** Attach refresh to [Native_list.vertical] before other viewport decorations. Each new request uses a
     new token. Pending acknowledges a request; Completed releases its native async
     action. Changes to show_token trigger the same action programmatically. *)
 module Refresh : sig
@@ -770,12 +801,13 @@ val semantics
     inherit; explicit child properties take precedence. *)
 val theme : ?key:Key.t -> data:Theme.t -> t -> t
 
+(** System date selection within an inclusive continuous range. Bounds must be
+    between 1582-10-15 and 9999-12-31; the selected date must lie within them. *)
 module Date_picker : sig
   val create
     :  ?key:Key.t
     -> ?label:string
     -> ?enabled:bool
-    -> ?selectable_dates:Date.t list
     -> selected:Date.t
     -> first:Date.t
     -> last:Date.t
@@ -1120,38 +1152,32 @@ module Slider : sig
     -> t
 end
 
+(** System swipe actions. Place the result directly inside a [Native_list.row].
+    Start/End follow layout direction. The first action on each side is the full
+    swipe action when [allows_full_swipe] is true. OCaml owns removal. *)
 module Swipe_actions : sig
   type action
 
   type side =
     | Start
     | End
-    (** Start and End follow layout direction horizontally, and mean top and bottom vertically.
-      At most one action per side may be triggered by a full swipe. OCaml owns removal. *)
 
   val action
     :  ?key:Key.t
     -> ?enabled:bool
     -> ?role:Button_role.t
-    -> ?extent:float
-    -> ?auto_close:bool
-    -> ?full_swipe:bool
+    -> ?symbol:string
     -> side:side
     -> title:string
     -> background:Style.Color.t
     -> on_press:Event.Handler.t
-    -> child:t
     -> unit
     -> action
 
   val create
     :  key:Key.t
     -> ?enabled:bool
-    -> ?axis:Layout.Axis.t
-    -> ?close_on_scroll:bool
-    -> ?group:string
-    -> ?close_when_opened:bool
-    -> ?close_when_tapped:bool
+    -> ?allows_full_swipe:bool
     -> actions:action list
     -> content:t
     -> unit
@@ -1226,6 +1252,9 @@ module Private : sig
     | K_collection_window
     | K_removal
     | K_refresh
+    | K_native_list
+    | K_list_section
+    | K_list_row
     | K_scroll_targets
     | K_scroll
     | K_flow
@@ -1353,6 +1382,14 @@ module Private : sig
         ; duration_ms : int
         }
         -> [ `Removal ] node
+    | Native_list : [ `Native_list ] node
+    | List_section :
+        { has_header : bool
+        ; has_footer : bool
+        ; separator : int
+        }
+        -> [ `List_section ] node
+    | List_row : { separator : int } -> [ `List_row ] node
     | Refresh :
         { request_token : int64
         ; request_state : int
@@ -1526,7 +1563,6 @@ module Private : sig
         { selected : Date.t
         ; first : Date.t
         ; last : Date.t
-        ; selectable_dates : Date.t list
         ; label : string
         ; enabled : bool
         }
@@ -1647,11 +1683,7 @@ module Private : sig
         -> [ `Toggle ] node
     | Swipe_actions :
         { enabled : bool
-        ; vertical : bool
-        ; close_on_scroll : bool
-        ; group : string option
-        ; close_when_opened : bool
-        ; close_when_tapped : bool
+        ; allows_full_swipe : bool
         }
         -> [ `Swipe_actions ] node
     | Swipe_action :
@@ -1659,10 +1691,8 @@ module Private : sig
         ; side : int
         ; enabled : bool
         ; role : int
-        ; extent : float
         ; background : int
-        ; auto_close : bool
-        ; full_swipe : bool
+        ; symbol : string option
         }
         -> [ `Swipe_action ] node
     | Morphing_surface :

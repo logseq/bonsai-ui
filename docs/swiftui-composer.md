@@ -2,7 +2,7 @@
 
 The ordinary `Native_widget.Message_composer` is implemented by the standard
 SwiftUI kind-6/version-1 registration. `RenderTree` installs it with the
-application's startup registrations. The expandable composer uses kind 7/version 2.
+application's startup registrations. The expandable composer uses kind 7/version 3.
 Both registrations are reserved against application replacement.
 
 ## Ownership and publication
@@ -28,7 +28,7 @@ an edit without losing the draft. Reaching the text limit displays `Draft limit
 reached`. Text-change detection compares UTF-8 bytes, preserving distinct
 canonically equivalent Unicode spellings in the OCaml event stream.
 
-## SwiftUI composition
+## Inline SwiftUI composition
 
 One native editor remains mounted within a SwiftUI surface. Its ideal height is
 measured with the current native font, width and insets, then bounded by the
@@ -74,8 +74,10 @@ validation remains compilation-only at this checkpoint.
 
 ## Expandable presentation
 
-`Native_widget.Expandable_message_composer` wraps the same editor and action
-surface in a native SwiftUI Sheet. There is no second card background. The
+`Native_widget.Expandable_message_composer` places the same editor in a native
+SwiftUI Sheet and NavigationStack. The system toolbar provides Close and explicit
+Action/Confirmation/Cancellation roles; there is no sheet drag target, chevron
+or manually placed action row. See [sheet actions](swiftui-expandable-composer.md). There is no second card background. The
 launcher supports Compact and Extended presentation; its duration and curve
 control the launcher change, while Sheet transitions use the platform behavior.
 Zero duration and reduced motion suppress the explicit launcher animation.

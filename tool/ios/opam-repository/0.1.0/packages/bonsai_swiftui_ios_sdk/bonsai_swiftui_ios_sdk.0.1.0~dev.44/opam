@@ -11,13 +11,13 @@ homepage: "https://github.com/logseq/bonsai-ui"
 bug-reports: "https://github.com/logseq/bonsai-ui/issues"
 dev-repo: "git+https://github.com/logseq/bonsai-ui.git"
 extra-source "bonsai_swiftui.tar.gz" {
-  src: "https://github.com/logseq/bonsai-ui/archive/d8be5273407e8137e1d1a073f732ef4e702509e3.tar.gz"
-  checksum: ["sha256=9acfb3a7a26c5c7d68cea47d91b762eea7a7bcf417917d315f22e28e2bd65489"]
+  src: "file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-17-system-controls-source/bonsai-swiftui-0.1.0~dev.tar.gz"
+  checksum: ["sha256=9d8d35b013c89300bc4171bc054a471530062411f533f6b050bf6f56550f917a"]
 }
 extra-files: [
-  ["build-installed-framework.sh" "sha256=ff92afd52aff4c1b7300c56566acd8f50bb448ec1c62b9712db6b07d601d196b"]
-  ["manifest.sexp" "sha256=0d87ad3e1f7414d6093c0b4953cfc0a93f2e76ee4649dcd9fa088e9158de3c4e"]
-  ["package-lock.sexp" "sha256=0dca9a7c1f287535ec915e74f6532d8ad8e86da757b10c3b2b12ff7d3a12d313"]
+  ["build-installed-framework.sh" "sha256=797e82191f2ea13abac4d48117dc0f46139031b0f30451e072d39723476fd477"]
+  ["manifest.sexp" "sha256=f675b675bb836d2447adc190d047a9e53cb3c4e083cef122d7aea1a93532a928"]
+  ["package-lock.sexp" "sha256=f72a1e747ff5f38b7c4a3746b128205c0e4396746b63e88cacbadac74701a3c6"]
 ]
 depends: [
   "bonsai_swiftui" {= "0.1.0~dev"}

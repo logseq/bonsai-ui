@@ -16,6 +16,7 @@ struct RenderComposer: Equatable {
     let prominent: Bool
     let enabled: Bool
     let tooltip: String
+    var role: Int = 0
   }
   let enabled: Bool
   let autofocus: Bool
@@ -42,7 +43,9 @@ struct RenderComposer: Equatable {
       actions: actions)
   }
 
-  static func decodeActions(_ reader: inout WireReader, count: Int, trimTooltip: Bool) throws
+  static func decodeActions(
+    _ reader: inout WireReader, count: Int, trimTooltip: Bool, sheet: Bool = false
+  ) throws
     -> [Action]
   {
     var actions: [Action] = []
@@ -50,9 +53,9 @@ struct RenderComposer: Equatable {
     for _ in 0..<count {
       let id = try reader.integer(UInt32.self)
       guard id > 0, identities.insert(id).inserted else { throw TreeError.invalidProperties }
-      let position = try reader.choice(1)
+      let position = try reader.choice(sheet ? 2 : 1)
       let visibility = try reader.choice(2)
-      let style = try reader.choice(1)
+      let style = try sheet ? 0 : reader.choice(1)
       let enabled = try reader.flag()
       let tooltip = try reader.string()
       guard
@@ -63,7 +66,7 @@ struct RenderComposer: Equatable {
       actions.append(
         Action(
           id: id, leading: position == 0, visibility: visibility, prominent: style == 1,
-          enabled: enabled, tooltip: tooltip))
+          enabled: enabled, tooltip: tooltip, role: sheet ? position : 0))
     }
     return actions
   }
@@ -192,9 +195,9 @@ enum ComposerEvent {
     unfocus()
   }
   func suspend() {
+    unfocus()
     active = false
     emit = { _ in false }
-    unfocus()
   }
   func dispose() {
     guard !disposed else { return }
@@ -223,19 +226,23 @@ struct NativeMessageComposerView: View {
   private var controller: ComposerController { context.resource }
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-  private func actions(leading: Bool) -> some View {
+  private func actions(leading: Bool = false, role: Int? = nil) -> some View {
     ForEach(Array(context.properties.actions.enumerated()), id: \.element.id) { index, action in
-      if action.leading == leading && controller.shows(action) {
+      if (role.map { action.role == $0 } ?? (action.leading == leading)) && controller.shows(action)
+      {
         let label = NativeNodeView(node: context.children[index].node, activate: { _ in })
           .disabled(true).allowsHitTesting(false).accessibilityHidden(true)
-        let button = Button {
+        let button = Button(role: closeSheet != nil && action.role == 2 ? .cancel : nil) {
+          guard context.isPresented, context.canInteract() else { return }
           controller.press(action)
         } label: {
           label
         }
         .accessibilityLabel(action.tooltip).help(action.tooltip)
         .disabled(!context.properties.enabled || !action.enabled || !context.isPresented)
-        if action.prominent {
+        if closeSheet != nil {
+          button
+        } else if action.prominent {
           button.buttonStyle(.borderedProminent)
         } else {
           button.buttonStyle(.plain)
@@ -243,9 +250,23 @@ struct NativeMessageComposerView: View {
       }
     }
   }
+  var sheetContent: some View {
+    body
+      .toolbar {
+        if let closeSheet {
+          ToolbarItemGroup(placement: .cancellationAction) {
+            Button("Close", role: .cancel, action: closeSheet).keyboardShortcut(.cancelAction)
+            actions(role: 2)
+          }
+          ToolbarItemGroup(placement: .confirmationAction) { actions(role: 1) }
+          ToolbarItemGroup(placement: .automatic) { actions(role: 0) }
+        }
+      }
+  }
+
   var body: some View {
     VStack(spacing: 8) {
-      if isExpanded {
+      if isExpanded && closeSheet == nil {
         HStack {
           Color.clear.frame(height: 16).contentShape(Rectangle())
             .gesture(
@@ -253,13 +274,13 @@ struct NativeMessageComposerView: View {
                 if value.translation.height > 50
                   && value.translation.height > abs(value.translation.width)
                 {
-                  if let closeSheet { closeSheet() } else { controller.collapse() }
+                  controller.collapse()
                 }
               })
           Button(
-            closeSheet == nil ? "Collapse composer" : "Close composer", systemImage: "chevron.down"
+            "Collapse composer", systemImage: "chevron.down"
           ) {
-            if let closeSheet { closeSheet() } else { controller.collapse() }
+            controller.collapse()
           }
           .labelStyle(.iconOnly).buttonStyle(.plain)
           .disabled(closeSheet == nil && !context.properties.enabled)
@@ -276,10 +297,12 @@ struct NativeMessageComposerView: View {
             .allowsHitTesting(false).accessibilityHidden(true)
         }
       }
-      HStack {
-        actions(leading: true)
-        Spacer(minLength: 12)
-        actions(leading: false)
+      if closeSheet == nil {
+        HStack {
+          actions(leading: true)
+          Spacer(minLength: 12)
+          actions(leading: false)
+        }
       }
       if controller.limitReached {
         Text("Draft limit reached").font(.caption).foregroundStyle(.secondary)

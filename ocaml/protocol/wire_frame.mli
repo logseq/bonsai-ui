@@ -37,6 +37,9 @@ type node_kind =
   | Collection_window
   | Removal
   | Refresh
+  | Native_list
+  | List_section
+  | List_row
   | Scroll_targets
   | Scroll
   | Flow
@@ -337,6 +340,13 @@ type props =
       ; title : string
       ; duration_ms : int
       }
+  | Native_list_props
+  | List_section_props of
+      { has_header : bool
+      ; has_footer : bool
+      ; separator : int
+      }
+  | List_row_props of { separator : int }
   | Refresh_props of
       { request_token : int64
       ; request_state : int
@@ -451,7 +461,6 @@ type props =
       { selected : civil_date
       ; first : civil_date
       ; last : civil_date
-      ; selectable_dates : civil_date list
       ; label : string
       ; enabled : bool
       }
@@ -543,7 +552,7 @@ type props =
   | Group_box_props of { has_label : bool }
   | Progress_props of
       { value : float option
-      ; circular : bool
+      ; style : int
       }
   | Overlay_props of { alignment : alignment }
   | Disclosure_group_props of
@@ -557,21 +566,15 @@ type props =
       }
   | Swipe_actions_props of
       { enabled : bool
-      ; vertical : bool
-      ; close_on_scroll : bool
-      ; group : string option
-      ; close_when_opened : bool
-      ; close_when_tapped : bool
+      ; allows_full_swipe : bool
       }
   | Swipe_action_props of
       { title : string
       ; side : int
       ; enabled : bool
       ; role : int
-      ; extent : float
       ; background : int
-      ; auto_close : bool
-      ; full_swipe : bool
+      ; symbol : string option
       }
   | Morphing_surface_props of
       { expanded : bool

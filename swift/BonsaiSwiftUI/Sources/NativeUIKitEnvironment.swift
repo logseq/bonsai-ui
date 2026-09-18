@@ -76,11 +76,20 @@
   }
 
   final class UIKitEnvironmentAttachmentView: UIView {
+    private let notificationCenter: NotificationCenter
+
+    init(notificationCenter: NotificationCenter = .default) {
+      self.notificationCenter = notificationCenter
+      super.init(frame: .zero)
+    }
+    required init?(coder: NSCoder) { nil }
+
     private weak var session: BonsaiSession?
     private var source: UUID?
     private var preferences: NativeHostEnvironment?
     private var observer: UIKitWindowGeometryView?
     private var registered = false
+    private weak var observedScene: UIWindowScene?
 
     func configure(session: BonsaiSession, source: UUID, preferences: NativeHostEnvironment) {
       if self.session !== session || self.source != source { detach() }
@@ -99,6 +108,15 @@
     }
     private func attach() {
       guard observer == nil, let window, session != nil, source != nil else { return }
+      observedScene = window.windowScene
+      session?.isActive = observedScene?.activationState == .foregroundActive
+      if let observedScene {
+        for name in [UIScene.didActivateNotification, UIScene.willDeactivateNotification,
+                     UIScene.didDisconnectNotification] {
+          notificationCenter.addObserver(self, selector: #selector(sceneActivationChanged(_:)),
+            name: name, object: observedScene)
+        }
+      }
       let observer = UIKitWindowGeometryView(frame: window.bounds)
       self.observer = observer
       observer.onChange = { [weak self, weak observer] geometry in
@@ -122,7 +140,16 @@
       observer.setNeedsLayout()
       observer.schedule()
     }
+    @objc private func sceneActivationChanged(_ notification: Notification) {
+      guard let scene = notification.object as? UIWindowScene,
+        scene === observedScene, scene === window?.windowScene else { return }
+      session?.isActive = notification.name == UIScene.didActivateNotification
+    }
+
     private func detach() {
+      notificationCenter.removeObserver(self)
+      observedScene = nil
+      session?.isActive = false
       observer?.invalidate()
       observer = nil
       if registered, let source { session?.endEnvironmentObservation(source: source) }

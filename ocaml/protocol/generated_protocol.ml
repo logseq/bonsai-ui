@@ -2,7 +2,7 @@
 
 module ID = Bonsai_swiftui_spec.Id
 
-let protocol_major = 8
+let protocol_major = 9
 let protocol_minor = 0
 
 module Limits = struct
@@ -90,6 +90,9 @@ module Node_kind = struct
   let menu = ID.Protocol.Node_kind.of_int 61
   let removal = ID.Protocol.Node_kind.of_int 78
   let refresh = ID.Protocol.Node_kind.of_int 77
+  let native_list = ID.Protocol.Node_kind.of_int 80
+  let list_section = ID.Protocol.Node_kind.of_int 81
+  let list_row = ID.Protocol.Node_kind.of_int 82
   let scroll_targets = ID.Protocol.Node_kind.of_int 62
   let help = ID.Protocol.Node_kind.of_int 63
   let popover = ID.Protocol.Node_kind.of_int 72
@@ -164,6 +167,9 @@ module Node_kind = struct
     | 61 -> Some "menu"
     | 78 -> Some "removal"
     | 77 -> Some "refresh"
+    | 80 -> Some "native_list"
+    | 81 -> Some "list_section"
+    | 82 -> Some "list_row"
     | 62 -> Some "scroll_targets"
     | 63 -> Some "help"
     | 72 -> Some "popover"
@@ -400,6 +406,37 @@ module Common_prop = struct
   ;;
 end
 
+module Native_list_prop = struct
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | _ -> None
+  ;;
+end
+
+module List_section_prop = struct
+  let has_header = ID.Protocol.Property.of_int 1
+  let has_footer = ID.Protocol.Property.of_int 2
+  let separator = ID.Protocol.Property.of_int 3
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "has_header"
+    | 2 -> Some "has_footer"
+    | 3 -> Some "separator"
+    | _ -> None
+  ;;
+end
+
+module List_row_prop = struct
+  let separator = ID.Protocol.Property.of_int 1
+
+  let debug_name id =
+    match ID.Protocol.Property.to_int id with
+    | 1 -> Some "separator"
+    | _ -> None
+  ;;
+end
+
 module Scroll_sections_prop = struct
   let vertical = ID.Protocol.Property.of_int 1
   let pin_headers = ID.Protocol.Property.of_int 2
@@ -508,20 +545,12 @@ end
 
 module Swipe_actions_prop = struct
   let enabled = ID.Protocol.Property.of_int 1
-  let vertical = ID.Protocol.Property.of_int 2
-  let close_on_scroll = ID.Protocol.Property.of_int 3
-  let group = ID.Protocol.Property.of_int 4
-  let close_when_opened = ID.Protocol.Property.of_int 5
-  let close_when_tapped = ID.Protocol.Property.of_int 6
+  let allows_full_swipe = ID.Protocol.Property.of_int 2
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
     | 1 -> Some "enabled"
-    | 2 -> Some "vertical"
-    | 3 -> Some "close_on_scroll"
-    | 4 -> Some "group"
-    | 5 -> Some "close_when_opened"
-    | 6 -> Some "close_when_tapped"
+    | 2 -> Some "allows_full_swipe"
     | _ -> None
   ;;
 end
@@ -531,10 +560,8 @@ module Swipe_action_prop = struct
   let side = ID.Protocol.Property.of_int 2
   let enabled = ID.Protocol.Property.of_int 3
   let role = ID.Protocol.Property.of_int 4
-  let extent = ID.Protocol.Property.of_int 5
-  let background = ID.Protocol.Property.of_int 6
-  let auto_close = ID.Protocol.Property.of_int 7
-  let full_swipe = ID.Protocol.Property.of_int 8
+  let background = ID.Protocol.Property.of_int 5
+  let symbol = ID.Protocol.Property.of_int 6
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
@@ -542,10 +569,8 @@ module Swipe_action_prop = struct
     | 2 -> Some "side"
     | 3 -> Some "enabled"
     | 4 -> Some "role"
-    | 5 -> Some "extent"
-    | 6 -> Some "background"
-    | 7 -> Some "auto_close"
-    | 8 -> Some "full_swipe"
+    | 5 -> Some "background"
+    | 6 -> Some "symbol"
     | _ -> None
   ;;
 end
@@ -1292,18 +1317,16 @@ module Date_picker_prop = struct
   let selected = ID.Protocol.Property.of_int 1
   let first = ID.Protocol.Property.of_int 2
   let last = ID.Protocol.Property.of_int 3
-  let selectable_dates = ID.Protocol.Property.of_int 4
-  let label = ID.Protocol.Property.of_int 5
-  let enabled = ID.Protocol.Property.of_int 6
+  let label = ID.Protocol.Property.of_int 4
+  let enabled = ID.Protocol.Property.of_int 5
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
     | 1 -> Some "selected"
     | 2 -> Some "first"
     | 3 -> Some "last"
-    | 4 -> Some "selectable_dates"
-    | 5 -> Some "label"
-    | 6 -> Some "enabled"
+    | 4 -> Some "label"
+    | 5 -> Some "enabled"
     | _ -> None
   ;;
 end
@@ -1350,12 +1373,12 @@ end
 
 module Progress_prop = struct
   let value = ID.Protocol.Property.of_int 1
-  let circular = ID.Protocol.Property.of_int 2
+  let style = ID.Protocol.Property.of_int 2
 
   let debug_name id =
     match ID.Protocol.Property.to_int id with
     | 1 -> Some "value"
-    | 2 -> Some "circular"
+    | 2 -> Some "style"
     | _ -> None
   ;;
 end

@@ -33,6 +33,9 @@ enum NodeProperties: Equatable, Sendable {
   case sheet(RenderSheet)
   case popover(RenderPopover)
   case removal(RenderRemoval)
+  case nativeList
+  case listSection(RenderListSection)
+  case listRow(Int)
   case refresh(RenderRefresh)
   case scrollSections(RenderScrollSections)
   case scrollSection(RenderScrollSection)
@@ -236,6 +239,9 @@ private func properties(_ reader: inout WireReader, kind: Int) throws -> NodePro
   case NodeKindId.sheet: return .sheet(try RenderSheet.decode(&reader))
   case NodeKindId.popover: return .popover(try RenderPopover.decode(&reader))
   case NodeKindId.removal: return .removal(try RenderRemoval.decode(&reader))
+  case NodeKindId.nativeList: return .nativeList
+  case NodeKindId.listSection: return .listSection(try RenderListSection.decode(&reader))
+  case NodeKindId.listRow: return .listRow(try reader.choice(2))
   case NodeKindId.refresh: return .refresh(try RenderRefresh.decode(&reader))
   case NodeKindId.scrollSections: return .scrollSections(try RenderScrollSections.decode(&reader))
   case NodeKindId.scrollSection: return .scrollSection(try RenderScrollSection.decode(&reader))
@@ -374,9 +380,12 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.popover: return 3
   case NodeKindId.toolbar, NodeKindId.help, NodeKindId.groupBox, NodeKindId.hoverRegion: return 1
   case NodeKindId.disclosureGroup: return 3
-  case NodeKindId.datePicker: return 63
+  case NodeKindId.datePicker: return 31
   case NodeKindId.timePicker: return 15
   case NodeKindId.removal: return 63
+  case NodeKindId.nativeList: return 0
+  case NodeKindId.listSection: return 7
+  case NodeKindId.listRow: return 1
   case NodeKindId.refresh: return 7
   case NodeKindId.scrollSections: return 63
   case NodeKindId.scrollSection: return 15
@@ -384,8 +393,8 @@ private func propertyMask(_ kind: Int) throws -> UInt64 {
   case NodeKindId.table: return 127
   case NodeKindId.menu: return 3
   case NodeKindId.picker: return 31
-  case NodeKindId.swipeActions: return 63
-  case NodeKindId.swipeAction: return 255
+  case NodeKindId.swipeActions: return 3
+  case NodeKindId.swipeAction: return 63
   case NodeKindId.tabs: return 1
   case NodeKindId.tab: return 31
   case NodeKindId.morphingSurface: return 7
@@ -514,6 +523,9 @@ struct NodeStore: Equatable, Sendable {
     var ownedDestinations: Set<UInt64> = []
     var ownedSections: Set<UInt64> = []
     var ownedTabs: Set<UInt64> = []
+    var ownedListSections: Set<UInt64> = []
+    var ownedListRows: Set<UInt64> = []
+    var ownedSwipeRows: Set<UInt64> = []
     var ownedSwipeActions: Set<UInt64> = []
     var pending = [(root, false)]
     // Iterative traversal also rejects duplicate parents and cycles without
@@ -563,9 +575,35 @@ struct NodeStore: Equatable, Sendable {
         guard node.children.count == 1 else { throw TreeError.invalidChildren }
         guard Set(node.bindings.keys) == [EventTagId.removalRequested, EventTagId.removalCompleted]
         else { throw TreeError.invalidBindings }
+      case .nativeList:
+        guard Set(node.bindings.keys).isSubset(of: [EventTagId.visibleRangeChanged]) else {
+          throw TreeError.invalidBindings
+        }
+        for child in node.children {
+          ownedListSections.insert(child)
+          guard let section = nodes[child], case .listSection = section.properties else {
+            throw TreeError.invalidChildren
+          }
+        }
+      case .listSection:
+        guard ownedListSections.contains(id) else { throw TreeError.invalidChildren }
+        guard node.bindings.isEmpty, node.children.count >= 2 else {
+          throw TreeError.invalidChildren
+        }
+        for child in node.children.dropFirst(2) {
+          ownedListRows.insert(child)
+          guard let row = nodes[child], case .listRow = row.properties else {
+            throw TreeError.invalidChildren
+          }
+        }
+      case .listRow:
+        guard ownedListRows.contains(id), node.bindings.isEmpty, node.children.count == 1 else {
+          throw TreeError.invalidChildren
+        }
+        ownedSwipeRows.insert(node.children[0])
       case .refresh:
         guard node.children.count == 1,
-          nodes[node.children[0]]?.properties.scrollAxis == true
+          nodes[node.children[0]]?.properties == .nativeList
         else { throw TreeError.invalidChildren }
         guard Set(node.bindings.keys) == [EventTagId.refreshRequest] else {
           throw TreeError.invalidBindings
@@ -650,22 +688,21 @@ struct NodeStore: Equatable, Sendable {
             : node.bindings.isEmpty
         else { throw TreeError.invalidBindings }
       case .swipeActions:
+        guard ownedSwipeRows.contains(id) else { throw TreeError.invalidChildren }
         guard node.bindings.isEmpty, !node.children.isEmpty, node.children.count <= 65 else {
           throw TreeError.invalidChildren
         }
         if let first = nodes[node.children[0]], case .swipeAction = first.properties {
           throw TreeError.invalidChildren
         }
-        var fullSides = Set<Int>()
         for child in node.children.dropFirst() {
-          guard let action = nodes[child], case .swipeAction(let p) = action.properties else {
+          guard let action = nodes[child], case .swipeAction = action.properties else {
             throw TreeError.invalidChildren
           }
-          if p.fullSwipe && !fullSides.insert(p.side).inserted { throw TreeError.invalidProperties }
           ownedSwipeActions.insert(child)
         }
       case .swipeAction(let p):
-        guard ownedSwipeActions.contains(id), node.children.count == 1 else {
+        guard ownedSwipeActions.contains(id), node.children.isEmpty else {
           throw TreeError.invalidChildren
         }
         guard

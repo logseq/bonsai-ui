@@ -90,8 +90,8 @@ let component ?(duration = 200) ?(curve = Ui.Animation.Curve.Ease_out) handlers 
              V.button ~on_press:(List.nth bindings index) ~child:(V.text title) ())
           controls
       in
-      let action ?(visibility = C.Always) id tooltip symbol =
-        C.button ~id ~tooltip ~visibility ~child:(V.symbol ~name:symbol ()) ()
+      let action ?(role = C.Action) ?(visibility = C.Always) id tooltip symbol =
+        C.button ~id ~tooltip ~role ~visibility ~child:(V.symbol ~name:symbol ()) ()
       in
       V.column
         ([ V.text ("Observed draft: " ^ s.text)
@@ -125,7 +125,12 @@ let component ?(duration = 200) ?(curve = Ui.Animation.Curve.Ease_out) handlers 
                ~buttons:
                  [ action 1 "Attach" "paperclip"
                  ; action ~visibility:When_empty 2 "Voice" "mic"
-                 ; action ~visibility:When_non_empty 3 "Send" "arrow.up"
+                 ; action
+                     ~role:Confirmation
+                     ~visibility:When_non_empty
+                     3
+                     "Send"
+                     "arrow.up"
                  ; action 4 "Change launcher" "rectangle.compress.vertical"
                  ; action 5 "Disable composer" "lock"
                  ; action 6 "Remove from sheet" "trash"

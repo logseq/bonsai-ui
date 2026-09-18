@@ -134,13 +134,11 @@ extension NativeRuntimeTests {
         #expect(try #require(scene.sheet).frame.width <= scene.window.frame.width)
         #expect(!scene.status.contains(mode + "="))
         if mode == "date" || mode == "range" {
-          let popup = try #require(
-            scene.nativeViews.compactMap { $0 as? NSPopUpButton }.first {
-              $0.itemArray.contains { $0.title == "2025" }
-            })
-          let menu = try #require(popup.menu)
-          let item = try #require(menu.items.first { $0.title == "2025" })
-          menu.performActionForItem(at: menu.index(of: item))
+          let control = try #require(scene.nativeViews.compactMap { $0 as? NSDatePicker }.first)
+          #expect(control.timeZone?.secondsFromGMT() == 0)
+          #expect(control.calendar?.identifier == .gregorian)
+          control.dateValue = try CivilDate(year: 2025, month: 2, day: 28).dateForPicker()
+          #expect(control.sendAction(control.action, to: control.target))
         }
         if mode == "time" {
           let control = try #require(scene.nativeViews.compactMap { $0 as? NSDatePicker }.first)
@@ -153,7 +151,7 @@ extension NativeRuntimeTests {
         #expect(try scene.action("Save").press())
         let expected = [
           "date": "2025-02-28", "range": "2025-02-28/2025-02-28",
-          "time": "00:01", "historical": "1582-10-10", "default": "2024-02-10",
+          "time": "00:01", "historical": "1582-10-15", "default": "2024-02-10",
         ][mode]!
         try await scene.wait {
           scene.status.contains(mode + "=" + expected + ";") && scene.sheet == nil
@@ -243,9 +241,9 @@ struct HostPickerWireTests {
     guard reader.remaining == 0 else { throw WireError.invalidOperation }
   }
   @Test func pickerWireValidatesCivilValuesBoundsAndNewPayloads() throws {
-    let first = date(1, 1, 1)
+    let first = date(1582, 10, 15)
     let last = date(9999, 12, 31)
-    let initial = date(1582, 10, 10)
+    let initial = date(1582, 10, 16)
     let valid: [(UInt16, Data)] = [
       (16, Data([0]) + first + last), (16, Data([1]) + initial + first + last),
       (17, Data([0]) + first + last), (17, Data([1]) + first + last + first + last),

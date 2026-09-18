@@ -118,6 +118,7 @@ extension NativeRuntimeTests {
   }
 
   @Test @MainActor func composerRetainsMarkedTextAndRejectsUnadmittedEdits() async throws {
+    initializeAccessibilityApplication()
     let session = BonsaiSession()
     session.isVisible = true
     do {

@@ -21,8 +21,6 @@ struct RenderRefresh: Equatable, Sendable {
   private var consumed: Int64?
   private var lastShow: Int64?
   private var disposed = false
-  private var pulling = false
-  private var armed = false
   @ObservationIgnored private var waiters: [UUID: CheckedContinuation<Void, Never>] = [:]
   @ObservationIgnored private var programmatic: Task<Void, Never>?
   @ObservationIgnored private let emit: (NativeEventPayload) -> Bool
@@ -43,12 +41,11 @@ struct RenderRefresh: Equatable, Sendable {
   }
   func synchronize(_ next: RenderRefresh) {
     guard next != properties else { return }
+    if next.show == nil { lastShow = nil }
     if next.token != properties.token {
       finish()
       consumed = nil
       generation += 1
-      armed = false
-      pulling = false
     } else if next.state == 2 {
       finish()
     }
@@ -57,8 +54,6 @@ struct RenderRefresh: Equatable, Sendable {
   func invalidateBinding() {
     finish()
     generation += 1
-    armed = false
-    pulling = false
     presented = false
   }
   func setPresentation(presented: Bool, active: Bool) {
@@ -103,22 +98,6 @@ struct RenderRefresh: Equatable, Sendable {
       }
     }
   }
-  func pull(offset: Double, interacting: Bool, generation expected: UInt64) -> Bool {
-    guard expected == generation, canRequest, offset.isFinite else {
-      pulling = false
-      armed = false
-      return false
-    }
-    if interacting {
-      pulling = true
-      armed = offset <= -72
-      return false
-    }
-    let trigger = pulling && armed
-    pulling = false
-    armed = false
-    return trigger
-  }
   func dispose() {
     disposed = true
     invalidateBinding()
@@ -137,60 +116,13 @@ extension EnvironmentValues {
   }
 }
 
-private struct RefreshButton: View {
-  let controller: RefreshController
-  @Environment(\.refresh) private var refresh
-  var body: some View {
-    HStack {
-      Button("Refresh", systemImage: "arrow.clockwise") {
-        Task { await refresh?() }
-      }.disabled(!controller.canRequest)
-      if controller.busy { ProgressView().controlSize(.small).accessibilityLabel("Refreshing") }
-      Spacer(minLength: 0)
-    }.padding(8)
-  }
-}
-
 struct NativeRefresh: View {
   let node: RenderNodeState
   let controller: RefreshController
   let activate: @MainActor (RenderNodeState) -> Void
   var body: some View {
-    let generation = controller.generation
-    return VStack(spacing: 0) {
-      RefreshButton(controller: controller)
-      NativeNodeView(node: node.children[0], activate: activate)
-        .environment(\.bonsaiRefresh, controller)
-    }
-    .refreshable { await controller.perform(generation: generation) }
-    .onDisappear { controller.setPresentation(presented: false, active: false) }
-  }
-}
-
-// Applied directly to each ScrollView. Its content clears the environment so a
-// nested scroll cannot issue a refresh on its ancestor's behalf.
-struct RefreshScrollModifier: ViewModifier {
-  @Environment(\.bonsaiRefresh) private var controller
-  @Environment(\.refresh) private var refresh
-  @State private var interacting = false
-  func body(content: Content) -> some View {
-    let generation = controller?.generation ?? 0
-    content
-      .onScrollGeometryChange(for: Double.self) { geometry in
-        geometry.contentOffset.y + geometry.contentInsets.top
-      } action: { _, offset in
-        if interacting {
-          _ = controller?.pull(offset: offset, interacting: true, generation: generation)
-        }
-      }
-      .onScrollPhaseChange { _, phase, context in
-        interacting = phase == .interacting
-        let offset = context.geometry.contentOffset.y + context.geometry.contentInsets.top
-        if controller?.pull(offset: offset, interacting: interacting, generation: generation)
-          == true
-        {
-          Task { await refresh?() }
-        }
-      }
+    NativeNodeView(node: node.children[0], activate: activate)
+      .environment(\.bonsaiRefresh, controller)
+      .onDisappear { controller.setPresentation(presented: false, active: false) }
   }
 }

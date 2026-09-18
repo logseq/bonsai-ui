@@ -63,6 +63,9 @@ module Node_kind : sig
   val menu : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val removal : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val refresh : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val native_list : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val list_section : Bonsai_swiftui_spec.Id.Protocol.node_kind
+  val list_row : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val scroll_targets : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val help : Bonsai_swiftui_spec.Id.Protocol.node_kind
   val popover : Bonsai_swiftui_spec.Id.Protocol.node_kind
@@ -205,6 +208,22 @@ module Common_prop : sig
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
+module Native_list_prop : sig
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module List_section_prop : sig
+  val has_header : Bonsai_swiftui_spec.Id.Protocol.property
+  val has_footer : Bonsai_swiftui_spec.Id.Protocol.property
+  val separator : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
+module List_row_prop : sig
+  val separator : Bonsai_swiftui_spec.Id.Protocol.property
+  val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
+end
+
 module Scroll_sections_prop : sig
   val vertical : Bonsai_swiftui_spec.Id.Protocol.property
   val pin_headers : Bonsai_swiftui_spec.Id.Protocol.property
@@ -260,11 +279,7 @@ end
 
 module Swipe_actions_prop : sig
   val enabled : Bonsai_swiftui_spec.Id.Protocol.property
-  val vertical : Bonsai_swiftui_spec.Id.Protocol.property
-  val close_on_scroll : Bonsai_swiftui_spec.Id.Protocol.property
-  val group : Bonsai_swiftui_spec.Id.Protocol.property
-  val close_when_opened : Bonsai_swiftui_spec.Id.Protocol.property
-  val close_when_tapped : Bonsai_swiftui_spec.Id.Protocol.property
+  val allows_full_swipe : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -273,10 +288,8 @@ module Swipe_action_prop : sig
   val side : Bonsai_swiftui_spec.Id.Protocol.property
   val enabled : Bonsai_swiftui_spec.Id.Protocol.property
   val role : Bonsai_swiftui_spec.Id.Protocol.property
-  val extent : Bonsai_swiftui_spec.Id.Protocol.property
   val background : Bonsai_swiftui_spec.Id.Protocol.property
-  val auto_close : Bonsai_swiftui_spec.Id.Protocol.property
-  val full_swipe : Bonsai_swiftui_spec.Id.Protocol.property
+  val symbol : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 
@@ -654,7 +667,6 @@ module Date_picker_prop : sig
   val selected : Bonsai_swiftui_spec.Id.Protocol.property
   val first : Bonsai_swiftui_spec.Id.Protocol.property
   val last : Bonsai_swiftui_spec.Id.Protocol.property
-  val selectable_dates : Bonsai_swiftui_spec.Id.Protocol.property
   val label : Bonsai_swiftui_spec.Id.Protocol.property
   val enabled : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
@@ -682,7 +694,7 @@ end
 
 module Progress_prop : sig
   val value : Bonsai_swiftui_spec.Id.Protocol.property
-  val circular : Bonsai_swiftui_spec.Id.Protocol.property
+  val style : Bonsai_swiftui_spec.Id.Protocol.property
   val debug_name : Bonsai_swiftui_spec.Id.Protocol.property -> string option
 end
 

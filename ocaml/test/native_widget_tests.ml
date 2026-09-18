@@ -368,9 +368,8 @@ let test_message_composer_validation_and_event_filtering () =
 ;;
 
 let expandable_message_composer_button
-      ?(position = Ui.Native_widget.Expandable_message_composer.Trailing)
+      ?(role = Ui.Native_widget.Expandable_message_composer.Action)
       ?(visibility = Ui.Native_widget.Expandable_message_composer.Always)
-      ?(style = Ui.Native_widget.Expandable_message_composer.Plain)
       ?(enabled = true)
       ~id
       ~tooltip
@@ -379,9 +378,8 @@ let expandable_message_composer_button
   Ui.Native_widget.Expandable_message_composer.button
     ~id
     ~tooltip
-    ~position
+    ~role
     ~visibility
-    ~style
     ~enabled
     ~child:(Ui.View.text label)
     ()
@@ -430,7 +428,7 @@ let expandable_message_composer_payload widget =
   match view.node with
   | Native_widget { kind_id; version; capabilities; payload } ->
     check (kind_id = native_kind_id 7) "expandable composer kind ID";
-    check (version = 2) "expandable composer schema version";
+    check (version = 3) "expandable composer schema version";
     check (Int64.equal capabilities 5L) "expandable composer capabilities";
     payload
   | _ -> failwith "expandable composer native props"
@@ -442,13 +440,13 @@ let test_expandable_message_composer_contract_and_events () =
     [ expandable_message_composer_button
         ~id:10
         ~tooltip:"Add attachment 📎"
-        ~position:Leading
+        ~role:Action
         "attachment"
     ; expandable_message_composer_button
         ~id:21
         ~tooltip:"Send message"
         ~visibility:When_non_empty
-        ~style:Filled
+        ~role:Confirmation
         ~enabled:false
         "send"
     ]
@@ -497,10 +495,10 @@ let test_expandable_message_composer_contract_and_events () =
   check (String.equal props.hint_text "Write 你好") "expandable hint";
   check (List.length props.buttons = 2) "expandable button count";
   let attachment = List.nth props.buttons 0 in
-  check (attachment.id = 10 && attachment.position = Leading) "expandable leading button";
+  check (attachment.id = 10 && attachment.role = Action) "expandable leading button";
   let send = List.nth props.buttons 1 in
   check
-    (send.visibility = When_non_empty && send.style = Filled && not send.enabled)
+    (send.visibility = When_non_empty && send.role = Confirmation && not send.enabled)
     "expandable button metadata";
   let binding = view.event_bindings.(0) in
   let invoke kind_id version event_id payload =
@@ -510,7 +508,7 @@ let test_expandable_message_composer_contract_and_events () =
   in
   invoke
     (native_kind_id 7)
-    2
+    3
     Ui.Native_widget.Expandable_message_composer.text_changed_event_id
     (Bytes.of_string "  hello 👋  ");
   let button_payload = Bytes.make 16 (Char.chr 0) in
@@ -518,7 +516,7 @@ let test_expandable_message_composer_contract_and_events () =
   Bytes.blit_string "  send  🚀" 0 button_payload 4 12;
   invoke
     (native_kind_id 7)
-    2
+    3
     Ui.Native_widget.Expandable_message_composer.button_pressed_event_id
     button_payload;
   check
@@ -530,7 +528,7 @@ let test_expandable_message_composer_contract_and_events () =
     "expandable composer typed raw-text events";
   let payload_event event_id payload =
     Ui.Native_widget.Expandable_message_composer.event_of_payload
-      (Native_event { kind_id = native_kind_id 7; version = 2; event_id; payload })
+      (Native_event { kind_id = native_kind_id 7; version = 3; event_id; payload })
   in
   check
     (payload_event
@@ -542,7 +540,7 @@ let test_expandable_message_composer_contract_and_events () =
     (fun (kind_id, version, event_id, payload) -> invoke kind_id version event_id payload)
     [ native_kind_id 6, 2, native_event_id 1, Bytes.of_string "wrong kind"
     ; native_kind_id 7, 1, native_event_id 1, Bytes.of_string "old version"
-    ; native_kind_id 7, 3, native_event_id 1, Bytes.of_string "wrong version"
+    ; native_kind_id 7, 4, native_event_id 1, Bytes.of_string "wrong version"
     ; native_kind_id 7, 2, native_event_id 9, Bytes.empty
     ; native_kind_id 7, 2, native_event_id 2, Bytes.make 3 (Char.chr 0)
     ; native_kind_id 7, 2, native_event_id 2, Bytes.make 4 (Char.chr 0)

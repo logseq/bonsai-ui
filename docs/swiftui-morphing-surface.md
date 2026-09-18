@@ -38,6 +38,7 @@ before publication. There is no legacy decoder or constructor.
 Swift regressions exercise native endpoint sizing, shared identity, editor
 removal, reversal, zero duration, scene inactivity and empty active content.
 The real OCaml Gallery fixture verifies that counters survive content removal
-through OCaml state, and that events remain presentation fenced. Integrated
-Mail collection animation and performance acceptance are tracked in the
+through OCaml state, and that events remain presentation fenced. Mail now uses native List with self-sized surface content; its row identity,
+expansion and collapsed-detail cleanup have native tests. Historical Collection
+animation and broader performance work are tracked in the
 [Mail Rendering Performance decision](agent-guide/proposed/architecture/2026-09-14-mail-rendering-performance.md).

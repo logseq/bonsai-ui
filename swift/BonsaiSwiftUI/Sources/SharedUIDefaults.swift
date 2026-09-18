@@ -182,17 +182,32 @@ struct SharedUIDefaults: Equatable, Sendable {
       return NSFont(descriptor: descriptor, size: textSize(0)) ?? base
     }
   #else
-    @MainActor func bodyFont(family: String?, legibility: LegibilityWeight?) -> UIFont {
+    @MainActor func bodyFont(
+      family: String?, legibility: LegibilityWeight?, dynamicTypeSize: DynamicTypeSize
+    ) -> UIFont {
+      let traits = UITraitCollection(
+        preferredContentSizeCategory: UIContentSizeCategory(dynamicTypeSize))
       let weight: UIFont.Weight = [.regular, .medium, .semibold, .bold][
         legibility == .bold ? 3 : textWeight(0)]
+      let systemBody = family == nil && textSizes[0] == nil
       let base =
-        family.flatMap { UIFont(name: $0, size: textSize(0)) }
-        ?? UIFont.systemFont(ofSize: textSize(0), weight: weight)
-      let descriptor = base.fontDescriptor.addingAttributes([
+        systemBody
+        ? UIFont.preferredFont(forTextStyle: .body, compatibleWith: traits)
+        : family.flatMap { UIFont(name: $0, size: textSize(0)) }
+          ?? UIFont.systemFont(ofSize: textSize(0), weight: weight)
+      var descriptor = base.fontDescriptor.addingAttributes([
         .traits: [UIFontDescriptor.TraitKey.weight: weight.rawValue]
       ])
-      return UIFontMetrics(forTextStyle: .body).scaledFont(
-        for: UIFont(descriptor: descriptor, size: textSize(0)))
+      if weight == .bold,
+        let bold = descriptor.withSymbolicTraits(descriptor.symbolicTraits.union(.traitBold))
+      {
+        descriptor = bold
+      }
+      let font = UIFont(descriptor: descriptor, size: base.pointSize)
+      return systemBody
+        ? font
+        : UIFontMetrics(forTextStyle: .body).scaledFont(
+          for: font, compatibleWith: traits)
     }
   #endif
 

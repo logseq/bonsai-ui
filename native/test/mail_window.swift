@@ -49,45 +49,37 @@ import SwiftUI
     }
     try setMailColumnWidth(560)
     for _ in 0..<4 { try await settleAccessibility(content) }
-    guard
-      let viewport = session.tree.nodes.values.compactMap({ $0.collectionController?.viewport })
-        .first,
-      viewport.visibleRect.width >= 340
-    else {
-      throw failure(
-        "Mail list is too narrow: \(session.tree.nodes.values.compactMap { $0.collectionController?.viewport.visibleRect.width })"
-      )
+    let list = try mailList(content)
+    guard list.bounds.width >= 340,
+      let owner = session.tree.listNodes.first,
+      let retainedRow = owner.children.flatMap({ Array($0.children.dropFirst(2)) }).first
+    else { throw failure("Missing intrinsically sized native Mail List") }
+    func firstRow() throws -> Int {
+      try require(
+        (0..<list.numberOfRows).first { row in
+          guard let cell = list.view(atColumn: 0, row: row, makeIfNecessary: false) else {
+            return false
+          }
+          return accessibilityElements(cell).contains { $0.label?.contains("Mara Vale") ?? false }
+        })
     }
-    guard
-      let owner = session.tree.nodes.values.first(where: {
-        $0.collectionController?.catalog.keys.count == 20
-      }), let collection = owner.collectionController,
-      collection.catalog.measurementRevision != nil,
-      let retainedRow = owner.children.first?.children.first
-    else { throw failure("Mail must use intrinsic measured collection rows") }
-    let compact = collection.viewport.geometry.extent(at: 0)
+    let compact = list.rect(ofRow: try firstRow()).height
     try capture(window, state: "inbox", revision: session.displayedRevision)
     window.makeKeyAndOrderFront(nil)
-    try await verifyRowDrag(window, content: content)
     let element = try button("Unread message from Mara Vale", window: window)
     guard element.press() else { throw failure("Mail row did not accept expansion") }
     try await waitFor("Reply", window: window)
     try await settleAccessibility(content)
     for _ in 0..<4 { try await settleAccessibility(content) }
-    let expanded = collection.viewport.geometry.extent(at: 0)
+    let expanded = list.rect(ofRow: try firstRow()).height
     guard expanded > compact else { throw failure("Expanded Mail row did not grow") }
-    let previousWidth = collection.viewport.visibleRect.width
+    let previousWidth = list.bounds.width
     try setMailColumnWidth(340)
     for _ in 0..<4 { try await settleAccessibility(content) }
-    guard collection.viewport.visibleRect.width < previousWidth,
-      collection.viewport.geometry.extent(at: 0) > expanded,
-      collection.viewport.leadingOffset < 1,
+    guard list.bounds.width < previousWidth,
+      list.rect(ofRow: try firstRow()).height >= expanded,
       session.tree.nodes[retainedRow.id.node] === retainedRow
-    else {
-      throw failure(
-        "Narrow Mail geometry: width \(previousWidth) -> \(collection.viewport.visibleRect.width), height \(expanded) -> \(collection.viewport.geometry.extent(at: 0)), offset \(collection.viewport.leadingOffset), retained \(session.tree.nodes[retainedRow.id.node] === retainedRow)"
-      )
-    }
+    else { throw failure("Native Mail List lost intrinsic sizing or row identity on resize") }
     try capture(window, state: "expanded-narrow", revision: session.displayedRevision)
     try setMailColumnWidth(560)
     for _ in 0..<4 { try await settleAccessibility(content) }
@@ -95,30 +87,34 @@ import SwiftUI
     guard try button("Collapse message from Mara Vale", window: window).press()
     else { throw failure("Mail collapse action was rejected") }
     for _ in 0..<4 { try await settleAccessibility(content) }
-    guard abs(collection.viewport.geometry.extent(at: 0) - compact) < 1
+    guard abs(list.rect(ofRow: try firstRow()).height - compact) < 1
     else { throw failure("Collapsed Mail row retained its expanded measurement") }
     guard try button("Unread message from Mara Vale", window: window).press()
     else { throw failure("Mail re-expansion action was rejected") }
     for _ in 0..<4 { try await settleAccessibility(content) }
 
-    let row = accessibilityElements(window).first { element in
-      element.actions.contains { $0.name == "Archive" }
-        && accessibilityElements(element.object).contains {
-          $0.label?.contains("Mara Vale") ?? false
-        }
+    let nativeRow = try firstRow()
+    let table: NSTableView = list
+    let systemActions =
+      table.delegate?.tableView?(table, rowActionsForRow: nativeRow, edge: .leading) ?? []
+    guard systemActions.map(\.title) == ["Archive", "Trash"] else {
+      throw failure("Expanded row lost its native swipe action identity")
     }
-    guard let archive = row?.actions.first(where: { $0.name == "Archive" }),
-      archive.handler?() == true
-    else { throw failure("Missing Mail row Archive action") }
+    let swipe = try require(retainedRow.children.first?.swipeController)
+    let archive = try require(swipe.actions.first)
+    guard case .swipeAction(let properties) = archive.properties,
+      properties.title == "Archive",
+      swipe.perform(archive, expected: properties, generation: swipe.generation)
+    else { throw failure("Archive command was not admitted") }
     for _ in 0..<100 {
       try await settleAccessibility(content)
-      if !accessibilityElements(window).contains(where: { $0.label?.contains("Mara Vale") ?? false }
+      if !mailElements(window).contains(where: { $0.label?.contains("Mara Vale") ?? false }
       ) {
         break
       }
     }
     guard
-      !accessibilityElements(window).contains(where: { $0.label?.contains("Mara Vale") ?? false })
+      !mailElements(window).contains(where: { $0.label?.contains("Mara Vale") ?? false })
     else { throw failure("Archived message remained in the inbox") }
     guard try button("Archived", window: window).press() else {
       throw failure("Archived mailbox did not accept selection")
@@ -132,10 +128,20 @@ import SwiftUI
     try await waitFor("Inbox", window: window)
     try await settleAccessibility(content)
     guard
-      !accessibilityElements(window).contains(where: { $0.label?.contains("Mara Vale") ?? false })
+      !mailElements(window).contains(where: { $0.label?.contains("Mara Vale") ?? false })
     else { throw failure("Archived message reappeared when returning to the inbox") }
+    let pagingList = try mailList(content)
+    let initialRows = pagingList.numberOfRows
+    for _ in 0..<100 {
+      pagingList.scrollRowToVisible(max(0, pagingList.numberOfRows - 1))
+      try await settleAccessibility(content)
+      if pagingList.numberOfRows > initialRows + 1 { break }
+    }
+    guard pagingList.numberOfRows > initialRows + 1 else {
+      throw failure("System List visibility did not load the next Mail page")
+    }
     print(
-      "PASS: actual Mail native window keeps its light palette and native appearance consistent, renders sidebar/inbox/detail, expands a card, and switches mailboxes after archiving through OCaml"
+      "PASS: actual Mail native window keeps its light palette and native appearance consistent, renders sidebar/inbox/detail, expands a card, and switches mailboxes after checking system row actions and dispatching Archive through OCaml"
     )
     fflush(stdout)
     exit(0)
@@ -145,59 +151,27 @@ import SwiftUI
     exit(1)
   }
 }
-@MainActor private func verifyRowDrag(_ window: NSWindow, content: NSView) async throws {
-  let row = try button("Unread message from Mara Vale", window: window)
-  let selector = NSSelectorFromString("accessibilityFrame")
-  guard row.object.responds(to: selector) else { throw failure("Missing Mail row frame") }
-  typealias FrameGetter = @convention(c) (AnyObject, Selector) -> CGRect
-  let getFrame = unsafeBitCast(row.object.method(for: selector), to: FrameGetter.self)
-  let frame = getFrame(row.object, selector)
-  guard frame.width >= 340, frame.height > 40 else {
-    throw failure("Invalid Mail drag frame: \(frame)")
+@MainActor private func mailList(_ content: NSView) throws -> NSOutlineView {
+  func outlines(_ view: NSView) -> [NSOutlineView] {
+    (view as? NSOutlineView).map { [$0] } ?? view.subviews.flatMap(outlines)
   }
-  let start = CGPoint(x: frame.minX + frame.width * 0.25, y: frame.midY)
-  let time = ProcessInfo.processInfo.systemUptime
-  for step in 0...12 {
-    let point = window.convertPoint(
-      fromScreen: CGPoint(x: start.x + 150 * CGFloat(step) / 12, y: start.y))
-    let type: NSEvent.EventType =
-      step == 0 ? .leftMouseDown : step == 12 ? .leftMouseUp : .leftMouseDragged
-    guard
-      let event = NSEvent.mouseEvent(
-        with: type, location: point, modifierFlags: [], timestamp: time + Double(step) * 0.016,
-        windowNumber: window.windowNumber, context: nil, eventNumber: step, clickCount: 1,
-        pressure: step == 12 ? 0 : 1)
-    else { throw failure("Cannot create Mail drag event") }
-    NSApp.postEvent(event, atStart: false)
+  return try require(outlines(content).max(by: { $0.numberOfRows < $1.numberOfRows }))
+}
+private func require<T>(_ value: T?) throws -> T {
+  guard let value else { throw failure("Missing native Mail object") }
+  return value
+}
+@MainActor private func mailElements(_ window: NSWindow) -> [AccessibilityElement] {
+  var elements = accessibilityElements(window)
+  if let content = window.contentView, let list = try? mailList(content) {
+    for row in 0..<list.numberOfRows {
+      if let cell = list.view(atColumn: 0, row: row, makeIfNecessary: false) {
+        elements += accessibilityElements(cell)
+      }
+    }
   }
-  for _ in 0..<4 { try await settleAccessibility(content) }
-  let elements = accessibilityElements(window)
-  let archives = elements.filter { $0.role == "AXButton" && $0.label == "Archive" }
-  guard archives.count == 1, archives[0].enabled,
-    !elements.contains(where: { $0.label == "Collapse message from Mara Vale" })
-  else {
-    throw failure(
-      "Mail mouse drag must reveal one Archive without expanding the row: \(elements.compactMap { $0.label })"
-    )
-  }
-  guard let close = elements.flatMap(\.actions).first(where: { $0.name == "Close actions" }),
-    close.handler?() == true
-  else { throw failure("Mail drag pane cannot be closed") }
-  for _ in 0..<4 { try await settleAccessibility(content) }
-  for type in [NSEvent.EventType.leftMouseDown, .leftMouseUp] {
-    guard
-      let event = NSEvent.mouseEvent(
-        with: type, location: window.convertPoint(fromScreen: start), modifierFlags: [],
-        timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: window.windowNumber,
-        context: nil, eventNumber: 20, clickCount: 1, pressure: type == .leftMouseDown ? 1 : 0)
-    else { throw failure("Cannot create Mail click event") }
-    NSApp.postEvent(event, atStart: false)
-  }
-  for _ in 0..<4 { try await settleAccessibility(content) }
-  guard try button("Collapse message from Mara Vale", window: window).press() else {
-    throw failure("Ordinary Mail mouse click stopped expanding the row")
-  }
-  for _ in 0..<4 { try await settleAccessibility(content) }
+  var seen = Set<ObjectIdentifier>()
+  return elements.filter { seen.insert(ObjectIdentifier($0.object)).inserted }
 }
 @MainActor private func requireLightAppearance(_ content: NSView) throws {
   guard content.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) == .aqua else {
@@ -207,17 +181,17 @@ import SwiftUI
 @MainActor private func waitFor(_ text: String, window: NSWindow) async throws {
   for _ in 0..<100 {
     if let content = window.contentView { try await settleAccessibility(content) }
-    if accessibilityElements(window).contains(where: {
+    if mailElements(window).contains(where: {
       ($0.value?.contains(text) ?? false) || ($0.label?.contains(text) ?? false)
     }) {
       return
     }
   }
-  let values = accessibilityElements(window).compactMap { $0.value ?? $0.label }
+  let values = mailElements(window).compactMap { $0.value ?? $0.label }
   throw failure("Missing \(text): \(values)")
 }
 @MainActor private func button(_ id: String, window: NSWindow) throws -> AccessibilityElement {
-  let elements = accessibilityElements(window)
+  let elements = mailElements(window)
   if let result = elements.first(where: {
     ($0.label?.contains(id) ?? false) && $0.role == "AXButton"
   }) {

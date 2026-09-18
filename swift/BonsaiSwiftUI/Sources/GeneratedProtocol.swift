@@ -1,7 +1,7 @@
 // Generated from protocol/schema.sexp. Do not edit.
 
 public enum ProtocolVersion {
-  public static let protocolMajor = 8
+  public static let protocolMajor = 9
   public static let protocolMinor = 0
 }
 
@@ -92,6 +92,9 @@ public enum NodeKindId {
     public static let `menu` = 61
     public static let `removal` = 78
     public static let `refresh` = 77
+    public static let `nativeList` = 80
+    public static let `listSection` = 81
+    public static let `listRow` = 82
     public static let `scrollTargets` = 62
     public static let `help` = 63
     public static let `popover` = 72
@@ -166,6 +169,9 @@ public enum NodeKindId {
         case 61: return "menu"
         case 78: return "removal"
         case 77: return "refresh"
+        case 80: return "native_list"
+        case 81: return "list_section"
+        case 82: return "list_row"
         case 62: return "scroll_targets"
         case 63: return "help"
         case 72: return "popover"
@@ -407,6 +413,41 @@ public enum CommonPropId {
     }
 }
 
+public enum NativeListPropId {
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        default: return nil
+        }
+    }
+}
+
+public enum ListSectionPropId {
+    public static let `hasHeader` = 1
+    public static let `hasFooter` = 2
+    public static let `separator` = 3
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "has_header"
+        case 2: return "has_footer"
+        case 3: return "separator"
+        default: return nil
+        }
+    }
+}
+
+public enum ListRowPropId {
+    public static let `separator` = 1
+
+    public static func debugName(_ id: Int) -> String? {
+        switch id {
+        case 1: return "separator"
+        default: return nil
+        }
+    }
+}
+
 public enum ScrollSectionsPropId {
     public static let `vertical` = 1
     public static let `pinHeaders` = 2
@@ -522,20 +563,12 @@ public enum TogglePropId {
 
 public enum SwipeActionsPropId {
     public static let `enabled` = 1
-    public static let `vertical` = 2
-    public static let `closeOnScroll` = 3
-    public static let `group` = 4
-    public static let `closeWhenOpened` = 5
-    public static let `closeWhenTapped` = 6
+    public static let `allowsFullSwipe` = 2
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
         case 1: return "enabled"
-        case 2: return "vertical"
-        case 3: return "close_on_scroll"
-        case 4: return "group"
-        case 5: return "close_when_opened"
-        case 6: return "close_when_tapped"
+        case 2: return "allows_full_swipe"
         default: return nil
         }
     }
@@ -546,10 +579,8 @@ public enum SwipeActionPropId {
     public static let `side` = 2
     public static let `enabled` = 3
     public static let `role` = 4
-    public static let `extent` = 5
-    public static let `background` = 6
-    public static let `autoClose` = 7
-    public static let `fullSwipe` = 8
+    public static let `background` = 5
+    public static let `symbol` = 6
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
@@ -557,10 +588,8 @@ public enum SwipeActionPropId {
         case 2: return "side"
         case 3: return "enabled"
         case 4: return "role"
-        case 5: return "extent"
-        case 6: return "background"
-        case 7: return "auto_close"
-        case 8: return "full_swipe"
+        case 5: return "background"
+        case 6: return "symbol"
         default: return nil
         }
     }
@@ -1356,18 +1385,16 @@ public enum DatePickerPropId {
     public static let `selected` = 1
     public static let `first` = 2
     public static let `last` = 3
-    public static let `selectableDates` = 4
-    public static let `label` = 5
-    public static let `enabled` = 6
+    public static let `label` = 4
+    public static let `enabled` = 5
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
         case 1: return "selected"
         case 2: return "first"
         case 3: return "last"
-        case 4: return "selectable_dates"
-        case 5: return "label"
-        case 6: return "enabled"
+        case 4: return "label"
+        case 5: return "enabled"
         default: return nil
         }
     }
@@ -1418,12 +1445,12 @@ public enum GroupBoxPropId {
 
 public enum ProgressPropId {
     public static let `value` = 1
-    public static let `circular` = 2
+    public static let `style` = 2
 
     public static func debugName(_ id: Int) -> String? {
         switch id {
         case 1: return "value"
-        case 2: return "circular"
+        case 2: return "style"
         default: return nil
         }
     }

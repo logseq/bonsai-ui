@@ -111,7 +111,6 @@ struct NativeScrollSections: View {
         ScrollPositionRetention(
           vertical: properties.vertical, preserveContentOffset: false, command: node.scrollCommand)
       )
-      .modifier(RefreshScrollModifier())
       .modifier(ScrollObservationModifier(observer: node.scrollObserver))
   }
 }

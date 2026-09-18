@@ -77,8 +77,6 @@ type state =
   ; next_cursor : int
   ; next_generation : int
   ; load_state : load_state
-  ; painted_first_index : int
-  ; painted_last_exclusive : int
   }
 
 type ('set_state, 'sleep) paging_dependencies =
@@ -394,8 +392,6 @@ let initial =
   ; next_cursor = 1
   ; next_generation = 0
   ; load_state = Idle
-  ; painted_first_index = 0
-  ; painted_last_exclusive = 20
   }
 ;;
 
@@ -608,9 +604,7 @@ let search_header on_menu =
 ;;
 
 let compact_mail_extent = 88.
-let card_outer_vertical_extent = 20.
 let card_header_extent = 88.
-let card_outline_vertical_extent = 16.
 let card_outline_line_extent = 30.
 let card_notice_extent = 48.
 let card_divider_extent = 1.
@@ -624,18 +618,6 @@ let rec flatten_outline ?(depth = 0) ?(prefix = []) nodes =
           (path, depth, node)
           :: flatten_outline ~depth:(depth + 1) ~prefix:path node.children)
        nodes)
-;;
-
-let expanded_mail_extent message ~has_notice =
-  let outline_count = List.length (flatten_outline message.outline) in
-  card_outer_vertical_extent
-  +. card_header_extent
-  +. card_divider_extent
-  +. card_outline_vertical_extent
-  +. (Float.of_int outline_count *. card_outline_line_extent)
-  +. (if has_notice then card_notice_extent else 0.)
-  +. card_divider_extent
-  +. card_footer_extent
 ;;
 
 let outline_test_id message_id path =
@@ -881,18 +863,15 @@ let expanded_mail_details ~reply ~open_message ~notice message =
 
 let with_swipe_actions ~swipe_actions message content =
   let archive, (trash, read) = swipe_actions in
-  let action ~key ~side ~title ~background ~symbol ?(full_swipe = false) ~on_press () =
+  let action ?role ~key ~side ~title ~background ~symbol ~on_press () =
     Ui.View.Swipe_actions.action
       ~key:(Ui.Key.string (Printf.sprintf "mail-swipe-%s-%d" key message.id))
       ~side
+      ?role
       ~title
       ~background
-      ~full_swipe
       ~on_press
-      ~child:
-        (Ui.View.column
-           ~spacing:8.
-           [ icon ~size:24. ~color:surface symbol; Ui.View.text title ])
+      ~symbol
       ()
   in
   let archive_action =
@@ -902,13 +881,13 @@ let with_swipe_actions ~swipe_actions message content =
       ~title:"Archive"
       ~background:archive_surface
       ~symbol:"archivebox"
-      ~full_swipe:true
       ~on_press:archive
       ()
   in
   let trash_action =
     action
       ~key:"trash"
+      ~role:Destructive
       ~side:Start
       ~title:"Trash"
       ~background:trash_surface
@@ -928,7 +907,7 @@ let with_swipe_actions ~swipe_actions message content =
   in
   Ui.View.Swipe_actions.create
     ~key:(Ui.Key.int message.id)
-    ~group:"mail-inbox"
+    ~allows_full_swipe:true
     ~actions:[ archive_action; trash_action; read_action ]
     ~content
     ()
@@ -972,7 +951,7 @@ let render_mail_row
       ()
   in
   with_swipe_actions ~swipe_actions message content
-  |> Ui.View.Keyed.create ~key:(Ui.Key.int message.id)
+  |> Ui.View.Native_list.row ~key:(Ui.Key.int message.id)
 ;;
 
 let mail_row handlers set_state large_text message_id row_data _graph =
@@ -1113,29 +1092,6 @@ let mail_row handlers set_state large_text message_id row_data _graph =
 
 let messages_for_destination state = List.filter (message_is_visible state) state.messages
 
-let expanded_extent_override state =
-  match state.expanded_id with
-  | None -> []
-  | Some expanded_id ->
-    let rec find index = function
-      | [] -> []
-      | message :: tail ->
-        if Int.equal message.id expanded_id
-        then (
-          let override : Ui.View.Collection.extent =
-            { index
-            ; extent =
-                expanded_mail_extent
-                  message
-                  ~has_notice:(Option.is_some state.card_notice)
-            }
-          in
-          [ override ])
-        else find (index + 1) tail
-    in
-    find 0 (messages_for_destination state)
-;;
-
 let mail_destination_title = function
   | Inbox_view -> "Inbox"
   | Starred_view -> "Starred"
@@ -1174,7 +1130,7 @@ let loading_more_row =
   |> Ui.View.semantics
        ~properties:
          (Ui.Semantics.create ~label:"Loading more messages" ~live_region:true ())
-  |> Ui.View.Keyed.create ~key:(Ui.Key.string "mail-loading-more")
+  |> Ui.View.Native_list.row ~key:(Ui.Key.string "mail-loading-more")
 ;;
 
 let has_loading_row state =
@@ -1185,36 +1141,7 @@ let has_loading_row state =
     -> false
 ;;
 
-let collection_catalog ~large_text state =
-  let keys =
-    List.map (fun message -> Ui.Key.int message.id) (messages_for_destination state)
-    @ if has_loading_row state then [ Ui.Key.string "mail-loading-more" ] else []
-  in
-  Ui.View.Collection.Catalog.create
-    ~keys
-    ~default_extent:compact_mail_extent
-    ~sizing:
-      (Ui.View.Collection.Measured
-         { revision =
-             Int64.logor
-               (Int64.shift_left state.layout_revision 1)
-               (if large_text then 1L else 0L)
-         })
-    ~overrides:(expanded_extent_override state)
-    ~overscan:4
-    ~expand_duration_ms:240
-    ~collapse_duration_ms:190
-    ()
-;;
-
-let materialized_window state ~catalog =
-  let total_count = Ui.View.Collection.Catalog.count catalog in
-  let visible_last_exclusive = min state.painted_last_exclusive total_count in
-  let visible_first_index = min state.painted_first_index visible_last_exclusive in
-  Ui.View.Collection.Window.create ~catalog ~visible_first_index ~visible_last_exclusive
-;;
-
-let render_mail_body ~state ~catalog ~rows ~open_menu ~on_visible_range =
+let render_mail_body ~state ~rows ~open_menu ~on_visible_range =
   match state.selected_mail_destination with
   | Settings_view -> Ui.View.Body.static (placeholder "Settings")
   | (Inbox_view | Starred_view | Archived_view | Trash_view) as destination ->
@@ -1225,25 +1152,13 @@ let render_mail_body ~state ~catalog ~rows ~open_menu ~on_visible_range =
         invalid_arg (Printf.sprintf "Mail: duplicate message ID %d" message_id)
     in
     let has_loading_row = has_loading_row state in
-    let message_count =
-      Ui.View.Collection.Catalog.count catalog - if has_loading_row then 1 else 0
-    in
-    let window = materialized_window state ~catalog in
-    let rows =
-      if has_loading_row && window.last_exclusive > message_count
-      then rows @ [ loading_more_row ]
-      else rows
-    in
+    let rows = if has_loading_row then rows @ [ loading_more_row ] else rows in
     let list =
-      Ui.View.Collection.vertical
-        ~key:(Ui.Key.string ("mail-collection-" ^ mail_destination_title destination))
-        ~catalog
-        ~first_index:window.first_index
-        ~items:rows
+      Ui.View.Native_list.vertical
+        ~key:(Ui.Key.string ("mail-list-" ^ mail_destination_title destination))
         ~on_visible_range
-        ()
-      |> Ui.View.Viewport.Vertical.with_test_id (Ui.Test_id.string "mail-virtual-list")
-      |> Ui.View.Viewport.Vertical.background ~color:surface ~corner_radius:26.
+        [ Ui.View.Native_list.section ~key:(Ui.Key.string "messages") rows ]
+      |> Ui.View.Viewport.Vertical.with_test_id (Ui.Test_id.string "mail-native-list")
     in
     let title = mail_destination_title destination in
     Ui.View.Body.Vertical.create
@@ -1638,33 +1553,6 @@ let detail_page handlers set_state message_id detail _graph =
         message)
 ;;
 
-let rec drop count values =
-  if count <= 0
-  then values
-  else (
-    match values with
-    | [] -> []
-    | _ :: tail -> drop (count - 1) tail)
-;;
-
-let rec take count values =
-  if count <= 0
-  then []
-  else (
-    match values with
-    | [] -> []
-    | head :: tail -> head :: take (count - 1) tail)
-;;
-
-let window_messages state ~catalog =
-  let messages = messages_for_destination state in
-  let message_count = List.length messages in
-  let window = materialized_window state ~catalog in
-  messages
-  |> drop window.first_index
-  |> take (min message_count window.last_exclusive - window.first_index)
-;;
-
 let app_destination_key = function
   | Mail -> "mail"
   | Chat -> "chat"
@@ -1686,7 +1574,6 @@ let split_state state =
 let render_mail_page
       state
       rows
-      ~catalog
       ~visible_range
       ~open_menu
       ~split_changed
@@ -1699,7 +1586,7 @@ let render_mail_page
       ~detail
   =
   let mail_body =
-    render_mail_body ~state ~catalog ~rows ~open_menu ~on_visible_range:visible_range
+    render_mail_body ~state ~rows ~open_menu ~on_visible_range:visible_range
     |> Ui.View.Body.background ~color:background
     |> Ui.View.Body.with_test_id (Ui.Test_id.string "mail-list-page")
   in
@@ -1776,21 +1663,9 @@ let component handlers graph =
           }))
   in
   let sleep = Bonsai.Cont.Clock.sleep graph in
-  let catalog =
-    state
-    |> Bonsai.Cont.cutoff ~equal:(fun left right ->
-      left.messages == right.messages
-      && left.selected_mail_destination = right.selected_mail_destination
-      && left.expanded_id = right.expanded_id
-      && left.card_notice = right.card_notice
-      && has_loading_row left = has_loading_row right)
-    |> fun state ->
-    Bonsai.Cont.map2 state large_text ~f:(fun state large_text ->
-      collection_catalog ~large_text state)
-  in
   let visible_messages =
-    Bonsai.Cont.map2 state catalog ~f:(fun state catalog ->
-      window_messages state ~catalog
+    Bonsai.Cont.map state ~f:(fun state ->
+      messages_for_destination state
       |> List.map (fun message ->
         let expanded = state.expanded_id = Some message.id in
         message, expanded, if expanded then state.card_notice else None))
@@ -1828,10 +1703,9 @@ let component handlers graph =
         let sleep = snapshot.paging_sleep in
         match Ui.View.Collection.visible_range_of_payload payload with
         | None -> Bonsai.Effect.Ignore
-        | Some { first_index; last_exclusive } ->
+        | Some { first_index = _; last_exclusive } ->
           let count = snapshot.paging_count in
           let bounded value = Int64.to_int (Int64.min value (Int64.of_int count)) in
-          let first_index = bounded first_index in
           let last_exclusive = bounded last_exclusive in
           let should_load =
             snapshot.paging_destination = Inbox_view
@@ -1851,9 +1725,7 @@ let component handlers graph =
                     && Int.equal state.next_generation generation
                   then
                     { state with
-                      painted_first_index = first_index
-                    ; painted_last_exclusive = last_exclusive
-                    ; load_state = Loading_more { generation; cursor }
+                      load_state = Loading_more { generation; cursor }
                     ; next_generation = generation + 1
                     }
                   else state)
@@ -1872,12 +1744,7 @@ let component handlers graph =
                         }
                       | Idle | Loading_more _ -> state))
               ])
-          else
-            set_state (fun state ->
-              { state with
-                painted_first_index = first_index
-              ; painted_last_exclusive = last_exclusive
-              }))
+          else set_state (fun state -> state))
   in
   let open_menu =
     Driver.Handler.create
@@ -1941,8 +1808,6 @@ let component handlers graph =
         ; compact_column = Ui.Navigation.Split_column.Content
         ; expanded_id = None
         ; card_notice = None
-        ; painted_first_index = 0
-        ; painted_last_exclusive = 20
         ; next_generation
         ; load_state
         }))
@@ -2024,11 +1889,11 @@ let component handlers graph =
         invalid_arg (Printf.sprintf "Mail: duplicate selected message ID %d" id))
   in
   Bonsai.Cont.map2
-    (Bonsai.Cont.both (Bonsai.Cont.both state catalog) rows)
+    (Bonsai.Cont.both state rows)
     (Bonsai.Cont.both detail (Bonsai.Cont.both visible_range shell_handlers))
     ~f:
       (fun
-        ((state, catalog), rows)
+        (state, rows)
         ( detail
         , ( visible_range
           , ( (open_menu, split_changed)
@@ -2036,7 +1901,6 @@ let component handlers graph =
       render_mail_page
         state
         rows
-        ~catalog
         ~visible_range
         ~open_menu
         ~split_changed

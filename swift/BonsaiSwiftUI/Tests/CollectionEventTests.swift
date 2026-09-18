@@ -37,133 +37,47 @@ struct CollectionEventTests {
   }
 }
 
-// Mail's remaining widgets cannot yet stage as a complete native tree. Inspect
-// its collection using the production catalog/window decoders, without a second
-// implementation of either property format.
-private struct CollectionWireState {
-  var id: UInt64 = 0
-  var handler: UInt64 = 0
-  var windowID: UInt64 = 0
-  var window: RenderCollectionWindow?
-  var catalog: RenderCollectionCatalog?
-  var children: [UInt64] = []
-  var firstIndex: Int { window?.firstIndex ?? 0 }
-  var geometry: CollectionGeometry? { catalog?.geometry }
-  mutating func apply(_ output: NativeOutput) throws {
-    guard !output.bytes.isEmpty else { return }
-    for operation in try WireFrame.decode(output.bytes).operations {
-      var reader = WireReader(operation.body)
-      switch operation.opcode {
-      case OperationId.createNode, OperationId.updateProps:
-        let node = try reader.integer(UInt64.self)
-        let kind = Int(try reader.integer(UInt16.self))
-        guard kind == NodeKindId.collectionCatalog || kind == NodeKindId.collectionWindow else {
-          continue
-        }
-        if operation.opcode == OperationId.updateProps { _ = try reader.integer(UInt64.self) }
-        if kind == NodeKindId.collectionCatalog {
-          id = node
-          catalog = try RenderCollectionCatalog.decode(&reader)
-        } else {
-          windowID = node
-          window = try RenderCollectionWindow.decode(&reader)
-        }
-        if operation.opcode == OperationId.createNode {
-          let bindings = try reader.bindings()
-          if kind == NodeKindId.collectionCatalog {
-            handler = try #require(bindings[EventTagId.visibleRangeChanged])
-          } else {
-            #expect(bindings.isEmpty)
-          }
-        }
-        #expect(reader.remaining == 0)
-      case OperationId.setChildren:
-        guard try reader.integer(UInt64.self) == windowID else { continue }
-        let count = Int(try reader.integer(UInt32.self))
-        children = try (0..<count).map { _ in try reader.integer(UInt64.self) }
-      case OperationId.updateEventBindings:
-        guard try reader.integer(UInt64.self) == id else { continue }
-        handler = try #require(reader.bindings()[EventTagId.visibleRangeChanged])
-      default: break
-      }
-    }
-    let catalog = try #require(catalog)
-    let window = try #require(window)
-    try #require(
-      window.firstIndex <= catalog.keys.count
-        && window.keys.count <= catalog.keys.count - window.firstIndex)
-    #expect(
-      Array(catalog.keys[window.firstIndex..<(window.firstIndex + window.keys.count)])
-        == window.keys)
-    #expect(children.count == window.keys.count)
-  }
-}
-
 extension NativeRuntimeTests {
-  @Test @MainActor func nativeRangesBoundActualMailMaterializationAndPreserveDelayedPaging()
-    async throws
-  {
+  @Test @MainActor func nativeListRangesPreserveActualMailDelayedPaging() async throws {
     let runtime = try await NativeRuntime.open(entrypoint: "mail-collection")
     do {
-      var snapshot = CollectionWireState()
+      var store = NodeStore()
+      func apply(_ output: NativeOutput) throws {
+        if !output.bytes.isEmpty { store = try store.staging(WireFrame.decode(output.bytes)).tree }
+      }
+      func rows() throws -> [UInt64] {
+        let list = try #require(store.nodes.values.first { $0.properties == .nativeList })
+        return list.children.flatMap { Array(store.nodes[$0]!.children.dropFirst(2)) }
+      }
       let initial = try await runtime.pump(monotonicNanoseconds: 1)
-      try snapshot.apply(initial)
-      let epoch = try WireFrame.decode(initial.bytes).epoch
-      #expect(snapshot.geometry?.count == 20 && snapshot.children.count == 20)
-      #expect(
-        snapshot.catalog?.timing
-          == CollectionTiming(expandMilliseconds: 240, collapseMilliseconds: 190))
-      let viewport = try CollectionViewport(geometry: #require(snapshot.geometry))
-      viewport.observe(CGRect(x: 0, y: 0, width: 420, height: 616))
-      #expect(viewport.visibleRange == 0..<7)
+      try apply(initial)
+      let retained = try rows()
+      #expect(retained.count == 20)
+      let list = try #require(store.nodes.values.first { $0.properties == .nativeList })
+      let handler = try #require(list.bindings[EventTagId.visibleRangeChanged])
       try await runtime.acknowledge(initial, monotonicNanoseconds: 2)
-      let first = NativeEvent(
-        sequence: 1, displayedRevision: initial.revision, nodeID: snapshot.id,
-        handlerID: snapshot.handler, payload: .visibleRange(viewport.visibleRange))
-      let narrowed = try await runtime.pump(
-        monotonicNanoseconds: 3, events: EventBatch.encode(epoch: epoch, events: [first]))
-      try snapshot.apply(narrowed)
-      for operation in try WireFrame.decode(narrowed.bytes).operations
-      where operation.opcode == OperationId.createNode
-        || operation.opcode == OperationId.updateProps
-      {
-        var reader = WireReader(operation.body)
-        _ = try reader.integer(UInt64.self)
-        #expect(try reader.integer(UInt16.self) != NodeKindId.collectionCatalog)
-      }
-      #expect(
-        snapshot.firstIndex == 0 && snapshot.children.count == 11 && snapshot.geometry?.count == 20)
-      try await runtime.acknowledge(narrowed, monotonicNanoseconds: 4)
-      var queue = NativeEventQueue()
-      for (sequence, offset) in [(UInt64(2), 352.0), (UInt64(3), 1144.0)] {
-        viewport.observe(CGRect(x: 0, y: offset, width: 420, height: 616))
-        let accepted = queue.append(
-          NativeEvent(
-            sequence: sequence, displayedRevision: narrowed.revision,
-            nodeID: snapshot.id, handlerID: snapshot.handler,
-            payload: .visibleRange(viewport.visibleRange)))
-        #expect(accepted)
-      }
-      #expect(queue.events.count == 1 && viewport.visibleRange == 13..<20)
+      let nearEnd = NativeEvent(
+        sequence: 1, displayedRevision: initial.revision,
+        nodeID: list.id, handlerID: handler, payload: .visibleRange(13..<20))
       let loading = try await runtime.pump(
-        monotonicNanoseconds: 5, events: EventBatch.encode(epoch: epoch, events: queue.events))
-      try snapshot.apply(loading)
-      #expect(
-        snapshot.geometry?.count == 21 && snapshot.firstIndex == 9 && snapshot.children.count == 12)
-      try await runtime.acknowledge(loading, monotonicNanoseconds: 6)
-      let beforeDelay = try await runtime.pump(monotonicNanoseconds: 700_000_005)
-      try snapshot.apply(beforeDelay)
-      #expect(snapshot.geometry?.count == 21)
-      try await runtime.acknowledge(beforeDelay, monotonicNanoseconds: 700_000_006)
-      let loaded = try await runtime.pump(monotonicNanoseconds: 800_000_005)
-      try snapshot.apply(loaded)
-      #expect(
-        snapshot.geometry?.count == 40 && snapshot.firstIndex == 9 && snapshot.children.count == 15)
-      try await runtime.acknowledge(loaded, monotonicNanoseconds: 800_000_006)
-      let idle = try await runtime.pump(monotonicNanoseconds: 1_600_000_005)
-      try snapshot.apply(idle)
-      #expect(snapshot.geometry?.count == 40)
-      try await runtime.acknowledge(idle, monotonicNanoseconds: 1_600_000_006)
+        monotonicNanoseconds: 3,
+        events: EventBatch.encode(epoch: store.epoch, events: [nearEnd]))
+      try apply(loading)
+      #expect(try rows().count == 21)
+      #expect(try Array(rows().prefix(20)) == retained)
+      try await runtime.acknowledge(loading, monotonicNanoseconds: 4)
+      let beforeDelay = try await runtime.pump(monotonicNanoseconds: 700_000_003)
+      try apply(beforeDelay)
+      #expect(try rows().count == 21)
+      try await runtime.acknowledge(beforeDelay, monotonicNanoseconds: 700_000_004)
+      let loaded = try await runtime.pump(monotonicNanoseconds: 800_000_003)
+      try apply(loaded)
+      #expect(try rows().count == 40)
+      #expect(try Array(rows().prefix(20)) == retained)
+      try await runtime.acknowledge(loaded, monotonicNanoseconds: 800_000_004)
+      let idle = try await runtime.pump(monotonicNanoseconds: 1_600_000_003)
+      try apply(idle)
+      #expect(try rows().count == 40)
       await runtime.close()
     } catch {
       await runtime.close()

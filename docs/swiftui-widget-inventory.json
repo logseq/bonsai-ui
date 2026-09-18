@@ -3731,7 +3731,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 88,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Key and optional 0..1 fraction remain (loading progress becomes value); omission denotes indeterminate activity. Choose Circular style. Flat/Wavy and Contained/Uncontained presentation are removed; native control size, tint and ordinary background/padding composition own appearance. Progress has no completion callback.",
+        "parameter_disposition": "Key and optional 0..1 value remain. Automatic is the default and preserves activity/determinate meaning. Linear requires a value; Circular requires no value. Unsupported combinations reject. System control size and tint own appearance; no custom progress style or completion callback remains.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeProgressView.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_entrypoint": "native-progress",
@@ -3757,7 +3757,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 88,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Key and optional 0..1 fraction remain (loading progress becomes value); omission denotes indeterminate activity. Choose Linear style. Flat/Wavy and Contained/Uncontained presentation are removed; native control size, tint and ordinary background/padding composition own appearance. Progress has no completion callback.",
+        "parameter_disposition": "Key and optional 0..1 value remain. Automatic is the default and preserves activity/determinate meaning. Linear requires a value; Circular requires no value. Unsupported combinations reject. System control size and tint own appearance; no custom progress style or completion callback remains.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeProgressView.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_entrypoint": "native-progress",
@@ -4148,7 +4148,7 @@
         "current_api": "View.Date_picker.create",
         "source": "ocaml/ui/view.mli",
         "line": 747,
-        "parameter_disposition": "Key, selected value, inclusive bounds, selectable dates and on_select remain. Current-day marker and Day/Year initial-page mode are removed; native component menus always expose year/month/day. Label and enabled are added. Nonempty selectable lists are sorted/deduplicated and bound the allowed selection.",
+        "parameter_disposition": "Key, selected value, inclusive continuous bounds, label, enabled and on_select remain. System DatePicker replaces component menus. Whitelists and initial-page modes are removed. Native bounds are 1582-10-15 through 9999-12-31.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeCivilPicker.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_entrypoint": "native-civil-picker",
@@ -5186,7 +5186,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 88,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Key and optional 0..1 fraction remain (loading progress becomes value); omission denotes indeterminate activity. Choose Circular style. Flat/Wavy and Contained/Uncontained presentation are removed; native control size, tint and ordinary background/padding composition own appearance. Progress has no completion callback.",
+        "parameter_disposition": "Key and optional 0..1 value remain. Automatic is the default and preserves activity/determinate meaning. Linear requires a value; Circular requires no value. Unsupported combinations reject. System control size and tint own appearance; no custom progress style or completion callback remains.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeProgressView.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_entrypoint": "native-progress",
@@ -5212,7 +5212,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 552,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Retain signed request/show tokens and Ready/Pending/Completed state. Attach to a supported vertical viewport before decorators; arbitrary View and horizontal children are rejected. One Int64 request is emitted per token; Completed releases the native async action. Material visual variants, including No_spinner, are removed in favor of native progress and labeled refresh controls.",
+        "parameter_disposition": "Retain signed request/show tokens and Ready/Pending/Completed ownership. Accept only Native_list.vertical before decorators. The system owns pull refresh and its indicator; macOS uses a toolbar action. SDK pull thresholds and extra button rows are removed.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeRefresh.swift",
         "gallery_source": "examples/gallery/ocaml/refresh_catalog.ml",
         "gallery_component": "component",
@@ -5626,7 +5626,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1105,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Remove the Dismissed extension event ID. A designated full-swipe action invokes its normal handler; OCaml decides whether to remove the row.",
+        "parameter_disposition": "Remove the Dismissed extension event ID. The first native action on each edge handles a permitted full swipe; OCaml decides whether to remove the row.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5653,7 +5653,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1105,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Capture the former integer ID in a stable action handler/key. Preserve enabled, background, auto_close and arbitrary decorative child content. Supply an accessible title and side. Native point extent replaces integer flex; compose foreground, padding, alignment and shape in child content where appropriate.",
+        "parameter_disposition": "Each action has a stable key/handler, title, optional SF Symbol, enabled state, Button role and tint. Arbitrary children, point extents and auto-close settings are removed; the native List owns presentation.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5680,7 +5680,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1105,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Compose icon and text using View.label or a column as the action child. The accessible title and normal Press handler are explicit; no separate icon-action record remains.",
+        "parameter_disposition": "Supply a title and optional SF Symbol to the system Button label. Arbitrary icon/text child composition is removed.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5707,7 +5707,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1105,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Remove the dismissible object and Flutter dismiss/resize durations, inverse-drawer motion and cancel threshold knobs. Designate one full_swipe action per side and perform removal in its OCaml handler.",
+        "parameter_disposition": "Remove the dismissible object and Flutter dismiss/resize durations, inverse-drawer motion and cancel threshold knobs. Set allows_full_swipe on the native List row action container; the system activates its first action, and OCaml owns removal.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5734,7 +5734,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1120,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Remove the pane object, motion enum, extent ratio and open/close thresholds. Each typed action carries its side and point extent; native reveal policy caps the pane at 80 percent and controls gesture settling.",
+        "parameter_disposition": "Remove pane objects, motions, extents and thresholds. SwiftUI List swipeActions owns reveal and settling; no SDK pane remains.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5761,7 +5761,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1120,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Preserve required key, enabled, axis, close_on_scroll and exact-byte group identity. Start/End are directional horizontally and top/bottom vertically; use_text_direction is removed. Actions own independent typed handlers, and closure policy is explicit on the container.",
+        "parameter_disposition": "Require a stable key and immediate Native_list.row ownership. Keep enabled and container allows_full_swipe. Start/End follow layout direction; vertical axis, grouping and explicit closing policies are removed.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5842,7 +5842,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1120,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Remove the auto-close wrapper kind and opaque payload; closure policy belongs to each typed Swipe_actions container.",
+        "parameter_disposition": "Remove the wrapper kind and payload. Native List owns closing; no replacement group or closure policy is exposed.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -5869,7 +5869,7 @@
         "source": "ocaml/ui/view.mli",
         "line": 1120,
         "source_sha256": "1bfbfac8aa1486657388e4a9f273b5665054c1be9b450089afcfd89fda938b93",
-        "parameter_disposition": "Remove the wrapper node. Apply close_when_opened/close_when_tapped and a shared group to the relevant containers; ordinary child layout remains explicit.",
+        "parameter_disposition": "Remove the wrapper and all group/close_when_opened/close_when_tapped options. Compose Swipe_actions directly as a native List row.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/SwipeActions.swift",
         "gallery_source": "examples/gallery/ocaml/gallery.ml",
         "gallery_component": "swipe_component",
@@ -6220,7 +6220,7 @@
         "source": "ocaml/ui/native_widget.mli",
         "line": 177,
         "source_sha256": "00c1bf5bae379b001edcfa1be9300b55839b435699442b44db10bc27b02cd879",
-        "parameter_disposition": "Retain standard kind 7/version 2 with a reserved SwiftUI registration; applications cannot replace it.",
+        "parameter_disposition": "Standard kind 7 uses version 3 with a reserved SwiftUI registration; applications cannot replace it.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeExpandableComposer.swift",
         "gallery_source": "examples/gallery/ocaml/expandable_composer_catalog.ml",
         "gallery_component": "component",
@@ -6301,7 +6301,7 @@
         "source": "ocaml/ui/native_widget.mli",
         "line": 183,
         "source_sha256": "00c1bf5bae379b001edcfa1be9300b55839b435699442b44db10bc27b02cd879",
-        "parameter_disposition": "Preserve positive unique ID, tooltip, leading/trailing position, whitespace-based empty/nonempty visibility, enabled state and composed View label. Plain/Filled map to native plain/prominent styles. Label descendants are decorative and cannot dispatch independent input.",
+        "parameter_disposition": "Preserve positive unique ID, tooltip, whitespace-based visibility, enabled state and decorative View label. Explicit Action/Confirmation/Cancellation roles replace position/style and select system toolbar placement.",
         "swift_source": "swift/BonsaiSwiftUI/Sources/NativeExpandableComposer.swift",
         "gallery_source": "examples/gallery/ocaml/expandable_composer_catalog.ml",
         "gallery_component": "component",
@@ -7134,7 +7134,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "View.progress",
-        "rationale": "Select Linear or Circular through the progress constructor; native progress appearance replaces the old track variant.",
+        "rationale": "Use Automatic, Linear determinate or Circular activity. Unsupported value/style combinations reject; the system owns presentation.",
         "guide": "swiftui-control-api-review.md",
         "physical_ios": "pending"
       }
@@ -7147,7 +7147,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "View.progress",
-        "rationale": "Select Linear or Circular through the progress constructor; native progress appearance replaces the old track variant.",
+        "rationale": "Use Automatic, Linear determinate or Circular activity. Unsupported value/style combinations reject; the system owns presentation.",
         "guide": "swiftui-control-api-review.md",
         "physical_ios": "pending"
       }
@@ -8314,7 +8314,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "View.Swipe_actions.action",
-        "rationale": "Start becomes the corresponding typed action side, directional horizontally and top/bottom vertically.",
+        "rationale": "Start/End select native leading/trailing row actions and follow layout direction. Vertical actions are removed.",
         "guide": "swiftui-extension-api-review.md",
         "physical_ios": "pending"
       }
@@ -8327,7 +8327,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "View.Swipe_actions.action",
-        "rationale": "End becomes the corresponding typed action side, directional horizontally and top/bottom vertically.",
+        "rationale": "Start/End select native leading/trailing row actions and follow layout direction. Vertical actions are removed.",
         "guide": "swiftui-extension-api-review.md",
         "physical_ios": "pending"
       }
@@ -8600,7 +8600,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "Native_widget.Expandable_message_composer.button",
-        "rationale": "Retain logical Leading action placement, following the native layout direction.",
+        "rationale": "Remove position/style. Choose explicit Action, Confirmation or Cancellation toolbar roles; style never implies submission.",
         "guide": "swiftui-extension-api-review.md",
         "physical_ios": "pending"
       }
@@ -8613,7 +8613,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "Native_widget.Expandable_message_composer.button",
-        "rationale": "Retain logical Trailing action placement, following the native layout direction.",
+        "rationale": "Remove position/style. Choose explicit Action, Confirmation or Cancellation toolbar roles; style never implies submission.",
         "guide": "swiftui-extension-api-review.md",
         "physical_ios": "pending"
       }
@@ -8665,7 +8665,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "Native_widget.Expandable_message_composer.button",
-        "rationale": "Retain the semantic Plain choice using native plain Button styling.",
+        "rationale": "Remove position/style. Choose explicit Action, Confirmation or Cancellation toolbar roles; style never implies submission.",
         "guide": "swiftui-extension-api-review.md",
         "physical_ios": "pending"
       }
@@ -8678,7 +8678,7 @@
       "acceptance": "API mapping inspected; complete variant and device acceptance pending.",
       "api_review": {
         "current_api": "Native_widget.Expandable_message_composer.button",
-        "rationale": "Retain the semantic Filled choice using native prominent Button styling.",
+        "rationale": "Remove position/style. Choose explicit Action, Confirmation or Cancellation toolbar roles; style never implies submission.",
         "guide": "swiftui-extension-api-review.md",
         "physical_ios": "pending"
       }

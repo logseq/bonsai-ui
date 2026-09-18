@@ -668,7 +668,8 @@ struct RenderTextField: Equatable, Sendable {
     func updateUIView(_ view: UITextField, context: Context) {
       controller.setHostEnabled(enabled)
       view.font = defaults.bodyFont(
-        family: fontFamily, legibility: context.environment.legibilityWeight)
+        family: fontFamily, legibility: context.environment.legibilityWeight,
+        dynamicTypeSize: context.environment.dynamicTypeSize)
       view.adjustsFontForContentSizeCategory = true
       view.textColor = UIColor(defaults.color(defaults.defaultForeground()))
     }

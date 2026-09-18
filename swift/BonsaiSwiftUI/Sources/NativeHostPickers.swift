@@ -67,44 +67,19 @@ private struct HostDateFields: View {
   let domain: CivilDateDomain
   @Binding var value: CivilDate
 
-  private func binding(_ field: CivilPickerController.Field) -> Binding<Int> {
-    let snapshot = value
-    return Binding(
-      get: {
-        switch field {
-        case .year: snapshot.year
-        case .month: snapshot.month
-        case .day: snapshot.day
-        }
-      },
-      set: { proposed in
-        guard value == snapshot else { return }
-        let next: CivilDate?
-        switch field {
-        case .year: next = domain.selectingYear(proposed, from: snapshot)
-        case .month: next = domain.selectingMonth(proposed, from: snapshot)
-        case .day: next = domain.selectingDay(proposed, from: snapshot)
-        }
-        if let next { value = next }
-      })
-  }
   var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Text(title).font(.headline)
-      HStack {
-        Picker("Year", selection: binding(.year)) {
-          ForEach(domain.years, id: \.self) { Text(String($0)).tag($0) }
-        }.accessibilityLabel(title + " year")
-        Picker("Month", selection: binding(.month)) {
-          ForEach(domain.months(in: value.year), id: \.self) { Text(String($0)).tag($0) }
-        }.accessibilityLabel(title + " month")
-        Picker("Day", selection: binding(.day)) {
-          ForEach(domain.days(in: value.year, month: value.month), id: \.self) {
-            Text(String($0)).tag($0)
+    DatePicker(
+      title,
+      selection: Binding(
+        get: { try! value.dateForPicker() },
+        set: { date in
+          if let proposed = try? CivilDate.fromPickerDate(date), domain.contains(proposed) {
+            value = proposed
           }
-        }.accessibilityLabel(title + " day")
-      }.pickerStyle(.menu).labelsHidden()
-    }
+        }), in: domain.pickerRange, displayedComponents: .date
+    )
+    .environment(\.calendar, CivilDate.pickerCalendar)
+    .environment(\.timeZone, .gmt)
   }
 }
 

@@ -2,7 +2,7 @@
 
 # Protocol IDs
 
-Protocol version: `8.0`
+Protocol version: `9.0`
 
 ## Frame kind
 
@@ -60,6 +60,9 @@ Protocol version: `8.0`
 | `menu` | 61 |
 | `removal` | 78 |
 | `refresh` | 77 |
+| `native_list` | 80 |
+| `list_section` | 81 |
+| `list_row` | 82 |
 | `scroll_targets` | 62 |
 | `help` | 63 |
 | `popover` | 72 |
@@ -204,6 +207,25 @@ Protocol version: `8.0`
 | `test_id` | 1 | `optional_string` |
 | `semantics` | 2 | `optional_semantics` |
 
+## Native list properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+
+## List section properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `has_header` | 1 | `bool` |
+| `has_footer` | 2 | `bool` |
+| `separator` | 3 | `enum_u8` |
+
+## List row properties
+
+| Name | ID | Encoding |
+|---|---:|---|
+| `separator` | 1 | `enum_u8` |
+
 ## Scroll sections properties
 
 | Name | ID | Encoding |
@@ -269,11 +291,7 @@ Protocol version: `8.0`
 | Name | ID | Encoding |
 |---|---:|---|
 | `enabled` | 1 | `bool` |
-| `vertical` | 2 | `bool` |
-| `close_on_scroll` | 3 | `bool` |
-| `group` | 4 | `optional_string` |
-| `close_when_opened` | 5 | `bool` |
-| `close_when_tapped` | 6 | `bool` |
+| `allows_full_swipe` | 2 | `bool` |
 
 ## Swipe action properties
 
@@ -283,10 +301,8 @@ Protocol version: `8.0`
 | `side` | 2 | `enum_u8` |
 | `enabled` | 3 | `bool` |
 | `role` | 4 | `enum_u8` |
-| `extent` | 5 | `f64` |
-| `background` | 6 | `u32` |
-| `auto_close` | 7 | `bool` |
-| `full_swipe` | 8 | `bool` |
+| `background` | 5 | `u32` |
+| `symbol` | 6 | `optional_string` |
 
 ## Morphing surface properties
 
@@ -711,9 +727,8 @@ Protocol version: `8.0`
 | `selected` | 1 | `civil_date` |
 | `first` | 2 | `civil_date` |
 | `last` | 3 | `civil_date` |
-| `selectable_dates` | 4 | `civil_dates` |
-| `label` | 5 | `string` |
-| `enabled` | 6 | `bool` |
+| `label` | 4 | `string` |
+| `enabled` | 5 | `bool` |
 
 ## Time picker properties
 
@@ -743,7 +758,7 @@ Protocol version: `8.0`
 | Name | ID | Encoding |
 |---|---:|---|
 | `value` | 1 | `optional_f64` |
-| `circular` | 2 | `bool` |
+| `style` | 2 | `enum_u8` |
 
 ## Table properties
 

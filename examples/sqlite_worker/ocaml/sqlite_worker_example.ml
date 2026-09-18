@@ -675,7 +675,7 @@ let component client handlers graph =
           ; write_file
           ; read_file
           ; cancel_file
-          ; Ui.View.progress ~style:Ui.View.Progress_style.Circular ~value:progress ()
+          ; Ui.View.progress ~style:Ui.View.Progress_style.Automatic ~value:progress ()
           ; Ui.View.text operation
           ; Ui.View.text
               (Printf.sprintf

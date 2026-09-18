@@ -6,11 +6,10 @@ import SwiftUI
   func change(_ translation: CGSize)
   func end(cancelled: Bool)
 }
-extension SwipeActionsController: NativePanTarget {}
 
 #if os(macOS)
   import AppKit
-  final class SwipePanRecognizer: NSPanGestureRecognizer {
+  final class RemovalPanRecognizer: NSPanGestureRecognizer {
     private var origin: CGPoint?
     private(set) var displacement: CGSize = .zero
 
@@ -46,18 +45,18 @@ extension SwipeActionsController: NativePanTarget {}
         height: (end.y - start.y) * (view.isFlipped ? 1 : -1))
     }
   }
-  struct NativeSwipePan: NSGestureRecognizerRepresentable {
+  struct NativeRemovalPan: NSGestureRecognizerRepresentable {
     let controller: any NativePanTarget
     func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
       Coordinator(controller)
     }
-    func makeNSGestureRecognizer(context: Context) -> SwipePanRecognizer {
-      let gesture = SwipePanRecognizer()
+    func makeNSGestureRecognizer(context: Context) -> RemovalPanRecognizer {
+      let gesture = RemovalPanRecognizer()
       gesture.delegate = context.coordinator
       gesture.delaysPrimaryMouseButtonEvents = true
       return gesture
     }
-    func handleNSGestureRecognizerAction(_ gesture: SwipePanRecognizer, context: Context) {
+    func handleNSGestureRecognizerAction(_ gesture: RemovalPanRecognizer, context: Context) {
       let translation = gesture.displacement
       switch gesture.state {
       case .began:
@@ -75,7 +74,7 @@ extension SwipeActionsController: NativePanTarget {}
       let controller: any NativePanTarget
       init(_ controller: any NativePanTarget) { self.controller = controller }
       func gestureRecognizerShouldBegin(_ recognizer: NSGestureRecognizer) -> Bool {
-        guard let pan = recognizer as? SwipePanRecognizer else { return false }
+        guard let pan = recognizer as? RemovalPanRecognizer else { return false }
         // NSPan's translation is still zero during this callback; use the complete mouse travel.
         return controller.canBegin(pan.displacement)
       }
@@ -94,7 +93,7 @@ extension SwipeActionsController: NativePanTarget {}
   }
 #else
   import UIKit
-  struct NativeSwipePan: UIGestureRecognizerRepresentable {
+  struct NativeRemovalPan: UIGestureRecognizerRepresentable {
     let controller: any NativePanTarget
     func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
       Coordinator(controller)

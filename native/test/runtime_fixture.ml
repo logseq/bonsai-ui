@@ -202,7 +202,7 @@ let civil_events_component handlers graph =
              (Ui.View.column
                 [ Ui.View.Date_picker.create
                     ~selected:(Ui.View.Date.create ~year:2000 ~month:2 ~day:29)
-                    ~first:(Ui.View.Date.create ~year:1 ~month:1 ~day:1)
+                    ~first:(Ui.View.Date.create ~year:1582 ~month:10 ~day:15)
                     ~last:(Ui.View.Date.create ~year:9999 ~month:12 ~day:31)
                     ~on_select
                     ()
@@ -1455,10 +1455,9 @@ let () =
            (Bonsai_swiftui_spec.Id.Application.Entrypoint_name.of_string
               (Printf.sprintf "native-refresh-%d" kind))
          (App.create ~name:"Gallery Refresh" (fun handlers graph ->
-            Bonsai.Cont.map
-              (Refresh_catalog.component ~kind handlers graph)
-              ~f:(fun body -> App.View.create ~theme:(Ui.Theme.create ()) ~body))))
-    [ 0; 1; 2; 3 ]
+            Bonsai.Cont.map (Refresh_catalog.component handlers graph) ~f:(fun body ->
+              App.View.create ~theme:(Ui.Theme.create ()) ~body))))
+    [ 0 ]
 ;;
 
 let () =
@@ -2546,8 +2545,8 @@ let picker_service_component handlers graph =
         finish
           (Host_effect.pick_date
              ~cancellation
-             ~initial:(date 1582 10 10)
-             ~first:(date 1 1 1)
+             ~initial:(date 1582 10 15)
+             ~first:(date 1582 10 15)
              ~last:(date 9999 12 31)
              host
              ())
@@ -2832,8 +2831,7 @@ let () =
   in
   let register name sheet field_kind =
     Native_backend.embed
-      ~name:
-        (ID.Application.Entrypoint_name.of_string name)
+      ~name:(ID.Application.Entrypoint_name.of_string name)
       (App.create ~name:"Editor Card Focus" (fun handlers graph ->
          let revision, set_revision = Bonsai_v017.state ~equal:Int.equal 0 graph in
          let change =
@@ -2884,18 +2882,19 @@ let () =
                     ~on_submit:ignored
                     ~on_focus_changed:ignored
                     ()
-                | None -> Ui.View.text_editor
-                 ~key:(Ui.Key.string "editor")
-                 ~autofocus:true
-                 ~session_id:(ID.Text_input.Session_id.of_int64 1L)
-                 ~document_revision:(ID.Text_input.Document_revision.of_int64 1L)
-                 ~accepted_local_revision:ID.Text_input.Local_revision.zero
-                 ~update_mode:Ui.Text_editing.Force_replace
-                 ~value
-                 ~on_edit:change
-                 ~on_submit:ignored
-                 ~on_focus_changed:ignored
-                 ())
+                | None ->
+                  Ui.View.text_editor
+                    ~key:(Ui.Key.string "editor")
+                    ~autofocus:true
+                    ~session_id:(ID.Text_input.Session_id.of_int64 1L)
+                    ~document_revision:(ID.Text_input.Document_revision.of_int64 1L)
+                    ~accepted_local_revision:ID.Text_input.Local_revision.zero
+                    ~update_mode:Ui.Text_editing.Force_replace
+                    ~value
+                    ~on_edit:change
+                    ~on_submit:ignored
+                    ~on_focus_changed:ignored
+                    ())
                |> Ui.View.frame ~height:100.
              in
              let body =
@@ -2930,7 +2929,8 @@ let () =
              in
              App.View.create ~theme:(Ui.Theme.create ()) ~body:(Ui.View.Body.static body))))
   in
-  List.iter (fun (name, sheet, field) -> register name sheet field)
+  List.iter
+    (fun (name, sheet, field) -> register name sheet field)
     [ "native-editor-card", false, None
     ; "native-editor-sheet", true, None
     ; "native-field-card", false, Some false

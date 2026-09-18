@@ -105,7 +105,7 @@ extension NativeRuntimeTests {
       #expect(editor.selectedRange() == selection)
       #expect(!app.session.activate(try app.control("Background action")))
       let oldSend = try app.button("Send", in: #require(app.sheet?.contentView))
-      try app.press("Close composer")
+      try app.press("Close")
       #expect(!app.session.activate(try app.control("Background action")))
       _ = oldSend.press()
       try await app.settle { app.sheet == nil }
@@ -151,7 +151,7 @@ extension NativeRuntimeTests {
       try await app.settle { !editor.isEditable }
       #expect(app.sheet != nil)
       #expect(!(try app.button("Send", in: #require(app.sheet?.contentView))).enabled)
-      try app.press("Close composer")
+      try app.press("Close")
       try await app.settle { app.sheet == nil }
       #expect(!(try app.button("Open composer", in: app.host)).enabled)
       #expect(app.session.activate(try app.control("Toggle availability")))
@@ -182,7 +182,7 @@ extension NativeRuntimeTests {
     var registry = BonsaiNativeViews()
     #expect(throws: BonsaiNativeViewError.invalidRegistration) {
       try registry.register(
-        kind: 7, version: 2, decode: { _ in () },
+        kind: 7, version: 3, decode: { _ in () },
         encodeEvent: { (_: Bool) in BonsaiNativeEvent(id: 1) },
         makeResource: { () }, dispose: { _ in }, content: { _ in Text("Override") })
     }
@@ -197,7 +197,7 @@ extension NativeRuntimeTests {
       let tree = RenderTree()
       try tree.validate(store)
       tree.commit(store)
-      func candidate(_ payload: Data, version: UInt16 = 2) throws -> NodeStore {
+      func candidate(_ payload: Data, version: UInt16 = 3) throws -> NodeStore {
         let operation = TreeFixture.operation(OperationId.updateProps) {
           $0.integer(node.id)
           $0.integer(UInt16(NodeKindId.nativeWidget))

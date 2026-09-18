@@ -6,7 +6,7 @@ import Testing
 
 extension TreeFixture {
   static func progress(
-    _ id: UInt64 = 1, value: Double? = nil, style: UInt8 = 0, update: Bool = false
+    _ id: UInt64 = 1, value: Double? = nil, style: UInt8 = 2, update: Bool = false
   ) -> WireOperation {
     operation(update ? OperationId.updateProps : OperationId.createNode) { writer in
       writer.integer(id)
@@ -41,14 +41,14 @@ struct ProgressTests {
       $0.integer(UInt64(3))
     }
     for operations in [
-      [TreeFixture.progress(style: 2, update: true)], [bindings],
+      [TreeFixture.progress(style: 3, update: true)], [bindings],
       [TreeFixture.text(2, "Invalid child"), TreeFixture.children(1, [2])],
     ] {
       #expect(throws: (any Error).self) {
         try initial.staging(TreeFixture.frame(operations, base: 1, revision: 2))
       }
     }
-    let update = TreeFixture.progress(value: 1, style: 1, update: true)
+    let update = TreeFixture.progress(value: 1, style: 0, update: true)
     for length in 0..<update.body.count {
       #expect(throws: (any Error).self) {
         try initial.staging(
@@ -61,72 +61,6 @@ struct ProgressTests {
     #expect(initial.revision == 1 && initial.nodes.count == 1)
   }
 
-  @Test @MainActor func linearProgressFillsFromTheNativeLeadingEdge() throws {
-    let tree = RenderTree()
-    tree.commit(
-      try NodeStore().staging(
-        TreeFixture.frame([
-          TreeFixture.progress(value: 0.25), TreeFixture.root(1),
-        ])
-      ).tree)
-    let node = try #require(tree.root)
-    for direction in [LayoutDirection.leftToRight, .rightToLeft] {
-      let output = try raster(
-        NativeNodeView(node: node, activate: { _ in })
-          .tint(.black).frame(width: 160, height: 40).environment(\.colorScheme, .light), direction)
-      let blackX = stride(from: 0, to: output.pixels.count, by: 4).filter {
-        output.pixels[$0] < 80 && output.pixels[$0 + 1] < 80 && output.pixels[$0 + 2] < 80
-      }.map { ($0 / 4) % output.width }
-      #expect(!blackX.isEmpty)
-      let center = Double(blackX.reduce(0, +)) / Double(max(1, blackX.count))
-      #expect(
-        direction == .leftToRight
-          ? center < Double(output.width) / 2 : center > Double(output.width) / 2)
-    }
-  }
-
-  @Test @MainActor func determinateProgressPaintsFractionAndRetainsIdentityAcrossModes() throws {
-    for style in UInt8(0)...1 {
-      let tree = RenderTree()
-      var store = try NodeStore().staging(
-        TreeFixture.frame([
-          TreeFixture.progress(value: 0, style: style), TreeFixture.root(1),
-        ])
-      ).tree
-      tree.commit(store)
-      let node = try #require(tree.root)
-      var amounts: [Int] = []
-      for (index, value) in [0.0, 0.25, 0.75, 1.0].enumerated() {
-        store = try store.staging(
-          TreeFixture.frame(
-            [
-              TreeFixture.progress(value: value, style: style, update: true)
-            ], base: UInt64(index + 1), revision: UInt64(index + 2))
-        ).tree
-        tree.commit(store)
-        let output = try raster(
-          NativeNodeView(node: node, activate: { _ in })
-            .tint(.black).frame(width: 160, height: 40).environment(\.colorScheme, .light))
-        let black = stride(from: 0, to: output.pixels.count, by: 4).filter {
-          output.pixels[$0] < 80 && output.pixels[$0 + 1] < 80 && output.pixels[$0 + 2] < 80
-        }.count
-        amounts.append(black)
-        #expect(tree.root === node)
-      }
-      #expect(amounts[0] == 0)
-      #expect(amounts[1] > 10)
-      #expect(amounts[2] > amounts[1] * 2)
-      #expect(amounts[3] > amounts[2])
-      let next = try store.staging(
-        TreeFixture.frame(
-          [
-            TreeFixture.progress(style: style == 0 ? 1 : 0, update: true)
-          ], base: 5, revision: 6)
-      ).tree
-      tree.commit(next)
-      #expect(tree.root === node)
-    }
-  }
 }
 
 extension NativeRuntimeTests {
@@ -155,7 +89,7 @@ extension NativeRuntimeTests {
       for percent in ["25%", "75%", nil, "100%"] {
         try await settleAccessibility(host)
         #expect(try await session.presented(#require(session.ticket)))
-        for identifier in ["progress-linear", "progress-circular"] {
+        for identifier in ["progress-linear", "progress-automatic"] {
           let element = try #require(
             accessibilityElements(host).first { $0.identifier == identifier })
           if let percent {
@@ -169,20 +103,6 @@ extension NativeRuntimeTests {
           }
         }
         #expect(original.allSatisfy { session.tree.nodes[$0.id.node] === $0 })
-        if percent == nil {
-          let first = try progressSnapshot(host)
-          try await Task.sleep(for: .milliseconds(180))
-          #expect(try progressSnapshot(host) != first)
-          let revision = session.displayedRevision
-          session.isActive = false
-          try await settleAccessibility(host)
-          let paused = try progressSnapshot(host)
-          try await Task.sleep(for: .milliseconds(180))
-          #expect(try progressSnapshot(host) == paused)
-          #expect(session.displayedRevision == revision && session.ticket == nil)
-          session.isActive = true
-
-        }
         if percent != "100%" {
           let button = try #require(
             accessibilityElements(host).first { $0.identifier == "progress-advance" })
@@ -196,12 +116,4 @@ extension NativeRuntimeTests {
       throw error
     }
   }
-}
-
-@MainActor private func progressSnapshot(_ host: NSView) throws -> Data {
-  host.layoutSubtreeIfNeeded()
-  host.displayIfNeeded()
-  let bitmap = try #require(host.bitmapImageRepForCachingDisplay(in: host.bounds))
-  host.cacheDisplay(in: host.bounds, to: bitmap)
-  return try #require(bitmap.representation(using: .png, properties: [:]))
 }

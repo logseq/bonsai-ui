@@ -167,8 +167,10 @@ final class BonsaiSession {
         isInteractive && displayedRevision > 0
           && displayed.tree.epoch == node.id.epoch && matching
           && isInActiveContent(node, ignoringModalBlocking: true),
-        retainingPresentation: isInteractive && isInActiveContent(
-          node, ignoringModalBlocking: true, retainingNativeFocus: true))
+        retainingPresentation: isInteractive
+          && isInActiveContent(
+            node, ignoringModalBlocking: true, retainingNativeFocus: true)
+      )
     }
   }
 
@@ -545,6 +547,20 @@ final class BonsaiSession {
   }
 
   private func sampleCollectionRequests() {
+    for node in tree.listNodes {
+      guard isVisible, isActive, node.id.epoch == displayed.tree.epoch,
+        let visibility = node.listVisibility, let range = visibility.request,
+        let mounted = displayed.tree.nodes[node.id.node], mounted.properties == .nativeList,
+        mounted.children == node.children.map({ $0.id.node }),
+        let handler = mounted.bindings[EventTagId.visibleRangeChanged],
+        node.bindings[EventTagId.visibleRangeChanged] == handler,
+        isInActiveContent(node, controlsOwnInput: false)
+      else { continue }
+      if enqueue(node, handler: handler, payload: .visibleRange(range)) {
+        visibility.accepted(range)
+      }
+    }
+
     for node in tree.collectionNodes {
       guard node.id.epoch == displayed.tree.epoch,
         let controller = node.collectionController,
@@ -922,7 +938,8 @@ final class BonsaiSession {
     var child = node
     while let parentID = tree.parents[child.id.node], let parent = tree.nodes[parentID] {
       if let instance = parent.nativeView {
-        let childMounted = retainingNativeFocus
+        let childMounted =
+          retainingNativeFocus
           ? instance.isChildMounted(child.id) : instance.containsMountedChild(child.id)
         guard childMounted else { return false }
         if !retainingNativeFocus {
@@ -939,9 +956,13 @@ final class BonsaiSession {
         return false
       }
       if let current = parent.properties.presentation, parent.children.last === child {
-        guard current.presented, parent.presentationController?.presented == true else { return false }
+        guard current.presented, parent.presentationController?.presented == true else {
+          return false
+        }
         if retainingNativeFocus {
-          guard parent.presentationController?.isContentMounted(child.id) == true else { return false }
+          guard parent.presentationController?.isContentMounted(child.id) == true else {
+            return false
+          }
         } else {
           guard let mounted = displayed.tree.nodes[parentID],
             mounted.properties.presentation == current,
@@ -1003,11 +1024,6 @@ final class BonsaiSession {
       if parent.removalController?.blocksContent == true { return false }
       if controlsOwnInput, case .menu = parent.properties { return false }
       if controlsOwnInput, case .picker = parent.properties { return false }
-      if controlsOwnInput, case .swipeActions = parent.properties, parent.children.first === child,
-        parent.swipeController?.offset != 0
-      {
-        return false
-      }
       if case .morphingSurface(let surface) = parent.properties {
         guard let previous = displayed.tree.nodes[parentID],
           case .morphingSurface(let displayedSurface) = previous.properties,
@@ -1045,7 +1061,8 @@ final class BonsaiSession {
     let continuousEdit: Bool
     switch payload {
     case .textEdit, .textLimitReached:
-      continuousEdit = node.textController?.retainsEditingFocus == true
+      continuousEdit =
+        node.textController?.retainsEditingFocus == true
         || node.fieldController?.retainsEditingFocus == true
     default: continuousEdit = false
     }
@@ -1063,7 +1080,6 @@ final class BonsaiSession {
           nodeID: node.id.node, handlerID: handler, payload: payload))
     else { return false }
     sequence += 1
-    if payload == .press { tree.swipeContentTapped(node) }
     return true
   }
 

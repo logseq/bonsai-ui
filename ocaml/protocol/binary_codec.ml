@@ -577,6 +577,16 @@ let write_slider_fields
   Option.iter (write_string writer) upper_label
 ;;
 
+let validate_progress_style value style =
+  if style < 0 || style > 2 || (style = 0 && value = None) || (style = 1 && value <> None)
+  then fail Invalid_props "unsupported system progress mode"
+;;
+
+let write_separator writer separator =
+  if separator < 0 || separator > 2 then fail Invalid_props "invalid list separator";
+  Writer.u8 writer separator
+;;
+
 let validate_progress_value = function
   | None -> ()
   | Some value
@@ -830,6 +840,9 @@ let node_kind_id = function
   | Collection_catalog -> Generated_protocol.Node_kind.collection_catalog
   | Collection_window -> Generated_protocol.Node_kind.collection_window
   | Removal -> Generated_protocol.Node_kind.removal
+  | Native_list -> Generated_protocol.Node_kind.native_list
+  | List_section -> Generated_protocol.Node_kind.list_section
+  | List_row -> Generated_protocol.Node_kind.list_row
   | Refresh -> Generated_protocol.Node_kind.refresh
   | Scroll_targets -> Generated_protocol.Node_kind.scroll_targets
   | Scroll -> Generated_protocol.Node_kind.scroll
@@ -1223,25 +1236,18 @@ let valid_civil_date (date : Wire_frame.civil_date) =
   && date.day <= days.(date.month - 1)
 ;;
 
-let validate_date_picker ~selected ~first ~last ~selectable_dates ~label =
+let validate_date_picker ~selected ~first ~last ~label =
   let bounded date =
     valid_civil_date date
     && compare_civil_date first date <= 0
     && compare_civil_date date last <= 0
   in
-  let rec ordered = function
-    | a :: (b :: _ as rest) -> compare_civil_date a b < 0 && ordered rest
-    | _ -> true
-  in
-  check_u16 "selectable date count" (List.length selectable_dates);
   if
     String.trim label = ""
     || (not (valid_civil_date first && valid_civil_date last))
+    || compare_civil_date first { year = 1582; month = 10; day = 15 } < 0
     || compare_civil_date first last > 0
-    || (not (bounded selected))
-    || (not (List.for_all bounded selectable_dates))
-    || (not (ordered selectable_dates))
-    || (selectable_dates <> [] && not (List.mem selected selectable_dates))
+    || not (bounded selected)
   then fail Invalid_props "invalid date picker selection or domain"
 ;;
 
@@ -1257,13 +1263,11 @@ let validate_time_picker ~(value : Wire_frame.civil_time) ~format ~label =
   then fail Invalid_props "invalid time picker value or configuration"
 ;;
 
-let write_date_picker writer ~selected ~first ~last ~selectable_dates ~label ~enabled =
-  validate_date_picker ~selected ~first ~last ~selectable_dates ~label;
+let write_date_picker writer ~selected ~first ~last ~label ~enabled =
+  validate_date_picker ~selected ~first ~last ~label;
   write_civil_date writer selected;
   write_civil_date writer first;
   write_civil_date writer last;
-  Writer.u16 writer (List.length selectable_dates);
-  List.iter (write_civil_date writer) selectable_dates;
   write_string writer label;
   write_bool writer enabled
 ;;
@@ -1379,6 +1383,12 @@ let write_props writer kind props =
       ~collapse_vertical
       ~title
       ~duration_ms
+  | Native_list, Native_list_props -> ()
+  | List_section, List_section_props { has_header; has_footer; separator } ->
+    write_bool writer has_header;
+    write_bool writer has_footer;
+    write_separator writer separator
+  | List_row, List_row_props { separator } -> write_separator writer separator
   | Refresh, Refresh_props { request_token; request_state; show_token } ->
     write_refresh writer ~request_token ~request_state ~show_token
   | ( Scroll_targets
@@ -1511,9 +1521,8 @@ let write_props writer kind props =
          write_string writer label)
       actions
   | Theme, Theme_props data -> write_theme writer data
-  | ( Date_picker
-    , Date_picker_props { selected; first; last; selectable_dates; label; enabled } ) ->
-    write_date_picker writer ~selected ~first ~last ~selectable_dates ~label ~enabled
+  | Date_picker, Date_picker_props { selected; first; last; label; enabled } ->
+    write_date_picker writer ~selected ~first ~last ~label ~enabled
   | Time_picker, Time_picker_props { value; format; label; enabled } ->
     write_time_picker writer ~value ~format ~label ~enabled
   | Menu, Menu_props { items; enabled } -> write_menu writer ~items ~enabled
@@ -1629,10 +1638,11 @@ let write_props writer kind props =
     if String.trim message = "" then fail Invalid_props "help message must not be empty";
     write_string writer message
   | Group_box, Group_box_props { has_label } -> write_bool writer has_label
-  | Progress, Progress_props { value; circular } ->
+  | Progress, Progress_props { value; style } ->
     validate_progress_value value;
     write_optional_f64 writer value;
-    write_bool writer circular
+    validate_progress_style value style;
+    Writer.u8 writer style
   | Overlay, Overlay_props { alignment } -> Writer.u8 writer (alignment_id alignment)
   | Disclosure_group, Disclosure_group_props { expanded; enabled } ->
     write_bool writer expanded;
@@ -1642,43 +1652,24 @@ let write_props writer kind props =
     write_bool writer value;
     write_bool writer enabled;
     Writer.u8 writer style
-  | ( Swipe_actions
-    , Swipe_actions_props
-        { enabled
-        ; vertical
-        ; close_on_scroll
-        ; group
-        ; close_when_opened
-        ; close_when_tapped
-        } ) ->
-    if group = Some "" then fail Invalid_props "empty swipe group";
+  | Swipe_actions, Swipe_actions_props { enabled; allows_full_swipe } ->
     write_bool writer enabled;
-    write_bool writer vertical;
-    write_bool writer close_on_scroll;
-    write_optional_string writer group;
-    write_bool writer close_when_opened;
-    write_bool writer close_when_tapped
-  | ( Swipe_action
-    , Swipe_action_props
-        { title; side; enabled; role; extent; background; auto_close; full_swipe } ) ->
+    write_bool writer allows_full_swipe
+  | Swipe_action, Swipe_action_props { title; side; enabled; role; background; symbol } ->
     if
-      title = ""
+      String.trim title = ""
       || side < 0
       || side > 1
       || role < 0
       || role > 2
-      || (not (Float.is_finite extent))
-      || extent < 44.
-      || extent > 4096.
+      || symbol = Some ""
     then fail Invalid_props "invalid swipe action";
     write_string writer title;
     Writer.u8 writer side;
     write_bool writer enabled;
     Writer.u8 writer role;
-    Writer.f64 writer extent;
     Writer.u32 writer background;
-    write_bool writer auto_close;
-    write_bool writer full_swipe
+    write_optional_string writer symbol
   | ( Morphing_surface
     , Morphing_surface_props { expanded; expand_duration_ms; collapse_duration_ms } ) ->
     check_u32 "morph expand duration" expand_duration_ms;
@@ -1741,6 +1732,9 @@ let props_kind_id = function
   | Collection_catalog_props _ -> Generated_protocol.Node_kind.collection_catalog
   | Collection_window_props _ -> Generated_protocol.Node_kind.collection_window
   | Removal_props _ -> Generated_protocol.Node_kind.removal
+  | Native_list_props -> Generated_protocol.Node_kind.native_list
+  | List_section_props _ -> Generated_protocol.Node_kind.list_section
+  | List_row_props _ -> Generated_protocol.Node_kind.list_row
   | Refresh_props _ -> Generated_protocol.Node_kind.refresh
   | Scroll_targets_props _ -> Generated_protocol.Node_kind.scroll_targets
   | Scroll_props _ -> Generated_protocol.Node_kind.scroll
@@ -1881,6 +1875,9 @@ let changed_fields = function
   | Collection_catalog_props _ -> 1023L
   | Collection_window_props _ -> 3L
   | Removal_props _ -> 63L
+  | Native_list_props -> 0L
+  | List_section_props _ -> 7L
+  | List_row_props _ -> 1L
   | Refresh_props _ -> 7L
   | Scroll_targets_props _ -> 511L
   | Scroll_props _ -> 15L
@@ -1967,7 +1964,7 @@ let changed_fields = function
       ; field_mask Generated_protocol.Semantics_prop.actions
       ]
   | Theme_props _ -> field_mask Generated_protocol.Theme_prop.data
-  | Date_picker_props _ -> 63L
+  | Date_picker_props _ -> 31L
   | Time_picker_props _ -> 15L
   | Menu_props _ -> 3L
   | Picker_props _ -> 31L
@@ -1988,12 +1985,12 @@ let changed_fields = function
   | Progress_props _ ->
     Int64.logor
       (field_mask Generated_protocol.Progress_prop.value)
-      (field_mask Generated_protocol.Progress_prop.circular)
+      (field_mask Generated_protocol.Progress_prop.style)
   | Overlay_props _ -> field_mask Generated_protocol.Overlay_prop.alignment
   | Disclosure_group_props _ -> 3L
   | Toggle_props _ -> 7L
-  | Swipe_actions_props _ -> 63L
-  | Swipe_action_props _ -> 255L
+  | Swipe_actions_props _ -> 3L
+  | Swipe_action_props _ -> 63L
   | Morphing_surface_props _ -> 7L
   | Tabs_props _ -> 1L
   | Tab_props _ -> 31L
@@ -2063,6 +2060,12 @@ let write_update_props writer props =
       ~collapse_vertical
       ~title
       ~duration_ms
+  | Native_list_props -> ()
+  | List_section_props { has_header; has_footer; separator } ->
+    write_bool writer has_header;
+    write_bool writer has_footer;
+    write_separator writer separator
+  | List_row_props { separator } -> write_separator writer separator
   | Refresh_props { request_token; request_state; show_token } ->
     write_refresh writer ~request_token ~request_state ~show_token
   | Scroll_targets_props
@@ -2185,8 +2188,8 @@ let write_update_props writer props =
          write_string writer label)
       actions
   | Theme_props data -> write_theme writer data
-  | Date_picker_props { selected; first; last; selectable_dates; label; enabled } ->
-    write_date_picker writer ~selected ~first ~last ~selectable_dates ~label ~enabled
+  | Date_picker_props { selected; first; last; label; enabled } ->
+    write_date_picker writer ~selected ~first ~last ~label ~enabled
   | Time_picker_props { value; format; label; enabled } ->
     write_time_picker writer ~value ~format ~label ~enabled
   | Menu_props { items; enabled } -> write_menu writer ~items ~enabled
@@ -2296,10 +2299,11 @@ let write_update_props writer props =
     if String.trim message = "" then fail Invalid_props "help message must not be empty";
     write_string writer message
   | Group_box_props { has_label } -> write_bool writer has_label
-  | Progress_props { value; circular } ->
+  | Progress_props { value; style } ->
     validate_progress_value value;
     write_optional_f64 writer value;
-    write_bool writer circular
+    validate_progress_style value style;
+    Writer.u8 writer style
   | Overlay_props { alignment } -> Writer.u8 writer (alignment_id alignment)
   | Disclosure_group_props { expanded; enabled } ->
     write_bool writer expanded;
@@ -2309,36 +2313,24 @@ let write_update_props writer props =
     write_bool writer value;
     write_bool writer enabled;
     Writer.u8 writer style
-  | Swipe_actions_props
-      { enabled; vertical; close_on_scroll; group; close_when_opened; close_when_tapped }
-    ->
-    if group = Some "" then fail Invalid_props "empty swipe group";
+  | Swipe_actions_props { enabled; allows_full_swipe } ->
     write_bool writer enabled;
-    write_bool writer vertical;
-    write_bool writer close_on_scroll;
-    write_optional_string writer group;
-    write_bool writer close_when_opened;
-    write_bool writer close_when_tapped
-  | Swipe_action_props
-      { title; side; enabled; role; extent; background; auto_close; full_swipe } ->
+    write_bool writer allows_full_swipe
+  | Swipe_action_props { title; side; enabled; role; background; symbol } ->
     if
-      title = ""
+      String.trim title = ""
       || side < 0
       || side > 1
       || role < 0
       || role > 2
-      || (not (Float.is_finite extent))
-      || extent < 44.
-      || extent > 4096.
+      || symbol = Some ""
     then fail Invalid_props "invalid swipe action";
     write_string writer title;
     Writer.u8 writer side;
     write_bool writer enabled;
     Writer.u8 writer role;
-    Writer.f64 writer extent;
     Writer.u32 writer background;
-    write_bool writer auto_close;
-    write_bool writer full_swipe
+    write_optional_string writer symbol
   | Morphing_surface_props { expanded; expand_duration_ms; collapse_duration_ms } ->
     check_u32 "morph expand duration" expand_duration_ms;
     check_u32 "morph collapse duration" collapse_duration_ms;
@@ -2426,7 +2418,6 @@ let validate_host_date_bounds ~initial ~first ~last =
     ~selected:(Option.value initial ~default:first)
     ~first
     ~last
-    ~selectable_dates:[]
     ~label:"Date"
 ;;
 
@@ -3193,6 +3184,9 @@ let read_node_kind reader =
     Collection_catalog
   | value when value = Generated_protocol.Node_kind.collection_window -> Collection_window
   | value when value = Generated_protocol.Node_kind.removal -> Removal
+  | value when value = Generated_protocol.Node_kind.native_list -> Native_list
+  | value when value = Generated_protocol.Node_kind.list_section -> List_section
+  | value when value = Generated_protocol.Node_kind.list_row -> List_row
   | value when value = Generated_protocol.Node_kind.refresh -> Refresh
   | value when value = Generated_protocol.Node_kind.scroll_targets -> Scroll_targets
   | value when value = Generated_protocol.Node_kind.scroll -> Scroll
@@ -3362,6 +3356,17 @@ let read_props reader kind =
     then fail Invalid_props "invalid removal properties";
     Removal_props
       { request_token; request_state; vertical; collapse_vertical; title; duration_ms }
+  | Native_list -> Native_list_props
+  | List_section ->
+    let has_header = read_bool reader in
+    let has_footer = read_bool reader in
+    let separator = Reader.u8 reader in
+    if separator > 2 then fail Invalid_props "invalid list separator";
+    List_section_props { has_header; has_footer; separator }
+  | List_row ->
+    let separator = Reader.u8 reader in
+    if separator > 2 then fail Invalid_props "invalid list separator";
+    List_row_props { separator }
   | Refresh ->
     let request_token = Reader.u64 reader in
     let request_state = Reader.u8 reader in
@@ -3701,13 +3706,10 @@ let read_props reader kind =
     let selected = read_civil_date reader in
     let first = read_civil_date reader in
     let last = read_civil_date reader in
-    let selectable_dates =
-      List.init (Reader.u16 reader) (fun _ -> read_civil_date reader)
-    in
     let label = read_string reader in
     let enabled = read_bool reader in
-    validate_date_picker ~selected ~first ~last ~selectable_dates ~label;
-    Date_picker_props { selected; first; last; selectable_dates; label; enabled }
+    validate_date_picker ~selected ~first ~last ~label;
+    Date_picker_props { selected; first; last; label; enabled }
   | Time_picker ->
     let value = read_civil_time reader in
     let format = Reader.u8 reader in
@@ -3899,8 +3901,9 @@ let read_props reader kind =
   | Progress ->
     let value = read_optional_f64 reader in
     validate_progress_value value;
-    let circular = read_bool reader in
-    Progress_props { value; circular }
+    let style = Reader.u8 reader in
+    validate_progress_style value style;
+    Progress_props { value; style }
   | Overlay ->
     let alignment =
       match Reader.u8 reader with
@@ -3928,33 +3931,18 @@ let read_props reader kind =
     Toggle_props { value; enabled; style }
   | Swipe_actions ->
     let enabled = read_bool reader in
-    let vertical = read_bool reader in
-    let close_on_scroll = read_bool reader in
-    let group = read_optional_string reader in
-    if group = Some "" then fail Invalid_props "empty swipe group";
-    let close_when_opened = read_bool reader in
-    let close_when_tapped = read_bool reader in
-    Swipe_actions_props
-      { enabled; vertical; close_on_scroll; group; close_when_opened; close_when_tapped }
+    let allows_full_swipe = read_bool reader in
+    Swipe_actions_props { enabled; allows_full_swipe }
   | Swipe_action ->
     let title = read_string reader in
     let side = Reader.u8 reader in
     let enabled = read_bool reader in
     let role = Reader.u8 reader in
-    let extent = Reader.f64 reader in
     let background = Reader.u32 reader in
-    let auto_close = read_bool reader in
-    let full_swipe = read_bool reader in
-    if
-      title = ""
-      || side > 1
-      || role > 2
-      || (not (Float.is_finite extent))
-      || extent < 44.
-      || extent > 4096.
+    let symbol = read_optional_string reader in
+    if String.trim title = "" || side > 1 || role > 2 || symbol = Some ""
     then fail Invalid_props "invalid swipe action";
-    Swipe_action_props
-      { title; side; enabled; role; extent; background; auto_close; full_swipe }
+    Swipe_action_props { title; side; enabled; role; background; symbol }
   | Morphing_surface ->
     let expanded = read_bool reader in
     let expand_duration_ms = Reader.u32 reader in

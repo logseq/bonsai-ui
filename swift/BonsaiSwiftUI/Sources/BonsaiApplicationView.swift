@@ -50,7 +50,9 @@ public struct BonsaiApplicationView: View {
     .modifier(NativeLayoutObserver(requests: session.windowHost.layoutRequests))
     .modifier(NativeFileDialogPresenter(controller: session.windowHost.fileDialogs))
     .background(SessionPresentationObserver(session: session, failed: report))
+    #if os(macOS)
     .onChange(of: scenePhase, initial: true) { _, phase in session.isActive = phase == .active }
+    #endif
     .task {
       let lifetime = UUID()
       do {

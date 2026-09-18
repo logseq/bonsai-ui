@@ -484,7 +484,7 @@ end
 
 module Expandable_message_composer = struct
   let kind_id = ID.Native_widget.Kind_id.of_int 7
-  let version = 2
+  let version = 3
   let text_changed_event_id = ID.Native_widget.Event_id.of_int 1
   let button_pressed_event_id = ID.Native_widget.Event_id.of_int 2
 
@@ -492,25 +492,21 @@ module Expandable_message_composer = struct
     | Extended
     | Compact
 
-  type button_position =
-    | Leading
-    | Trailing
+  type button_role =
+    | Action
+    | Confirmation
+    | Cancellation
 
   type button_visibility =
     | Always
     | When_empty
     | When_non_empty
 
-  type button_style =
-    | Plain
-    | Filled
-
   type button_props =
     { id : int
     ; tooltip : string
-    ; position : button_position
+    ; role : button_role
     ; visibility : button_visibility
-    ; style : button_style
     ; enabled : bool
     }
 
@@ -564,9 +560,8 @@ module Expandable_message_composer = struct
   let button
         ~id
         ~tooltip
-        ?(position = Trailing)
+        ?(role = Action)
         ?(visibility = Always)
-        ?(style = Plain)
         ?(enabled = true)
         ~child
         ()
@@ -574,7 +569,7 @@ module Expandable_message_composer = struct
     validate_button_id id;
     validate_required_string "button tooltip" tooltip;
     validate_u32_string_length "button tooltip" tooltip;
-    { props = { id; tooltip; position; visibility; style; enabled }; child }
+    { props = { id; tooltip; role; visibility; enabled }; child }
   ;;
 
   let validate_props props =
@@ -614,20 +609,16 @@ module Expandable_message_composer = struct
     | Compact -> 1
   ;;
 
-  let position_byte = function
-    | Leading -> 0
-    | Trailing -> 1
+  let role_byte = function
+    | Action -> 0
+    | Confirmation -> 1
+    | Cancellation -> 2
   ;;
 
   let visibility_byte = function
     | Always -> 0
     | When_empty -> 1
     | When_non_empty -> 2
-  ;;
-
-  let style_byte = function
-    | Plain -> 0
-    | Filled -> 1
   ;;
 
   let encode_props props =
@@ -641,7 +632,7 @@ module Expandable_message_composer = struct
       + fab_tooltip_length
       + hint_length
       + List.fold_left
-          (fun total button -> total + 12 + String.length button.tooltip)
+          (fun total button -> total + 11 + String.length button.tooltip)
           0
           props.buttons
     in
@@ -666,13 +657,12 @@ module Expandable_message_composer = struct
          (fun offset button ->
             let tooltip_length = String.length button.tooltip in
             Little_endian.set_u32 payload offset button.id;
-            Bytes.set payload (offset + 4) (Char.chr (position_byte button.position));
+            Bytes.set payload (offset + 4) (Char.chr (role_byte button.role));
             Bytes.set payload (offset + 5) (Char.chr (visibility_byte button.visibility));
-            Bytes.set payload (offset + 6) (Char.chr (style_byte button.style));
-            Bytes.set payload (offset + 7) (Char.chr (if button.enabled then 1 else 0));
-            Little_endian.set_u32 payload (offset + 8) tooltip_length;
-            Bytes.blit_string button.tooltip 0 payload (offset + 12) tooltip_length;
-            offset + 12 + tooltip_length)
+            Bytes.set payload (offset + 6) (Char.chr (if button.enabled then 1 else 0));
+            Little_endian.set_u32 payload (offset + 7) tooltip_length;
+            Bytes.blit_string button.tooltip 0 payload (offset + 11) tooltip_length;
+            offset + 11 + tooltip_length)
          (offset + hint_length)
          props.buttons);
     payload
@@ -758,14 +748,14 @@ module Expandable_message_composer = struct
                 if offset = Bytes.length payload
                 then Ok (List.rev decoded)
                 else Error "expandable message composer props contain extra bytes"
-              else if offset + 12 > Bytes.length payload
+              else if offset + 11 > Bytes.length payload
               then Error "expandable message composer button header exceeds payload"
               else (
                 let id = Little_endian.get_u32_unsigned payload offset in
                 let tooltip_length =
-                  Little_endian.get_u32_unsigned payload (offset + 8)
+                  Little_endian.get_u32_unsigned payload (offset + 7)
                 in
-                let tooltip_offset = offset + 12 in
+                let tooltip_offset = offset + 11 in
                 if Int64.equal id 0L || List.mem id ids
                 then
                   Error
@@ -777,11 +767,11 @@ module Expandable_message_composer = struct
                   > 0
                 then Error "expandable message composer button tooltip exceeds payload"
                 else
-                  let* position =
+                  let* role =
                     decode_enum
                       (Char.code (Bytes.get payload (offset + 4)))
-                      [ 0, Leading; 1, Trailing ]
-                      "invalid expandable message composer button position"
+                      [ 0, Action; 1, Confirmation; 2, Cancellation ]
+                      "invalid expandable message composer button role"
                   in
                   let* visibility =
                     decode_enum
@@ -789,13 +779,7 @@ module Expandable_message_composer = struct
                       [ 0, Always; 1, When_empty; 2, When_non_empty ]
                       "invalid expandable message composer button visibility"
                   in
-                  let* style =
-                    decode_enum
-                      (Char.code (Bytes.get payload (offset + 6)))
-                      [ 0, Plain; 1, Filled ]
-                      "invalid expandable message composer button style"
-                  in
-                  let button_flags = Char.code (Bytes.get payload (offset + 7)) in
+                  let button_flags = Char.code (Bytes.get payload (offset + 6)) in
                   if button_flags land lnot 1 <> 0
                   then
                     Error "expandable message composer button flags contain unknown bits"
@@ -817,9 +801,8 @@ module Expandable_message_composer = struct
                         (id :: ids)
                         ({ id = Int64.to_int id
                          ; tooltip
-                         ; position
+                         ; role
                          ; visibility
-                         ; style
                          ; enabled = button_flags land 1 <> 0
                          }
                          :: decoded)))
@@ -981,9 +964,8 @@ module Expandable_message_composer = struct
     type nonrec button_props = button_props =
       { id : int
       ; tooltip : string
-      ; position : button_position
+      ; role : button_role
       ; visibility : button_visibility
-      ; style : button_style
       ; enabled : bool
       }
 

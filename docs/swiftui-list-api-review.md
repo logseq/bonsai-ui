@@ -16,7 +16,7 @@ refresh, contextual selection and Table.
 | Carousel | Scroll_targets | Controlled position requests are independent of item Button actions. |
 | Expansion_panel_list and Expandable_list | Keyed DisclosureGroups | Per-item Bool requests update an OCaml expanded-ID set. |
 | Dismissible_list | Keyed Removal controls | Each item owns a token/state; completion precedes canonical OCaml removal. |
-| Refresh_indicator | Refresh.vertical | Tokened native async action around a typed vertical viewport. |
+| Refresh_indicator | Refresh.vertical | Tokened native async action attached to Native_list.vertical; arbitrary scroll hosts are rejected. |
 | Selection | Toggle and contextual Toolbar | Each requested Bool updates current membership; batch commands read current state. |
 | Data_table | Table returning Body | Canonical sort/selection remain in OCaml; normal Buttons replace cell/select-all events. |
 
