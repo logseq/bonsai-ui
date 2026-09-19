@@ -2,9 +2,9 @@
  (format_version 1)
  (bonsai_swiftui_version 0.1.0~dev)
  (bonsai_swiftui_source
-  archive-sha256-b2d81bc9fde3472e411895914c9f21c63176f32c0d9ba6342488276c430a7dad
+  archive-sha256-03b0086348a81229060525c3e4b82bc9ac0d0776aac9c06a8530be40871abc36
   sha256
-  b2d81bc9fde3472e411895914c9f21c63176f32c0d9ba6342488276c430a7dad)
+  03b0086348a81229060525c3e4b82bc9ac0d0776aac9c06a8530be40871abc36)
  (abi_version 4)
  (ocaml_version 5.1.1)
  (dune_version_range 3.17 4.0)
@@ -12,8 +12,8 @@
  (findlib_toolchain ios)
  (architecture arm64)
  (platform iphoneos)
- (minimum_deployment_target 18.0)
- (package_universe_digest 2866c260fe3524a4dc90c65e7c0e14a00f78bb4af1eab0eabd33174d79a718c6)
+ (minimum_deployment_target 26.0)
+ (package_universe_digest eb0c8e0c539b45b8f373cfa435da734c02f5747cc39a825d846a531b24a5b9f6)
  (target_components_digest eae3fcc8ca4c556602e825c0f19d0f83b652cb36fd6e846b261e9ef10ce5a21e)
  (required_frameworks Foundation Security)
  (required_system_libraries sqlite3)

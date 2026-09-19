@@ -25,7 +25,7 @@ bigstringaf|0.10.0|https://github.com/inhabitedtype/bigstringaf/archive/0.10.0.t
 bin_prot|v0.17.0-1|https://github.com/janestreet/bin_prot/archive/refs/tags/v0.17.0.tar.gz|sha256|0e6c61aff150d19a0f89cb3e354ab36189e4bc23e28ab8bce03b6c6b6004f237
 bin_prot|v0.17.0-1|https://github.com/ocaml/opam-source-archives/raw/refs/heads/main/patches/bin_prot/remove-outdated-mirage-xen-cross-compilation-rules.patch|sha256|0c6fdc1a9377ae678895f237bae191ac458e507550063de143f1ee70a39ba318
 bonsai|v0.17.0|https://github.com/janestreet/bonsai/archive/refs/tags/v0.17.0.tar.gz|sha256|c78c4476ee6b856846e2d0941e5965009d5e1b853e564b2b1bee61202f0b1ebb
-bonsai_swiftui|0.1.0~dev|file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-18-dependency-preflight-source/bonsai-swiftui-0.1.0~dev.tar.gz|sha256|b2d81bc9fde3472e411895914c9f21c63176f32c0d9ba6342488276c430a7dad
+bonsai_swiftui|0.1.0~dev|file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-18-journal-native-210435/source/bonsai-swiftui-0.1.0~dev.tar.gz|sha256|03b0086348a81229060525c3e4b82bc9ac0d0776aac9c06a8530be40871abc36
 bos|0.3.0|https://erratique.ch/software/bos/releases/bos-0.3.0.tbz|sha512|77416442448462fb316b9b64ec213038153e82c6de030d511838a15bb13b80700598c1bcfae1c90ef766d4f42c9bf5dcf231eeff23709558246d7946962858cc
 ca-certs-nss|3.126|https://github.com/mirage/ca-certs-nss/releases/download/v3.126/ca-certs-nss-3.126.tbz|sha256|682a23c2c547c2af85084d75bb9844c5d9a7b8fddf90fa02ea4958eddce30204
 camlp-streams|5.0.1|https://github.com/ocaml/camlp-streams/archive/v5.0.1.tar.gz|sha512|2efa8dd4a636217c8d49bac1e4e7e5558fc2f45cfea66514140a59fd99dd08d61fb9f1e17804997ff648b71b13820a5d4a1eb70fed9d848aa2abd6e41f853c86

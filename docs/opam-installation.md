@@ -248,3 +248,40 @@ Installed `doctor`, SDK verification and the real consumer profile/platform
 matrix pass. See the [acceptance and provenance report](test-reports/2026-09-16-swiftui-host-configuration/README.md)
 for recorded package checksums, remote transitive pins and signing/device limits.
 This is a local immutable release, not public source or SDK publication.
+
+## Journal native UI local update
+
+On 2026-09-18, the three host packages (`bonsai_swiftui`, `bonsai_swiftui_tool`,
+`bonsai_swiftui_test`) were reinstalled in `bonsai-ui`, preserving their existing
+worktree pins. The source is based on framework commit `0f4f343`, plus the local
+SDK release metadata changes. The active switch remains `bonsai-ui`.
+
+The dedicated `bonsai-swiftui-ios` switch now contains framework SDK
+`0.1.0~dev.45` and runtime SDK `0.1.0~dev.8`. Its OCaml 5.1.1 cross-compiler and
+runtime dependency closure were rebuilt for physical iOS 26 arm64. Runtime recipe
+8 gives this raised-baseline rebuild a distinct identity from the iOS 18 release.
+
+Immutable local inputs and installation evidence are under
+`~/.local/share/bonsai-swiftui/releases/2026-09-18-journal-native-210435/`:
+
+- Framework source archive SHA-256:
+  `03b0086348a81229060525c3e4b82bc9ac0d0776aac9c06a8530be40871abc36`.
+- Final archive including matching CLI SDK metadata SHA-256:
+  `e2afa48c984833edbff34ccb7523b1d50372695fb65e8ef8f88c36e88e65766e`.
+- SDK repository snapshot SHA-256:
+  `0deb8766b480158857923dc05dec102664f79ff1624141344c4bb2896f9ef674`.
+
+The installed CLI verifies the SDK. All four compiler/runtime artifact tests
+pass. An independent macOS Release App builds from installed packages; installed
+Swift sources and SDK repository metadata match the current worktree. A binary
+scan of the installed target library checks every standalone object and static
+archive member: 195 archives and 2,347 object occurrences all report IOS/arm64,
+minimum 26.0, with no Bitcode segment. This scan is separate from the older
+external-switch-layout dependency inventory test helper.
+
+Both installed iOS consumer tests pass (36.258 seconds): an independent unsigned
+Release App with no framework source override or prebuilt object, and Zarith
+linking against installed GMP.
+
+This is a local installation. Generated SDK metadata and lock updates remain in
+the framework worktree; no commit, push or public SDK publication was performed.

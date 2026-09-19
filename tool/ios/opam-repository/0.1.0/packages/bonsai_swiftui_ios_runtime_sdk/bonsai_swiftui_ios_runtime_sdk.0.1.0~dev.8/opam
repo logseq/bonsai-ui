@@ -442,7 +442,7 @@ extra-files: [
   ["patches/mirage-crypto-rng-apple-entropy.patch" "sha256=da840f6ac6b44892f7e3cdbf6b931d557caa44697d21292fbadd5f1f95c60994"]
   ["pkgconfig/iphoneos/sqlite3.pc" "sha256=8b5b586f38ac603b9ac45c7193805a728934d489000dfb578b345733c41ed3ad"]
   ["supported-closure.lock" "sha256=eae3fcc8ca4c556602e825c0f19d0f83b652cb36fd6e846b261e9ef10ce5a21e"]
-  ["toolchain.lock" "sha256=97f90f7d86d8b802ade6e2f0a5e8c107418d1847f9818ab7515545d5c434801c"]
+  ["toolchain.lock" "sha256=c7ddd7ea99bca3c8e243e72394786849afe20175c74f41e7082237a277ec90dc"]
   ["verify_macho.sh" "sha256=e6d2083e03ac5f883f236e35b7e9e539759e8cc36eb403dd76d5b8136f7f9076"]
 ]
 depends: [

@@ -204,3 +204,16 @@ preflight behavior, not device connectivity or CMS trust. `make ci-contract`
 includes this gate. The 2026-09-14 live iPhone check returned iOS 26.6.1,
 paired, Developer Mode enabled, but `ddiServicesAvailable=false`; preflight
 correctly failed before the lock query, signing, or application launch.
+
+## Current local iOS 26 SDK installation
+
+On 2026-09-18, the global `bonsai-swiftui-ios` switch was updated to framework SDK
+`0.1.0~dev.45` and runtime SDK `0.1.0~dev.8`. The OCaml 5.1.1 compiler and target
+runtime dependencies were rebuilt at iOS 26. All four actual compiler/runtime
+checks, installed CLI verification, and both independent iOS consumer build/link
+tests pass. The installed artifact scan checks 195 static archives and 2,347
+standalone/member object occurrences; every object is IOS/arm64/minimum 26.0.
+See [local installation provenance](opam-installation.md#journal-native-ui-local-update).
+This supersedes the old installed iOS 18 artifact baseline, without relabeling the
+historical application or dependency audit attempts above. No public release or
+SDK repository push was performed.
