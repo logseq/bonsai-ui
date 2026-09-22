@@ -64,7 +64,8 @@ class HostConfigurationTests(unittest.TestCase):
                    if v["isa"] == "PBXShellScriptBuildPhase" and "iphoneos" in v["shellScript"]]
         self.assertTrue(scripts)
         for script in scripts:
-            self.assertIn("IOS 26.0 arm64", script)
+            self.assertIn("iphonesimulator) platform=IOSSIMULATOR", script)
+            self.assertIn('"$platform" 26.0 arm64', script)
         before = self.snapshot()
         self.assertEqual(subprocess.run(command + ["--check"], capture_output=True).returncode, 0)
         self.assertEqual(before, self.snapshot())

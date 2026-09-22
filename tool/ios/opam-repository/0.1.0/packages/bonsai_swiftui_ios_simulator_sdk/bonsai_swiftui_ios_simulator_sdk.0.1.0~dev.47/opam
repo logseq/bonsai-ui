@@ -1,0 +1,35 @@
+opam-version: "2.0"
+synopsis: "Bonsai SwiftUI iOS Simulator framework SDK"
+description: """
+Builds and installs the Bonsai SwiftUI framework for iOS Simulator
+arm64 on top of the exact immutable runtime SDK package.
+"""
+maintainer: "bonsai_swiftui contributors"
+authors: ["bonsai_swiftui contributors"]
+license: "MIT"
+homepage: "https://github.com/logseq/bonsai-ui"
+bug-reports: "https://github.com/logseq/bonsai-ui/issues"
+dev-repo: "git+https://github.com/logseq/bonsai-ui.git"
+extra-source "bonsai_swiftui.tar.gz" {
+  src: "https://github.com/logseq/bonsai-ui/archive/02e68004cb7a8005cebf85655b0f788b68ae44a1.tar.gz"
+  checksum: ["sha256=49c580c5bca743d1d34cfad5e96d41a351585de4377239280d8db48ac12e4f2b"]
+}
+extra-files: [
+  ["build-installed-framework.sh" "sha256=d3e4ea13a86708c58d0863b50039270a42b5430c349d1a2f9089075e40f0af60"]
+  ["manifest.sexp" "sha256=38dbe660c6b56bad7c6db7c971c7ffeaf081352d20679b83e6c9041e7b93e60f"]
+  ["package-lock.sexp" "sha256=dfe83a6123b94e6ca1d34304eef54247da600f8cc55816818326756bfd83dcb1"]
+]
+depends: [
+  "bonsai_swiftui" {= "0.1.0~dev"}
+  "bonsai_swiftui_ios_simulator_runtime_sdk" {= "0.1.0~dev.10"}
+]
+build: [
+  ["sh" "./build-installed-framework.sh" "%{switch}%" "%{prefix}%" "iossimulator"]
+]
+install: [
+  ["cp" "-R" ".bonsai_swiftui_ios_framework_sdk/stage/ios-sysroot/." "%{prefix}%/ios-sysroot/"]
+  ["mkdir" "-p" "%{share}%/bonsai_swiftui_ios_simulator_sdk"]
+  ["cp" "manifest.sexp" "%{share}%/bonsai_swiftui_ios_simulator_sdk/manifest.sexp"]
+  ["cp" "package-lock.sexp" "%{share}%/bonsai_swiftui_ios_simulator_sdk/package-lock.sexp"]
+]
+available: os = "macos" & arch = "arm64"

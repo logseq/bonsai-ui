@@ -144,9 +144,15 @@ let embed_macos_network_gmp ~(build : Plan.native_build) ~config destination =
       else Ok ())
 ;;
 
-let link_iphoneos_application ~(build : Plan.native_build) ~config destination =
+let link_ios_application ~(build : Plan.native_build) ~config ~target destination =
+  let sdk, suffix =
+    match target with
+    | Plan.Iphoneos -> "iphoneos", ""
+    | Plan.Iossimulator -> "iphonesimulator", "-simulator"
+    | Plan.Macos -> invalid_arg "link_ios_application requires an iOS target"
+  in
   match List.assoc_opt "BONSAI_SWIFTUI_APPLE_SDK_ROOT" build.command.environment with
-  | None -> Error "The iPhoneOS SDK root is missing from the native build plan"
+  | None -> Error "The iOS SDK root is missing from the native build plan"
   | Some sdk_root ->
     Scaffold.ensure_directory (Filename.dirname destination);
     let architecture = only_architecture config.Config.ios.architectures in
@@ -154,11 +160,15 @@ let link_iphoneos_application ~(build : Plan.native_build) ~config destination =
       { program = "xcrun"
       ; arguments =
           [ "--sdk"
-          ; "iphoneos"
+          ; sdk
           ; "clang"
           ; "-r"
           ; "-target"
-          ; Printf.sprintf "%s-apple-ios%s" architecture config.ios.minimum_version
+          ; Printf.sprintf
+              "%s-apple-ios%s%s"
+              architecture
+              config.ios.minimum_version
+              suffix
           ; "-isysroot"
           ; sdk_root
           ; build.source_object
@@ -175,7 +185,8 @@ let prepare_source ~(build : Plan.native_build) ~config ~target destination =
   | Plan.Macos
     when List.exists (Config.Feature.equal Config.Feature.Network) config.Config.features
     -> embed_macos_network_gmp ~build ~config destination
-  | Plan.Iphoneos -> link_iphoneos_application ~build ~config destination
+  | Plan.Iphoneos | Plan.Iossimulator ->
+    link_ios_application ~build ~config ~target destination
   | Plan.Macos ->
     copy_file build.source_object destination;
     Ok ()
@@ -190,6 +201,10 @@ let verify ~framework_root ~project_root ~config ~target path =
       , only_architecture config.Config.macos.architectures )
     | Plan.Iphoneos ->
       ( "IOS"
+      , config.Config.ios.minimum_version
+      , only_architecture config.Config.ios.architectures )
+    | Plan.Iossimulator ->
+      ( "IOSSIMULATOR"
       , config.Config.ios.minimum_version
       , only_architecture config.Config.ios.architectures )
   in

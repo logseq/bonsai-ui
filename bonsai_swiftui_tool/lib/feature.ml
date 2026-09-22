@@ -83,7 +83,7 @@ let validate_package ~features package =
 let validate_packages ~target ~features packages =
   match target with
   | Plan.Macos -> Ok ()
-  | Plan.Iphoneos ->
+  | Plan.Iphoneos | Plan.Iossimulator ->
     List.fold_left
       (fun result package ->
          match result with

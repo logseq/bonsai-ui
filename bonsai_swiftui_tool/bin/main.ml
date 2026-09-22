@@ -133,30 +133,60 @@ let absolute_object =
     if Filename.is_relative path then Filename.concat (Sys.getcwd ()) path else path)
 ;;
 
-let build platform profile no_codesign development_team signing_identity native_object =
-  let native_object = absolute_object native_object in
-  let* project_root, config = load_project () in
-  let* framework_root = Assets.find_framework_root () in
-  let* bundle =
-    Build_system.build_apple
-      ~framework_root
-      ~project_root
-      ~config
-      ~platform
-      ~profile
-      ~no_codesign
-      ~development_team
-      ~signing_identity
-      ~native_object
-  in
-  Printf.printf "application: %s\n%!" bundle;
-  Ok ()
+let ios_platform ~simulator =
+  match simulator with
+  | true -> Plan.Ios_simulator_platform
+  | false -> Plan.Ios_platform
 ;;
 
-let run platform profile device development_team signing_identity native_object arguments =
-  if platform = Plan.Ios_platform && Option.is_none device
+let build
+      platform
+      profile
+      simulator
+      no_codesign
+      development_team
+      signing_identity
+      native_object
+  =
+  if simulator && platform <> Plan.Ios_platform
+  then Error "--simulator requires the ios platform"
+  else (
+    let platform = ios_platform ~simulator in
+    let native_object = absolute_object native_object in
+    let* project_root, config = load_project () in
+    let* framework_root = Assets.find_framework_root () in
+    let* bundle =
+      Build_system.build_apple
+        ~framework_root
+        ~project_root
+        ~config
+        ~platform
+        ~profile
+        ~no_codesign
+        ~development_team
+        ~signing_identity
+        ~native_object
+    in
+    Printf.printf "application: %s\n%!" bundle;
+    Ok ())
+;;
+
+let run
+      platform
+      profile
+      simulator
+      device
+      development_team
+      signing_identity
+      native_object
+      arguments
+  =
+  if simulator && platform <> Plan.Ios_platform
+  then Error "--simulator requires the ios platform"
+  else if platform = Plan.Ios_platform && (not simulator) && Option.is_none device
   then Error "Running on iOS requires --device <physical-device-id>"
   else (
+    let platform = ios_platform ~simulator in
     let native_object = absolute_object native_object in
     let* project_root, config = load_project () in
     let* framework_root = Assets.find_framework_root () in
@@ -218,8 +248,8 @@ let clean platform all_project_builds =
   | None, true -> Clean.run ~project_root ~config Clean.All
 ;;
 
-let toolchain_show () =
-  let* info = Toolchain.show ~working_directory:(Sys.getcwd ()) in
+let toolchain_show target =
+  let* info = Toolchain.show ~target ~working_directory:(Sys.getcwd ()) in
   Printf.printf
     "switch: %s\n\
      prefix: %s\n\
@@ -239,17 +269,17 @@ let toolchain_show () =
   Ok ()
 ;;
 
-let toolchain_verify () =
-  let* verified = Toolchain.verify ~working_directory:(Sys.getcwd ()) in
-  Printf.printf "verified iPhoneOS toolchain: %s\n%!" verified.fingerprint;
+let toolchain_verify target =
+  let* verified = Toolchain.verify ~target ~working_directory:(Sys.getcwd ()) in
+  Printf.printf "verified iOS toolchain: %s\n%!" verified.fingerprint;
   Ok ()
 ;;
 
-let toolchain_remove () = Toolchain.remove ~working_directory:(Sys.getcwd ())
+let toolchain_remove target = Toolchain.remove ~target ~working_directory:(Sys.getcwd ())
 
-let toolchain_install () =
+let toolchain_install target =
   let* framework_root = Assets.find_framework_root () in
-  Toolchain.install ~framework_root ~working_directory:(Sys.getcwd ())
+  Toolchain.install ~target ~framework_root ~working_directory:(Sys.getcwd ())
 ;;
 
 let resolve_dune_closure project_root target =
@@ -260,7 +290,11 @@ let resolve_dune_closure project_root target =
       ("_build/bonsai-swiftui/dune/internal-closure/" ^ target_key)
   in
   let* dependencies =
-    Dune_closure.resolve_project ~project_root ~target ~build_directory
+    Dune_closure.resolve_project
+      ~project_root
+      ~switch:Plan.iphoneos_switch
+      ~target
+      ~build_directory
   in
   List.iter print_endline dependencies;
   Ok ()
@@ -269,7 +303,14 @@ let resolve_dune_closure project_root target =
 let target =
   Arg.(
     required
-    & opt (some (enum [ "macos", Plan.Macos; "iphoneos", Plan.Iphoneos ])) None
+    & opt
+        (some
+           (enum
+              [ "macos", Plan.Macos
+              ; "iphoneos", Plan.Iphoneos
+              ; "iossimulator", Plan.Iossimulator
+              ]))
+        None
     & info [ "target" ] ~docv:"TARGET")
 ;;
 
@@ -297,6 +338,17 @@ let native_object =
         [ "native-object" ]
         ~docv:"PATH"
         ~doc:"Use an explicitly selected, verified OCaml complete object.")
+;;
+
+let simulator =
+  Arg.(
+    value
+    & flag
+    & info
+        [ "simulator" ]
+        ~doc:
+          "Target the iOS Simulator instead of a physical iPhoneOS device (ios platform \
+           only).")
 ;;
 
 let development_team =
@@ -381,6 +433,7 @@ let build_command =
       const build
       $ platform
       $ profile
+      $ simulator
       $ no_codesign
       $ development_team
       $ signing_identity
@@ -395,11 +448,12 @@ let run_command =
     Arg.(value & pos_right 0 string [] & info [] ~docv:"APPLICATION_ARGUMENT")
   in
   Cmd.v
-    (Cmd.info "run" ~doc:"Build and launch a native macOS or physical-iOS application.")
+    (Cmd.info "run" ~doc:"Build and launch a native macOS or iOS application.")
     Term.(
       const run
       $ platform
       $ profile
+      $ simulator
       $ device
       $ development_team
       $ signing_identity
@@ -451,7 +505,15 @@ let clean_command =
   let target =
     Arg.(
       value
-      & pos 0 (some (enum [ "macos", Clean.Macos; "iphoneos", Clean.Iphoneos ])) None
+      & pos
+          0
+          (some
+             (enum
+                [ "macos", Clean.Macos
+                ; "iphoneos", Clean.Iphoneos
+                ; "iossimulator", Clean.Iossimulator
+                ]))
+          None
       & info [] ~docv:"PLATFORM")
   in
   let all = Arg.(value & flag & info [ "all-project-builds" ]) in
@@ -475,20 +537,25 @@ let resolve_dune_closure_command =
 ;;
 
 let toolchain_command =
-  let iphoneos =
-    Arg.(required & pos 0 (some (enum [ "iphoneos", () ])) None & info [] ~docv:"TARGET")
+  let target =
+    Arg.(
+      required
+      & pos
+          0
+          (some
+             (enum [ "iphoneos", Toolchain.Device; "iossimulator", Toolchain.Simulator ]))
+          None
+      & info [] ~docv:"TARGET")
   in
   let subcommand name doc action =
-    Cmd.v (Cmd.info name ~doc) Term.(const (fun () -> action ()) $ iphoneos)
+    Cmd.v (Cmd.info name ~doc) Term.(const action $ target)
   in
   Cmd.group
-    (Cmd.info
-       "toolchain"
-       ~doc:"Install, inspect, or remove the global iPhoneOS toolchain.")
-    [ subcommand "install" "Install the locked global iPhoneOS SDK." toolchain_install
-    ; subcommand "show" "Show the installed iPhoneOS SDK manifest." toolchain_show
-    ; subcommand "verify" "Verify the installed iPhoneOS SDK." toolchain_verify
-    ; subcommand "remove" "Remove the fixed global iPhoneOS switch." toolchain_remove
+    (Cmd.info "toolchain" ~doc:"Install, inspect, or remove a global iOS toolchain.")
+    [ subcommand "install" "Install the locked global iOS SDK." toolchain_install
+    ; subcommand "show" "Show the installed iOS SDK manifest." toolchain_show
+    ; subcommand "verify" "Verify the installed iOS SDK." toolchain_verify
+    ; subcommand "remove" "Remove the fixed global iOS switch." toolchain_remove
     ]
 ;;
 

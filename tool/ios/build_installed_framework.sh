@@ -5,13 +5,22 @@ set -eu
 script_directory=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 fail() {
-  printf '%s\n' "iPhoneOS framework SDK build failure: $1" >&2
+  printf '%s\n' "iOS framework SDK build failure: $1" >&2
   exit 1
 }
 
-test "$#" -eq 2 || fail "usage: build-installed-framework.sh OPAM_SWITCH OPAM_SWITCH_PREFIX"
+case "$#" in
+  2 | 3) ;;
+  *) fail "usage: build-installed-framework.sh OPAM_SWITCH OPAM_SWITCH_PREFIX [TARGET]" ;;
+esac
 SDK_OPAM_SWITCH=$1
 selected_prefix=$2
+target=${3:-iphoneos}
+case "$target" in
+  iphoneos) sdk_name=iphoneos ;;
+  iossimulator) sdk_name=iphonesimulator ;;
+  *) fail "expected iphoneos or iossimulator" ;;
+esac
 test -n "${OPAM_SWITCH_PREFIX:-}" || fail "OPAM_SWITCH_PREFIX is missing"
 test "$selected_prefix" = "$OPAM_SWITCH_PREFIX" ||
   fail "selected opam prefix differs from OPAM_SWITCH_PREFIX"
@@ -50,7 +59,7 @@ findlib_conf="$work_root/findlib.conf"
 runtime_target_lib="$OPAM_SWITCH_PREFIX/ios-sysroot/lib"
 standard_target_lib="$runtime_target_lib/ocaml"
 test -d "$standard_target_lib" ||
-  fail "the installed iPhoneOS runtime SDK is missing its target standard library"
+  fail "the installed iOS $target runtime SDK is missing its target standard library"
 {
   cat "$OPAM_SWITCH_PREFIX/lib/findlib.conf"
   awk \
@@ -69,8 +78,8 @@ test -d "$standard_target_lib" ||
     ' "$OPAM_SWITCH_PREFIX/lib/findlib.conf.d/ios.conf"
 } > "$findlib_conf"
 
-sdk_version=$(xcrun --sdk iphoneos --show-sdk-version)
-sdk_root=$(xcrun --sdk iphoneos --show-sdk-path)
+sdk_version=$(xcrun --sdk "$sdk_name" --show-sdk-version)
+sdk_root=$(xcrun --sdk "$sdk_name" --show-sdk-path)
 (
   cd "$framework_source"
   OPAMROOT=${OPAMROOT:-$(opam var root)} \
@@ -89,7 +98,7 @@ sdk_root=$(xcrun --sdk iphoneos --show-sdk-path)
 
 framework_install_root="$framework_build/install/default.ios"
 test -d "$framework_install_root/lib/bonsai_swiftui" ||
-  fail "Dune did not produce the iPhoneOS framework install tree"
+  fail "Dune did not produce the iOS $target framework install tree"
 cp -RL "$framework_install_root/." "$stage_root/ios-sysroot/"
 
-printf '%s\n' "iPhoneOS framework SDK build passed"
+printf '%s\n' "iOS $target framework SDK build passed"

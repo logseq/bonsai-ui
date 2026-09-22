@@ -1,0 +1,15 @@
+{
+  "capture_kind": "ios-simulator",
+  "source_base": "61bc89d58daf398e551898c32b86bac227d861bf",
+  "uncommitted_worktree": false,
+  "capture_scope": "iPhone 17 iOS Simulator (iOS 27.0) Counter app launched via bonsai-swiftui run ios --simulator",
+  "capture_method": "xcrun simctl io booted screenshot",
+  "device": "iPhone 17 (8E780854-5816-4435-AD8F-8098DF847EB5), iOS Simulator runtime 27.0",
+  "host": "macOS 26.5.2, Xcode 26.6",
+  "application": "examples/counter/apple/DerivedData/Build/Products/Debug-iphonesimulator/BonsaiCounter.app",
+  "application_configuration": "Debug, platform=iOS Simulator, ARCHS=arm64, minimum deployment target 26.0, ad-hoc sign to run locally",
+  "running_executable_sha256": "58de154e3ff773f80f9729f7f33e9692614dc41ef1ed91bb2cde0b0b95270034",
+  "complete_object": "examples/counter/_build/bonsai-swiftui/artifacts/ios/iossimulator/arm64/debug/native_embed.exe.o (platform IOSSIMULATOR, minos 26.0, sdk 26.5)",
+  "screenshot_sha256": "8bc4e7001df1c5777283457a5f868b9bca17615b6711fc35477fc66619b62ddb",
+  "state_evidence": "Hosted XCTest BonsaiCounter-iOSUITests executed inside the same simulator: Increment button tapped twice, OCaml state rendered Count: 0 -> Count: 1 -> Count: 2"
+}

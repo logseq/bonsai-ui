@@ -3,7 +3,8 @@
 This host runs the existing OCaml scenarios in `native/test/runtime_fixture.ml`
 through the production framework. The Swift application only selects an
 entrypoint; XCTest drives actual native controls. It does not implement a
-replacement application reducer. No Simulator target is supported.
+replacement application reducer. This acceptance suite is physical-device only;
+the separate iOS Simulator lane (`build ios --simulator`) is not a substitute.
 
 Build the current framework's iOS install artifacts with the selected cross
 toolchain, then compile the existing fixture sources:

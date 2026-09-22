@@ -13,10 +13,13 @@ fail() {
 }
 
 test "$#" -eq 1 ||
-  fail "usage: stage_host_metadata.sh iphoneos"
+  fail "usage: stage_host_metadata.sh iphoneos|iossimulator"
 
 target=$1
-test "$target" = iphoneos || fail "expected iphoneos"
+case "$target" in
+  iphoneos | iossimulator) ;;
+  *) fail "expected iphoneos or iossimulator" ;;
+esac
 
 switch="$switch_root/$target"
 test -x "$switch/_opam/bin/ocamlc" ||

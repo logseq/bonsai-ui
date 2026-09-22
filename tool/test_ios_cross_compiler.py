@@ -1,4 +1,4 @@
-"""Verify the real OCaml cross-compiler and C runtime for physical iOS 26 arm64."""
+"""Verify the real OCaml cross-compiler and C runtime for iOS arm64 targets."""
 
 import os
 from pathlib import Path
@@ -10,6 +10,9 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 OPAM_ROOT = os.environ.get("IOS_CROSS_TEST_OPAMROOT", str(ROOT / "_build/ios/opam-root"))
 SWITCH = os.environ.get("IOS_CROSS_TEST_SWITCH", str(ROOT / "_build/ios/switches/iphoneos"))
+PLATFORM = os.environ.get("IOS_CROSS_TEST_PLATFORM", "IOS")
+CFLAGS_EXPECT = os.environ.get("IOS_CROSS_TEST_CFLAGS_EXPECT",
+                               "-miphoneos-version-min=26.0")
 
 
 class CrossCompilerTests(unittest.TestCase):
@@ -24,7 +27,8 @@ class CrossCompilerTests(unittest.TestCase):
                             "--", "ocamlfind", "-toolchain", "ios", *arguments, cwd=cwd)
 
     def verify(self, artifact):
-        self.command("sh", ROOT / "tool/ios/verify_macho.sh", artifact, "IOS", "arm64", "26.0")
+        self.command("sh", ROOT / "tool/ios/verify_macho.sh", artifact,
+                     PLATFORM, "arm64", "26.0")
 
     def test_actual_compiler_configuration(self):
         configuration = self.cross("ocamlopt", "-config")
@@ -32,7 +36,7 @@ class CrossCompilerTests(unittest.TestCase):
         self.assertIn("architecture: arm64", configuration)
         for key in ("ocamlc_cflags", "ocamlopt_cflags"):
             line = next(line for line in configuration.splitlines() if line.startswith(key + ":"))
-            self.assertIn("-miphoneos-version-min=26.0", line)
+            self.assertIn(CFLAGS_EXPECT, line)
             self.assertNotIn("MacOSX", line)
 
     def test_foreign_stub_and_complete_object(self):
@@ -68,7 +72,7 @@ class CrossCompilerTests(unittest.TestCase):
         result = subprocess.run(["sh", str(ROOT / "tool/ios/setup_toolchain.sh"), "iphonesimulator"],
                                 cwd=ROOT, text=True, capture_output=True, timeout=10)
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("expected host, iphoneos, or all", result.stderr)
+        self.assertIn("expected host, iphoneos, iossimulator, or all", result.stderr)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
 src:
-  "file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-18-journal-native-210435/source/bonsai-swiftui-0.1.0~dev.tar.gz"
+  "https://github.com/logseq/bonsai-ui/archive/02e68004cb7a8005cebf85655b0f788b68ae44a1.tar.gz"
 checksum:
-  "sha256=03b0086348a81229060525c3e4b82bc9ac0d0776aac9c06a8530be40871abc36"
+  "sha256=49c580c5bca743d1d34cfad5e96d41a351585de4377239280d8db48ac12e4f2b"

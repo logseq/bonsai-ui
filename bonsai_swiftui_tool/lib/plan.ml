@@ -1,6 +1,7 @@
 type target =
   | Macos
   | Iphoneos
+  | Iossimulator
 
 type profile =
   | Debug
@@ -14,6 +15,7 @@ type action =
 type platform =
   | Macos_platform
   | Ios_platform
+  | Ios_simulator_platform
 
 type command =
   { program : string
@@ -33,10 +35,12 @@ type native_build =
   }
 
 let iphoneos_switch = "bonsai-swiftui-ios"
+let iossimulator_switch = "bonsai-swiftui-ios-simulator"
 
 let target_name = function
   | Macos -> "macos"
   | Iphoneos -> "iphoneos"
+  | Iossimulator -> "iossimulator"
 ;;
 
 let profile_name = function
@@ -74,6 +78,7 @@ let app_bundle ~project_root ~config ~platform ~profile =
     match platform with
     | Macos_platform -> ""
     | Ios_platform -> "-iphoneos"
+    | Ios_simulator_platform -> "-iphonesimulator"
   in
   Filename.concat
     (apple_host ~project_root config)
@@ -102,6 +107,7 @@ let apple_build
     match platform with
     | Macos_platform -> "macOS", "platform=macOS,arch=arm64"
     | Ios_platform -> "iOS", "generic/platform=iOS"
+    | Ios_simulator_platform -> "iOS", "generic/platform=iOS Simulator"
   in
   { program = "xcodebuild"
   ; arguments =
@@ -125,6 +131,9 @@ let apple_build
            ; "-onlyUsePackageVersionsFromResolvedFile"
            ; "-skipPackageUpdates"
            ])
+      @ (match platform with
+         | Ios_simulator_platform -> [ "ARCHS=arm64" ]
+         | Macos_platform | Ios_platform -> [])
       @ (match development_team with
          | None -> []
          | Some team -> [ "DEVELOPMENT_TEAM=" ^ team ])
@@ -174,6 +183,54 @@ let ios_device_launch ~project_root ~device ~bundle_identifier =
       ; "--terminate-existing"
       ; bundle_identifier
       ]
+  ; working_directory = project_root
+  ; environment = []
+  }
+;;
+
+let ios_simulator_list_devices ~project_root =
+  { program = "xcrun"
+  ; arguments = [ "simctl"; "list"; "devices"; "available" ]
+  ; working_directory = project_root
+  ; environment = []
+  }
+;;
+
+let ios_simulator_boot ~project_root ~udid =
+  { program = "xcrun"
+  ; arguments = [ "simctl"; "boot"; udid ]
+  ; working_directory = project_root
+  ; environment = []
+  }
+;;
+
+let ios_simulator_bootstatus ~project_root ~udid =
+  { program = "xcrun"
+  ; arguments = [ "simctl"; "bootstatus"; udid; "-b" ]
+  ; working_directory = project_root
+  ; environment = []
+  }
+;;
+
+let ios_simulator_install ~project_root ~udid ~app_bundle =
+  { program = "xcrun"
+  ; arguments = [ "simctl"; "install"; udid; app_bundle ]
+  ; working_directory = project_root
+  ; environment = []
+  }
+;;
+
+let ios_simulator_terminate ~project_root ~udid ~bundle_identifier =
+  { program = "xcrun"
+  ; arguments = [ "simctl"; "terminate"; udid; bundle_identifier ]
+  ; working_directory = project_root
+  ; environment = []
+  }
+;;
+
+let ios_simulator_launch ~project_root ~udid ~bundle_identifier =
+  { program = "xcrun"
+  ; arguments = [ "simctl"; "launch"; udid; bundle_identifier ]
   ; working_directory = project_root
   ; environment = []
   }
@@ -229,6 +286,11 @@ let native_build
         , "default.ios"
         , only_architecture config.ios.architectures
         , [ "VER", config.ios.minimum_version ] )
+      | Iossimulator ->
+        ( "iossimulator"
+        , "default.ios"
+        , only_architecture config.ios.architectures
+        , [ "VER", config.ios.minimum_version ] )
     in
     let dune_profile = dune_profile profile in
     let profile_name = profile_name profile in
@@ -250,19 +312,22 @@ let native_build
       ]
       @ (match target with
          | Macos -> []
-         | Iphoneos -> [ "-x"; "ios" ])
+         | Iphoneos | Iossimulator -> [ "-x"; "ios" ])
       @ [ Sexplib.Sexp.to_string (Sexplib.Sexp.Atom config.native_target) ]
     in
     let arguments =
       match target with
       | Macos -> [ "exec"; "--" ] @ dune_arguments
       | Iphoneos -> [ "exec"; "--switch=" ^ iphoneos_switch; "--" ] @ dune_arguments
+      | Iossimulator ->
+        [ "exec"; "--switch=" ^ iossimulator_switch; "--" ] @ dune_arguments
     in
     let sdk_environment =
       match target, apple_sdk_version with
       | Macos, _ -> Ok []
-      | Iphoneos, Some version -> Ok [ "SDK", version ]
+      | (Iphoneos | Iossimulator), Some version -> Ok [ "SDK", version ]
       | Iphoneos, None -> Error "The iPhoneOS SDK version is required"
+      | Iossimulator, None -> Error "The iOS Simulator SDK version is required"
     in
     match sdk_environment with
     | Error _ as error -> error
@@ -271,11 +336,13 @@ let native_build
         match target with
         | Macos -> "macos/" ^ architecture
         | Iphoneos -> "ios/iphoneos/" ^ architecture
+        | Iossimulator -> "ios/iossimulator/" ^ architecture
       in
       let state_platform =
         match target with
         | Macos -> "macos"
         | Iphoneos -> "iphoneos"
+        | Iossimulator -> "iossimulator"
       in
       let build_root = Filename.concat project_root "_build/bonsai-swiftui" in
       Ok

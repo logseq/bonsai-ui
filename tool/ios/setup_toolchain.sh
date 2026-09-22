@@ -24,7 +24,9 @@ require_command() {
 }
 
 opam_command() {
-  OPAMROOT="$opam_root" opam "$@"
+  # A foreign OPAMSWITCH in the caller's environment must not steer the
+  # managed root's switch resolution.
+  OPAMROOT="$opam_root" env -u OPAMSWITCH opam "$@"
 }
 
 switch_path() {
@@ -143,6 +145,50 @@ install_iphoneos() {
   printf '%s\n' "$recipe_identity" >"$recipe_marker"
 }
 
+install_iossimulator() {
+  create_switch iossimulator
+  switch=$(switch_path iossimulator)
+  sdk_version=$(xcrun --sdk iphonesimulator --show-sdk-version)
+  recipe_marker="$switch/_opam/.bonsai-swiftui-ios-simulator-recipe"
+  recipe_identity="$OCAML_IOS_SIMULATOR_RECIPE_REVISION-$IOS_DEPLOYMENT_TARGET"
+
+  opam_command update overlay
+
+  if opam_command list \
+    --switch="$switch" \
+    --installed \
+    --short \
+    "$OCAML_IOS_SIMULATOR_PACKAGE" |
+    grep -Fx ocaml-ios64-simulator >/dev/null 2>&1; then
+    installed_recipe_identity=$(cat "$recipe_marker" 2>/dev/null || true)
+    if test "$installed_recipe_identity" != "$recipe_identity"; then
+      ARCH="$IOSSIMULATOR_ARCH" \
+        SUBARCH="$IOSSIMULATOR_SUBARCH" \
+        PLATFORM="$IOSSIMULATOR_PLATFORM" \
+        SDK="$sdk_version" \
+        VER="$IOS_DEPLOYMENT_TARGET" \
+        opam_command reinstall \
+          --switch="$switch" \
+          conf-ios-simulator.4 \
+          "$OCAML_IOS_SIMULATOR_PACKAGE" \
+          --yes
+    fi
+  else
+    ARCH="$IOSSIMULATOR_ARCH" \
+      SUBARCH="$IOSSIMULATOR_SUBARCH" \
+      PLATFORM="$IOSSIMULATOR_PLATFORM" \
+      SDK="$sdk_version" \
+      VER="$IOS_DEPLOYMENT_TARGET" \
+      opam_command install \
+        --switch="$switch" \
+        conf-ios-simulator.4 \
+        "$OCAML_IOS_SIMULATOR_PACKAGE" \
+        --yes
+  fi
+
+  printf '%s\n' "$recipe_identity" >"$recipe_marker"
+}
+
 verify_switch() {
   logical_name=$1
   switch=$(switch_path "$logical_name")
@@ -161,6 +207,23 @@ verify_switch() {
       fail "iphoneos compiler does not target iOS $IOS_DEPLOYMENT_TARGET"
     IOS_CROSS_TEST_OPAMROOT="$opam_root" \
       IOS_CROSS_TEST_SWITCH="$switch" \
+      python3 "$repository_root/tool/test_ios_cross_compiler.py"
+  fi
+
+  if test "$logical_name" = iossimulator; then
+    target_cflags=$(
+      opam_command exec --switch="$switch" -- \
+        ocamlfind -toolchain ios ocamlc -config |
+        sed -n 's/^ocamlc_cflags: //p'
+    )
+    printf '%s\n' "$target_cflags" |
+      grep -F -- "-target arm64-apple-ios$IOS_DEPLOYMENT_TARGET-simulator" \
+        >/dev/null ||
+      fail "iossimulator compiler does not target the iOS $IOS_DEPLOYMENT_TARGET simulator"
+    IOS_CROSS_TEST_OPAMROOT="$opam_root" \
+      IOS_CROSS_TEST_SWITCH="$switch" \
+      IOS_CROSS_TEST_PLATFORM="IOSSIMULATOR" \
+      IOS_CROSS_TEST_CFLAGS_EXPECT="-target arm64-apple-ios$IOS_DEPLOYMENT_TARGET-simulator" \
       python3 "$repository_root/tool/test_ios_cross_compiler.py"
   fi
 }
@@ -184,6 +247,12 @@ case "$requested_target" in
     install_iphoneos
     verify_switch iphoneos
     ;;
+  iossimulator)
+    ensure_cross_repository
+    ensure_opam_root
+    install_iossimulator
+    verify_switch iossimulator
+    ;;
   all)
     ensure_cross_repository
     ensure_opam_root
@@ -193,7 +262,7 @@ case "$requested_target" in
     verify_switch iphoneos
     ;;
   *)
-    fail "expected host, iphoneos, or all"
+    fail "expected host, iphoneos, iossimulator, or all"
     ;;
 esac
 

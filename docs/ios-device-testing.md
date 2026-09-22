@@ -1,8 +1,11 @@
 # Testing SwiftUI on a physical iOS device
 
 The supported target is physical iOS/iPadOS 26.0+ arm64. Use Xcode and the
-OCaml 5.1.1 toolchain pinned in `tool/ios/toolchain.lock`. There is no Simulator,
-Catalyst or Intel test lane. The application links its real OCaml complete
+OCaml 5.1.1 toolchain pinned in `tool/ios/toolchain.lock`. There is no
+Catalyst or Intel test lane. The iOS Simulator lane
+(`build ios --simulator` / `run ios --simulator`) exists for development
+iteration but is not a substitute for this device acceptance. The application
+links its real OCaml complete
 object into a native SwiftUI Xcode host.
 
 ## Device and development signing

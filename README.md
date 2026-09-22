@@ -4,8 +4,10 @@ Source repository: [logseq/bonsai-ui](https://github.com/logseq/bonsai-ui).
 Report issues in the [project issue tracker](https://github.com/logseq/bonsai-ui/issues).
 
 BonsaiSwiftUI renders OCaml/Bonsai applications with SwiftUI on macOS 26.0+
-Apple Silicon and physical iOS/iPadOS 26.0+ arm64 devices. Simulator, Intel Mac,
-Catalyst and non-Apple platforms are unsupported.
+Apple Silicon and physical iOS/iPadOS 26.0+ arm64 devices. The iOS Simulator is
+supported for development iteration through `build ios --simulator` and
+`run ios --simulator`; physical devices remain the authoritative iOS acceptance
+target. Intel Mac, Catalyst and non-Apple platforms are unsupported.
 
 The SwiftUI replacement is in progress and is not production ready. The runtime,
 most view families, native application CLI and eleven example App entrypoints are

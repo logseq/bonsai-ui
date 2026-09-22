@@ -9,6 +9,7 @@ let run ~project_root ~target =
     match target with
     | None | Some Plan.Macos -> "macosx"
     | Some Plan.Iphoneos -> "iphoneos"
+    | Some Plan.Iossimulator -> "iphonesimulator"
   in
   let commands =
     [ ( "python3"

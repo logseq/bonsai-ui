@@ -1,0 +1,53 @@
+opam-version: "2.0"
+synopsis: "OCaml 5.1.1 cross-compiler for iOS Simulator arm64"
+authors: [
+  "Xavier Leroy"
+  "Damien Doligez"
+  "Alain Frisch"
+  "Jacques Garrigue"
+  "Didier Rémy"
+  "KC Sivaramakrishnan"
+  "Jérôme Vouillon"
+]
+license: "LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception"
+homepage: "https://ocaml.org"
+bug-reports: "https://github.com/ocaml/opam-repository/issues"
+maintainer: "Boris D. <borisd@gmx.com>"
+substs: [
+  "Makefile.cross"
+  "ios.conf"
+]
+patches: [
+  "sys.patch"
+  "ocamlmklib-failsafe.patch"
+]
+build: [
+  ["/bin/sh" "./build.sh" "%{conf-ios-simulator:triple}%"]
+]
+install: [
+  ["/bin/sh" "./install.sh" "%{prefix}%"]
+]
+remove: [
+  ["/bin/sh" "./remove.sh" "%{prefix}%"]
+]
+available: os = "macos" & arch = "arm64"
+depends: [
+  "ocaml" {= version}
+  "ocamlfind" {>= "1.5.4"}
+  "conf-ios-simulator" {>= "4"}
+]
+extra-files: [
+  ["Makefile.cross.in" "md5=8ab3bfb4f8baeae1de02219dfeeb88ff"]
+  ["build.sh" "md5=2b44a2448fc0589881b12d2217c308a2"]
+  ["install.sh" "md5=83563f4f51275d6b91ea5e65957d333f"]
+  ["ios.conf.in" "md5=52c667a467d307094d2eba884d408c96"]
+  ["m-ios.h" "md5=66a125d352c8ee2271899eae808e5f86"]
+  ["remove.sh" "md5=d8660f646b5a3155094e68d25ef00ff9"]
+  ["s-ios.h" "md5=bcfd63d45db211005f64708ded08c746"]
+  ["sys.patch" "md5=9a4afd84bf8b488fe3afec1f2d2dd3a4"]
+  ["ocamlmklib-failsafe.patch" "md5=f93b6e2c0732c5713f69c85fce112c0a"]
+]
+url {
+  src: "https://github.com/ocaml/ocaml/releases/download/5.1.1/ocaml-5.1.1.tar.gz"
+  checksum: "sha256=57f7b382b3d71198413ede405d95ef3506f1cdc480cda1dca1e26b37cb090e17"
+}

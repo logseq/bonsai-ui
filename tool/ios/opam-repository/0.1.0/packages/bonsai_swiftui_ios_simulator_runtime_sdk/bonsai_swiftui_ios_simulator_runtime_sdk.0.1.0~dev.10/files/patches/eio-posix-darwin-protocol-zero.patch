@@ -1,0 +1,17 @@
+diff --git a/lib_eio_posix/net.ml b/lib_eio_posix/net.ml
+index 68fc211..5280dba 100644
+--- a/lib_eio_posix/net.ml
++++ b/lib_eio_posix/net.ml
+@@ -89,9 +89,11 @@ let getaddrinfo ~service node =
+       (Unix.SOCK_STREAM | SOCK_DGRAM),
+       Unix.ADDR_INET (inet_addr,port) -> (
+         match ai_protocol with
+-        | 6 -> Some (`Tcp (Eio_unix.Net.Ipaddr.of_unix inet_addr, port))
+-        | 17 -> Some (`Udp (Eio_unix.Net.Ipaddr.of_unix inet_addr, port))
++        | (6 | 0) when ai_socktype = Unix.SOCK_STREAM ->
++          Some (`Tcp (Eio_unix.Net.Ipaddr.of_unix inet_addr, port))
++        | (17 | 0) when ai_socktype = Unix.SOCK_DGRAM ->
++          Some (`Udp (Eio_unix.Net.Ipaddr.of_unix inet_addr, port))
+         | _ -> None)
+     | _ -> None
+   in

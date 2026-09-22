@@ -1,7 +1,9 @@
 # Physical iOS 26 OCaml toolchain
 
-The SwiftUI target is physical iOS/iPadOS 26.0 arm64. Simulator, Catalyst and
-Intel targets are unsupported. This document separates compiler verification
+The SwiftUI targets are physical iOS/iPadOS 26.0 arm64 and the iOS 26.0 arm64
+Simulator (`iossimulator` toolchain target, selected by `build ios --simulator`
+and `run ios --simulator`). Catalyst and Intel targets are unsupported. This
+document separates compiler verification
 from dependency-closure, application linking and physical-device acceptance.
 
 ## Isolated compiler bootstrap
@@ -43,8 +45,10 @@ The tests check the installed OCaml configuration, compile a C foreign stub and
 an OCaml callback into an Apple complete object, and inspect a native allocation
 object extracted from the installed `libasmrun.a`. Mach-O validation checks
 physical IOS platform, arm64 and minimum 26.0. The complete object must contain
-the runtime startup symbol and the actual foreign-stub symbol. A separate check
-rejects Simulator input before setup begins.
+the runtime startup symbol and the actual foreign-stub symbol. A separate
+iossimulator bootstrap mode (`setup_toolchain.sh iossimulator`) installs
+`conf-ios-simulator` and `ocaml-ios64-simulator` and runs the same audit
+against `IOSSIMULATOR`/arm64/26.0 metadata.
 
 `IOS_CROSS_TEST_OPAMROOT` and `IOS_CROSS_TEST_SWITCH` select an explicitly supplied
 installation for auditing. They do not alter its compiler or manufacture a
