@@ -701,6 +701,30 @@ let test_sdk_validates_only_reachable_application_lock_subset () =
   |> check_error_contains "Dependency base in demo.opam.locked is not pinned exactly"
 ;;
 
+let test_sdk_lock_accepts_single_line_depends () =
+  let root = Filename.temp_dir "bonsai-swiftui-tool" "application-lock" in
+  write_file
+    (Filename.concat root "demo.opam")
+    "opam-version: \"2.0\"\nname: \"demo\"\n";
+  write_file
+    (Filename.concat root "demo.opam.locked")
+    {|opam-version: "2.0"
+name: "demo"
+version: "0.1.0"
+depends: ["ocaml" {= "5.1.1"} "base" {= "v0.17.0"} "bonsai_swiftui" {= "0.1.0~dev"}]
+|};
+  let manifest = parse_sdk_manifest valid_sdk_manifest in
+  Alcotest.(check (list (pair string string)))
+    "single-line depends parses and validates"
+    [ "base", "v0.17.0"; "bonsai_swiftui", "0.1.0~dev" ]
+    (Sdk.validate_application_lock
+       ~project_root:root
+       ~application_name:"demo"
+       ~reachable_libraries:[ "bonsai_swiftui.ui"; "base" ]
+       manifest
+     |> get_ok)
+;;
+
 let test_sdk_manifest_fingerprint_is_canonical () =
   let compact = parse_sdk_manifest valid_sdk_manifest in
   let expanded =
@@ -2414,6 +2438,10 @@ let () =
             "sdk validates only reachable application lock subset"
             `Quick
             test_sdk_validates_only_reachable_application_lock_subset
+        ; Alcotest.test_case
+            "sdk lock accepts single-line depends"
+            `Quick
+            test_sdk_lock_accepts_single_line_depends
         ; Alcotest.test_case
             "sdk manifest fingerprint is canonical"
             `Quick

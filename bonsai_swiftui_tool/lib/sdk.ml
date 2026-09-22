@@ -399,26 +399,89 @@ module Application_lock = struct
         else Ok (name, Not_exact))
   ;;
 
-  let parse source =
-    let rec loop inside dependencies = function
-      | [] -> Ok dependencies
-      | line :: rest ->
-        let line = String.trim line in
-        if not inside
-        then
-          if line = "depends: ["
-          then loop true dependencies rest
-          else loop false dependencies rest
-        else if line = "]"
-        then Ok dependencies
-        else
-          let* name, constraint_ = parse_dependency line in
-          if String_map.mem name dependencies
-          then
-            Error (Printf.sprintf "Duplicate dependency %s in application opam lock" name)
-          else loop true (String_map.add name constraint_ dependencies) rest
+  let depends_block source =
+    let marker = "depends: [" in
+    let marker_length = String.length marker in
+    let rec find i =
+      if i + marker_length > String.length source
+      then None
+      else if String.sub source i marker_length = marker
+      then Some i
+      else find (i + 1)
     in
-    loop false String_map.empty (String.split_on_char '\n' source)
+    match find 0 with
+    | None -> Ok None
+    | Some start ->
+      let region_start = start + marker_length in
+      (match
+         try Some (String.index_from source region_start ']') with
+         | Not_found -> None
+       with
+       | None ->
+         Error "Unterminated depends: [ block in application opam lock"
+       | Some stop -> Ok (Some (region_start, stop)))
+  ;;
+
+  let scan_dependencies region =
+    let length = String.length region in
+    let whitespace = function
+      | ' ' | '\t' | '\n' | '\r' -> true
+      | _ -> false
+    in
+    let rec skip i = if i < length && whitespace region.[i] then skip (i + 1) else i in
+    let invalid i =
+      Error
+        (Printf.sprintf
+           "Invalid dependency in application opam lock: %s"
+           (String.sub region i (length - i)))
+    in
+    let add name constraint_ dependencies =
+      if String_map.mem name dependencies
+      then
+        Error
+          (Printf.sprintf "Duplicate dependency %s in application opam lock" name)
+      else Ok (String_map.add name constraint_ dependencies)
+    in
+    let rec entries i dependencies =
+      match skip i with
+      | i when i >= length -> Ok dependencies
+      | i when region.[i] <> '"' -> invalid i
+      | i ->
+        (match
+           try Some (String.index_from region (i + 1) '"') with
+           | Not_found -> None
+         with
+         | None -> invalid i
+         | Some name_end ->
+           let name = String.sub region (i + 1) (name_end - i - 1) in
+           let suffix_start = skip (name_end + 1) in
+           (match suffix_start < length && region.[suffix_start] = '{' with
+            | false ->
+              let* dependencies = add name Not_exact dependencies in
+              entries suffix_start dependencies
+            | true ->
+              (match
+                 try Some (String.index_from region suffix_start '}') with
+                 | Not_found -> None
+               with
+               | None -> invalid i
+               | Some suffix_end ->
+                 let* name, constraint_ =
+                   parse_dependency (String.sub region i (suffix_end - i + 1))
+                 in
+                 let* dependencies = add name constraint_ dependencies in
+                 entries (suffix_end + 1) dependencies)))
+    in
+    entries 0 String_map.empty
+  ;;
+
+  let parse source =
+    let* block = depends_block source in
+    match block with
+    | None -> Ok String_map.empty
+    | Some (region_start, region_stop) ->
+      scan_dependencies
+        (String.sub source region_start (region_stop - region_start))
   ;;
 end
 
