@@ -26,13 +26,24 @@ require_command() {
 }
 
 test "$#" -eq 2 ||
-  fail "usage: build_runtime_package.sh iphoneos <package>"
+  fail "usage: build_runtime_package.sh <iphoneos|iossimulator> <package>"
 
 target=$1
 requested_package=$2
 
-test "$target" = iphoneos || fail "expected iphoneos"
-expected_platform=IOS
+case "$target" in
+  iphoneos)
+    expected_platform=IOS
+    sdk_name=iphoneos
+    version_min_flag="-miphoneos-version-min=$IOS_DEPLOYMENT_TARGET"
+    ;;
+  iossimulator)
+    expected_platform=IOSSIMULATOR
+    sdk_name=iphonesimulator
+    version_min_flag="-mios-simulator-version-min=$IOS_DEPLOYMENT_TARGET"
+    ;;
+  *) fail "expected iphoneos or iossimulator" ;;
+esac
 expected_minimum=$IOS_DEPLOYMENT_TARGET
 
 require_command awk
@@ -297,10 +308,10 @@ if test "$package_name" = mirage-crypto-rng; then
     fail "mirage-crypto-rng does not use the Apple system entropy source"
 fi
 
-sdk_version=$(xcrun --sdk "$target" --show-sdk-version)
-sdk_root=$(xcrun --sdk "$target" --show-sdk-path)
-target_archiver=$(xcrun --sdk "$target" --find ar)
-target_pkg_config_path="$SDK_ASSET_ROOT/pkgconfig/$target"
+sdk_version=$(xcrun --sdk "$sdk_name" --show-sdk-version)
+sdk_root=$(xcrun --sdk "$sdk_name" --show-sdk-path)
+target_archiver=$(xcrun --sdk "$sdk_name" --find ar)
+target_pkg_config_path="$SDK_ASSET_ROOT/pkgconfig/$sdk_name"
 test -f "$target_pkg_config_path/sqlite3.pc" ||
   fail "missing target SQLite pkg-config metadata"
 export PKG_CONFIG_PATH="$target_pkg_config_path"
@@ -311,8 +322,8 @@ if test "$package_name" = gmp-sys-ios; then
   target_dependency_root="$SDK_PACKAGE_WORK_ROOT/dependencies/gmp"
   gmp_build_directory="$build_directory/gmp"
   target_cc="$switch_prefix/ios-sysroot/bin/ios-cc"
-  target_cflags="-O2 -arch arm64 -isysroot $sdk_root -miphoneos-version-min=$IOS_DEPLOYMENT_TARGET"
-  target_ldflags="-Wl,-syslibroot,$sdk_root -miphoneos-version-min=$IOS_DEPLOYMENT_TARGET"
+  target_cflags="-O2 -arch arm64 -isysroot $sdk_root $version_min_flag"
+  target_ldflags="-Wl,-syslibroot,$sdk_root $version_min_flag"
 
   test -x "$target_cc" ||
     fail "missing iPhoneOS C compiler wrapper: $target_cc"
@@ -322,7 +333,7 @@ if test "$package_name" = gmp-sys-ios; then
       cd "$gmp_build_directory"
       CC="$target_cc" \
         CFLAGS="$target_cflags" \
-        CPPFLAGS="-arch arm64 -isysroot $sdk_root -miphoneos-version-min=$IOS_DEPLOYMENT_TARGET" \
+        CPPFLAGS="-arch arm64 -isysroot $sdk_root $version_min_flag" \
         LDFLAGS="$target_ldflags" \
         "$source_directory/configure" \
           --host=aarch64-apple-darwin \

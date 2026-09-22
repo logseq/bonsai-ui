@@ -495,6 +495,8 @@ let test_sdk_manifest_contract () =
   let validate_supported source =
     Sdk.Manifest.validate
       (parse_sdk_manifest source)
+      ~platform:"iphoneos"
+      ~toolchain_target:"iphoneos"
       ~bonsai_swiftui_version:Sdk.supported_bonsai_swiftui_version
       ~abi_version:Sdk.supported_abi_version
       ~minimum_deployment_target:Sdk.supported_minimum_deployment_target
@@ -507,6 +509,8 @@ let test_sdk_manifest_contract () =
   let manifest = parse_sdk_manifest valid_sdk_manifest in
   Sdk.Manifest.validate
     manifest
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
     ~minimum_deployment_target:"26.0"
@@ -522,6 +526,8 @@ let test_sdk_manifest_contract () =
   |> check_error_contains
        "Package base.v0.18.0 conflicts with iPhoneOS SDK package base.v0.17.0";
   Sdk.Manifest.validate
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     (valid_sdk_manifest
      |> replace_once ~pattern:"(platform iphoneos)" ~replacement:"(platform macos)"
      |> parse_sdk_manifest)
@@ -531,12 +537,16 @@ let test_sdk_manifest_contract () =
   |> check_error_contains "expected Apple platform iphoneos";
   Sdk.Manifest.validate
     manifest
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     ~bonsai_swiftui_version:"0.2.0"
     ~abi_version:"4"
     ~minimum_deployment_target:"26.0"
   |> check_error_contains
        "The iPhoneOS switch SDK manifest is incompatible with bonsai-swiftui 0.2.0";
   Sdk.Manifest.validate
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     (valid_sdk_manifest
      |> replace_once
           ~pattern:"(build_recipe_revision 5)"
@@ -550,11 +560,15 @@ let test_sdk_manifest_contract () =
         iphoneos";
   Sdk.Manifest.validate
     manifest
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
     ~minimum_deployment_target:"14.0"
   |> check_error_contains "minimum deployment target 14.0 is unsupported";
   Sdk.Manifest.validate
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     (valid_sdk_manifest
      |> replace_once ~pattern:"(abi_version 4)" ~replacement:"(abi_version 1)"
      |> parse_sdk_manifest)
@@ -585,6 +599,8 @@ let test_sdk_accepts_framework_source_drift () =
   in
   Sdk.Manifest.validate
     stale_manifest
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"4"
     ~minimum_deployment_target:"26.0"
@@ -606,6 +622,8 @@ let test_sdk_accepts_missing_framework_source_identity () =
   in
   Sdk.Manifest.validate
     legacy_manifest
+    ~platform:"iphoneos"
+    ~toolchain_target:"iphoneos"
     ~bonsai_swiftui_version:"0.1.0~dev"
     ~abi_version:"1"
     ~minimum_deployment_target:"26.0"
@@ -748,6 +766,7 @@ fi
        let result =
          Sdk.preflight
            ~project_root
+           ~simulator:false
            ~bonsai_swiftui_version:"0.1.0~dev"
            ~abi_version:"4"
            ~minimum_deployment_target:"26.0"
@@ -792,6 +811,7 @@ let test_sdk_preflight_reports_missing_switch () =
     (fun () ->
        Sdk.preflight
          ~project_root:(Filename.concat root "project")
+         ~simulator:false
          ~bonsai_swiftui_version:"0.1.0~dev"
          ~abi_version:"4"
          ~minimum_deployment_target:"26.0"
@@ -954,7 +974,8 @@ let test_toolchain_show_and_verify_are_read_only () =
   let manifest_mtime = (Unix.stat fixture.toolchain_manifest).st_mtime in
   let info =
     with_toolchain_fixture fixture (fun () ->
-      Toolchain.show ~working_directory:fixture.toolchain_root |> get_ok)
+      Toolchain.show ~target:Toolchain.Device ~working_directory:fixture.toolchain_root
+      |> get_ok)
   in
   Alcotest.(check string) "fixed switch" "bonsai-swiftui-ios" info.switch;
   Alcotest.(check string) "switch prefix" fixture.toolchain_prefix info.prefix;
@@ -962,7 +983,8 @@ let test_toolchain_show_and_verify_are_read_only () =
   Alcotest.(check string) "target" "iphoneos/arm64" info.target;
   let verified =
     with_toolchain_fixture fixture (fun () ->
-      Toolchain.verify ~working_directory:fixture.toolchain_root |> get_ok)
+      Toolchain.verify ~target:Toolchain.Device ~working_directory:fixture.toolchain_root
+      |> get_ok)
   in
   Alcotest.(check string)
     "show and verify fingerprint"
@@ -987,7 +1009,8 @@ let test_toolchain_show_and_verify_are_read_only () =
 let test_toolchain_remove_uses_only_fixed_switch () =
   let fixture = create_toolchain_fixture () in
   with_toolchain_fixture fixture (fun () ->
-    Toolchain.remove ~working_directory:fixture.toolchain_root |> get_ok);
+    Toolchain.remove ~target:Toolchain.Device ~working_directory:fixture.toolchain_root
+    |> get_ok);
   Alcotest.(check (list string))
     "fixed destructive command"
     [ String.concat
@@ -1006,7 +1029,7 @@ let test_toolchain_remove_uses_only_fixed_switch () =
     ~environment:[ "REMOVE_EXIT", "31" ]
     fixture
     (fun () ->
-       Toolchain.remove ~working_directory:fixture.toolchain_root
+       Toolchain.remove ~target:Toolchain.Device ~working_directory:fixture.toolchain_root
        |> check_error_contains "opam exited with status 31")
 ;;
 
@@ -1030,7 +1053,11 @@ esac
 |}
     );
   with_toolchain_fixture fixture (fun () ->
-    Toolchain.install ~framework_root ~working_directory:fixture.toolchain_root |> get_ok);
+    Toolchain.install
+      ~target:Toolchain.Device
+      ~framework_root
+      ~working_directory:fixture.toolchain_root
+    |> get_ok);
   let commands = read_file fixture.toolchain_log |> non_empty_lines in
   Alcotest.(check int) "one check, create, and install" 3 (List.length commands);
   let create = List.nth commands 1 in
@@ -1087,7 +1114,10 @@ exit 64
     ~environment:[ "SWITCH_EXISTS", "true" ]
     fixture
     (fun () ->
-       Toolchain.install ~framework_root ~working_directory:fixture.toolchain_root
+       Toolchain.install
+         ~target:Toolchain.Device
+         ~framework_root
+         ~working_directory:fixture.toolchain_root
        |> check_error_contains "already exists");
   Alcotest.(check int)
     "existing switch stops after read-only check"
@@ -1096,7 +1126,10 @@ exit 64
   write_file fixture.toolchain_log "";
   write_file (Filename.concat repository "repo") "opam-version: \"2.1\"\n";
   with_toolchain_fixture fixture (fun () ->
-    Toolchain.install ~framework_root ~working_directory:fixture.toolchain_root
+    Toolchain.install
+      ~target:Toolchain.Device
+      ~framework_root
+      ~working_directory:fixture.toolchain_root
     |> check_error_contains "repository snapshot digest");
   Alcotest.(check string)
     "tampered repository stops before opam"
@@ -1107,7 +1140,10 @@ exit 64
     (Filename.concat repository "package-universe.lock")
     "tampered package lock\n";
   with_toolchain_fixture fixture (fun () ->
-    Toolchain.install ~framework_root ~working_directory:fixture.toolchain_root
+    Toolchain.install
+      ~target:Toolchain.Device
+      ~framework_root
+      ~working_directory:fixture.toolchain_root
     |> check_error_contains "package universe digest");
   Alcotest.(check string)
     "tampered package universe stops before opam"
@@ -1116,7 +1152,10 @@ exit 64
   write_repository_fixture repository;
   write_file (Filename.concat repository "source-archives.lock") "tampered archives\n";
   with_toolchain_fixture fixture (fun () ->
-    Toolchain.install ~framework_root ~working_directory:fixture.toolchain_root
+    Toolchain.install
+      ~target:Toolchain.Device
+      ~framework_root
+      ~working_directory:fixture.toolchain_root
     |> check_error_contains "source archive digest");
   Alcotest.(check string)
     "tampered source archives stop before opam"
@@ -1128,7 +1167,10 @@ exit 64
   in
   write_file source_lock "tampered source lock\n";
   with_toolchain_fixture fixture (fun () ->
-    Toolchain.install ~framework_root ~working_directory:fixture.toolchain_root
+    Toolchain.install
+      ~target:Toolchain.Device
+      ~framework_root
+      ~working_directory:fixture.toolchain_root
     |> check_error_contains "source lock digest");
   Alcotest.(check string)
     "tampered source lock stops before opam"
@@ -1633,7 +1675,7 @@ let test_native_builds_use_project_local_dune_workspaces () =
     Alcotest.(check int) "exactly one Dune build" 1 (List.length dune_builds);
     (match target with
      | Plan.Macos -> ()
-     | Plan.Iphoneos ->
+     | Plan.Iphoneos | Plan.Iossimulator ->
        let closure_queries =
          List.filter
            (fun command -> contains command "\tdune\tdescribe\texternal-lib-deps\t")
@@ -1649,7 +1691,10 @@ let test_native_builds_use_project_local_dune_workspaces () =
           && contains closure_query ("--root=" ^ fixture.native_project_root)
           && contains
                closure_query
-               (fixture.native_project_root ^ "/_build/bonsai-swiftui/dune/iphoneos/")));
+               (fixture.native_project_root
+                ^ "/_build/bonsai-swiftui/dune/"
+                ^ Plan.target_name target
+                ^ "/")));
     let dune_build = List.hd dune_builds in
     Alcotest.(check bool)
       "application is the Dune root"

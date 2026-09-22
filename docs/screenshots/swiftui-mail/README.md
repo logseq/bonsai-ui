@@ -154,4 +154,6 @@ gate does not qualify the exported images as complete screenshots.
 
 Repeat the reviewed macOS captures against the final published source snapshot.
 Physical iOS inline preview, swipe actions and detail-with-attachment captures
-remain outstanding. Repeat Inbox after appearance fixes. Simulator is unsupported.
+remain outstanding. Repeat Inbox after appearance fixes. iOS Simulator captures
+are permitted for development documentation when explicitly labeled as simulator
+output; they do not satisfy physical-device evidence.

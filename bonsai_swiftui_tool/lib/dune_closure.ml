@@ -252,7 +252,7 @@ let resolve_csexp ?(context = "default") ~target input =
   external_closure ~target stanzas
 ;;
 
-let resolve_project ~project_root ~target ~build_directory =
+let resolve_project ~project_root ~switch ~target ~build_directory =
   Scaffold.ensure_directory (Filename.dirname build_directory);
   let* description =
     Process_runner.capture
@@ -260,7 +260,7 @@ let resolve_project ~project_root ~target ~build_directory =
       ~environment:[]
       "opam"
       [ "exec"
-      ; "--switch=" ^ Plan.iphoneos_switch
+      ; "--switch=" ^ switch
       ; "--"
       ; "dune"
       ; "describe"

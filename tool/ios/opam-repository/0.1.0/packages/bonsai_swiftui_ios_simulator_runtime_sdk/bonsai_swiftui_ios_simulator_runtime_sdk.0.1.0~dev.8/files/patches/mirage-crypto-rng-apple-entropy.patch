@@ -1,0 +1,25 @@
+diff --git a/rng/unix/mc_getrandom_stubs.c b/rng/unix/mc_getrandom_stubs.c
+index 1d80d81..61157d3 100644
+--- a/rng/unix/mc_getrandom_stubs.c
++++ b/rng/unix/mc_getrandom_stubs.c
+@@ -40,12 +40,14 @@ void raw_getrandom (uint8_t *data, size_t len) {
+     off += (size_t)r;
+   }
+ }
+-#elif (defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__DragonFly__)  || defined(__OpenBSD__) || defined(__APPLE__)) || defined(__NetBSD__)
+-// on BSD and macOS, loop (in pieces of 256) getentropy
+-#if defined(__APPLE__)
+-// on macOS, getentropy is defined in sys/random.h (on BSD in unistd.h)
+-#include <sys/random.h>
+-#endif
++#elif defined(__APPLE__)
++# include <stdlib.h>
++
++void raw_getrandom (uint8_t *data, size_t len) {
++  arc4random_buf(data, len);
++}
++#elif (defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__DragonFly__)  || defined(__OpenBSD__)) || defined(__NetBSD__)
++// on BSD, loop (in pieces of 256) getentropy
+ #include <sys/param.h>
+
+ void raw_getrandom (uint8_t *data, size_t len) {

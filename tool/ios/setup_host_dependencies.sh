@@ -25,7 +25,9 @@ require_command() {
 }
 
 opam_command() {
-  OPAMROOT="$opam_root" opam "$@"
+  # A foreign OPAMSWITCH in the caller's environment must not steer the
+  # managed root's switch resolution.
+  OPAMROOT="$opam_root" env -u OPAMSWITCH opam "$@"
 }
 
 switch_path() {
@@ -147,7 +149,7 @@ test -f "$APPLICATION_OPAM_FILE" ||
 
 requested_target=${1:-all}
 case "$requested_target" in
-  host | iphoneos)
+  host | iphoneos | iossimulator)
     install_for_switch "$requested_target"
     ;;
   all)
@@ -155,7 +157,7 @@ case "$requested_target" in
     install_for_switch iphoneos
     ;;
   *)
-    fail "expected host, iphoneos, or all"
+    fail "expected host, iphoneos, iossimulator, or all"
     ;;
 esac
 

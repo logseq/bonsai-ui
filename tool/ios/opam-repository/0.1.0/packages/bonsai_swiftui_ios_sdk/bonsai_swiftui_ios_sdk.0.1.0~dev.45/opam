@@ -1,8 +1,8 @@
 opam-version: "2.0"
 synopsis: "Bonsai SwiftUI iPhoneOS framework SDK"
 description: """
-Builds and installs the Bonsai SwiftUI framework for iPhoneOS arm64 on top
-of the exact immutable runtime SDK package.
+Builds and installs the Bonsai SwiftUI framework for iPhoneOS
+arm64 on top of the exact immutable runtime SDK package.
 """
 maintainer: "bonsai_swiftui contributors"
 authors: ["bonsai_swiftui contributors"]
@@ -11,20 +11,20 @@ homepage: "https://github.com/logseq/bonsai-ui"
 bug-reports: "https://github.com/logseq/bonsai-ui/issues"
 dev-repo: "git+https://github.com/logseq/bonsai-ui.git"
 extra-source "bonsai_swiftui.tar.gz" {
-  src: "file:///Users/rcmerci/.local/share/bonsai-swiftui/releases/2026-09-18-journal-native-210435/source/bonsai-swiftui-0.1.0~dev.tar.gz"
-  checksum: ["sha256=03b0086348a81229060525c3e4b82bc9ac0d0776aac9c06a8530be40871abc36"]
+  src: "https://github.com/logseq/bonsai-ui/archive/d8be5273407e8137e1d1a073f732ef4e702509e3.tar.gz"
+  checksum: ["sha256=9acfb3a7a26c5c7d68cea47d91b762eea7a7bcf417917d315f22e28e2bd65489"]
 }
 extra-files: [
-  ["build-installed-framework.sh" "sha256=ac08fd6363c65b202d4eca4a5fef6646e0db98c1c4f474db273dc18c53a8d365"]
-  ["manifest.sexp" "sha256=5b3b4b702e5baffcfbd7900fd6604a980b86f7760036756bbed47caa3ce51d80"]
-  ["package-lock.sexp" "sha256=eb0c8e0c539b45b8f373cfa435da734c02f5747cc39a825d846a531b24a5b9f6"]
+  ["build-installed-framework.sh" "sha256=098b541cf180d97e8571c2939e326f0a037d768e488b34477644bcdf5f428223"]
+  ["manifest.sexp" "sha256=f2a932c0cfbfbdfe0d74f7278e35f95363fd48fbd1ed1428caa3e4b799994eca"]
+  ["package-lock.sexp" "sha256=37f8fa40ec75b6db0c0d28c744664e81f3ef0ff5d5019ff001f5c291d0022842"]
 ]
 depends: [
   "bonsai_swiftui" {= "0.1.0~dev"}
   "bonsai_swiftui_ios_runtime_sdk" {= "0.1.0~dev.8"}
 ]
 build: [
-  ["sh" "./build-installed-framework.sh" "%{switch}%" "%{prefix}%"]
+  ["sh" "./build-installed-framework.sh" "%{switch}%" "%{prefix}%" "iphoneos"]
 ]
 install: [
   ["cp" "-R" ".bonsai_swiftui_ios_framework_sdk/stage/ios-sysroot/." "%{prefix}%/ios-sysroot/"]

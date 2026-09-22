@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: SQLite
+Description: Apple SDK system SQLite
+Version: 3
+Libs: -lsqlite3
+Cflags: -I${includedir} -DSQLITE3_DISABLE_LOADABLE_EXTENSIONS

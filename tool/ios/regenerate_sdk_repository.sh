@@ -123,11 +123,21 @@ cp -R "$repository_root/vendor/opam-ios/sdk-packages/." "$staged_repository/pack
 mkdir -p "$staged_repository/packages/ocaml-ios64"
 cp -R "$temporary_directory/cross-overlay/packages/$OCAML_IOS_PACKAGE" \
   "$staged_repository/packages/ocaml-ios64/"
+mkdir -p "$staged_repository/packages/ocaml-ios64-simulator"
+cp -R "$temporary_directory/cross-overlay/packages/$OCAML_IOS_SIMULATOR_PACKAGE" \
+  "$staged_repository/packages/ocaml-ios64-simulator/"
 
 framework_packages="$staged_repository/packages/bonsai_swiftui_ios_sdk"
 runtime_packages="$staged_repository/packages/bonsai_swiftui_ios_runtime_sdk"
+simulator_framework_packages="$staged_repository/packages/bonsai_swiftui_ios_simulator_sdk"
+simulator_runtime_packages="$staged_repository/packages/bonsai_swiftui_ios_simulator_runtime_sdk"
 framework_source_package="$staged_repository/packages/bonsai_swiftui/bonsai_swiftui.$BONSAI_SWIFTUI_VERSION"
-mkdir -p "$framework_packages" "$runtime_packages" "$framework_source_package"
+mkdir -p \
+  "$framework_packages" \
+  "$runtime_packages" \
+  "$simulator_framework_packages" \
+  "$simulator_runtime_packages" \
+  "$framework_source_package"
 cp "$temporary_directory/framework.opam" "$framework_source_package/opam"
 framework_url="$framework_source_package/url"
 {
@@ -154,6 +164,7 @@ printf '%b\n' \
   'base-threads	base' \
   'base-unix	base' \
   'conf-ios	4' \
+  'conf-ios-simulator	4' \
   'conf-pkg-config	5' \
   'conf-sqlite3	1' \
   "dune	$DUNE_VERSION" \
@@ -163,6 +174,7 @@ printf '%b\n' \
   "ocaml-base-compiler	$OCAML_VERSION" \
   'ocaml-config	3' \
   "ocaml-ios64	$OCAML_VERSION" \
+  "ocaml-ios64-simulator	$OCAML_VERSION" \
   'ocaml-options-vanilla	1' \
   "ocamlfind	$OCAMLFIND_VERSION" \
   'seq	base' >> "$packages_tsv"
@@ -171,6 +183,12 @@ printf '%s\t%s\n' bonsai_swiftui_ios_sdk "$SDK_PACKAGE_VERSION" >> "$packages_ts
 printf '%s\t%s\n' \
   bonsai_swiftui_ios_runtime_sdk \
   "$SDK_RUNTIME_PACKAGE_VERSION" >> "$packages_tsv"
+printf '%s\t%s\n' \
+  bonsai_swiftui_ios_simulator_sdk \
+  "$SDK_PACKAGE_VERSION" >> "$packages_tsv"
+printf '%s\t%s\n' \
+  bonsai_swiftui_ios_simulator_runtime_sdk \
+  "$SDK_RUNTIME_PACKAGE_VERSION" >> "$packages_tsv"
 LC_ALL=C sort -u "$packages_tsv" -o "$packages_tsv"
 jq -Rn \
   '[inputs | split("\t") | {install: {name: .[0], version: .[1]}}] | {solution: .}' \
@@ -178,6 +196,8 @@ jq -Rn \
 
 framework_package_directory="$framework_packages/bonsai_swiftui_ios_sdk.$SDK_PACKAGE_VERSION"
 runtime_package_directory="$runtime_packages/bonsai_swiftui_ios_runtime_sdk.$SDK_RUNTIME_PACKAGE_VERSION"
+simulator_framework_package_directory="$simulator_framework_packages/bonsai_swiftui_ios_simulator_sdk.$SDK_PACKAGE_VERSION"
+simulator_runtime_package_directory="$simulator_runtime_packages/bonsai_swiftui_ios_simulator_runtime_sdk.$SDK_RUNTIME_PACKAGE_VERSION"
 SDK_SOURCE_REVISION="$BONSAI_SWIFTUI_SOURCE_REVISION" \
 SDK_SOURCE_SHA256="$BONSAI_SWIFTUI_SOURCE_SHA256" \
 SDK_SOURCE_URL="$framework_source_url" \
@@ -188,6 +208,18 @@ SDK_SOURCE_URL="$framework_source_url" \
   "$framework_package_directory/opam" \
   "$runtime_package_directory/opam" \
   "$repository_root/vendor/opam-ios/supported-closure.lock"
+
+SDK_SOURCE_REVISION="$BONSAI_SWIFTUI_SOURCE_REVISION" \
+SDK_SOURCE_SHA256="$BONSAI_SWIFTUI_SOURCE_SHA256" \
+SDK_SOURCE_URL="$framework_source_url" \
+"$script_directory/generate_package_universe.sh" \
+  "$solution_json" \
+  "$repository_cache" \
+  "$staged_repository" \
+  "$simulator_framework_package_directory/opam" \
+  "$simulator_runtime_package_directory/opam" \
+  "$repository_root/vendor/opam-ios/supported-closure.lock" \
+  iossimulator
 
 repository_digest() {
   root=$1
@@ -234,7 +266,8 @@ source_archives_sha256=$(shasum -a 256 "$staged_repository/source-archives.lock"
     "  $OPAM_CROSS_IOS_REPOSITORY" \
     "  $OPAM_CROSS_IOS_COMMIT)" \
     " (compiler ocaml-base-compiler $OCAML_VERSION)" \
-    " (sdk_package bonsai_swiftui_ios_sdk $SDK_PACKAGE_VERSION))"
+    " (sdk_package bonsai_swiftui_ios_sdk $SDK_PACKAGE_VERSION)" \
+    " (simulator_sdk_package bonsai_swiftui_ios_simulator_sdk $SDK_PACKAGE_VERSION))"
 } > "$staged_repository/repository.sexp"
 
 if test "$mode" = --check; then

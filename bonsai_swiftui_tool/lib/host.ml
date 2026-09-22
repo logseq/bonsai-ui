@@ -63,7 +63,7 @@ let rec sync ~framework_root ~project_root ~(config : Config.t) ~mode =
            ; "--platform"
            ; (match platform with
               | Plan.Macos_platform -> "macos"
-              | Plan.Ios_platform -> "ios")
+              | Plan.Ios_platform | Plan.Ios_simulator_platform -> "ios")
            ; "--profile"
            ; Plan.profile_name profile
            ; "--lock-held-by-parent"

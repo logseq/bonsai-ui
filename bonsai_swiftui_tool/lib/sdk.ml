@@ -267,30 +267,45 @@ module Manifest = struct
     | _ -> invalid "Invalid numeric version comparison: %s and %s" left right
   ;;
 
-  let incompatible bonsai_swiftui_version =
-    Error
-      (Printf.sprintf
-         "The iPhoneOS switch SDK manifest is incompatible with bonsai-swiftui %s. Run: \
-          bonsai-swiftui toolchain remove iphoneos; bonsai-swiftui toolchain install \
-          iphoneos"
-         bonsai_swiftui_version)
+  let platform_label = function
+    | "iossimulator" -> "iOS Simulator"
+    | _ -> "iPhoneOS"
   ;;
 
-  let validate t ~bonsai_swiftui_version ~abi_version ~minimum_deployment_target =
+  let incompatible ~platform ~toolchain_target bonsai_swiftui_version =
+    Error
+      (Printf.sprintf
+         "The %s switch SDK manifest is incompatible with bonsai-swiftui %s. Run: \
+          bonsai-swiftui toolchain remove %s; bonsai-swiftui toolchain install %s"
+         (platform_label platform)
+         bonsai_swiftui_version
+         toolchain_target
+         toolchain_target)
+  ;;
+
+  let validate
+        t
+        ~platform
+        ~toolchain_target
+        ~bonsai_swiftui_version
+        ~abi_version
+        ~minimum_deployment_target
+    =
     if
       t.format_version <> "1"
       || t.bonsai_swiftui_version <> bonsai_swiftui_version
       || t.abi_version <> abi_version
       || t.build_recipe_revision <> supported_build_recipe_revision
-    then incompatible bonsai_swiftui_version
+    then incompatible ~platform ~toolchain_target bonsai_swiftui_version
     else if t.findlib_toolchain <> "ios"
     then invalid "Invalid SDK findlib toolchain %s; expected ios" t.findlib_toolchain
     else if t.architecture <> "arm64"
     then invalid "Invalid SDK architecture %s; expected arm64" t.architecture
-    else if t.platform <> "iphoneos"
+    else if t.platform <> platform
     then
       invalid
-        "Invalid SDK manifest: expected Apple platform iphoneos, found %s"
+        "Invalid SDK manifest: expected Apple platform %s, found %s"
+        platform
         t.platform
     else
       let* deployment_comparison =
@@ -299,8 +314,9 @@ module Manifest = struct
       if deployment_comparison < 0
       then
         invalid
-          "The configured iPhoneOS minimum deployment target %s is unsupported; the SDK \
+          "The configured %s minimum deployment target %s is unsupported; the SDK \
            requires %s or newer"
+          (platform_label platform)
           minimum_deployment_target
           t.minimum_deployment_target
       else Ok ()
@@ -429,7 +445,28 @@ let validate_application_lock
       (manifest : Manifest.t)
   =
   let module String_map = Manifest.String_map in
-  let lock_name = application_name ^ ".opam.locked" in
+  let* lock_name =
+    let manifests =
+      Sys.readdir project_root
+      |> Array.to_list
+      |> List.filter (fun name -> String.ends_with ~suffix:".opam" name)
+      |> List.sort String.compare
+    in
+    let preferred = application_name ^ ".opam" in
+    match
+      if List.mem preferred manifests
+      then Some preferred
+      else (
+        match manifests with
+        | [ only ] -> Some only
+        | _ -> None)
+    with
+    | Some manifest ->
+      Ok
+        (String.sub manifest 0 (String.length manifest - String.length ".opam")
+         ^ ".opam.locked")
+    | None -> Ok (application_name ^ ".opam.locked")
+  in
   let lock_path = Filename.concat project_root lock_name in
   try
     let channel = open_in_bin lock_path in
@@ -490,25 +527,33 @@ let opam_capture ~project_root arguments =
 
 let preflight
       ~project_root
+      ~simulator
       ~bonsai_swiftui_version
       ~abi_version
       ~minimum_deployment_target
       ~required_packages
   =
-  let switch_argument = "--switch=" ^ Plan.iphoneos_switch in
+  let switch, toolchain_target, platform, sdk_share =
+    if simulator
+    then
+      ( Plan.iossimulator_switch
+      , "iossimulator"
+      , "iossimulator"
+      , "bonsai_swiftui_ios_simulator_sdk" )
+    else Plan.iphoneos_switch, "iphoneos", "iphoneos", "bonsai_swiftui_ios_sdk"
+  in
+  let switch_argument = "--switch=" ^ switch in
   match opam_capture ~project_root [ "switch"; "show"; switch_argument ] with
   | Error _ ->
     Error
       (Printf.sprintf
-         "The global iPhoneOS switch \"%s\" is missing. Run: bonsai-swiftui toolchain \
-          install iphoneos"
-         Plan.iphoneos_switch)
-  | Ok selected when selected <> Plan.iphoneos_switch ->
-    Error
-      (Printf.sprintf
-         "opam resolved iPhoneOS switch %s instead of %s"
-         selected
-         Plan.iphoneos_switch)
+         "The global %s switch \"%s\" is missing. Run: bonsai-swiftui toolchain install \
+          %s"
+         (Manifest.platform_label platform)
+         switch
+         toolchain_target)
+  | Ok selected when selected <> switch ->
+    Error (Printf.sprintf "opam resolved iOS switch %s instead of %s" selected switch)
   | Ok _ ->
     let* switch_prefix =
       opam_capture ~project_root [ "var"; switch_argument; "prefix" ]
@@ -524,17 +569,23 @@ let preflight
      | Some executable ->
        Error
          (Printf.sprintf
-            "The iPhoneOS switch is incomplete: missing %s. Run: bonsai-swiftui \
-             toolchain remove iphoneos; bonsai-swiftui toolchain install iphoneos"
-            executable)
+            "The %s switch %s is incomplete: missing %s. Run: bonsai-swiftui toolchain \
+             remove %s; bonsai-swiftui toolchain install %s"
+            (Manifest.platform_label platform)
+            switch
+            executable
+            toolchain_target
+            toolchain_target)
      | None ->
        let manifest_path =
-         Filename.concat switch_prefix "share/bonsai_swiftui_ios_sdk/manifest.sexp"
+         Filename.concat switch_prefix ("share/" ^ sdk_share ^ "/manifest.sexp")
        in
        let* manifest = read_manifest manifest_path in
        let* () =
          Manifest.validate
            manifest
+           ~platform
+           ~toolchain_target
            ~bonsai_swiftui_version
            ~abi_version
            ~minimum_deployment_target
@@ -553,7 +604,8 @@ let preflight
        then
          Error
            (Printf.sprintf
-              "The iPhoneOS switch OCaml version %s does not match SDK manifest %s"
+              "The %s switch OCaml version %s does not match SDK manifest %s"
+              (Manifest.platform_label platform)
               ocaml_version
               manifest.ocaml_version)
        else
@@ -571,6 +623,10 @@ let preflight
              ]
          in
          if findlib_path = ""
-         then Error "The iPhoneOS switch does not expose the ios findlib toolchain"
+         then
+           Error
+             (Printf.sprintf
+                "The %s switch does not expose the ios findlib toolchain"
+                (Manifest.platform_label platform))
          else Ok { switch_prefix; manifest; fingerprint = Manifest.fingerprint manifest })
 ;;

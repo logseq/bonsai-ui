@@ -14,10 +14,11 @@ capabilities and Apple destinations. `bonsai-swiftui sync-host` generates the
 Xcode project, shared schemes, plists and entitlement files. `sync-host --check`
 rejects stale generated output. Application sources remain application-owned.
 
-The only supported destinations are macOS 26.0+ arm64 and physical iOS/iPadOS
-26.0+ arm64. Debug, Profile and Release have separate build and staging paths.
+The only supported destinations are macOS 26.0+ arm64, physical iOS/iPadOS
+26.0+ arm64 and the iOS 26.0+ arm64 Simulator (`--simulator` on the `ios`
+target). Debug, Profile and Release have separate build and staging paths.
 Profile and Release use the optimized OCaml release profile; Xcode retains
-separate configurations and profiling actions. Simulator, Intel and Catalyst
+separate configurations and profiling actions. Intel and Catalyst
 are unsupported.
 
 ## Native objects and dependencies

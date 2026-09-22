@@ -1,0 +1,21 @@
+opam-version: "2.0"
+synopsis: "Fixed iOS Simulator arm64 cross-compilation configuration"
+description: """
+Defines the immutable iOS Simulator arm64 target selected by the Bonsai
+SwiftUI SDK. The active Xcode installation supplies only the simulator SDK
+path and SDK version.
+"""
+maintainer: "bonsai_swiftui contributors"
+authors: ["bonsai_swiftui contributors"]
+license: "MIT"
+homepage: "https://github.com/logseq/bonsai-ui"
+bug-reports: "https://github.com/logseq/bonsai-ui/issues"
+depends: ["ocaml" {= "5.1.1"}]
+build: [
+  [
+    "sh"
+    "-c"
+    "sdk=$(xcrun --sdk iphonesimulator --show-sdk-version) && sysroot=$(xcrun --sdk iphonesimulator --show-sdk-path) && printf '%s\\n' 'arch: \"arm64\"' 'subarch: \"arm64\"' 'platform: \"iPhoneSimulator\"' \"sdk: \\\"$sdk\\\"\" \"sysroot: \\\"$sysroot\\\"\" \"cflags: \\\"-target arm64-apple-ios26.0-simulator -arch arm64 -isysroot $sysroot -miphoneos-version-min=26.0\\\"\" \"ldflags: \\\"-Wl,-syslibroot,$sysroot -target arm64-apple-ios26.0-simulator\\\"\" 'triple: \"arm-apple-darwin\"' 'triplereal: \"aarch64-apple-darwin\"' 'target: \"aarch64-apple-darwin.simulator\"' > conf-ios-simulator.config"
+  ]
+]
+available: os = "macos" & arch = "arm64"

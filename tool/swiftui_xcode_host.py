@@ -220,7 +220,7 @@ def generate_project(*, framework_root, application_root, host_directory, produc
                                                repositoryURL=dependency["url"], requirement=requirement)
     targets, products, schemes, test_host_files, ui_test_files = [], [], [], [], []
 
-    for platform, (sdk, macho, minimum) in PLATFORMS.items():
+    for platform, (sdk, _macho, minimum) in PLATFORMS.items():
         if platform == "iOS":
             minimum = ios_minimum_version
         target_name = f"{product_name}-{platform}"
@@ -252,12 +252,13 @@ def generate_project(*, framework_root, application_root, host_directory, produc
         emit(host / f"Entitlements/{platform}/TestHost.entitlements", plistlib.dumps({}))
         settings = {
             "ARCHS": "arm64", "ONLY_ACTIVE_ARCH": "NO", "SDKROOT": sdk,
-            "SUPPORTED_PLATFORMS": sdk, "SUPPORTS_MACCATALYST": "NO",
+            "SUPPORTED_PLATFORMS": "iphoneos iphonesimulator" if platform == "iOS" else sdk,
+            "SUPPORTS_MACCATALYST": "NO",
             "SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD": "NO",
             "MACOSX_DEPLOYMENT_TARGET": "26.0", "IPHONEOS_DEPLOYMENT_TARGET": ios_minimum_version,
             "SWIFT_VERSION": "6.0", "CLANG_ENABLE_MODULES": "YES",
             "SWIFT_INCLUDE_PATHS": ["$(inherited)", f'"$(PROJECT_DIR)/{os.path.relpath(framework_root / "native/src", host)}"'],
-            "OTHER_LDFLAGS": ["$(inherited)", f'"$(PROJECT_DIR)/Native/{sdk}/$(CONFIGURATION)/runtime.complete.o"',
+            "OTHER_LDFLAGS": ["$(inherited)", '"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o"',
                               "-framework", "CoreFoundation", "-framework", "Security",
                               "-lpthread", '@"$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp"', "-Wl,-no_compact_unwind"],
             "LD_RUNPATH_SEARCH_PATHS": ["$(inherited)", "@executable_path/../Frameworks", "@executable_path/Frameworks", "@loader_path/Frameworks"],
@@ -298,11 +299,17 @@ def generate_project(*, framework_root, application_root, host_directory, produc
                 phases.append(add(
                     f"{name}/verify", "PBXShellScriptBuildPhase", name="Verify native complete object",
                     buildActionMask="2147483647", runOnlyForDeploymentPostprocessing="0", files=[],
-                    inputPaths=[f"$(PROJECT_DIR)/Native/{sdk}/$(CONFIGURATION)/runtime.complete.o"],
+                    inputPaths=["$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o"],
                     outputPaths=["$(DERIVED_FILE_DIR)/runtime-system-libraries.rsp"], alwaysOutOfDate="1", shellPath="/bin/sh",
-                    shellScript='set -eu\n/bin/sh "$PROJECT_DIR"/' + shlex.quote(os.path.relpath(framework_root / "tool/ios/verify_complete_object.sh", host))
-                    + f' "$PROJECT_DIR/Native/{sdk}/$CONFIGURATION/runtime.complete.o" {macho} {minimum} arm64\n'
-                    + f'symbols=$(xcrun nm -uj "$PROJECT_DIR/Native/{sdk}/$CONFIGURATION/runtime.complete.o")\n'
+                    shellScript='set -eu\ncase "$PLATFORM_NAME" in\n'
+                    + '  macosx) platform=MACOS ;;\n'
+                    + '  iphoneos) platform=IOS ;;\n'
+                    + '  iphonesimulator) platform=IOSSIMULATOR ;;\n'
+                    + '  *) echo "unsupported PLATFORM_NAME: $PLATFORM_NAME" >&2; exit 1 ;;\n'
+                    + 'esac\n'
+                    + '/bin/sh "$PROJECT_DIR"/' + shlex.quote(os.path.relpath(framework_root / "tool/ios/verify_complete_object.sh", host))
+                    + f' "$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o" "$platform" {minimum} arm64\n'
+                    + 'symbols=$(xcrun nm -uj "$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o")\n'
                     + 'mkdir -p "$DERIVED_FILE_DIR"\n'
                     + ': > "$DERIVED_FILE_DIR/runtime-system-libraries.rsp"\n'
                     + 'if printf "%s\\n" "$symbols" | LC_ALL=C grep -Eq "^_sqlite3_[A-Za-z0-9_]+$"; then\n'

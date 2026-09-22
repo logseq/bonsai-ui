@@ -9,9 +9,13 @@ fail() {
   exit 1
 }
 
-test "$#" -eq 2 || fail "usage: build-runtime-sdk.sh OPAM_SWITCH OPAM_SWITCH_PREFIX"
+case "$#" in
+  2 | 3) ;;
+  *) fail "usage: build-runtime-sdk.sh OPAM_SWITCH OPAM_SWITCH_PREFIX [TARGET]" ;;
+esac
 SDK_OPAM_SWITCH=$1
 selected_prefix=$2
+target=${3:-iphoneos}
 test -n "${OPAM_SWITCH_PREFIX:-}" || fail "OPAM_SWITCH_PREFIX is missing"
 test "$selected_prefix" = "$OPAM_SWITCH_PREFIX" ||
   fail "selected opam prefix differs from OPAM_SWITCH_PREFIX"
@@ -32,6 +36,6 @@ export SDK_PACKAGE_WORK_ROOT=$package_work_root
 export RUNTIME_CLOSURE_LOCK="$script_directory/supported-closure.lock"
 export TARGET_LIB=$target_lib
 
-sh "$script_directory/build-runtime-closure.sh" iphoneos
+sh "$script_directory/build-runtime-closure.sh" "$target"
 
-printf '%s\n' "iPhoneOS runtime SDK build passed"
+printf '%s\n' "iOS $target runtime SDK build passed"

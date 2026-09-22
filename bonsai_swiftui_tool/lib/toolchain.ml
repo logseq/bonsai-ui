@@ -4,6 +4,10 @@ let ( let* ) result f =
   | Error _ as error -> error
 ;;
 
+type target =
+  | Device
+  | Simulator
+
 type info =
   { switch : string
   ; prefix : string
@@ -33,6 +37,8 @@ module Repository = struct
     ; compiler_version : string
     ; sdk_package : string
     ; sdk_version : string
+    ; simulator_sdk_package : string option
+    ; simulator_sdk_version : string option
     }
 
   let version = "0.1.0"
@@ -63,6 +69,7 @@ module Repository = struct
 
   let digest root =
     files root ""
+    |> List.sort String.compare
     |> List.map (fun relative ->
       relative ^ "\000" ^ Artifact.digest (Filename.concat root relative))
     |> String.concat "\000"
@@ -120,6 +127,26 @@ module Repository = struct
         let* cross_url, cross_commit = two "cross_repository" in
         let* compiler_package, compiler_version = two "compiler" in
         let* sdk_package, sdk_version = two "sdk_package" in
+        let* simulator_sdk_package, simulator_sdk_version =
+          let* values =
+            entries
+            |> List.filter_map (function
+              | Sexplib.Sexp.List (Sexplib.Sexp.Atom actual :: values)
+                when actual = "simulator_sdk_package" -> Some values
+              | _ -> None)
+            |> function
+            | [ values ] -> Ok values
+            | [] -> Ok []
+            | _ -> invalid "duplicate field simulator_sdk_package"
+          in
+          match values with
+          | [] -> Ok (None, None)
+          | [ left; right ] ->
+            let* left = atom left in
+            let* right = atom right in
+            Ok (Some left, Some right)
+          | _ -> invalid "simulator_sdk_package must contain two values"
+        in
         if format_version <> "1"
         then invalid ("unsupported format version " ^ format_version)
         else if repository_version <> version
@@ -143,6 +170,8 @@ module Repository = struct
             ; compiler_version
             ; sdk_package
             ; sdk_version
+            ; simulator_sdk_package
+            ; simulator_sdk_version
             }
       | _ -> invalid "expected one repository form"
     with
@@ -222,29 +251,51 @@ let capture ~working_directory arguments =
   Process_runner.capture ~working_directory ~environment:[] "opam" arguments
 ;;
 
-let show ~working_directory =
-  let switch_argument = "--switch=" ^ Plan.iphoneos_switch in
+let target_name = function
+  | Device -> "iphoneos"
+  | Simulator -> "iossimulator"
+;;
+
+let switch_of = function
+  | Device -> Plan.iphoneos_switch
+  | Simulator -> Plan.iossimulator_switch
+;;
+
+let sdk_share_of = function
+  | Device -> "bonsai_swiftui_ios_sdk"
+  | Simulator -> "bonsai_swiftui_ios_simulator_sdk"
+;;
+
+let sdk_package_of (repository : Repository.t) = function
+  | Device -> Ok (repository.sdk_package, repository.sdk_version)
+  | Simulator ->
+    (match repository.simulator_sdk_package, repository.simulator_sdk_version with
+     | Some package, Some version -> Ok (package, version)
+     | _ ->
+       Error "The loaded iOS opam repository predates simulator support; regenerate it")
+;;
+
+let show ~target ~working_directory =
+  let switch = switch_of target in
+  let switch_argument = "--switch=" ^ switch in
   match capture ~working_directory [ "switch"; "show"; switch_argument ] with
   | Error _ ->
     Error
       (Printf.sprintf
-         "The global iPhoneOS switch \"%s\" is missing. Run: bonsai-swiftui toolchain \
-          install iphoneos"
-         Plan.iphoneos_switch)
-  | Ok selected when selected <> Plan.iphoneos_switch ->
-    Error
-      (Printf.sprintf
-         "opam resolved iPhoneOS switch %s instead of %s"
-         selected
-         Plan.iphoneos_switch)
+         "The global iOS switch \"%s\" is missing. Run: bonsai-swiftui toolchain install \
+          %s"
+         switch
+         (target_name target))
+  | Ok selected when selected <> switch ->
+    Error (Printf.sprintf "opam resolved iOS switch %s instead of %s" selected switch)
   | Ok _ ->
     let* prefix = capture ~working_directory [ "var"; switch_argument; "prefix" ] in
     let manifest_path =
-      Filename.concat prefix "share/bonsai_swiftui_ios_sdk/manifest.sexp"
+      Filename.concat prefix ("share/" ^ sdk_share_of target ^ "/manifest.sexp")
     in
     let* manifest = Sdk.read_manifest manifest_path in
     Ok
-      { switch = Plan.iphoneos_switch
+      { switch
       ; prefix
       ; manifest_path
       ; fingerprint = Sdk.Manifest.fingerprint manifest
@@ -254,19 +305,20 @@ let show ~working_directory =
       }
 ;;
 
-let verify ~working_directory =
+let verify ~target ~working_directory =
   Sdk.preflight
     ~project_root:working_directory
+    ~simulator:(target = Simulator)
     ~bonsai_swiftui_version:Sdk.supported_bonsai_swiftui_version
     ~abi_version:Sdk.supported_abi_version
     ~minimum_deployment_target:Sdk.supported_minimum_deployment_target
     ~required_packages:[ "bonsai_swiftui", Sdk.supported_bonsai_swiftui_version ]
 ;;
 
-let remove ~working_directory =
+let remove ~target ~working_directory =
   let command : Plan.command =
     { program = "opam"
-    ; arguments = [ "switch"; "remove"; "--yes"; Plan.iphoneos_switch ]
+    ; arguments = [ "switch"; "remove"; "--yes"; switch_of target ]
     ; working_directory
     ; environment = []
     }
@@ -274,21 +326,22 @@ let remove ~working_directory =
   Process_runner.run command
 ;;
 
-let install ~framework_root ~working_directory =
+let install ~target ~framework_root ~working_directory =
   let* repository = Repository.load ~framework_root in
+  let* sdk_package, sdk_version = sdk_package_of repository target in
   let* switches = capture ~working_directory [ "switch"; "list"; "--short" ] in
+  let switch = switch_of target in
   let switch_exists =
-    switches
-    |> String.split_on_char '\n'
-    |> List.exists (String.equal Plan.iphoneos_switch)
+    switches |> String.split_on_char '\n' |> List.exists (String.equal switch)
   in
   if switch_exists
   then
     Error
       (Printf.sprintf
-         "The global iPhoneOS switch \"%s\" already exists. Run: bonsai-swiftui \
-          toolchain verify iphoneos"
-         Plan.iphoneos_switch)
+         "The global iOS switch \"%s\" already exists. Run: bonsai-swiftui toolchain \
+          verify %s"
+         switch
+         (target_name target))
   else (
     let local_repository_name =
       "bonsai-swiftui-ios-" ^ String.sub repository.snapshot_sha256 0 12
@@ -312,7 +365,7 @@ let install ~framework_root ~working_directory =
       ; arguments =
           [ "switch"
           ; "create"
-          ; Plan.iphoneos_switch
+          ; switch
           ; repository.compiler_package ^ "." ^ repository.compiler_version
           ; "--no-switch"
           ; "--yes"
@@ -327,9 +380,9 @@ let install ~framework_root ~working_directory =
       { program = "opam"
       ; arguments =
           [ "install"
-          ; "--switch=" ^ Plan.iphoneos_switch
+          ; "--switch=" ^ switch
           ; "--yes"
-          ; repository.sdk_package ^ "." ^ repository.sdk_version
+          ; sdk_package ^ "." ^ sdk_version
           ; "--assume-depexts"
           ]
       ; working_directory

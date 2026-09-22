@@ -1,0 +1,16 @@
+diff --git a/src/dune b/src/dune
+index 837cfb8..8d8fef7 100644
+--- a/src/dune
++++ b/src/dune
+@@ -1,8 +1,6 @@
+ (rule
+  (targets config.h)
+- (deps
+-  (:first_dep ../discover/discover.exe)
+-  thread_id.h)
++ (deps thread_id.h)
+  (action
+-  (run %{first_dep})))
++  (run ../discover/discover.exe)))
+
+ (install

@@ -13,11 +13,12 @@ let apple_sdk ~project_root target =
     match target with
     | Plan.Macos -> "macosx"
     | Plan.Iphoneos -> "iphoneos"
+    | Plan.Iossimulator -> "iphonesimulator"
   in
   let* root = capture ~project_root "xcrun" [ "--sdk"; sdk; "--show-sdk-path" ] in
   match target with
   | Plan.Macos -> Ok (root, None)
-  | Plan.Iphoneos ->
+  | Plan.Iphoneos | Plan.Iossimulator ->
     let* version = capture ~project_root "xcrun" [ "--sdk"; sdk; "--show-sdk-version" ] in
     Ok (root, Some version)
 ;;
@@ -50,10 +51,15 @@ let host_fingerprint ~project_root ~(config : Config.t) =
   Ok Digestif.SHA256.(to_hex (digest_string identity))
 ;;
 
-let iphoneos_fingerprint ~(config : Config.t) sdk_fingerprint =
+let ios_fingerprint ~(config : Config.t) ~target sdk_fingerprint =
+  let flavor =
+    match target with
+    | Plan.Iossimulator -> "bonsai-swiftui-iossimulator-v1"
+    | _ -> "bonsai-swiftui-iphoneos-v1"
+  in
   String.concat
     "\000"
-    [ "bonsai-swiftui-iphoneos-v1"
+    [ flavor
     ; sdk_fingerprint
     ; Sdk.supported_abi_version
     ; config.ios.minimum_version
@@ -124,10 +130,12 @@ let build_native ~framework_root ~project_root ~config ~target ~profile =
       ~toolchain_fingerprint
       ~apple_sdk_root
       ~apple_sdk_version
-  | Plan.Iphoneos ->
+  | Plan.Iphoneos | Plan.Iossimulator ->
+    let simulator = target = Plan.Iossimulator in
     let* sdk =
       Sdk.preflight
         ~project_root
+        ~simulator
         ~bonsai_swiftui_version:Sdk.supported_bonsai_swiftui_version
         ~abi_version:Sdk.supported_abi_version
         ~minimum_deployment_target:config.Config.ios.minimum_version
@@ -136,11 +144,16 @@ let build_native ~framework_root ~project_root ~config ~target ~profile =
     let closure_build_directory =
       Filename.concat
         project_root
-        ("_build/bonsai-swiftui/dune/iphoneos/" ^ sdk.fingerprint ^ "/closure")
+        ("_build/bonsai-swiftui/dune/"
+         ^ Plan.target_name target
+         ^ "/"
+         ^ sdk.fingerprint
+         ^ "/closure")
     in
     let* reachable_libraries =
       Dune_closure.resolve_project
         ~project_root
+        ~switch:(if simulator then Plan.iossimulator_switch else Plan.iphoneos_switch)
         ~target:config.native_target
         ~build_directory:closure_build_directory
     in
@@ -151,7 +164,7 @@ let build_native ~framework_root ~project_root ~config ~target ~profile =
         ~reachable_libraries
         sdk.manifest
     in
-    let toolchain_fingerprint = iphoneos_fingerprint ~config sdk.fingerprint in
+    let toolchain_fingerprint = ios_fingerprint ~config ~target sdk.fingerprint in
     execute_native
       ~framework_root
       ~project_root
@@ -225,6 +238,7 @@ let stage_host_object ~project_root ~config ~target ~profile artifact =
     match target with
     | Plan.Macos -> "macosx"
     | Plan.Iphoneos -> "iphoneos"
+    | Plan.Iossimulator -> "iphonesimulator"
   in
   let path =
     Filename.concat
@@ -250,6 +264,8 @@ let verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_code
       Filename.concat bundle ("Contents/MacOS/" ^ Plan.product_name config), Plan.Macos
     | Plan.Ios_platform ->
       Filename.concat bundle (Plan.product_name config), Plan.Iphoneos
+    | Plan.Ios_simulator_platform ->
+      Filename.concat bundle (Plan.product_name config), Plan.Iossimulator
   in
   let platform_name, minimum, plist =
     match target with
@@ -259,6 +275,10 @@ let verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_code
       , Filename.concat bundle "Contents/Info.plist" )
     | Plan.Iphoneos ->
       "IOS", config.Config.ios.minimum_version, Filename.concat bundle "Info.plist"
+    | Plan.Iossimulator ->
+      ( "IOSSIMULATOR"
+      , config.Config.ios.minimum_version
+      , Filename.concat bundle "Info.plist" )
   in
   let* () =
     Process_runner.run
@@ -277,7 +297,7 @@ let verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_code
   let minimum_key =
     match target with
     | Plan.Macos -> "LSMinimumSystemVersion"
-    | Plan.Iphoneos -> "MinimumOSVersion"
+    | Plan.Iphoneos | Plan.Iossimulator -> "MinimumOSVersion"
   in
   let* actual_minimum =
     capture ~project_root "plutil" [ "-extract"; minimum_key; "raw"; "-o"; "-"; plist ]
@@ -288,12 +308,12 @@ let verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_code
        =
        match target with
        | Plan.Macos -> config.macos.bundle_identifier
-       | Plan.Iphoneos -> config.ios.bundle_identifier)
+       | Plan.Iphoneos | Plan.Iossimulator -> config.ios.bundle_identifier)
       && actual_minimum = minimum
     then Ok ()
     else Error "Built application metadata does not match its configuration"
   in
-  if no_codesign
+  if no_codesign || target = Plan.Iossimulator
   then Ok bundle
   else
     let* () =
@@ -330,6 +350,7 @@ let build_apple
     match platform with
     | Plan.Macos_platform -> Plan.Macos
     | Plan.Ios_platform -> Plan.Iphoneos
+    | Plan.Ios_simulator_platform -> Plan.Iossimulator
   in
   let* () = Host.sync ~framework_root ~project_root ~config ~mode:Host.Locked_inputs in
   Lock.with_apple_lock ~project_root (fun () ->
@@ -370,6 +391,88 @@ let build_apple
     verify_app ~framework_root ~project_root ~config ~platform ~profile ~no_codesign)
 ;;
 
+let simulator_devices ~project_root =
+  let* listing =
+    capture ~project_root "xcrun" [ "simctl"; "list"; "devices"; "available" ]
+  in
+  let devices =
+    listing
+    |> String.split_on_char '\n'
+    |> List.filter_map (fun line ->
+      let line = String.trim line in
+      match String.index_opt line '(' with
+      | None -> None
+      | Some open_paren ->
+        (match String.index_from_opt line open_paren ')' with
+         | None -> None
+         | Some close_paren ->
+           let name = String.sub line 0 open_paren |> String.trim in
+           let udid = String.sub line (open_paren + 1) (close_paren - open_paren - 1) in
+           let state =
+             String.sub line (close_paren + 1) (String.length line - close_paren - 1)
+             |> String.trim
+           in
+           let state =
+             if
+               String.length state >= 2
+               && state.[0] = '('
+               && state.[String.length state - 1] = ')'
+             then String.sub state 1 (String.length state - 2)
+             else state
+           in
+           Some (name, udid, state)))
+  in
+  Ok devices
+;;
+
+let select_simulator_udid ~project_root ~device =
+  let* devices = simulator_devices ~project_root in
+  match device with
+  | Some wanted ->
+    (match
+       List.find_opt (fun (name, udid, _state) -> name = wanted || udid = wanted) devices
+     with
+     | Some (_, udid, state) -> Ok (udid, state)
+     | None ->
+       Error
+         (Printf.sprintf
+            "No available iOS Simulator matches --device %s. Run: xcrun simctl list \
+             devices available"
+            wanted))
+  | None ->
+    (match
+       List.find_opt (fun (_name, _udid, state) -> state = "Booted") devices
+       |> Option.value
+            ~default:
+              (try List.hd devices with
+               | Failure _ -> "", "", "")
+     with
+     | "", "", _ -> Error "No available iOS Simulator devices"
+     | _name, "", _state -> Error "No available iOS Simulator devices"
+     | _name, udid, state -> Ok (udid, state))
+;;
+
+let run_simulator ~project_root ~config ~device ~bundle ~arguments =
+  let* udid, state = select_simulator_udid ~project_root ~device in
+  let* () =
+    if state = "Booted"
+    then Ok ()
+    else
+      let* () = Process_runner.run (Plan.ios_simulator_boot ~project_root ~udid) in
+      Process_runner.run (Plan.ios_simulator_bootstatus ~project_root ~udid)
+  in
+  let* () =
+    Process_runner.run (Plan.ios_simulator_install ~project_root ~udid ~app_bundle:bundle)
+  in
+  let bundle_identifier = config.Config.ios.bundle_identifier in
+  let (_ : (unit, string) result) =
+    Process_runner.run
+      (Plan.ios_simulator_terminate ~project_root ~udid ~bundle_identifier)
+  in
+  let command = Plan.ios_simulator_launch ~project_root ~udid ~bundle_identifier in
+  Process_runner.run { command with arguments = command.arguments @ arguments }
+;;
+
 let run_apple
       ~framework_root
       ~project_root
@@ -392,7 +495,7 @@ let run_apple
         ~config
         ~platform
         ~profile
-        ~no_codesign:false
+        ~no_codesign:(platform = Plan.Ios_simulator_platform)
         ~development_team
         ~signing_identity
         ~native_object
@@ -411,6 +514,8 @@ let run_apple
           ~bundle_identifier:config.Config.ios.bundle_identifier
       in
       Process_runner.run { command with arguments = command.arguments @ arguments }
+    | Plan.Ios_simulator_platform ->
+      run_simulator ~project_root ~config ~device ~bundle ~arguments
     | Plan.Macos_platform ->
       let command : Plan.command =
         { program = Filename.concat bundle ("Contents/MacOS/" ^ Plan.product_name config)

@@ -75,8 +75,11 @@ and shared schemes. The only architectures and deployment targets are:
 | --- | --- | --- | --- |
 | macOS | macosx | arm64 | 26.0 |
 | Physical iOS/iPadOS | iphoneos | arm64 | 26.0 |
+| iOS Simulator | iphonesimulator | arm64 | 26.0 |
 
-Simulator, Intel Mac and Catalyst are unsupported. iOS supports iPhone and iPad,
+Intel Mac and Catalyst are unsupported. The simulator destination is selected
+by `--simulator` on the `ios` target and stages `Native/iphonesimulator/<configuration>/runtime.complete.o`.
+iOS supports iPhone and iPad,
 uses SwiftUI scenes and a system launch screen, and disables multiple scenes.
 macOS uses local ad-hoc signing. iOS uses automatic signing with an explicitly
 selected development team. Entitlement files are explicit and initially empty;

@@ -21,9 +21,10 @@ class PlatformTests(unittest.TestCase):
             text=True,
         )
 
-    def test_physical_ios_and_apple_silicon_macos(self):
+    def test_supported_platforms_typecheck(self):
         for sdk, target in [
             ("iphoneos", "arm64-apple-ios26.0"),
+            ("iphonesimulator", "arm64-apple-ios26.0-simulator"),
             ("macosx", "arm64-apple-macos26.0"),
         ]:
             with self.subTest(target=target):
@@ -56,9 +57,9 @@ class PlatformTests(unittest.TestCase):
                     )
                     self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_simulator_and_intel_macos_are_explicitly_rejected(self):
+    def test_catalyst_and_intel_macos_are_explicitly_rejected(self):
         for sdk, target, diagnostic in [
-            ("iphonesimulator", "arm64-apple-ios26.0-simulator", "Simulator is unsupported"),
+            ("macosx", "arm64-apple-ios26.0-macabi", "Mac Catalyst is unsupported"),
             ("macosx", "x86_64-apple-macos26.0", "Only arm64 is supported"),
         ]:
             with self.subTest(target=target):

@@ -218,10 +218,11 @@ but whole-tree invalidation under frequently changing presentation tickets and
 action closures has not been measured. Use a stable action sink if measurements
 show that parent closure changes invalidate otherwise unchanged node views.
 
-`PlatformSupport.swift` rejects Simulator, Catalyst, unsupported operating
-systems and non-arm64 architectures at compile time. The platform test
-typechecks the gate for physical iOS 18 and macOS 26, and verifies the explicit
-Simulator and Intel rejection diagnostics. It also typechecks all current
+`PlatformSupport.swift` rejects Catalyst, unsupported operating
+systems and non-arm64 architectures at compile time; the iOS Simulator is
+accepted as an arm64 iOS target. The platform test
+typechecks the gate for physical iOS, iOS Simulator and macOS, and verifies the explicit
+Catalyst and Intel rejection diagnostics. It also typechecks all current
 Swift module sources against the iPhoneOS SDK with an arm64 iOS 18 deployment
 target. It does not link the complete OCaml runtime for iPhoneOS or prove
 physical-device execution.

@@ -1,6 +1,7 @@
 type target =
   | Macos
   | Iphoneos
+  | Iossimulator
   | All
 
 let rec remove_tree path =
@@ -27,12 +28,19 @@ let platform_paths = function
     ]
   | Iphoneos ->
     [ "dune/iphoneos"
-    ; "artifacts/ios"
+    ; "artifacts/ios/iphoneos"
     ; "state/iphoneos"
     ; "logs/iphoneos"
     ; "locks/iphoneos"
     ; "dependencies/probes/ios"
     ; "dependencies/validation/ios"
+    ]
+  | Iossimulator ->
+    [ "dune/iossimulator"
+    ; "artifacts/ios/iossimulator"
+    ; "state/iossimulator"
+    ; "logs/iossimulator"
+    ; "locks/iossimulator"
     ]
   | All -> []
 ;;
@@ -78,17 +86,18 @@ let run ~project_root ~(config : Config.t) target =
         let native_paths =
           match target with
           | All -> [ native_root ]
-          | Macos | Iphoneos ->
+          | Macos | Iphoneos | Iossimulator ->
             List.map (Filename.concat native_root) (platform_paths target)
         in
         let apple_paths =
           match target with
           | All -> [ "Native"; "DerivedData" ]
-          | Macos | Iphoneos ->
+          | Macos | Iphoneos | Iossimulator ->
             let sdk, suffix =
               match target with
               | Macos -> "macosx", ""
               | Iphoneos -> "iphoneos", "-iphoneos"
+              | Iossimulator -> "iphonesimulator", "-iphonesimulator"
               | All -> assert false
             in
             ("Native/" ^ sdk)

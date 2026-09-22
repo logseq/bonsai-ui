@@ -1,7 +1,9 @@
 # Testing the SwiftUI backend
 
-The target matrix is physical iOS/iPadOS 26.0+ arm64 and macOS 26.0+ arm64.
-iOS Simulator and Intel Mac are explicitly unsupported. The backend migration
+The target matrix is physical iOS/iPadOS 26.0+ arm64 and macOS 26.0+ arm64,
+with the iOS Simulator (arm64, same 26.0 floor) available as a development
+lane through the `--simulator` flag on the `ios` build and run targets. Intel
+Mac is explicitly unsupported. The backend migration
 is incomplete; commands below exercise the implemented boundaries. Their
 success does not establish every widget, physical-device execution or screenshot
 acceptance. See the [implementation ledger](swiftui-implementation.md) and the
@@ -17,8 +19,9 @@ shell after the switch rename so tools resolve from the current prefix:
 eval "$(opam env --switch=bonsai-ui --set-switch)"
 ```
 
-The separate `bonsai-swiftui-ios` switch contains the physical-iOS SDK; the CLI
-selects it automatically for iOS builds.
+The separate `bonsai-swiftui-ios` switch contains the physical-iOS SDK and
+`bonsai-swiftui-ios-simulator` the simulator SDK; the CLI selects each
+automatically for iOS device and `--simulator` builds.
 
 ```sh
 opam exec --switch=bonsai-ui -- dune build @all @runtest @fmt
@@ -172,7 +175,8 @@ install on a device or execute iOS UI tests.
 Physical iOS acceptance requires an available iOS 26+ device and development
 signing. It must include the runtime, input/IME, navigation, scrolling, native
 presentation, accessibility and screenshot gates in the governing decision.
-Do not add a Simulator lane to replace those requirements.
+Simulator runs are a development and CI lane; they do not replace those
+device requirements.
 
 Mail screenshots must come from the running SwiftUI app linked to real OCaml and be
 saved with the required reproducibility manifest under

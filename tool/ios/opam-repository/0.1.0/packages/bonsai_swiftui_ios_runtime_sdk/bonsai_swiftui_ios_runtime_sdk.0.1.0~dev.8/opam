@@ -1,8 +1,9 @@
 opam-version: "2.0"
 synopsis: "Immutable Bonsai SwiftUI iPhoneOS runtime SDK"
 description: """
-Builds and installs the locked iPhoneOS arm64 cross-compiler runtime and
-target dependency closure independently from the Bonsai SwiftUI framework.
+Builds and installs the locked iPhoneOS arm64 cross-compiler
+runtime and target dependency closure independently from the Bonsai
+SwiftUI framework.
 """
 maintainer: "bonsai_swiftui contributors"
 authors: ["bonsai_swiftui contributors"]
@@ -431,9 +432,9 @@ extra-source "runtime-zarith-5db9dcbd939153942a08581fabd846d0f3f2b8c67fe68b85512
   checksum: ["sha256=5db9dcbd939153942a08581fabd846d0f3f2b8c67fe68b855127e0472d4d1859"]
 }
 extra-files: [
-  ["build-runtime-closure.sh" "sha256=bc743ed15d60ad2628e32f106139c33e9d06a126d87168f4666e1ec957517cb3"]
-  ["build-runtime-package.sh" "sha256=bbf25b30819843049886d1a370b257c26519b8b1162559c479d20c6c3f5814bd"]
-  ["build-runtime-sdk.sh" "sha256=97a81f853e84c028d23586874dae2d374c858b3c6fe0d9b63658f208ecaf54b8"]
+  ["build-runtime-closure.sh" "sha256=81a613a880d6eee71016332e803eabbf25e6bc6e062308b0c17aba5eb8ed6c04"]
+  ["build-runtime-package.sh" "sha256=259ed5641292877120987618e84f5d68be258f93ab41cd4ca9ec74f69bf30992"]
+  ["build-runtime-sdk.sh" "sha256=f41deeaaf98dbd3bab24a18d0ef52a88f9138ebe2d08ef4f6612e7c4c7d14dca"]
   ["patches/base-host-generator.patch" "sha256=d66da45798d7fd09df4d5e1a2789428f2343670f212ddf36dabf1ffa2e9d5ada"]
   ["patches/datascript-system-sqlite.patch" "sha256=25671b3a84772c8a6b6c9fae3c8c2e0efa1b7d88c9ca2edb274b2ce40de481a4"]
   ["patches/eio-posix-darwin-protocol-zero.patch" "sha256=b6a158f56db6bc1c1e19ad2412625f2d7941a5004274e3a45fe58f6c89e5b963"]
@@ -442,7 +443,7 @@ extra-files: [
   ["patches/mirage-crypto-rng-apple-entropy.patch" "sha256=da840f6ac6b44892f7e3cdbf6b931d557caa44697d21292fbadd5f1f95c60994"]
   ["pkgconfig/iphoneos/sqlite3.pc" "sha256=8b5b586f38ac603b9ac45c7193805a728934d489000dfb578b345733c41ed3ad"]
   ["supported-closure.lock" "sha256=eae3fcc8ca4c556602e825c0f19d0f83b652cb36fd6e846b261e9ef10ce5a21e"]
-  ["toolchain.lock" "sha256=c7ddd7ea99bca3c8e243e72394786849afe20175c74f41e7082237a277ec90dc"]
+  ["toolchain.lock" "sha256=f02d0798c0336dd14443316191339f95a82be2fef247a17d9a8b9c303354412f"]
   ["verify_macho.sh" "sha256=e6d2083e03ac5f883f236e35b7e9e539759e8cc36eb403dd76d5b8136f7f9076"]
 ]
 depends: [
@@ -694,7 +695,7 @@ depends: [
   "zarith_stubs_js" {= "v0.17.0"}
 ]
 build: [
-  ["sh" "./build-runtime-sdk.sh" "%{switch}%" "%{prefix}%"]
+  ["sh" "./build-runtime-sdk.sh" "%{switch}%" "%{prefix}%" "iphoneos"]
 ]
 install: [
   ["cp" "-R" ".bonsai_swiftui_ios_runtime_sdk/stage/ios-sysroot/." "%{prefix}%/ios-sysroot/"]

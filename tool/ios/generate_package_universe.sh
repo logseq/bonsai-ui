@@ -11,10 +11,13 @@ BONSAI_SWIFTUI_SOURCE_REVISION=${SDK_SOURCE_REVISION:-$BONSAI_SWIFTUI_SOURCE_REV
 BONSAI_SWIFTUI_SOURCE_SHA256=${SDK_SOURCE_SHA256:-$BONSAI_SWIFTUI_SOURCE_SHA256}
 expected_framework_source_url=${SDK_SOURCE_URL:-https://github.com/logseq/bonsai-ui/archive/$BONSAI_SWIFTUI_SOURCE_REVISION.tar.gz}
 
-if [ "$#" -ne 6 ]; then
-  echo "usage: $0 SOLUTION_JSON OPAM_REPO_CACHE OUTPUT_REPOSITORY FRAMEWORK_OPAM RUNTIME_OPAM SUPPORTED_CLOSURE_LOCK" >&2
-  exit 64
-fi
+case "$#" in
+  6 | 7) ;;
+  *)
+    echo "usage: $0 SOLUTION_JSON OPAM_REPO_CACHE OUTPUT_REPOSITORY FRAMEWORK_OPAM RUNTIME_OPAM SUPPORTED_CLOSURE_LOCK [TARGET]" >&2
+    exit 64
+    ;;
+esac
 
 solution_json=$1
 repo_cache=$2
@@ -22,6 +25,27 @@ output_repository=$3
 framework_opam=$4
 runtime_opam=$5
 supported_closure_lock=$6
+target=${7:-iphoneos}
+case "$target" in
+  iphoneos)
+    sdk_name=iphoneos
+    cross_compiler_package=ocaml-ios64
+    framework_sdk_name=bonsai_swiftui_ios_sdk
+    runtime_sdk_name=bonsai_swiftui_ios_runtime_sdk
+    platform_synopsis=iPhoneOS
+    ;;
+  iossimulator)
+    sdk_name=iphonesimulator
+    cross_compiler_package=ocaml-ios64-simulator
+    framework_sdk_name=bonsai_swiftui_ios_simulator_sdk
+    runtime_sdk_name=bonsai_swiftui_ios_simulator_runtime_sdk
+    platform_synopsis="iOS Simulator"
+    ;;
+  *)
+    echo "expected iphoneos or iossimulator" >&2
+    exit 64
+    ;;
+esac
 temporary_directory=$(mktemp -d)
 trap 'rm -rf "$temporary_directory"' EXIT HUP INT TERM
 
@@ -65,7 +89,7 @@ runtime_meta_file="$temporary_directory/runtime.opam"
 framework_files="$temporary_directory/framework-files"
 runtime_files="$temporary_directory/runtime-files"
 mkdir -p "$framework_files" "$runtime_files"
-mkdir -p "$runtime_files/patches" "$runtime_files/pkgconfig/iphoneos"
+mkdir -p "$runtime_files/patches" "$runtime_files/pkgconfig/$sdk_name"
 sed \
   -e "s/^framework_source_sha256=.*/framework_source_sha256='$BONSAI_SWIFTUI_SOURCE_SHA256'/" \
   -e "s/^framework_deployment_target=.*/framework_deployment_target='$IOS_DEPLOYMENT_TARGET'/" \
@@ -82,7 +106,8 @@ for patch_file in "$runtime_files/patches/"*.patch; do
   sed 's/^ $//' "$patch_file" >"$patch_file.normalized"
   mv "$patch_file.normalized" "$patch_file"
 done
-cp "$framework_root/vendor/pkgconfig/iphoneos/sqlite3.pc" "$runtime_files/pkgconfig/iphoneos/"
+cp "$framework_root/vendor/pkgconfig/$sdk_name/sqlite3.pc" \
+  "$runtime_files/pkgconfig/$sdk_name/"
 chmod +x "$framework_files/"*.sh "$runtime_files/"*.sh
 
 printf '%s\n' '# package|version|repository|metadata-sha256' > "$package_lock"
@@ -90,7 +115,9 @@ printf '%s\n' '# package|version|source|algorithm|checksum' > "$source_lock"
 
 while IFS="$(printf '\t')" read -r package version; do
   case "$package" in
-    bonsai_swiftui_ios_sdk | bonsai_swiftui_ios_runtime_sdk) continue ;;
+    bonsai_swiftui_ios_sdk | bonsai_swiftui_ios_runtime_sdk | \
+      bonsai_swiftui_ios_simulator_sdk | \
+      bonsai_swiftui_ios_simulator_runtime_sdk) continue ;;
   esac
   package_directory=
   repository_name=
@@ -175,7 +202,7 @@ awk -F '|' '
   }
 ' "$runtime_closure_lock" | LC_ALL=C sort -u > "$target_packages"
 printf '%s\t%s\n' bonsai_swiftui "$BONSAI_SWIFTUI_VERSION" >> "$target_packages"
-printf '%s\t%s\n' ocaml-ios64 5.1.1 >> "$target_packages"
+printf '%s\t%s\n' "$cross_compiler_package" "$OCAML_VERSION" >> "$target_packages"
 LC_ALL=C sort -u "$target_packages" -o "$target_packages"
 
 {
@@ -190,10 +217,10 @@ LC_ALL=C sort -u "$target_packages" -o "$target_packages"
     " (abi_version $SDK_ABI_VERSION)" \
     ' (ocaml_version 5.1.1)' \
     ' (dune_version_range 3.17 4.0)' \
-    ' (cross_compiler ocaml-ios64 5.1.1)' \
+    " (cross_compiler $cross_compiler_package $OCAML_VERSION)" \
     ' (findlib_toolchain ios)' \
     ' (architecture arm64)' \
-    ' (platform iphoneos)' \
+    " (platform $target)" \
     " (minimum_deployment_target $IOS_DEPLOYMENT_TARGET)" \
     " (package_universe_digest $package_lock_digest)" \
     " (target_components_digest $target_components_digest)" \
@@ -219,7 +246,11 @@ LC_ALL=C sort -u "$target_packages" -o "$target_packages"
   ' "$runtime_closure_lock"
   standard_library_components='threads unix str dynlink'
   for library in $standard_library_components; do
-    printf '  (%s ocaml-ios64 5.1.1 (%s))\n' "$library" "$standard_library_components"
+    printf '  (%s %s %s (%s))\n' \
+      "$library" \
+      "$cross_compiler_package" \
+      "$OCAML_VERSION" \
+      "$standard_library_components"
   done
   framework_components='bonsai_swiftui bonsai_swiftui.driver bonsai_swiftui.native_backend bonsai_swiftui.protocol bonsai_swiftui.runtime bonsai_swiftui.runtime_adapter bonsai_swiftui.spec bonsai_swiftui.spec_impl bonsai_swiftui.ui'
   for library in $framework_components; do
@@ -260,10 +291,10 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
 {
   printf '%s\n' \
     'opam-version: "2.0"' \
-    'synopsis: "Bonsai SwiftUI iPhoneOS framework SDK"' \
+    "synopsis: \"Bonsai SwiftUI $platform_synopsis framework SDK\"" \
     'description: """' \
-    'Builds and installs the Bonsai SwiftUI framework for iPhoneOS arm64 on top' \
-    'of the exact immutable runtime SDK package.' \
+    "Builds and installs the Bonsai SwiftUI framework for $platform_synopsis" \
+    'arm64 on top of the exact immutable runtime SDK package.' \
     '"""' \
     'maintainer: "bonsai_swiftui contributors"' \
     'authors: ["bonsai_swiftui contributors"]' \
@@ -286,16 +317,16 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
     ']' \
     'depends: [' \
     "  \"bonsai_swiftui\" {= \"$BONSAI_SWIFTUI_VERSION\"}" \
-    "  \"bonsai_swiftui_ios_runtime_sdk\" {= \"$SDK_RUNTIME_PACKAGE_VERSION\"}" \
+    "  \"$runtime_sdk_name\" {= \"$SDK_RUNTIME_PACKAGE_VERSION\"}" \
     ']' \
     'build: [' \
-    '  ["sh" "./build-installed-framework.sh" "%{switch}%" "%{prefix}%"]' \
+    "  [\"sh\" \"./build-installed-framework.sh\" \"%{switch}%\" \"%{prefix}%\" \"$target\"]" \
     ']' \
     'install: [' \
     '  ["cp" "-R" ".bonsai_swiftui_ios_framework_sdk/stage/ios-sysroot/." "%{prefix}%/ios-sysroot/"]' \
-    '  ["mkdir" "-p" "%{share}%/bonsai_swiftui_ios_sdk"]' \
-    '  ["cp" "manifest.sexp" "%{share}%/bonsai_swiftui_ios_sdk/manifest.sexp"]' \
-    '  ["cp" "package-lock.sexp" "%{share}%/bonsai_swiftui_ios_sdk/package-lock.sexp"]' \
+    "  [\"mkdir\" \"-p\" \"%{share}%/$framework_sdk_name\"]" \
+    "  [\"cp\" \"manifest.sexp\" \"%{share}%/$framework_sdk_name/manifest.sexp\"]" \
+    "  [\"cp\" \"package-lock.sexp\" \"%{share}%/$framework_sdk_name/package-lock.sexp\"]" \
     ']' \
     'available: os = "macos" & arch = "arm64"'
 } > "$framework_meta_file"
@@ -303,10 +334,11 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
 {
   printf '%s\n' \
     'opam-version: "2.0"' \
-    'synopsis: "Immutable Bonsai SwiftUI iPhoneOS runtime SDK"' \
+    "synopsis: \"Immutable Bonsai SwiftUI $platform_synopsis runtime SDK\"" \
     'description: """' \
-    'Builds and installs the locked iPhoneOS arm64 cross-compiler runtime and' \
-    'target dependency closure independently from the Bonsai SwiftUI framework.' \
+    "Builds and installs the locked $platform_synopsis arm64 cross-compiler" \
+    'runtime and target dependency closure independently from the Bonsai' \
+    'SwiftUI framework.' \
     '"""' \
     'maintainer: "bonsai_swiftui contributors"' \
     'authors: ["bonsai_swiftui contributors"]' \
@@ -332,14 +364,20 @@ test "$framework_source_checksum" = "$BONSAI_SWIFTUI_SOURCE_SHA256" || {
   printf '%s\n' ']' 'depends: ['
   while IFS="$(printf '\t')" read -r package version; do
     case "$package" in
-      bonsai_swiftui | bonsai_swiftui_ios_sdk | bonsai_swiftui_ios_runtime_sdk) continue ;;
+      bonsai_swiftui | bonsai_swiftui_ios_sdk | bonsai_swiftui_ios_runtime_sdk | \
+        bonsai_swiftui_ios_simulator_sdk | \
+        bonsai_swiftui_ios_simulator_runtime_sdk) continue ;;
+      conf-ios | ocaml-ios64)
+        test "$target" = iphoneos || continue ;;
+      conf-ios-simulator | ocaml-ios64-simulator)
+        test "$target" = iossimulator || continue ;;
     esac
     printf '  "%s" {= "%s"}\n' "$package" "$version"
   done < "$packages_tsv"
   printf '%s\n' \
     ']' \
     'build: [' \
-    '  ["sh" "./build-runtime-sdk.sh" "%{switch}%" "%{prefix}%"]' \
+    "  [\"sh\" \"./build-runtime-sdk.sh\" \"%{switch}%\" \"%{prefix}%\" \"$target\"]" \
     ']' \
     'install: [' \
     '  ["cp" "-R" ".bonsai_swiftui_ios_runtime_sdk/stage/ios-sysroot/." "%{prefix}%/ios-sysroot/"]' \

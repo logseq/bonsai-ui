@@ -16,9 +16,12 @@ fail() {
   exit 1
 }
 
-test "$#" -eq 1 || fail "usage: build_runtime_closure.sh iphoneos"
+test "$#" -eq 1 || fail "usage: build_runtime_closure.sh iphoneos|iossimulator"
 target=$1
-test "$target" = iphoneos || fail "expected iphoneos"
+case "$target" in
+  iphoneos | iossimulator) ;;
+  *) fail "expected iphoneos or iossimulator" ;;
+esac
 test -f "$closure_lock" || fail "missing runtime closure lock: $closure_lock"
 
 stage_host_ppx_metadata() {
