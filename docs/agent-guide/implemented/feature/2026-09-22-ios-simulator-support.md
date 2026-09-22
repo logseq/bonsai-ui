@@ -86,6 +86,37 @@ Everything below is verified against the worktree at `790ea53`.
 | Screenshots | `docs/screenshots/` provenance assumes committed source and, for iOS, physical capture. | Simulator captures are permitted for examples and are labeled simulator-sourced; physical-capture rules stay for evidence that requires a device. |
 | Docs claiming unsupported | `README.md`, `docs/testing.md`, `docs/swiftui-ios-toolchain.md`, `native/test/ios/README.md` and the architecture document state simulator is unsupported. | Updated when the decision is implemented, not in this document. |
 
+## Decision
+
+The `--simulator` flag path is implemented: the simulator toolchain lives
+in the dedicated `bonsai-swiftui-ios-simulator` opam switch reusing the
+`ios` findlib toolchain name, the SDK gains a `simulator_sdk_package`
+universe built from the same pinned source, `build`/`run`/`doctor`
+`ios --simulator` route through `Ios_simulator_platform` staging
+(`SUPPORTED_PLATFORMS="iphoneos iphonesimulator"`, `ARCHS=arm64`
+override, unsigned `.app`), and `run` drives `simctl` boot/install/launch.
+The iOS 26.0 arm64 floor matches the device baseline.
+
+Verified on this machine's `iPhone 17` (iOS 27.0) simulator, SDK
+regenerated from the implementation commit: toolchain install + manifest
+verification of `IOSSIMULATOR`/arm64/minos-26.0 objects; `build ios
+--simulator --profile debug` produces an unsigned `.app` embedding a
+real `IOSSIMULATOR` complete object for both Counter and Mail; `run ios
+--simulator` boots, installs, launches and renders the real Counter UI;
+hosted XCTest executes inside the simulator — Counter increments real
+OCaml state (`Count: 0` → `1` → `2`), Mail `MailRuntimeTests` 2/2 and
+`MailUITests` 2/2 pass (expansion, attachment detail, swipe-to-archive
+removing a message); `xcodebuild -destination 'platform=iOS Simulator'`
+builds unsigned; `tool/test_swift_platforms.py` accepts the simulator
+target and still rejects Intel macOS and Catalyst; a labeled simulator
+screenshot ships under `docs/screenshots/swiftui-counter/`. OCaml gates
+(`dune build @all @runtest @fmt`, 52 tool tests) and
+`spec-dev-tool check --all` pass; iPhoneOS code paths are unchanged.
+
+Physical iPhone acceptance remains authoritative and was not re-run for
+this feature; the simulator covers build, launch, XCTest and OCaml state
+changes only.
+
 ## Alternatives considered
 
 ### macOS target only (status quo)
@@ -152,6 +183,23 @@ toolchains immutable.
   labeled as simulator capture.
 - All existing iPhoneOS gates (cross-compiler tests, SDK verification,
   device preflight and examples) keep passing unchanged.
+
+## Consequences
+
+- `toolchain install/verify/show/remove iossimulator` manages the
+  simulator switch; `bonsai-swiftui-ios` is untouched.
+- Lock files keep a single-line or multi-line `depends: [...]` block —
+  `Application_lock.parse` now scans entries inside the block instead of
+  requiring line-bounded form (fixes a pre-existing parser bug that
+  silently dropped mail's dependencies).
+- Generated hosts stage `SUPPORTED_PLATFORMS="iphoneos iphonesimulator"`
+  and per-platform entitlements; existing generated trees need one
+  `bonsai-swiftui build`/`xcodegen` regeneration to pick this up.
+- `docs/screenshots/` accepts simulator captures when labeled as such in
+  the manifest and README.
+- The SDK lock now pins `simulator_sdk_package` + runtime package
+  versions alongside the device ones; `regenerate_sdk_repository.sh`
+  emits both universes.
 
 ## Risks
 

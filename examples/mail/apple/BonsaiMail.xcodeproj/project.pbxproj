@@ -60,7 +60,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/iOS/TestHost.entitlements";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf";
 				"DEVELOPMENT_TEAM" = "";
@@ -81,7 +81,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.test-host";
 				"PRODUCT_NAME" = "BonsaiMailTestHost";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
@@ -211,7 +211,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -223,7 +223,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.tests";
 				"PRODUCT_NAME" = "BonsaiMail-iOSTests";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_INCLUDE_PATHS" = (
@@ -265,7 +265,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -277,7 +277,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.tests";
 				"PRODUCT_NAME" = "BonsaiMail-iOSTests";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_INCLUDE_PATHS" = (
@@ -313,7 +313,7 @@
 			"files" = (
 			);
 			"inputPaths" = (
-				"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o",
+				"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o",
 			);
 			"isa" = "PBXShellScriptBuildPhase";
 			"name" = "Verify native complete object";
@@ -322,7 +322,7 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = "0";
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\" IOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+			"shellScript" = "set -eu\ncase \"$PLATFORM_NAME\" in\n  macosx) platform=MACOS ;;\n  iphoneos) platform=IOS ;;\n  iphonesimulator) platform=IOSSIMULATOR ;;\n  *) echo \"unsupported PLATFORM_NAME: $PLATFORM_NAME\" >&2; exit 1 ;;\nesac\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\" \"$platform\" 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
 		};
 		"2CB661822DFFA82A32B1109E" = {
 			"isa" = "PBXFileReference";
@@ -334,7 +334,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/macOS/Profile.entitlements";
 				"CODE_SIGN_IDENTITY" = "-";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
@@ -355,7 +355,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -436,7 +436,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.ui-tests";
 				"PRODUCT_NAME" = "BonsaiMail-iOSUITests";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
@@ -463,7 +463,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/iOS/Debug.entitlements";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf";
 				"DEVELOPMENT_TEAM" = "";
@@ -483,7 +483,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -495,7 +495,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail";
 				"PRODUCT_NAME" = "BonsaiMail";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_INCLUDE_PATHS" = (
@@ -513,7 +513,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/iOS/TestHost.entitlements";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
 				"DEVELOPMENT_TEAM" = "";
@@ -534,7 +534,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.test-host";
 				"PRODUCT_NAME" = "BonsaiMailTestHost";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
@@ -584,7 +584,7 @@
 			"files" = (
 			);
 			"inputPaths" = (
-				"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o",
+				"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o",
 			);
 			"isa" = "PBXShellScriptBuildPhase";
 			"name" = "Verify native complete object";
@@ -593,7 +593,7 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = "0";
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\" IOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/iphoneos/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+			"shellScript" = "set -eu\ncase \"$PLATFORM_NAME\" in\n  macosx) platform=MACOS ;;\n  iphoneos) platform=IOS ;;\n  iphonesimulator) platform=IOSSIMULATOR ;;\n  *) echo \"unsupported PLATFORM_NAME: $PLATFORM_NAME\" >&2; exit 1 ;;\nesac\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\" \"$platform\" 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
 		};
 		"6F298A4F4D568386D1886E05" = {
 			"buildActionMask" = "2147483647";
@@ -685,7 +685,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/iOS/Release.entitlements";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
 				"DEVELOPMENT_TEAM" = "";
@@ -705,7 +705,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -717,7 +717,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail";
 				"PRODUCT_NAME" = "BonsaiMail";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_INCLUDE_PATHS" = (
@@ -761,7 +761,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.ui-tests";
 				"PRODUCT_NAME" = "BonsaiMail-iOSUITests";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
@@ -802,7 +802,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -814,7 +814,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.tests";
 				"PRODUCT_NAME" = "BonsaiMail-iOSTests";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_INCLUDE_PATHS" = (
@@ -842,7 +842,7 @@
 			"files" = (
 			);
 			"inputPaths" = (
-				"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o",
+				"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o",
 			);
 			"isa" = "PBXShellScriptBuildPhase";
 			"name" = "Verify native complete object";
@@ -851,13 +851,13 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = "0";
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\" MACOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+			"shellScript" = "set -eu\ncase \"$PLATFORM_NAME\" in\n  macosx) platform=MACOS ;;\n  iphoneos) platform=IOS ;;\n  iphonesimulator) platform=IOSSIMULATOR ;;\n  *) echo \"unsupported PLATFORM_NAME: $PLATFORM_NAME\" >&2; exit 1 ;;\nesac\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\" \"$platform\" 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
 		};
 		"9C14ADD912F5CCBC3F815283" = {
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/iOS/Profile.entitlements";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
 				"DEVELOPMENT_TEAM" = "";
@@ -877,7 +877,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/iphoneos/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -889,7 +889,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail";
 				"PRODUCT_NAME" = "BonsaiMail";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_INCLUDE_PATHS" = (
@@ -968,7 +968,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/macOS/Release.entitlements";
 				"CODE_SIGN_IDENTITY" = "-";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
@@ -989,7 +989,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -1037,7 +1037,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -1081,7 +1081,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/iOS/TestHost.entitlements";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
 				"DEVELOPMENT_TEAM" = "";
@@ -1102,7 +1102,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.test-host";
 				"PRODUCT_NAME" = "BonsaiMailTestHost";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
@@ -1151,7 +1151,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -1200,7 +1200,7 @@
 			"buildSettings" = {
 				"ARCHS" = "arm64";
 				"CLANG_ENABLE_MODULES" = "YES";
-				"CODE_SIGN_ENTITLEMENTS" = "macOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS" = "Entitlements/macOS/Debug.entitlements";
 				"CODE_SIGN_IDENTITY" = "-";
 				"CODE_SIGN_STYLE" = "Automatic";
 				"DEBUG_INFORMATION_FORMAT" = "dwarf";
@@ -1221,7 +1221,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -1289,7 +1289,7 @@
 				"ONLY_ACTIVE_ARCH" = "NO";
 				"OTHER_LDFLAGS" = (
 					"$(inherited)",
-					"\"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o\"",
+					"\"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o\"",
 					"-framework",
 					"CoreFoundation",
 					"-framework",
@@ -1368,7 +1368,7 @@
 			"files" = (
 			);
 			"inputPaths" = (
-				"$(PROJECT_DIR)/Native/macosx/$(CONFIGURATION)/runtime.complete.o",
+				"$(PROJECT_DIR)/Native/$(PLATFORM_NAME)/$(CONFIGURATION)/runtime.complete.o",
 			);
 			"isa" = "PBXShellScriptBuildPhase";
 			"name" = "Verify native complete object";
@@ -1377,7 +1377,7 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = "0";
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\" MACOS 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/macosx/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
+			"shellScript" = "set -eu\ncase \"$PLATFORM_NAME\" in\n  macosx) platform=MACOS ;;\n  iphoneos) platform=IOS ;;\n  iphonesimulator) platform=IOSSIMULATOR ;;\n  *) echo \"unsupported PLATFORM_NAME: $PLATFORM_NAME\" >&2; exit 1 ;;\nesac\n/bin/sh \"$PROJECT_DIR\"/../../../tool/ios/verify_complete_object.sh \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\" \"$platform\" 26.0 arm64\nsymbols=$(xcrun nm -uj \"$PROJECT_DIR/Native/$PLATFORM_NAME/$CONFIGURATION/runtime.complete.o\")\nmkdir -p \"$DERIVED_FILE_DIR\"\n: > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nif printf \"%s\\n\" \"$symbols\" | LC_ALL=C grep -Eq \"^_sqlite3_[A-Za-z0-9_]+$\"; then\n  printf \"%s\\n\" \"-lsqlite3\" > \"$DERIVED_FILE_DIR/runtime-system-libraries.rsp\"\nfi\n";
 		};
 		"FCFDE68A6EB171067DE643B7" = {
 			"explicitFileType" = "wrapper.cfbundle";
@@ -1416,7 +1416,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER" = "org.bonsai-swiftui.example.mail.ui-tests";
 				"PRODUCT_NAME" = "BonsaiMail-iOSUITests";
 				"SDKROOT" = "iphoneos";
-				"SUPPORTED_PLATFORMS" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
 				"SUPPORTS_MACCATALYST" = "NO";
 				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
 				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
