@@ -208,20 +208,20 @@ extra-source "runtime-macaddr-08a3fa6e6411490b6661e5b10229ea9ec6b8c3738e9f6b2558
   checksum: ["sha256=08a3fa6e6411490b6661e5b10229ea9ec6b8c3738e9f6b255859b13f145be136"]
 }
 extra-source "runtime-melange-edn-core-6c52b0cffd59249a2a0ad994d511370bd7189beecec888ebe5eee1f11b13e504.archive" {
-  src: "https://github.com/RCmerci/melange-edn/archive/3cb79f278e972388a0a2b2ea1caec7a008a0b956.tar.gz"
+  src: "https://github.com/logseq/melange-edn/archive/3cb79f278e972388a0a2b2ea1caec7a008a0b956.tar.gz"
   checksum: ["sha256=6c52b0cffd59249a2a0ad994d511370bd7189beecec888ebe5eee1f11b13e504"]
 }
 extra-source "runtime-melange-edn-native-6c52b0cffd59249a2a0ad994d511370bd7189beecec888ebe5eee1f11b13e504.archive" {
-  src: "https://github.com/RCmerci/melange-edn/archive/3cb79f278e972388a0a2b2ea1caec7a008a0b956.tar.gz"
+  src: "https://github.com/logseq/melange-edn/archive/3cb79f278e972388a0a2b2ea1caec7a008a0b956.tar.gz"
   checksum: ["sha256=6c52b0cffd59249a2a0ad994d511370bd7189beecec888ebe5eee1f11b13e504"]
 }
-extra-source "runtime-melange-transit-core-b714fab0b4c083cff50e3666ccb0bd2bec54cd2a5ebf72c98834203264c9af52.archive" {
-  src: "https://github.com/RCmerci/melange-transit/archive/35f8afe7d6506863c7253e67a20befb3dde5c18f.tar.gz"
-  checksum: ["sha256=b714fab0b4c083cff50e3666ccb0bd2bec54cd2a5ebf72c98834203264c9af52"]
+extra-source "runtime-melange-transit-core-6b29795a413e44dfc20479159d9238af36e6e21ad6f0cd0b8e1ef7c875bfc846.archive" {
+  src: "https://github.com/logseq/melange-transit/archive/38ca92e299cf34c897d9a44091fe86e55b1315ee.tar.gz"
+  checksum: ["sha256=6b29795a413e44dfc20479159d9238af36e6e21ad6f0cd0b8e1ef7c875bfc846"]
 }
-extra-source "runtime-melange-transit-native-b714fab0b4c083cff50e3666ccb0bd2bec54cd2a5ebf72c98834203264c9af52.archive" {
-  src: "https://github.com/RCmerci/melange-transit/archive/35f8afe7d6506863c7253e67a20befb3dde5c18f.tar.gz"
-  checksum: ["sha256=b714fab0b4c083cff50e3666ccb0bd2bec54cd2a5ebf72c98834203264c9af52"]
+extra-source "runtime-melange-transit-native-6b29795a413e44dfc20479159d9238af36e6e21ad6f0cd0b8e1ef7c875bfc846.archive" {
+  src: "https://github.com/logseq/melange-transit/archive/38ca92e299cf34c897d9a44091fe86e55b1315ee.tar.gz"
+  checksum: ["sha256=6b29795a413e44dfc20479159d9238af36e6e21ad6f0cd0b8e1ef7c875bfc846"]
 }
 extra-source "runtime-mirage-crypto-4b87091b6a77843bf97a74aae2e7da21310307ff7d2105712c4369680122d80a.archive" {
   src: "https://github.com/mirage/mirage-crypto/releases/download/v2.2.0/mirage-crypto-2.2.0.tbz"
@@ -344,7 +344,7 @@ extra-source "runtime-ptime-9616747fdf490ec36e8024cab27ee01e3a0af577d8a23226638f
   checksum: ["sha256=9616747fdf490ec36e8024cab27ee01e3a0af577d8a23226638fa4034de73ab0"]
 }
 extra-source "runtime-rrbvec-aed0c632d3612edbc925f24a8d30ad0f5ec16e5d202996872708c95c57b69e35.archive" {
-  src: "https://github.com/RCmerci/rrbvec/archive/dd5ce904f91d53235b5136f7a771f3f074c3971d.tar.gz"
+  src: "https://github.com/logseq/rrbvec/archive/dd5ce904f91d53235b5136f7a771f3f074c3971d.tar.gz"
   checksum: ["sha256=aed0c632d3612edbc925f24a8d30ad0f5ec16e5d202996872708c95c57b69e35"]
 }
 extra-source "runtime-sexplib-da863b42b81235fdcf45eb32c04fb8bde22ff446a779cfb6f989730a35103160.archive" {
