@@ -67,10 +67,10 @@ for dependency in \
   '"ppx_deriving_yojson" {= "3.9.1"}' \
   '"melange-transit-core" {= "0.1.2"}' \
   '"melange-transit-native" {= "0.1.2"}' \
-  '["datascript_ocaml.dev" "git+https://github.com/logseq/datascript-ocaml.git#40345cc2f59214daa88b33b8aec711337d20afa7"]' \
-  '["datascript-ocaml-native.dev" "git+https://github.com/logseq/datascript-ocaml.git#40345cc2f59214daa88b33b8aec711337d20afa7"]' \
-  '["melange-transit-core.0.1.2" "git+https://github.com/RCmerci/melange-transit.git#35f8afe7d6506863c7253e67a20befb3dde5c18f"]' \
-  '["melange-transit-native.0.1.2" "git+https://github.com/RCmerci/melange-transit.git#35f8afe7d6506863c7253e67a20befb3dde5c18f"]'
+  '["datascript_ocaml.dev" "git+https://github.com/logseq/datascript-ocaml.git#main"]' \
+  '["datascript-ocaml-native.dev" "git+https://github.com/logseq/datascript-ocaml.git#main"]' \
+  '["melange-transit-core.0.1.2" "git+https://github.com/logseq/melange-transit.git#main"]' \
+  '["melange-transit-native.0.1.2" "git+https://github.com/logseq/melange-transit.git#main"]'
 do
   require_text "$fixture_packages" "$dependency" "DataScript Worker fixture package pins"
 done

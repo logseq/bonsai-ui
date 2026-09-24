@@ -118,7 +118,7 @@ depends: [
   "rrbvec" {= "dev"}
 ]
 pin-depends: [
-  ["rrbvec.dev" "git+https://github.com/RCmerci/rrbvec.git#dd5ce904f91d53235b5136f7a771f3f074c3971d"]
+  ["rrbvec.dev" "git+https://github.com/logseq/rrbvec.git#main"]
 ]
 ```
 

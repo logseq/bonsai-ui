@@ -3,9 +3,9 @@ synopsis: "Transit JSON reader and writer for native OCaml"
 maintainer: "rcmerci <rcmerci@gmail.com>"
 authors: ["rcmerci"]
 license: "MIT"
-homepage: "https://github.com/RCmerci/melange-transit"
-bug-reports: "https://github.com/RCmerci/melange-transit/issues"
-dev-repo: "git+https://github.com/RCmerci/melange-transit.git"
+homepage: "https://github.com/logseq/melange-transit"
+bug-reports: "https://github.com/logseq/melange-transit/issues"
+dev-repo: "git+https://github.com/logseq/melange-transit.git"
 depends: [
   "dune" {= "3.23.1"}
   "ocaml" {= "5.1.1"}
